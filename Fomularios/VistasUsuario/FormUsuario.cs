@@ -37,5 +37,20 @@ namespace LaCaguamaSV.Fomularios.VistasUsuario
             loginForm.ShowDialog();
             this.Close();
         }
+
+        private void FormUsuario_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
