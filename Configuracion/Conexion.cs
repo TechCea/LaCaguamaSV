@@ -228,5 +228,94 @@ namespace LaCaguamaSV.Configuracion
             }
         }
 
+        //Funcion para obtener las bebidas
+        public DataTable ObtenerBebidas()
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    string query = "SELECT i.id_inventario AS 'ID Inventario', " +
+                           "i.nombreBebida AS 'Nombre Bebida', " +
+                           "b.id_bebida AS 'ID Bebida', b.precioUnitario AS 'Precio Unitario', " +
+                           "c.tipo AS 'Categoría' " +
+                           "FROM bebidas b " +
+                           "JOIN inventario i ON b.id_inventario = i.id_inventario " +
+                           "JOIN categorias c ON b.id_categoria = c.id_categoria";
+
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                        da.Fill(dt);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al obtener bebidas: " + ex.Message);
+            }
+            return dt;
+        }
+
+        //Filtro para las categorias de bebidas
+        public DataTable ObtenerBebidasPorCategoria(string categoria)
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    string query = "SELECT i.id_inventario AS 'ID Inventario', " +
+                                   "i.nombreBebida AS 'Nombre Bebida', " +
+                                   "b.id_bebida AS 'ID Bebida', b.precioUnitario AS 'Precio Unitario', " +
+                                   "c.tipo AS 'Categoría' " +
+                                   "FROM bebidas b " +
+                                   "JOIN inventario i ON b.id_inventario = i.id_inventario " +
+                                   "JOIN categorias c ON b.id_categoria = c.id_categoria " +
+                                   "WHERE c.tipo = @categoria";
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@categoria", categoria);
+                        MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                        da.Fill(dt);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al obtener bebidas por categoría: " + ex.Message);
+            }
+            return dt;
+        }
+
+        public DataTable ObtenerCategorias()
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    string query = "SELECT tipo FROM categorias";
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                        da.Fill(dt);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al obtener categorías: " + ex.Message);
+            }
+            return dt;
+        }
+
     }
 }

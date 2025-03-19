@@ -44,5 +44,11 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             loginForm.ShowDialog();
             this.Close();
         }
+
+        private void btnMenu_Click(object sender, EventArgs e)
+        {
+            FormMenuAdmin formMenu = new FormMenuAdmin();
+            formMenu.ShowDialog();
+        }
     }
 }
