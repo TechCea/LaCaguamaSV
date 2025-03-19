@@ -113,6 +113,113 @@ namespace LaCaguamaSV.Configuracion
             return dt;
         }
 
+        public bool AgregarUsuario(string nombre, string correo, string usuario, string contrasena, string telefono, int idRol)
+        {
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    string query = "INSERT INTO usuarios (nombre, correo, usuario, contrasenya, telefono_contacto, id_rol) " +
+                                   "VALUES (@nombre, @correo, @usuario, @contrasena, @telefono, @idRol)";
 
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@nombre", nombre);
+                        cmd.Parameters.AddWithValue("@correo", correo);
+                        cmd.Parameters.AddWithValue("@usuario", usuario);
+                        cmd.Parameters.AddWithValue("@contrasena", contrasena);
+                        cmd.Parameters.AddWithValue("@telefono", telefono);
+                        cmd.Parameters.AddWithValue("@idRol", idRol);
+
+                        int filasAfectadas = cmd.ExecuteNonQuery();
+                        return filasAfectadas > 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al agregar usuario: " + ex.Message);
+                return false;
+            }
+        }
+        public DataTable ObtenerRoles()
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    string query = "SELECT id_rol, nombre_rol FROM roles";
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                        da.Fill(dt);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al obtener roles: " + ex.Message);
+            }
+            return dt;
+        }
+
+        public bool EliminarUsuario(string usuario)
+        {
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    string query = "DELETE FROM usuarios WHERE usuario = @usuario";
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@usuario", usuario);
+
+                        int filasAfectadas = cmd.ExecuteNonQuery();
+                        return filasAfectadas > 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al eliminar usuario: " + ex.Message);
+                return false;
+            }
+        }
+
+        public bool EditarUsuario(string usuario, string nombre, string correo, string contrasena, string telefono, int idRol)
+        {
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    string query = "UPDATE usuarios SET nombre = @nombre, correo = @correo, contrasenya = @contrasena, " +
+                                   "telefono_contacto = @telefono, id_rol = @idRol WHERE usuario = @usuario";
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@usuario", usuario);
+                        cmd.Parameters.AddWithValue("@nombre", nombre);
+                        cmd.Parameters.AddWithValue("@correo", correo);
+                        cmd.Parameters.AddWithValue("@contrasena", contrasena);
+                        cmd.Parameters.AddWithValue("@telefono", telefono);
+                        cmd.Parameters.AddWithValue("@idRol", idRol);
+
+                        int filasAfectadas = cmd.ExecuteNonQuery();
+                        return filasAfectadas > 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al editar usuario: " + ex.Message);
+                return false;
+            }
+        }
     }
 }

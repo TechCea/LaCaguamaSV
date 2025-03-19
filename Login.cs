@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using LaCaguamaSV.Configuracion;
+using LaCaguamaSV.Fomularios.VistasAdmin;
+using LaCaguamaSV.Fomularios.VistasUsuario;
 using MySql.Data.MySqlClient;
 
 namespace LaCaguamaSV
@@ -55,13 +57,13 @@ namespace LaCaguamaSV
                 // Redirige según el rol
                 if (SesionUsuario.Rol == 1) // Administrador
                 {
-                    Login formLogin = new Login();
+                    FormAdmin formAdmin = new FormAdmin();
                     this.Hide();
-                    formLogin.ShowDialog();
+                    formAdmin.ShowDialog();
                 }
                 else if (SesionUsuario.Rol == 2) // Usuario normal
                 {
-                    Login formUsuario = new Login(); // Crea este formulario
+                    FormUsuario formUsuario = new FormUsuario(); // Crea este formulario
                     this.Hide();
                     formUsuario.ShowDialog();
                 }
