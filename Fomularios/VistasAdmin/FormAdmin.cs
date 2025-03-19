@@ -50,5 +50,11 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             FormMenuAdmin formMenu = new FormMenuAdmin();
             formMenu.ShowDialog();
         }
+
+        private void Ordenes_Click(object sender, EventArgs e)
+        {
+            FormGestionOrdenes formOrdenes = new FormGestionOrdenes();
+            formOrdenes.ShowDialog();
+        }
     }
 }

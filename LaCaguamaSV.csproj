@@ -99,6 +99,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuracion\Conexion.cs" />
+    <Compile Include="Configuracion\OrdenesD.cs" />
+    <Compile Include="Configuracion\OrdenesService.cs" />
     <Compile Include="Configuracion\SesionUsuario.cs" />
     <Compile Include="Fomularios\VistasAdmin\FormAdmin.cs">
       <SubType>Form</SubType>
@@ -123,6 +125,12 @@
     </Compile>
     <Compile Include="Fomularios\VistasAdmin\FormExtrasMenuAdmin.Designer.cs">
       <DependentUpon>FormExtrasMenuAdmin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Fomularios\VistasAdmin\FormGestionOrdenes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Fomularios\VistasAdmin\FormGestionOrdenes.Designer.cs">
+      <DependentUpon>FormGestionOrdenes.cs</DependentUpon>
     </Compile>
     <Compile Include="Fomularios\VistasAdmin\FormMenuAdmin.cs">
       <SubType>Form</SubType>
@@ -158,6 +166,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Fomularios\VistasAdmin\FormExtrasMenuAdmin.resx">
       <DependentUpon>FormExtrasMenuAdmin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fomularios\VistasAdmin\FormGestionOrdenes.resx">
+      <DependentUpon>FormGestionOrdenes.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fomularios\VistasAdmin\FormMenuAdmin.resx">
       <DependentUpon>FormMenuAdmin.cs</DependentUpon>
