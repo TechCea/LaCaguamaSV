@@ -98,7 +98,10 @@ namespace LaCaguamaSV.Configuracion
                 using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
                 {
                     conexion.Open();
-                    string query = "SELECT \r\n                    u.usuario AS 'Usuario', \r\n                    u.nombre AS 'Nombre',\r\n                    u.correo AS 'Correo',\r\n                    u.telefono_contacto AS 'Teléfono',\r\n        u.contrasenya AS 'Contraseña',\r\n            r.nombre_rol AS 'Rol'\r\n                FROM usuarios u\r\n                JOIN roles r ON u.id_rol = r.id_rol";
+                    string query = "SELECT u.id_usuario AS 'ID', u.usuario AS 'Usuario', u.nombre AS 'Nombre', " +
+                                   "u.correo AS 'Correo', u.telefono_contacto AS 'Teléfono', " +
+                                   "u.contrasenya AS 'Contraseña', r.nombre_rol AS 'Rol' " +
+                                   "FROM usuarios u JOIN roles r ON u.id_rol = r.id_rol";
                     using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                     {
                         MySqlDataAdapter da = new MySqlDataAdapter(cmd);
@@ -166,18 +169,18 @@ namespace LaCaguamaSV.Configuracion
             return dt;
         }
 
-        public bool EliminarUsuario(string usuario)
+        public bool EliminarUsuario(int idUsuario)
         {
             try
             {
                 using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
                 {
                     conexion.Open();
-                    string query = "DELETE FROM usuarios WHERE usuario = @usuario";
+                    string query = "DELETE FROM usuarios WHERE id_usuario = @idUsuario";
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                     {
-                        cmd.Parameters.AddWithValue("@usuario", usuario);
+                        cmd.Parameters.AddWithValue("@idUsuario", idUsuario);
 
                         int filasAfectadas = cmd.ExecuteNonQuery();
                         return filasAfectadas > 0;
@@ -191,18 +194,21 @@ namespace LaCaguamaSV.Configuracion
             }
         }
 
-        public bool EditarUsuario(string usuario, string nombre, string correo, string contrasena, string telefono, int idRol)
+
+        public bool EditarUsuario(int idUsuario, string usuario, string nombre, string correo, string contrasena, string telefono, int idRol)
         {
             try
             {
                 using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
                 {
                     conexion.Open();
-                    string query = "UPDATE usuarios SET nombre = @nombre, correo = @correo, contrasenya = @contrasena, " +
-                                   "telefono_contacto = @telefono, id_rol = @idRol WHERE usuario = @usuario";
+                    string query = "UPDATE usuarios SET usuario = @usuario, nombre = @nombre, correo = @correo, " +
+                                   "contrasenya = @contrasena, telefono_contacto = @telefono, id_rol = @idRol " +
+                                   "WHERE id_usuario = @idUsuario";
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                     {
+                        cmd.Parameters.AddWithValue("@idUsuario", idUsuario);
                         cmd.Parameters.AddWithValue("@usuario", usuario);
                         cmd.Parameters.AddWithValue("@nombre", nombre);
                         cmd.Parameters.AddWithValue("@correo", correo);
@@ -221,5 +227,6 @@ namespace LaCaguamaSV.Configuracion
                 return false;
             }
         }
+
     }
 }
