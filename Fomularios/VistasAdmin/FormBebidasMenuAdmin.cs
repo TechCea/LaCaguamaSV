@@ -55,5 +55,20 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 dgvBebidas.DataSource = conexion.ObtenerBebidasPorCategoria(categoriaSeleccionada);
             }
         }
+
+        private void dgvBebidas_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void cbCategoria_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnRegresarMenu_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

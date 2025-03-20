@@ -15,8 +15,8 @@ namespace LaCaguamaSV.Configuracion
         private MySqlConnection conectar = null;
         //hola
         private static string usuario = "root";
-        private static string contrasenia = "root";
-        private static string bd = "LaCaguamaBD";
+        private static string contrasenia = "1234";
+        private static string bd = "lacaguamabd";
         private static string ip = "localhost";
         private static string puerto = "3306";
 
@@ -316,6 +316,101 @@ namespace LaCaguamaSV.Configuracion
             }
             return dt;
         }
+
+
+        //Funcion para obtener las Comidas
+        public DataTable ObtenerComidas()
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    string query = "SELECT p.id_plato AS 'ID Plato', " +
+                                   "p.nombrePlato AS 'Nombre Plato', " +
+                                   "p.precioUnitario AS 'Precio Unitario', " +
+                                   "p.descripcion AS 'Descripción', " +
+                                   "cp.tipo AS 'Categoría' " +
+                                   "FROM platos p " +
+                                   "JOIN categoria_platos cp ON p.id_categoriaP = cp.id_categoriaP";
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                        da.Fill(dt);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al obtener comidas: " + ex.Message);
+            }
+            return dt;
+        }
+
+        //Función para obtener comidas filtradas por categoría
+        public DataTable ObtenerComidasPorCategoria(string categoria)
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    string query = "SELECT p.id_plato AS 'ID Plato', " +
+                                   "p.nombrePlato AS 'Nombre Plato', " +
+                                   "p.precioUnitario AS 'Precio Unitario', " +
+                                   "p.descripcion AS 'Descripción', " +
+                                   "cp.tipo AS 'Categoría' " +
+                                   "FROM platos p " +
+                                   "JOIN categoria_platos cp ON p.id_categoriaP = cp.id_categoriaP " +
+                                   "WHERE cp.tipo = @categoria";
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@categoria", categoria);
+                        MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                        da.Fill(dt);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al obtener comidas por categoría: " + ex.Message);
+            }
+            return dt;
+        }
+
+        //Función para obtener las categorías de comidas
+        public DataTable ObtenerCategoriasComida()
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    string query = "SELECT tipo FROM categoria_platos";
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                        da.Fill(dt);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al obtener categorías de comidas: " + ex.Message);
+            }
+            return dt;
+        }
+
+
+
+
+
 
     }
 }
