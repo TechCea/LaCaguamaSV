@@ -485,5 +485,107 @@ namespace LaCaguamaSV.Configuracion
             }
         }
 
+        public DataTable ObtenerExtras()
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    string query = "SELECT id_extra AS 'ID', nombre AS 'Nombre', precioUnitario AS 'Precio Unitario' FROM extras";
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                        da.Fill(dt);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al obtener los extras: " + ex.Message);
+            }
+            return dt;
+        }
+
+        public bool EliminarExtra(int idExtra)
+        {
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    string query = "DELETE FROM extras WHERE id_extra = @idExtra";
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@idExtra", idExtra);
+                        int filasAfectadas = cmd.ExecuteNonQuery();
+                        return filasAfectadas > 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al eliminar el extra: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+        }
+
+        public bool AgregarExtra(string nombre, decimal precio)
+        {
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    string query = "INSERT INTO extras (nombre, precioUnitario) VALUES (@nombre, @precio)";
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@nombre", nombre);
+                        cmd.Parameters.AddWithValue("@precio", precio);
+
+                        int filasAfectadas = cmd.ExecuteNonQuery();
+                        return filasAfectadas > 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al agregar el extra: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+        }
+
+        public bool ActualizarExtra(int idExtra, string nuevoNombre, decimal nuevoPrecio)
+        {
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    string query = "UPDATE extras SET nombre = @nombre, precioUnitario = @precio WHERE id_extra = @idExtra";
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@nombre", nuevoNombre);
+                        cmd.Parameters.AddWithValue("@precio", nuevoPrecio);
+                        cmd.Parameters.AddWithValue("@idExtra", idExtra);
+
+                        int filasAfectadas = cmd.ExecuteNonQuery();
+                        return filasAfectadas > 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al actualizar el extra: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+        }
+
+
     }
 }

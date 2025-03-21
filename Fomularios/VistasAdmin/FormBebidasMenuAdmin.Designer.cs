@@ -169,9 +169,10 @@
             // lblSeleccionBebida
             // 
             this.lblSeleccionBebida.AutoSize = true;
-            this.lblSeleccionBebida.Location = new System.Drawing.Point(33, 39);
+            this.lblSeleccionBebida.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.lblSeleccionBebida.Location = new System.Drawing.Point(30, 39);
             this.lblSeleccionBebida.Name = "lblSeleccionBebida";
-            this.lblSeleccionBebida.Size = new System.Drawing.Size(234, 16);
+            this.lblSeleccionBebida.Size = new System.Drawing.Size(247, 17);
             this.lblSeleccionBebida.TabIndex = 8;
             this.lblSeleccionBebida.Text = "Selecciona una bebida a editar/borrar";
             // 
