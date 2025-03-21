@@ -239,9 +239,11 @@ namespace LaCaguamaSV.Configuracion
                     conexion.Open();
                     string query = "SELECT b.id_bebida AS 'ID Bebida', " +
                                    "i.nombreBebida AS 'Nombre Bebida', " +
+                                   "c.tipo AS 'Categoría', " +
                                    "b.precioUnitario AS 'Precio Unitario' " +
                                    "FROM bebidas b " +
-                                   "JOIN inventario i ON b.id_inventario = i.id_inventario";
+                                   "JOIN inventario i ON b.id_inventario = i.id_inventario " +
+                                   "JOIN categorias c ON b.id_categoria = c.id_categoria";
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                     using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
@@ -428,36 +430,57 @@ namespace LaCaguamaSV.Configuracion
             }
         }
 
-        public bool EditarBebida(int idBebida, string nuevoNombre, string nuevaCategoria, decimal nuevoPrecio)
+        //Actualizar nombre de bebidas (en inventario), precio y categoria en la tabla bebidas
+        public bool ActualizarBebida(int idBebida, string nuevoNombre, string nuevaCategoria, decimal nuevoPrecio)
         {
             try
             {
                 using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
                 {
                     conexion.Open();
-                    string query = "UPDATE bebidas b " +
-                                   "JOIN inventario i ON b.id_inventario = i.id_inventario " +
-                                   "JOIN categorias c ON b.id_categoria = c.id_categoria " +
-                                   "SET i.nombreBebida = @nuevoNombre, " +
-                                   "b.precioUnitario = @nuevoPrecio, " +
-                                   "b.id_categoria = (SELECT id_categoria FROM categorias WHERE tipo = @nuevaCategoria) " +
-                                   "WHERE b.id_bebida = @idBebida";
 
-                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    // Obtener el ID de la categoría seleccionada
+                    string queryCategoria = "SELECT id_categoria FROM categorias WHERE tipo = @tipo";
+                    int idCategoria;
+
+                    using (MySqlCommand cmdCategoria = new MySqlCommand(queryCategoria, conexion))
                     {
-                        cmd.Parameters.AddWithValue("@idBebida", idBebida);
-                        cmd.Parameters.AddWithValue("@nuevoNombre", nuevoNombre);
-                        cmd.Parameters.AddWithValue("@nuevaCategoria", nuevaCategoria);
-                        cmd.Parameters.AddWithValue("@nuevoPrecio", nuevoPrecio);
+                        cmdCategoria.Parameters.AddWithValue("@tipo", nuevaCategoria);
+                        object resultado = cmdCategoria.ExecuteScalar();
+                        if (resultado == null)
+                        {
+                            MessageBox.Show("Categoría no encontrada.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return false;
+                        }
+                        idCategoria = Convert.ToInt32(resultado);
+                    }
 
-                        int filasAfectadas = cmd.ExecuteNonQuery();
+                    // Actualizar el nombre en la tabla Inventario
+                    string queryInventario = "UPDATE inventario SET nombreBebida = @nuevoNombre WHERE id_inventario = (SELECT id_inventario FROM bebidas WHERE id_bebida = @idBebida)";
+
+                    using (MySqlCommand cmdInventario = new MySqlCommand(queryInventario, conexion))
+                    {
+                        cmdInventario.Parameters.AddWithValue("@nuevoNombre", nuevoNombre);
+                        cmdInventario.Parameters.AddWithValue("@idBebida", idBebida);
+                        cmdInventario.ExecuteNonQuery();
+                    }
+
+                    // Actualizar la categoría y el precio en la tabla Bebidas
+                    string queryBebida = "UPDATE bebidas SET id_categoria = @idCategoria, precioUnitario = @nuevoPrecio WHERE id_bebida = @idBebida";
+
+                    using (MySqlCommand cmdBebida = new MySqlCommand(queryBebida, conexion))
+                    {
+                        cmdBebida.Parameters.AddWithValue("@idCategoria", idCategoria);
+                        cmdBebida.Parameters.AddWithValue("@nuevoPrecio", nuevoPrecio);
+                        cmdBebida.Parameters.AddWithValue("@idBebida", idBebida);
+                        int filasAfectadas = cmdBebida.ExecuteNonQuery();
                         return filasAfectadas > 0;
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al actualizar la bebida: " + ex.Message);
+                MessageBox.Show("Error al actualizar la bebida: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
         }

@@ -40,6 +40,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.txtNombreB = new System.Windows.Forms.TextBox();
             this.lbNombreBebida = new System.Windows.Forms.Label();
+            this.lblSeleccionBebida = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgvBebidas)).BeginInit();
             this.gbDatosBebida.SuspendLayout();
             this.SuspendLayout();
@@ -52,17 +53,17 @@
             this.dgvBebidas.Name = "dgvBebidas";
             this.dgvBebidas.RowHeadersWidth = 51;
             this.dgvBebidas.RowTemplate.Height = 24;
-            this.dgvBebidas.Size = new System.Drawing.Size(496, 412);
+            this.dgvBebidas.Size = new System.Drawing.Size(582, 412);
             this.dgvBebidas.TabIndex = 0;
             this.dgvBebidas.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvBebidas_CellContentClick);
             // 
             // cbCategoria
             // 
             this.cbCategoria.FormattingEnabled = true;
-            this.cbCategoria.Location = new System.Drawing.Point(384, 66);
+            this.cbCategoria.Location = new System.Drawing.Point(441, 66);
             this.cbCategoria.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cbCategoria.Name = "cbCategoria";
-            this.cbCategoria.Size = new System.Drawing.Size(155, 24);
+            this.cbCategoria.Size = new System.Drawing.Size(184, 24);
             this.cbCategoria.TabIndex = 1;
             this.cbCategoria.SelectedIndexChanged += new System.EventHandler(this.cbCategoria_SelectedIndexChanged_1);
             // 
@@ -79,6 +80,7 @@
             // 
             // gbDatosBebida
             // 
+            this.gbDatosBebida.Controls.Add(this.lblSeleccionBebida);
             this.gbDatosBebida.Controls.Add(this.btnEliminarB);
             this.gbDatosBebida.Controls.Add(this.btnActualizarB);
             this.gbDatosBebida.Controls.Add(this.cbCategoriaB);
@@ -87,7 +89,7 @@
             this.gbDatosBebida.Controls.Add(this.label1);
             this.gbDatosBebida.Controls.Add(this.txtNombreB);
             this.gbDatosBebida.Controls.Add(this.lbNombreBebida);
-            this.gbDatosBebida.Location = new System.Drawing.Point(566, 66);
+            this.gbDatosBebida.Location = new System.Drawing.Point(689, 66);
             this.gbDatosBebida.Name = "gbDatosBebida";
             this.gbDatosBebida.Size = new System.Drawing.Size(439, 451);
             this.gbDatosBebida.TabIndex = 3;
@@ -164,11 +166,20 @@
             this.lbNombreBebida.TabIndex = 0;
             this.lbNombreBebida.Text = "Nombre bebida:";
             // 
+            // lblSeleccionBebida
+            // 
+            this.lblSeleccionBebida.AutoSize = true;
+            this.lblSeleccionBebida.Location = new System.Drawing.Point(33, 39);
+            this.lblSeleccionBebida.Name = "lblSeleccionBebida";
+            this.lblSeleccionBebida.Size = new System.Drawing.Size(234, 16);
+            this.lblSeleccionBebida.TabIndex = 8;
+            this.lblSeleccionBebida.Text = "Selecciona una bebida a editar/borrar";
+            // 
             // FormBebidasMenuAdmin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1041, 622);
+            this.ClientSize = new System.Drawing.Size(1167, 622);
             this.Controls.Add(this.gbDatosBebida);
             this.Controls.Add(this.btnRegresarMenu);
             this.Controls.Add(this.cbCategoria);
@@ -197,5 +208,6 @@
         private System.Windows.Forms.ComboBox cbCategoriaB;
         private System.Windows.Forms.TextBox txtPrecioU;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label lblSeleccionBebida;
     }
 }

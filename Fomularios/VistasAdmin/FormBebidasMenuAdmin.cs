@@ -21,7 +21,9 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             InitializeComponent();
             CargarCategorias();
             CargarBebidas();
-            cbCategoria.SelectedIndexChanged += CbCategoria_SelectedIndexChanged; // Evento para filtrar
+            CargarCategoriasBebidas(); // Cargar categorías en cbCategoriaB
+            cbCategoria.SelectedIndexChanged += CbCategoria_SelectedIndexChanged;
+            dgvBebidas.SelectionChanged += dgvBebidas_SelectionChanged;
         }
 
         private void CargarBebidas()
@@ -40,6 +42,23 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             }
 
             cbCategoria.SelectedIndex = 0; // Selecciona "Todas" por defecto
+        }
+
+        private void CargarCategoriasBebidas()
+        {
+            DataTable dtCategorias = conexion.ObtenerCategorias();
+
+            cbCategoriaB.Items.Clear(); // Limpia el ComboBox antes de cargar datos
+
+            foreach (DataRow row in dtCategorias.Rows)
+            {
+                cbCategoriaB.Items.Add(row["tipo"].ToString()); // Agrega cada categoría al ComboBox
+            }
+
+            if (cbCategoriaB.Items.Count > 0)
+            {
+                cbCategoriaB.SelectedIndex = 0; // Selecciona la primera opción por defecto
+            }
         }
 
         private void CbCategoria_SelectedIndexChanged(object sender, EventArgs e)
@@ -73,63 +92,65 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void btnActualizarB_Click(object sender, EventArgs e)
         {
-            //if (dgvBebidas.SelectedRows.Count > 0)
-            //{
-            //    int idBebida = Convert.ToInt32(dgvBebidas.SelectedRows[0].Cells["ID Bebida"].Value);
-            //    string nuevoNombre = txtNombreB.Text;
-            //    string nuevaCategoria = cbCategoriaB.SelectedItem.ToString();
-            //    decimal nuevoPrecio;
+            if (dgvBebidas.SelectedRows.Count > 0)
+            {
+                int idBebida = Convert.ToInt32(dgvBebidas.SelectedRows[0].Cells["ID Bebida"].Value);
+                string nuevoNombre = txtNombreB.Text;
+                string nuevaCategoria = cbCategoriaB.SelectedItem.ToString();
+                decimal nuevoPrecio;
 
-            //    if (!decimal.TryParse(txtPrecioU.Text, out nuevoPrecio))
-            //    {
-            //        MessageBox.Show("Ingrese un precio válido.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            //        return;
-            //    }
+                if (!decimal.TryParse(txtPrecioU.Text, out nuevoPrecio))
+                {
+                    MessageBox.Show("Ingrese un precio válido.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
 
-            //    if (conexion.EditarBebida(idBebida, nuevoNombre, nuevaCategoria, nuevoPrecio))
-            //    {
-            //        MessageBox.Show("Bebida actualizada correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            //        CargarBebidas(); // Recargar datos en la tabla
-            //    }
-            //    else
-            //    {
-            //        MessageBox.Show("No se pudo actualizar la bebida.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //    }
-            //}
-            //else
-            //{
-            //    MessageBox.Show("Seleccione una bebida para actualizar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            //}
+                if (conexion.ActualizarBebida(idBebida, nuevoNombre, nuevaCategoria, nuevoPrecio))
+                {
+                    MessageBox.Show("Bebida actualizada correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    CargarBebidas(); // Recargar la lista después de actualizar
+                }
+                else
+                {
+                    MessageBox.Show("No se pudo actualizar la bebida.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Seleccione una bebida para actualizar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         private void btnEliminarB_Click(object sender, EventArgs e)
         {
-            //if (dgvBebidas.SelectedRows.Count > 0)
-            //{
-            //    // Obtener el ID de la bebida seleccionada
-            //    int idBebida = Convert.ToInt32(dgvBebidas.SelectedRows[0].Cells["ID Bebida"].Value);
+            if (dgvBebidas.SelectedRows.Count > 0)
+            {
+                // Obtener el ID de la bebida seleccionada
+                int idBebida = Convert.ToInt32(dgvBebidas.SelectedRows[0].Cells["ID Bebida"].Value);
 
-            //    // Confirmación antes de eliminar
-            //    DialogResult resultado = MessageBox.Show("¿Está seguro de que desea eliminar esta bebida?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                // Confirmación antes de eliminar
+                DialogResult resultado = MessageBox.Show("¿Está seguro de que desea eliminar esta bebida?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
-            //    if (resultado == DialogResult.Yes)
-            //    {
-            //        if (conexion.EliminarBebida(idBebida))
-            //        {
-            //            MessageBox.Show("Bebida eliminada correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            //            CargarBebidas(); // Recargar la tabla después de eliminar
-            //        }
-            //        else
-            //        {
-            //            MessageBox.Show("No se pudo eliminar la bebida.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //        }
-            //    }
-            //}
-            //else
-            //{
-            //    MessageBox.Show("Seleccione una bebida para eliminar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            //}
+                if (resultado == DialogResult.Yes)
+                {
+                    if (conexion.EliminarBebida(idBebida))
+                    {
+                        MessageBox.Show("Bebida eliminada correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        CargarBebidas(); // Recargar la tabla después de eliminar
+                    }
+                    else
+                    {
+                        MessageBox.Show("No se pudo eliminar la bebida.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Seleccione una bebida para eliminar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
+
+
 
         private void cbCategoriaB_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -138,23 +159,29 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void dgvBebidas_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            //if (e.RowIndex >= 0) // Asegurar que se hace clic en una fila válida
-            //{
-            //    CargarDatosBebidaSeleccionada(e.RowIndex);
-            //}
+            if (e.RowIndex >= 0) // Asegurar que se selecciona una fila válida
+            {
+                DataGridViewRow row = dgvBebidas.Rows[e.RowIndex];
+
+                txtNombreB.Text = row.Cells["Nombre Bebida"].Value.ToString();
+                cbCategoriaB.SelectedItem = row.Cells["Categoría"].Value.ToString();
+                txtPrecioU.Text = row.Cells["Precio Unitario"].Value.ToString();
+            }
         }
 
-        private void CargarDatosBebidaSeleccionada(int rowIndex)
+        private void dgvBebidas_SelectionChanged(object sender, EventArgs e)
         {
-            //// Obtener los valores de la fila seleccionada
-            //txtNombreB.Text = dgvBebidas.Rows[rowIndex].Cells["Nombre Bebida"].Value.ToString();
-            //txtPrecioU.Text = dgvBebidas.Rows[rowIndex].Cells["Precio Unitario"].Value.ToString();
+            if (dgvBebidas.SelectedRows.Count > 0)
+            {
+                // Obtener la fila seleccionada
+                DataGridViewRow filaSeleccionada = dgvBebidas.SelectedRows[0];
 
-            //// Obtener la categoría de la bebida
-            //string categoria = dgvBebidas.Rows[rowIndex].Cells["Categoría"].Value.ToString();
+                // Obtener el nombre de la bebida
+                string nombreBebida = filaSeleccionada.Cells["Nombre Bebida"].Value.ToString();
 
-            //// Seleccionar la categoría en el ComboBox
-            //cbCategoriaB.SelectedItem = categoria;
+                // Mostrar en el Label
+                lblSeleccionBebida.Text = $"Has seleccionado la bebida: {nombreBebida}";
+            }
         }
 
     }
