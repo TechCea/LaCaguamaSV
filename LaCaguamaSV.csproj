@@ -163,6 +163,12 @@
     <Compile Include="Fomularios\VistasAdmin\FormAdmin.Designer.cs">
       <DependentUpon>FormAdmin.cs</DependentUpon>
     </Compile>
+    <Compile Include="Fomularios\VistasAdmin\FormAdminFunciones.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Fomularios\VistasAdmin\FormAdminFunciones.Designer.cs">
+      <DependentUpon>FormAdminFunciones.cs</DependentUpon>
+    </Compile>
     <Compile Include="Fomularios\VistasAdmin\FormBebidasMenuAdmin.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -215,6 +221,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Fomularios\VistasAdmin\FormAdmin.resx">
       <DependentUpon>FormAdmin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fomularios\VistasAdmin\FormAdminFunciones.resx">
+      <DependentUpon>FormAdminFunciones.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fomularios\VistasAdmin\FormBebidasMenuAdmin.resx">
       <DependentUpon>FormBebidasMenuAdmin.cs</DependentUpon>
