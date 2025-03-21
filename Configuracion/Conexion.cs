@@ -15,7 +15,7 @@ namespace LaCaguamaSV.Configuracion
         private MySqlConnection conectar = null;
         //hola
         private static string usuario = "root";
-        private static string contrasenia = "1234";
+        private static string contrasenia = "180294";
         private static string bd = "lacaguamabd";
         private static string ip = "localhost";
         private static string puerto = "3306";
@@ -237,18 +237,15 @@ namespace LaCaguamaSV.Configuracion
                 using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
                 {
                     conexion.Open();
-                    string query = "SELECT i.id_inventario AS 'ID Inventario', " +
-                           "i.nombreBebida AS 'Nombre Bebida', " +
-                           "b.id_bebida AS 'ID Bebida', b.precioUnitario AS 'Precio Unitario', " +
-                           "c.tipo AS 'Categoría' " +
-                           "FROM bebidas b " +
-                           "JOIN inventario i ON b.id_inventario = i.id_inventario " +
-                           "JOIN categorias c ON b.id_categoria = c.id_categoria";
-
+                    string query = "SELECT b.id_bebida AS 'ID Bebida', " +
+                                   "i.nombreBebida AS 'Nombre Bebida', " +
+                                   "b.precioUnitario AS 'Precio Unitario' " +
+                                   "FROM bebidas b " +
+                                   "JOIN inventario i ON b.id_inventario = i.id_inventario";
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
                     {
-                        MySqlDataAdapter da = new MySqlDataAdapter(cmd);
                         da.Fill(dt);
                     }
                 }
@@ -260,6 +257,7 @@ namespace LaCaguamaSV.Configuracion
             return dt;
         }
 
+
         //Filtro para las categorias de bebidas
         public DataTable ObtenerBebidasPorCategoria(string categoria)
         {
@@ -269,8 +267,7 @@ namespace LaCaguamaSV.Configuracion
                 using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
                 {
                     conexion.Open();
-                    string query = "SELECT i.id_inventario AS 'ID Inventario', " +
-                                   "i.nombreBebida AS 'Nombre Bebida', " +
+                    string query = "SELECT i.nombreBebida AS 'Nombre Bebida', " +
                                    "b.id_bebida AS 'ID Bebida', b.precioUnitario AS 'Precio Unitario', " +
                                    "c.tipo AS 'Categoría' " +
                                    "FROM bebidas b " +
@@ -407,10 +404,63 @@ namespace LaCaguamaSV.Configuracion
             return dt;
         }
 
+        public bool EliminarBebida(int idBebida)
+        {
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    string query = "DELETE FROM bebidas WHERE id_bebida = @idBebida";
 
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@idBebida", idBebida);
+                        int filasAfectadas = cmd.ExecuteNonQuery();
+                        return filasAfectadas > 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al eliminar la bebida: " + ex.Message);
+                return false;
+            }
+        }
 
+        public bool EditarBebida(int idBebida, string nuevoNombre, string nuevaCategoria, decimal nuevoPrecio)
+        {
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    string query = "UPDATE bebidas b " +
+                                   "JOIN inventario i ON b.id_inventario = i.id_inventario " +
+                                   "JOIN categorias c ON b.id_categoria = c.id_categoria " +
+                                   "SET i.nombreBebida = @nuevoNombre, " +
+                                   "b.precioUnitario = @nuevoPrecio, " +
+                                   "b.id_categoria = (SELECT id_categoria FROM categorias WHERE tipo = @nuevaCategoria) " +
+                                   "WHERE b.id_bebida = @idBebida";
 
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@idBebida", idBebida);
+                        cmd.Parameters.AddWithValue("@nuevoNombre", nuevoNombre);
+                        cmd.Parameters.AddWithValue("@nuevaCategoria", nuevaCategoria);
+                        cmd.Parameters.AddWithValue("@nuevoPrecio", nuevoPrecio);
 
+                        int filasAfectadas = cmd.ExecuteNonQuery();
+                        return filasAfectadas > 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al actualizar la bebida: " + ex.Message);
+                return false;
+            }
+        }
 
     }
 }
