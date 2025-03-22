@@ -9,61 +9,189 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
     public partial class FormComidasMenuAdmin : Form
     {
         Conexion conexion = new Conexion();
+        int idPlatoSeleccionado = -1;
 
         public FormComidasMenuAdmin()
         {
             InitializeComponent();
             CargarCategoriasComida();
             CargarComidas();
-            cbCategoriaC.SelectedIndexChanged += cbCategoriaC_SelectedIndexChanged; // OJO: Usar cbCategoriaC (minúscula)
+            cbCategoriaC.SelectedIndexChanged += cbCategoriaC_SelectedIndexChanged;
+            dgvComidas.CellClick += dgvComidas_CellClick;
         }
 
         private void CargarComidas()
         {
-            dgvComidas.DataSource = conexion.ObtenerComidas();  // Asegúrate de tener este método en tu clase Conexion
+            dgvComidas.DataSource = conexion.ObtenerComidas();
             dgvComidas.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
         }
 
-        private void CargarCategoriasComida()
+
+
+        private void txtDescripcionC_TextChanged(object sender, EventArgs e)
         {
-            DataTable dtCategorias = conexion.ObtenerCategoriasComida();  // Asegúrate de tener este método en Conexion
-            cbCategoriaC.Items.Add("Todas"); // Opción para mostrar todas las comidas
-
-            foreach (DataRow row in dtCategorias.Rows)
-            {
-                cbCategoriaC.Items.Add(row["tipo"].ToString());
-            }
-
-            cbCategoriaC.SelectedIndex = 0; // Selecciona "Todas" por defecto
+            // Evento generado por el diseñador, puedes dejarlo vacío
         }
 
-        private void cbCategoriaC_SelectedIndexChanged(object sender, EventArgs e)
+        private void label3_Click(object sender, EventArgs e)
         {
-            if (cbCategoriaC.SelectedItem != null)
-            {
-                string categoriaSeleccionada = cbCategoriaC.SelectedItem.ToString();
+            // Evento generado por el diseñador, puedes dejarlo vacío
+        }
 
-                if (categoriaSeleccionada == "Todas")
-                {
-                    CargarComidas();
-                }
-                else
-                {
-                    dgvComidas.DataSource = conexion.ObtenerComidasPorCategoria(categoriaSeleccionada); // Implementa este método en tu clase Conexion
-                    dgvComidas.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-                }
-            }
+        private void txtNombreC_TextChanged(object sender, EventArgs e)
+        {
+            // Puedes dejarlo vacío o agregar lógica si quieres
+        }
+
+        private void txtPrecioU_TextChanged(object sender, EventArgs e)
+        {
+            // Puedes dejarlo vacío
+        }
+
+
+        private void cbCategoriaB_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Puedes dejarlo vacío si no usarás nada por ahora
         }
 
         private void dgvComidas_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-
-            // Puedes agregar funcionalidad aquí si quieres editar o eliminar
+            // Puedes dejarlo vacío o meterle lógica si luego la necesitas
         }
 
+
+        private void CargarCategoriasComida()
+        {
+            DataTable dtCategorias = conexion.ObtenerCategoriasComida();
+            cbCategoriaC.Items.Add("Todas");
+            cbCategoriaB.Items.Clear();
+
+            foreach (DataRow row in dtCategorias.Rows)
+            {
+                cbCategoriaC.Items.Add(row["tipo"].ToString());
+                cbCategoriaB.Items.Add(row["tipo"].ToString());
+            }
+
+            cbCategoriaC.SelectedIndex = 0;
+            if (cbCategoriaB.Items.Count > 0) cbCategoriaB.SelectedIndex = 0;
+        }
+
+        private void cbCategoriaC_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string categoriaSeleccionada = cbCategoriaC.SelectedItem.ToString();
+            dgvComidas.DataSource = categoriaSeleccionada == "Todas"
+                ? conexion.ObtenerComidas()
+                : conexion.ObtenerComidasPorCategoria(categoriaSeleccionada);
+            dgvComidas.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+        }
+
+        private void dgvComidas_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                DataGridViewRow fila = dgvComidas.Rows[e.RowIndex];
+                idPlatoSeleccionado = Convert.ToInt32(fila.Cells["ID Plato"].Value);
+                txtNombreC.Text = fila.Cells["Nombre Plato"].Value.ToString();
+                txtDescripcionC.Text = fila.Cells["Descripción"].Value.ToString();
+                txtPrecioU.Text = fila.Cells["Precio Unitario"].Value.ToString();
+                cbCategoriaB.SelectedItem = fila.Cells["Categoría"].Value.ToString();
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e) // AGREGAR NUEVO PLATO
+        {
+            string nombre = txtNombreC.Text;
+            string descripcion = txtDescripcionC.Text;
+            string categoria = cbCategoriaB.SelectedItem?.ToString();
+            decimal precio;
+
+            if (!decimal.TryParse(txtPrecioU.Text, out precio))
+            {
+                MessageBox.Show("Precio inválido");
+                return;
+            }
+
+            if (conexion.AgregarPlato(nombre, descripcion, precio, categoria))
+            {
+                MessageBox.Show("Plato agregado");
+                CargarComidas();
+                LimpiarCampos();
+            }
+            else
+            {
+                MessageBox.Show("Error al agregar el plato");
+            }
+        }
+
+        private void btnActualizarC_Click(object sender, EventArgs e)
+        {
+            if (idPlatoSeleccionado == -1)
+            {
+                MessageBox.Show("Selecciona un plato para actualizar");
+                return;
+            }
+
+            string nombre = txtNombreC.Text;
+            string descripcion = txtDescripcionC.Text;
+            string categoria = cbCategoriaB.SelectedItem?.ToString();
+            decimal precio;
+
+            if (!decimal.TryParse(txtPrecioU.Text, out precio))
+            {
+                MessageBox.Show("Precio inválido");
+                return;
+            }
+
+            if (conexion.ActualizarPlato(idPlatoSeleccionado, nombre, descripcion, precio, categoria))
+            {
+                MessageBox.Show("Plato actualizado");
+                CargarComidas();
+                LimpiarCampos();
+            }
+            else
+            {
+                MessageBox.Show("Error al actualizar");
+            }
+        }
+
+        private void btnEliminarC_Click(object sender, EventArgs e)
+        {
+            if (idPlatoSeleccionado == -1)
+            {
+                MessageBox.Show("Selecciona un plato para eliminar");
+                return;
+            }
+
+            DialogResult confirmacion = MessageBox.Show("¿Estás seguro de eliminar este plato?", "Confirmar", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (confirmacion == DialogResult.Yes)
+            {
+                if (conexion.EliminarPlato(idPlatoSeleccionado))
+                {
+                    MessageBox.Show("Plato eliminado");
+                    CargarComidas();
+                    LimpiarCampos();
+                }
+                else
+                {
+                    MessageBox.Show("Error al eliminar");
+                }
+            }
+        }
+
+        private void LimpiarCampos()
+        {
+            idPlatoSeleccionado = -1;
+            txtNombreC.Clear();
+            txtDescripcionC.Clear();
+            txtPrecioU.Clear();
+            if (cbCategoriaB.Items.Count > 0) cbCategoriaB.SelectedIndex = 0;
+        }
+
+        // Tu botón regresar se mantiene igual
         private void btnRegresarMenu_Click(object sender, EventArgs e)
         {
-            this.Close(); // Cierra este formulario
+            this.Close(); // Cierra este formulario y regresa al menú anterior
         }
     }
 }

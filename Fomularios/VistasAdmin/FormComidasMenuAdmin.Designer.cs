@@ -31,18 +31,35 @@
             this.btnRegresarMenu = new System.Windows.Forms.Button();
             this.cbCategoriaC = new System.Windows.Forms.ComboBox();
             this.dgvComidas = new System.Windows.Forms.DataGridView();
+            this.gbDatosBebida = new System.Windows.Forms.GroupBox();
+            this.lblSeleccionBebida = new System.Windows.Forms.Label();
+            this.btnEliminarC = new System.Windows.Forms.Button();
+            this.btnActualizarC = new System.Windows.Forms.Button();
+            this.cbCategoriaB = new System.Windows.Forms.ComboBox();
+            this.txtPrecioU = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.txtNombreC = new System.Windows.Forms.TextBox();
+            this.lbNombreBebida = new System.Windows.Forms.Label();
+            this.btnaAgregarC = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.txtDescripcionC = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvComidas)).BeginInit();
+            this.gbDatosBebida.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnRegresarMenu
             // 
-            this.btnRegresarMenu.Location = new System.Drawing.Point(44, 398);
+            this.btnRegresarMenu.BackColor = System.Drawing.Color.SaddleBrown;
+            this.btnRegresarMenu.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnRegresarMenu.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.btnRegresarMenu.Location = new System.Drawing.Point(53, 415);
             this.btnRegresarMenu.Margin = new System.Windows.Forms.Padding(2);
             this.btnRegresarMenu.Name = "btnRegresarMenu";
-            this.btnRegresarMenu.Size = new System.Drawing.Size(110, 28);
+            this.btnRegresarMenu.Size = new System.Drawing.Size(138, 47);
             this.btnRegresarMenu.TabIndex = 5;
             this.btnRegresarMenu.Text = "Regresar Menú";
-            this.btnRegresarMenu.UseVisualStyleBackColor = true;
+            this.btnRegresarMenu.UseVisualStyleBackColor = false;
             this.btnRegresarMenu.Click += new System.EventHandler(this.btnRegresarMenu_Click);
             // 
             // cbCategoriaC
@@ -67,17 +84,175 @@
             this.dgvComidas.TabIndex = 3;
             this.dgvComidas.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvComidas_CellContentClick);
             // 
+            // gbDatosBebida
+            // 
+            this.gbDatosBebida.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.gbDatosBebida.Controls.Add(this.txtDescripcionC);
+            this.gbDatosBebida.Controls.Add(this.label3);
+            this.gbDatosBebida.Controls.Add(this.lblSeleccionBebida);
+            this.gbDatosBebida.Controls.Add(this.cbCategoriaB);
+            this.gbDatosBebida.Controls.Add(this.txtPrecioU);
+            this.gbDatosBebida.Controls.Add(this.label2);
+            this.gbDatosBebida.Controls.Add(this.label1);
+            this.gbDatosBebida.Controls.Add(this.txtNombreC);
+            this.gbDatosBebida.Controls.Add(this.lbNombreBebida);
+            this.gbDatosBebida.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.gbDatosBebida.Location = new System.Drawing.Point(639, 54);
+            this.gbDatosBebida.Margin = new System.Windows.Forms.Padding(2);
+            this.gbDatosBebida.Name = "gbDatosBebida";
+            this.gbDatosBebida.Padding = new System.Windows.Forms.Padding(2);
+            this.gbDatosBebida.Size = new System.Drawing.Size(329, 335);
+            this.gbDatosBebida.TabIndex = 6;
+            this.gbDatosBebida.TabStop = false;
+            this.gbDatosBebida.Text = "Datos Comida";
+            // 
+            // lblSeleccionBebida
+            // 
+            this.lblSeleccionBebida.AutoSize = true;
+            this.lblSeleccionBebida.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.lblSeleccionBebida.Location = new System.Drawing.Point(22, 32);
+            this.lblSeleccionBebida.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblSeleccionBebida.Name = "lblSeleccionBebida";
+            this.lblSeleccionBebida.Size = new System.Drawing.Size(236, 17);
+            this.lblSeleccionBebida.TabIndex = 8;
+            this.lblSeleccionBebida.Text = "Selecciona un platillo a editar/borrar";
+            // 
+            // btnEliminarC
+            // 
+            this.btnEliminarC.BackColor = System.Drawing.Color.Brown;
+            this.btnEliminarC.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnEliminarC.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.btnEliminarC.Location = new System.Drawing.Point(765, 415);
+            this.btnEliminarC.Margin = new System.Windows.Forms.Padding(2);
+            this.btnEliminarC.Name = "btnEliminarC";
+            this.btnEliminarC.Size = new System.Drawing.Size(93, 47);
+            this.btnEliminarC.TabIndex = 7;
+            this.btnEliminarC.Text = "Eliminar";
+            this.btnEliminarC.UseVisualStyleBackColor = false;
+            this.btnEliminarC.Click += new System.EventHandler(this.btnEliminarC_Click);
+            // 
+            // btnActualizarC
+            // 
+            this.btnActualizarC.BackColor = System.Drawing.Color.ForestGreen;
+            this.btnActualizarC.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnActualizarC.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.btnActualizarC.Location = new System.Drawing.Point(639, 415);
+            this.btnActualizarC.Margin = new System.Windows.Forms.Padding(2);
+            this.btnActualizarC.Name = "btnActualizarC";
+            this.btnActualizarC.Size = new System.Drawing.Size(104, 47);
+            this.btnActualizarC.TabIndex = 6;
+            this.btnActualizarC.Text = "Actualizar datos";
+            this.btnActualizarC.UseVisualStyleBackColor = false;
+            this.btnActualizarC.Click += new System.EventHandler(this.btnActualizarC_Click);
+            // 
+            // cbCategoriaB
+            // 
+            this.cbCategoriaB.FormattingEnabled = true;
+            this.cbCategoriaB.Location = new System.Drawing.Point(126, 121);
+            this.cbCategoriaB.Margin = new System.Windows.Forms.Padding(2);
+            this.cbCategoriaB.Name = "cbCategoriaB";
+            this.cbCategoriaB.Size = new System.Drawing.Size(170, 24);
+            this.cbCategoriaB.TabIndex = 5;
+            this.cbCategoriaB.SelectedIndexChanged += new System.EventHandler(this.cbCategoriaB_SelectedIndexChanged);
+            // 
+            // txtPrecioU
+            // 
+            this.txtPrecioU.Location = new System.Drawing.Point(126, 253);
+            this.txtPrecioU.Margin = new System.Windows.Forms.Padding(2);
+            this.txtPrecioU.Name = "txtPrecioU";
+            this.txtPrecioU.Size = new System.Drawing.Size(171, 23);
+            this.txtPrecioU.TabIndex = 4;
+            this.txtPrecioU.TextChanged += new System.EventHandler(this.txtPrecioU_TextChanged);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(22, 258);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(103, 17);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "Precio unitario:";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(22, 121);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(73, 17);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "Categoría:";
+            // 
+            // txtNombreC
+            // 
+            this.txtNombreC.Location = new System.Drawing.Point(126, 66);
+            this.txtNombreC.Margin = new System.Windows.Forms.Padding(2);
+            this.txtNombreC.Name = "txtNombreC";
+            this.txtNombreC.Size = new System.Drawing.Size(171, 23);
+            this.txtNombreC.TabIndex = 1;
+            this.txtNombreC.TextChanged += new System.EventHandler(this.txtNombreC_TextChanged);
+            // 
+            // lbNombreBebida
+            // 
+            this.lbNombreBebida.AutoSize = true;
+            this.lbNombreBebida.Location = new System.Drawing.Point(22, 66);
+            this.lbNombreBebida.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lbNombreBebida.Name = "lbNombreBebida";
+            this.lbNombreBebida.Size = new System.Drawing.Size(109, 17);
+            this.lbNombreBebida.TabIndex = 0;
+            this.lbNombreBebida.Text = "Nombre bebida:";
+            // 
+            // btnaAgregarC
+            // 
+            this.btnaAgregarC.BackColor = System.Drawing.Color.ForestGreen;
+            this.btnaAgregarC.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnaAgregarC.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.btnaAgregarC.Location = new System.Drawing.Point(879, 415);
+            this.btnaAgregarC.Name = "btnaAgregarC";
+            this.btnaAgregarC.Size = new System.Drawing.Size(89, 47);
+            this.btnaAgregarC.TabIndex = 9;
+            this.btnaAgregarC.Text = "Agregar";
+            this.btnaAgregarC.UseVisualStyleBackColor = false;
+            this.btnaAgregarC.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(22, 188);
+            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(86, 17);
+            this.label3.TabIndex = 10;
+            this.label3.Text = "Descripción:";
+            this.label3.Click += new System.EventHandler(this.label3_Click);
+            // 
+            // txtDescripcionC
+            // 
+            this.txtDescripcionC.Location = new System.Drawing.Point(124, 181);
+            this.txtDescripcionC.Name = "txtDescripcionC";
+            this.txtDescripcionC.Size = new System.Drawing.Size(173, 23);
+            this.txtDescripcionC.TabIndex = 11;
+            this.txtDescripcionC.TextChanged += new System.EventHandler(this.txtDescripcionC_TextChanged);
+            // 
             // FormComidasMenuAdmin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.ClientSize = new System.Drawing.Size(991, 486);
+            this.Controls.Add(this.gbDatosBebida);
             this.Controls.Add(this.btnRegresarMenu);
+            this.Controls.Add(this.btnaAgregarC);
             this.Controls.Add(this.cbCategoriaC);
             this.Controls.Add(this.dgvComidas);
+            this.Controls.Add(this.btnEliminarC);
+            this.Controls.Add(this.btnActualizarC);
             this.Name = "FormComidasMenuAdmin";
             this.Text = "FormComidasMenuAdmin";
             ((System.ComponentModel.ISupportInitialize)(this.dgvComidas)).EndInit();
+            this.gbDatosBebida.ResumeLayout(false);
+            this.gbDatosBebida.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -87,5 +262,18 @@
         private System.Windows.Forms.Button btnRegresarMenu;
         private System.Windows.Forms.ComboBox cbCategoriaC;
         private System.Windows.Forms.DataGridView dgvComidas;
+        private System.Windows.Forms.GroupBox gbDatosBebida;
+        private System.Windows.Forms.Button btnaAgregarC;
+        private System.Windows.Forms.Label lblSeleccionBebida;
+        private System.Windows.Forms.Button btnEliminarC;
+        private System.Windows.Forms.Button btnActualizarC;
+        private System.Windows.Forms.ComboBox cbCategoriaB;
+        private System.Windows.Forms.TextBox txtPrecioU;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox txtNombreC;
+        private System.Windows.Forms.Label lbNombreBebida;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox txtDescripcionC;
     }
 }

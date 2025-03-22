@@ -15,7 +15,7 @@ namespace LaCaguamaSV.Configuracion
         private MySqlConnection conectar = null;
         //hola
         private static string usuario = "root";
-        private static string contrasenia = "root";
+        private static string contrasenia = "1234";
         private static string bd = "lacaguamabd";
         private static string ip = "localhost";
         private static string puerto = "3306";
@@ -405,6 +405,102 @@ namespace LaCaguamaSV.Configuracion
             }
             return dt;
         }
+
+
+
+
+        //Función para agregar comidas
+
+        public bool AgregarPlato(string nombre, string descripcion, decimal precio, string categoria)
+        {
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    string query = "INSERT INTO platos (nombrePlato, descripcion, precioUnitario, id_categoriaP) " +
+                                   "VALUES (@nombre, @descripcion, @precio, (SELECT id_categoriaP FROM categoria_platos WHERE tipo = @categoria))";
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@nombre", nombre);
+                        cmd.Parameters.AddWithValue("@descripcion", descripcion);
+                        cmd.Parameters.AddWithValue("@precio", precio);
+                        cmd.Parameters.AddWithValue("@categoria", categoria);
+                        return cmd.ExecuteNonQuery() > 0;
+                    }
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        //Función para Actualizae comidas
+        public bool ActualizarPlato(int idPlato, string nombre, string descripcion, decimal precio, string categoria)
+        {
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    string query = "UPDATE platos SET nombrePlato = @nombre, descripcion = @descripcion, precioUnitario = @precio, " +
+                                   "id_categoriaP = (SELECT id_categoriaP FROM categoria_platos WHERE tipo = @categoria) " +
+                                   "WHERE id_plato = @idPlato";
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@nombre", nombre);
+                        cmd.Parameters.AddWithValue("@descripcion", descripcion);
+                        cmd.Parameters.AddWithValue("@precio", precio);
+                        cmd.Parameters.AddWithValue("@categoria", categoria);
+                        cmd.Parameters.AddWithValue("@idPlato", idPlato);
+                        return cmd.ExecuteNonQuery() > 0;
+                    }
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        //Función para eliminar comidas
+
+        public bool EliminarPlato(int idPlato)
+        {
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    string query = "DELETE FROM platos WHERE id_plato = @idPlato";
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@idPlato", idPlato);
+                        return cmd.ExecuteNonQuery() > 0;
+                    }
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         public bool EliminarBebida(int idBebida)
         {
