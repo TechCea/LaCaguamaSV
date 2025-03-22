@@ -205,11 +205,35 @@
     <Compile Include="Fomularios\VistasAdmin\FormUsuariosAdmin.Designer.cs">
       <DependentUpon>FormUsuariosAdmin.cs</DependentUpon>
     </Compile>
+    <Compile Include="Fomularios\VistasUsuario\FormCartaBebidas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Fomularios\VistasUsuario\FormCartaBebidas.Designer.cs">
+      <DependentUpon>FormCartaBebidas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Fomularios\VistasUsuario\FormCartaExtras.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Fomularios\VistasUsuario\FormCartaExtras.Designer.cs">
+      <DependentUpon>FormCartaExtras.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Fomularios\VistasUsuario\FormCartaPlatos.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Fomularios\VistasUsuario\FormCartaPlatos.Designer.cs">
+      <DependentUpon>FormCartaPlatos.cs</DependentUpon>
+    </Compile>
     <Compile Include="Fomularios\VistasUsuario\FormUsuario.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Fomularios\VistasUsuario\FormUsuario.Designer.cs">
       <DependentUpon>FormUsuario.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Fomularios\VistasUsuario\Menu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Fomularios\VistasUsuario\Menu.Designer.cs">
+      <DependentUpon>Menu.cs</DependentUpon>
     </Compile>
     <Compile Include="Login.cs">
       <SubType>Form</SubType>
@@ -243,8 +267,20 @@
     <EmbeddedResource Include="Fomularios\VistasAdmin\FormUsuariosAdmin.resx">
       <DependentUpon>FormUsuariosAdmin.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Fomularios\VistasUsuario\FormCartaBebidas.resx">
+      <DependentUpon>FormCartaBebidas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fomularios\VistasUsuario\FormCartaExtras.resx">
+      <DependentUpon>FormCartaExtras.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fomularios\VistasUsuario\FormCartaPlatos.resx">
+      <DependentUpon>FormCartaPlatos.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Fomularios\VistasUsuario\FormUsuario.resx">
       <DependentUpon>FormUsuario.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fomularios\VistasUsuario\Menu.resx">
+      <DependentUpon>Menu.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
