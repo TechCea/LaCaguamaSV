@@ -33,6 +33,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.btnMenu = new System.Windows.Forms.Button();
             this.Ordenes = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnGestionUsuarios
@@ -67,7 +68,7 @@
             // btnMenu
             // 
             this.btnMenu.Location = new System.Drawing.Point(412, 171);
-            this.btnMenu.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnMenu.Margin = new System.Windows.Forms.Padding(2);
             this.btnMenu.Name = "btnMenu";
             this.btnMenu.Size = new System.Drawing.Size(167, 52);
             this.btnMenu.TabIndex = 5;
@@ -85,12 +86,23 @@
             this.Ordenes.UseVisualStyleBackColor = true;
             this.Ordenes.Click += new System.EventHandler(this.Ordenes_Click);
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(427, 253);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(152, 67);
+            this.button1.TabIndex = 7;
+            this.button1.Text = "Funciones";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // FormAdmin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.Rectangle_52;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.Ordenes);
             this.Controls.Add(this.btnMenu);
             this.Controls.Add(this.label1);
@@ -98,6 +110,7 @@
             this.Controls.Add(this.btnGestionUsuarios);
             this.Name = "FormAdmin";
             this.Text = "FormAdmin";
+            this.Load += new System.EventHandler(this.FormAdmin_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -110,5 +123,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnMenu;
         private System.Windows.Forms.Button Ordenes;
+        private System.Windows.Forms.Button button1;
     }
 }

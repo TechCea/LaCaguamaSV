@@ -15,6 +15,68 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         public FormAdminFunciones()
         {
             InitializeComponent();
+            panelConfirmacion.Visible = false; // Ocultar la ventana de confirmación al inicio
+            this.Controls.Add(panelIngresoMonto);
+            panelIngresoMonto.Visible = false; // Lo ocultamos al inicio
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void FormAdminFunciones_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Corte_Caja_Click(object sender, EventArgs e)
+        {
+            panelConfirmacion.Visible = true; // Mostrar la ventana de confirmación
+          
+        }
+
+        private  void btnConfirmarCorte_Click(object sender, EventArgs e)
+        {
+            panelConfirmacion.Visible = false;
+            panelIngresoMonto.Visible = true;
+            panelIngresoMonto.BringToFront();
+
+            // Centrar el panel en el formulario
+            panelIngresoMonto.Location = new Point(
+                (this.ClientSize.Width - panelIngresoMonto.Width) / 2,
+                (this.ClientSize.Height - panelIngresoMonto.Height) / 2
+            );
+        }
+
+        private void btnCancelarCorte_Click(object sender, EventArgs e)
+        {
+            panelConfirmacion.Visible = false; // Ocultar la ventana de confirmación
+        }
+
+        private void btnConfirmarMonto_Click(object sender, EventArgs e)
+        {
+            decimal montoContado;
+            if (decimal.TryParse(txtMontoContado.Text, out montoContado))
+            {
+                MessageBox.Show("Corte de caja confirmado.\nMonto contado: $" + montoContado, "Confirmación", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                panelIngresoMonto.Visible = false; // Ocultar la ventana de ingreso después de confirmar
+            }
+            else
+            {
+                MessageBox.Show("Ingrese un monto válido.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnCancelarMonto_Click(object sender, EventArgs e)
+        {
+            panelIngresoMonto.Visible = false; // Ocultar la ventana de ingreso
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            FormAdmin formAdmin = new FormAdmin();
+            formAdmin.ShowDialog();
         }
     }
 }

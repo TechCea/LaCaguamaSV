@@ -15,7 +15,7 @@ namespace LaCaguamaSV.Configuracion
         private MySqlConnection conectar = null;
         //hola
         private static string usuario = "root";
-        private static string contrasenia = "180294";
+        private static string contrasenia = "slenderman";
         private static string bd = "lacaguamabd";
         private static string ip = "localhost";
         private static string puerto = "3306";

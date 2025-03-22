@@ -35,5 +35,9 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             formExtras.ShowDialog();
         }
 
+        private void FormMenuAdmin_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

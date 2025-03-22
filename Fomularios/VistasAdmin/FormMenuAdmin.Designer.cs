@@ -36,9 +36,10 @@
             // 
             // btnBebidas
             // 
-            this.btnBebidas.Location = new System.Drawing.Point(158, 172);
+            this.btnBebidas.Location = new System.Drawing.Point(118, 140);
+            this.btnBebidas.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnBebidas.Name = "btnBebidas";
-            this.btnBebidas.Size = new System.Drawing.Size(103, 52);
+            this.btnBebidas.Size = new System.Drawing.Size(77, 42);
             this.btnBebidas.TabIndex = 0;
             this.btnBebidas.Text = "Bebidas";
             this.btnBebidas.UseVisualStyleBackColor = true;
@@ -46,9 +47,10 @@
             // 
             // btnExtras
             // 
-            this.btnExtras.Location = new System.Drawing.Point(346, 171);
+            this.btnExtras.Location = new System.Drawing.Point(260, 139);
+            this.btnExtras.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnExtras.Name = "btnExtras";
-            this.btnExtras.Size = new System.Drawing.Size(90, 53);
+            this.btnExtras.Size = new System.Drawing.Size(68, 43);
             this.btnExtras.TabIndex = 1;
             this.btnExtras.Text = "Extras";
             this.btnExtras.UseVisualStyleBackColor = true;
@@ -56,9 +58,10 @@
             // 
             // btnComidas
             // 
-            this.btnComidas.Location = new System.Drawing.Point(540, 172);
+            this.btnComidas.Location = new System.Drawing.Point(405, 140);
+            this.btnComidas.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnComidas.Name = "btnComidas";
-            this.btnComidas.Size = new System.Drawing.Size(99, 52);
+            this.btnComidas.Size = new System.Drawing.Size(74, 42);
             this.btnComidas.TabIndex = 2;
             this.btnComidas.Text = "Comidas";
             this.btnComidas.UseVisualStyleBackColor = true;
@@ -66,24 +69,27 @@
             // 
             // btnRegresarAdmin
             // 
-            this.btnRegresarAdmin.Location = new System.Drawing.Point(46, 383);
+            this.btnRegresarAdmin.Location = new System.Drawing.Point(34, 311);
+            this.btnRegresarAdmin.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnRegresarAdmin.Name = "btnRegresarAdmin";
-            this.btnRegresarAdmin.Size = new System.Drawing.Size(180, 25);
+            this.btnRegresarAdmin.Size = new System.Drawing.Size(135, 20);
             this.btnRegresarAdmin.TabIndex = 3;
             this.btnRegresarAdmin.Text = "Regresar pantalla Admin";
             this.btnRegresarAdmin.UseVisualStyleBackColor = true;
             // 
             // FormMenuAdmin
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(600, 366);
             this.Controls.Add(this.btnRegresarAdmin);
             this.Controls.Add(this.btnComidas);
             this.Controls.Add(this.btnExtras);
             this.Controls.Add(this.btnBebidas);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "FormMenuAdmin";
             this.Text = "FormMenuAdmin";
+            this.Load += new System.EventHandler(this.FormMenuAdmin_Load);
             this.ResumeLayout(false);
 
         }
