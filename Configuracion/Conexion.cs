@@ -681,9 +681,87 @@ namespace LaCaguamaSV.Configuracion
                 return false;
             }
         }
+        // corte de caja 
+
+        public decimal ObtenerTotalEfectivo()
+        {
+            decimal total = 0;
+            string query = "SELECT SUM(total) FROM tipopago WHERE id_pago = 1 )";
+
+            using (MySqlConnection conn = new MySqlConnection(cadenaConexion))
+            {
+                using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                {
+                    try
+                    {
+                        conn.Open();
+                        object result = cmd.ExecuteScalar();
+                        if (result != DBNull.Value && result != null)
+                        {
+                            total = Convert.ToDecimal(result);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error al obtener ingresos en efectivo: " + ex.Message);
+                    }
+                }
+            }
+            return total;
+        }
+
+        public decimal ObtenerTotalGastos()
+        {
+            decimal total = 0;
+            string query = "SELECT SUM(cantidad) FROM gastos WHERE id_gasto IN (SELECT id_caja FROM caja WHERE DATE(fecha) = CURDATE())";
+
+            using (MySqlConnection conn = new MySqlConnection(cadenaConexion))
+            {
+                using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                {
+                    try
+                    {
+                        conn.Open();
+                        object result = cmd.ExecuteScalar();
+                        if (result != DBNull.Value && result != null)
+                        {
+                            total = Convert.ToDecimal(result);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error al obtener los gastos: " + ex.Message);
+                    }
+                }
+            }
+            return total;
+        }
+
+        public void RegistrarCorteCaja(decimal dineroContado)
+        {
+            string query = "INSERT INTO caja (cantidad, fecha) VALUES (@cantidad, NOW(), ";
+
+            using (MySqlConnection conn = new MySqlConnection(cadenaConexion))
+            {
+                using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@cantidad", dineroContado);
 
 
-     
+                    try
+                    {
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                        MessageBox.Show("Corte de caja registrado exitosamente.");
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error al registrar el corte de caja: " + ex.Message);
+                    }
+                }
+            }
+        }
+
 
 
     }

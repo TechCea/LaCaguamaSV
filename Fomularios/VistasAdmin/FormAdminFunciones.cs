@@ -13,7 +13,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 {
     public partial class FormAdminFunciones: Form
     {
-        private string connectionString = "server=root; database=lacaguamabd; uid=root; pwd=slenderman;";
+    
 
         public FormAdminFunciones()
         {
@@ -100,88 +100,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
 
         }
-        private decimal ObtenerTotalEfectivo()
-        {
-            decimal total = 0;
-            string query = "SELECT SUM(total) FROM tipopago WHERE id_pago = 1 )";
-
-            using (MySqlConnection conn = new MySqlConnection(connectionString))
-            {
-                using (MySqlCommand cmd = new MySqlCommand(query, conn))
-                {
-                    try
-                    {
-                        conn.Open();
-                        object result = cmd.ExecuteScalar();
-                        if (result != DBNull.Value && result != null)
-                        {
-                            total = Convert.ToDecimal(result);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Error al obtener ingresos en efectivo: " + ex.Message);
-                    }
-                }
-            }
-            return total;
-        }
-
-        private decimal ObtenerTotalGastos()
-        {
-            decimal total = 0;
-            string query = "SELECT SUM(cantidad) FROM gastos WHERE id_gasto IN (SELECT id_caja FROM caja WHERE DATE(fecha) = CURDATE())";
-
-            using (MySqlConnection conn = new MySqlConnection(connectionString))
-            {
-                using (MySqlCommand cmd = new MySqlCommand(query, conn))
-                {
-                    try
-                    {
-                        conn.Open();
-                        object result = cmd.ExecuteScalar();
-                        if (result != DBNull.Value && result != null)
-                        {
-                            total = Convert.ToDecimal(result);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Error al obtener los gastos: " + ex.Message);
-                    }
-                }
-            }
-            return total;
-        }
-
-        private void RegistrarCorteCaja(decimal dineroContado)
-        {
-            string query = "INSERT INTO caja (cantidad, fecha) VALUES (@cantidad, NOW(), ";
-
-            using (MySqlConnection conn = new MySqlConnection(connectionString))
-            {
-                using (MySqlCommand cmd = new MySqlCommand(query, conn))
-                {
-                    cmd.Parameters.AddWithValue("@cantidad", dineroContado);
-
-
-                    try
-                    {
-                        conn.Open();
-                        cmd.ExecuteNonQuery();
-                        MessageBox.Show("Corte de caja registrado exitosamente.");
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Error al registrar el corte de caja: " + ex.Message);
-                    }
-                }
-            }
-        }
- 
-
-
-
+        
         private void btnCancelarMonto_Click(object sender, EventArgs e)
         {
             panelIngresoMonto.Visible = false; // Ocultar la ventana de ingreso
