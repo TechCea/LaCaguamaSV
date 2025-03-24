@@ -190,12 +190,11 @@
             // panelConfirmacion
             // 
             this.panelConfirmacion.BackColor = System.Drawing.Color.Blue;
-            this.panelConfirmacion.Controls.Add(this.panelIngresoMonto);
             this.panelConfirmacion.Controls.Add(this.btnCancelarCorte);
             this.panelConfirmacion.Controls.Add(this.btnConfirmarCorte);
             this.panelConfirmacion.Controls.Add(this.label5);
             this.panelConfirmacion.Controls.Add(this.label4);
-            this.panelConfirmacion.Location = new System.Drawing.Point(162, 69);
+            this.panelConfirmacion.Location = new System.Drawing.Point(174, 86);
             this.panelConfirmacion.Name = "panelConfirmacion";
             this.panelConfirmacion.Size = new System.Drawing.Size(423, 299);
             this.panelConfirmacion.TabIndex = 12;
@@ -208,7 +207,7 @@
             this.panelIngresoMonto.Controls.Add(this.btnConfirmarMonto);
             this.panelIngresoMonto.Controls.Add(this.txtMontoContado);
             this.panelIngresoMonto.Controls.Add(this.Label6);
-            this.panelIngresoMonto.Location = new System.Drawing.Point(0, 0);
+            this.panelIngresoMonto.Location = new System.Drawing.Point(174, 83);
             this.panelIngresoMonto.Name = "panelIngresoMonto";
             this.panelIngresoMonto.Size = new System.Drawing.Size(423, 299);
             this.panelIngresoMonto.TabIndex = 13;
@@ -249,6 +248,7 @@
             this.txtMontoContado.Name = "txtMontoContado";
             this.txtMontoContado.Size = new System.Drawing.Size(156, 20);
             this.txtMontoContado.TabIndex = 14;
+            this.txtMontoContado.TextChanged += new System.EventHandler(this.txtMontoContado_TextChanged);
             // 
             // Label6
             // 
@@ -315,6 +315,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.panelIngresoMonto);
             this.Controls.Add(this.panelConfirmacion);
             this.Controls.Add(this.button9);
             this.Controls.Add(this.button8);

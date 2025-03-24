@@ -1,4 +1,5 @@
-﻿using MySql.Data.MySqlClient;
+﻿using LaCaguamaSV.Configuracion;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,11 +10,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+
 namespace LaCaguamaSV.Fomularios.VistasAdmin
 {
     public partial class FormAdminFunciones: Form
     {
-    
+        Conexion conexion = new Conexion();
+
+        private decimal dineroContado;
 
         public FormAdminFunciones()
         {
@@ -44,12 +48,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             panelConfirmacion.Visible = false;
             panelIngresoMonto.Visible = true;
             panelIngresoMonto.BringToFront();
-
-            // Centrar el panel en el formulario
-            panelIngresoMonto.Location = new Point(
-                (this.ClientSize.Width - panelIngresoMonto.Width) / 2,
-                (this.ClientSize.Height - panelIngresoMonto.Height) / 2
-            );
+            panelIngresoMonto.Location = new Point((this.ClientSize.Width - panelIngresoMonto.Width) / 2, (this.ClientSize.Height - panelIngresoMonto.Height) / 2);
         }
 
         private void btnCancelarCorte_Click(object sender, EventArgs e)
@@ -59,57 +58,70 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void btnConfirmarMonto_Click(object sender, EventArgs e)
         {
-            decimal montoContado;
-            if (decimal.TryParse(txtMontoContado.Text, out montoContado))
+            if (decimal.TryParse(txtMontoContado.Text, out decimal montoContado))
             {
-                MessageBox.Show("Corte de caja confirmado.\nMonto contado: $" + montoContado, "Confirmación", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                panelIngresoMonto.Visible = false; // Ocultar la ventana de ingreso después de confirmar
+                decimal cajaInicial = ObtenerCajaInicial(); // Ahora obtiene el valor dinámico de la BD
+                decimal totalEfectivo = ObtenerTotalEfectivo(); // Obtiene ingresos solo en efectivo
+                decimal totalGastos = ObtenerTotalGastos(); // Obtiene los gastos
+                decimal totalEsperado = cajaInicial + totalEfectivo - totalGastos;
+                decimal diferencia = montoContado - totalEsperado;
+
+                string resultado = diferencia > 0 ? $"Sobrante: ${diferencia}" :
+                                   diferencia < 0 ? $"Faltante: ${Math.Abs(diferencia)}" :
+                                   "Sin diferencia.";
+
+                // Mostrar mensaje de confirmación
+                MessageBox.Show($"Corte de caja confirmado.\n" +
+                                $"Monto contado: ${montoContado}\n" +
+                                $"Caja inicial: ${cajaInicial}\n" +
+                                $"Total generado: ${totalEfectivo}\n" +
+                                $"Gastos: ${totalGastos}\n" +
+                                $"Total esperado: ${totalEsperado}\n" +
+                                $"{resultado}",
+                                "Confirmación", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                panelIngresoMonto.Visible = false;
             }
             else
             {
                 MessageBox.Show("Ingrese un monto válido.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-
-            decimal dineroContado;
-
-            // Validar si el monto ingresado es un número válido
-            if (!decimal.TryParse(txtMontoContado.Text, out dineroContado))
-            {
-                MessageBox.Show("Ingrese un monto válido.");
-                return;
-            }
-
-            // Obtener ingresos y gastos
-            decimal totalEfectivo = ObtenerTotalEfectivo();
-            decimal totalGastos = ObtenerTotalGastos();
-            decimal totalEsperado = totalEfectivo - totalGastos;
-
-            // Calcular la diferencia
-            decimal diferencia = dineroContado - totalEsperado;
-
-            // Mostrar resultados
-            MessageBox.Show($"Total en efectivo: {totalEfectivo:C2}\n" +
-                            $"Total de gastos: {totalGastos:C2}\n" +
-                            $"Total esperado en caja: {totalEsperado:C2}\n" +
-                            $"Diferencia: {diferencia:C2}");
-
-            // Guardar en la base de datos
-            RegistrarCorteCaja(dineroContado);
-
-
-
         }
-        
+       
+        private decimal ObtenerTotalEfectivo()
+        {
+            return conexion.ObtenerTotalEfectivo(DateTime.Now);
+        }
+
+        private decimal ObtenerTotalGastos()
+        {
+            return conexion.ObtenerTotalGastos(DateTime.Now);
+        }
+        private decimal ObtenerCajaInicial()
+        {
+            return conexion.ObtenerCajaInicial(DateTime.Now);
+        }
+
         private void btnCancelarMonto_Click(object sender, EventArgs e)
         {
             panelIngresoMonto.Visible = false; // Ocultar la ventana de ingreso
         }
+        private decimal ObtenerTotalGeneradoEfectivo()
+        {
+            return conexion.ObtenerTotalGeneradoEfectivo(DateTime.Now);
+        }
+
+
 
         private void button9_Click(object sender, EventArgs e)
         {
             FormAdmin formAdmin = new FormAdmin();
             formAdmin.ShowDialog();
+        }
+
+        private void txtMontoContado_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

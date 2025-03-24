@@ -681,17 +681,52 @@ namespace LaCaguamaSV.Configuracion
                 return false;
             }
         }
-        // corte de caja 
+        // caja incial
+        public decimal ObtenerCajaInicial(DateTime fecha)
+        {
+            decimal cajaInicial = 0;
+            string query = "SELECT cantidad FROM caja WHERE DATE(fecha) = @fecha LIMIT 1";
 
-        public decimal ObtenerTotalEfectivo()
+            using (MySqlConnection conn = new MySqlConnection(cadenaConexion))
+            using (MySqlCommand cmd = new MySqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@fecha", fecha.ToString("yyyy-MM-dd"));
+                try
+                {
+                    conn.Open();
+                    object result = cmd.ExecuteScalar();
+                    if (result != DBNull.Value && result != null)
+                    {
+                        cajaInicial = Convert.ToDecimal(result);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al obtener la caja inicial: " + ex.Message);
+                }
+            }
+            return cajaInicial;
+        }
+
+        // Corte de caja
+
+
+        public decimal ObtenerTotalEfectivo(DateTime fecha)
         {
             decimal total = 0;
-            string query = "SELECT SUM(total) FROM tipopago WHERE id_pago = 1 )";
+            string query = @"
+        SELECT COALESCE(SUM(o.total), 0) 
+        FROM ordenes o
+        INNER JOIN tipopago t ON o.id_pago = t.id_pago
+        WHERE t.nombrePago = 'Efectivo' AND DATE(o.fecha) = @fecha;
+    ";
 
             using (MySqlConnection conn = new MySqlConnection(cadenaConexion))
             {
                 using (MySqlCommand cmd = new MySqlCommand(query, conn))
                 {
+                    cmd.Parameters.AddWithValue("@fecha", fecha.Date);
+
                     try
                     {
                         conn.Open();
@@ -709,16 +744,22 @@ namespace LaCaguamaSV.Configuracion
             }
             return total;
         }
-
-        public decimal ObtenerTotalGastos()
+        public decimal ObtenerTotalGeneradoEfectivo(DateTime fecha)
         {
             decimal total = 0;
-            string query = "SELECT SUM(cantidad) FROM gastos WHERE id_gasto IN (SELECT id_caja FROM caja WHERE DATE(fecha) = CURDATE())";
+            string query = @"
+        SELECT COALESCE(SUM(o.total), 0)
+        FROM ordenes o
+        INNER JOIN tipopago t ON o.id_pago = t.id_pago
+        WHERE t.nombrePago = 'Efectivo' AND DATE(o.fecha) = @fecha;
+    ";
 
             using (MySqlConnection conn = new MySqlConnection(cadenaConexion))
             {
                 using (MySqlCommand cmd = new MySqlCommand(query, conn))
                 {
+                    cmd.Parameters.AddWithValue("@fecha", fecha.ToString("yyyy-MM-dd"));
+
                     try
                     {
                         conn.Open();
@@ -730,39 +771,37 @@ namespace LaCaguamaSV.Configuracion
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show("Error al obtener los gastos: " + ex.Message);
+                        MessageBox.Show("Error al obtener total generado: " + ex.Message);
                     }
                 }
             }
             return total;
         }
 
-        public void RegistrarCorteCaja(decimal dineroContado)
+        public decimal ObtenerTotalGastos(DateTime fecha)
         {
-            string query = "INSERT INTO caja (cantidad, fecha) VALUES (@cantidad, NOW(), ";
+            decimal total = 0;
+            string query = "SELECT COALESCE(SUM(cantidad), 0) FROM gastos WHERE DATE(fecha) = @fecha";
 
             using (MySqlConnection conn = new MySqlConnection(cadenaConexion))
+            using (MySqlCommand cmd = new MySqlCommand(query, conn))
             {
-                using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                cmd.Parameters.AddWithValue("@fecha", fecha.ToString("yyyy-MM-dd"));
+                try
                 {
-                    cmd.Parameters.AddWithValue("@cantidad", dineroContado);
-
-
-                    try
+                    conn.Open();
+                    object result = cmd.ExecuteScalar();
+                    if (result != DBNull.Value && result != null)
                     {
-                        conn.Open();
-                        cmd.ExecuteNonQuery();
-                        MessageBox.Show("Corte de caja registrado exitosamente.");
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Error al registrar el corte de caja: " + ex.Message);
+                        total = Convert.ToDecimal(result);
                     }
                 }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al obtener los gastos: " + ex.Message);
+                }
             }
+            return total;
         }
-
-
-
-    }
 }
+        }
