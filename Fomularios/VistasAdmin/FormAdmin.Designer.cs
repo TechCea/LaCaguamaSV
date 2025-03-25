@@ -34,11 +34,14 @@
             this.btnMenu = new System.Windows.Forms.Button();
             this.Ordenes = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
+            this.dataGridViewOrdenesAdmin = new System.Windows.Forms.DataGridView();
+            this.btnCrearOrden = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewOrdenesAdmin)).BeginInit();
             this.SuspendLayout();
             // 
             // btnGestionUsuarios
             // 
-            this.btnGestionUsuarios.Location = new System.Drawing.Point(412, 77);
+            this.btnGestionUsuarios.Location = new System.Drawing.Point(579, 73);
             this.btnGestionUsuarios.Name = "btnGestionUsuarios";
             this.btnGestionUsuarios.Size = new System.Drawing.Size(167, 62);
             this.btnGestionUsuarios.TabIndex = 2;
@@ -48,7 +51,7 @@
             // 
             // btnCerrarSesion
             // 
-            this.btnCerrarSesion.Location = new System.Drawing.Point(321, 218);
+            this.btnCerrarSesion.Location = new System.Drawing.Point(641, 415);
             this.btnCerrarSesion.Name = "btnCerrarSesion";
             this.btnCerrarSesion.Size = new System.Drawing.Size(75, 23);
             this.btnCerrarSesion.TabIndex = 3;
@@ -59,7 +62,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(261, 102);
+            this.label1.Location = new System.Drawing.Point(454, 12);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(92, 13);
             this.label1.TabIndex = 4;
@@ -67,7 +70,7 @@
             // 
             // btnMenu
             // 
-            this.btnMenu.Location = new System.Drawing.Point(412, 171);
+            this.btnMenu.Location = new System.Drawing.Point(579, 156);
             this.btnMenu.Margin = new System.Windows.Forms.Padding(2);
             this.btnMenu.Name = "btnMenu";
             this.btnMenu.Size = new System.Drawing.Size(167, 52);
@@ -78,7 +81,7 @@
             // 
             // Ordenes
             // 
-            this.Ordenes.Location = new System.Drawing.Point(66, 77);
+            this.Ordenes.Location = new System.Drawing.Point(579, 12);
             this.Ordenes.Name = "Ordenes";
             this.Ordenes.Size = new System.Drawing.Size(112, 55);
             this.Ordenes.TabIndex = 6;
@@ -88,7 +91,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(427, 253);
+            this.button1.Location = new System.Drawing.Point(579, 218);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(152, 67);
             this.button1.TabIndex = 7;
@@ -96,12 +99,33 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // dataGridViewOrdenesAdmin
+            // 
+            this.dataGridViewOrdenesAdmin.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewOrdenesAdmin.Location = new System.Drawing.Point(12, 37);
+            this.dataGridViewOrdenesAdmin.Name = "dataGridViewOrdenesAdmin";
+            this.dataGridViewOrdenesAdmin.Size = new System.Drawing.Size(553, 377);
+            this.dataGridViewOrdenesAdmin.TabIndex = 8;
+            this.dataGridViewOrdenesAdmin.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewOrdenesAdmin_CellContentClick);
+            // 
+            // btnCrearOrden
+            // 
+            this.btnCrearOrden.Location = new System.Drawing.Point(579, 305);
+            this.btnCrearOrden.Name = "btnCrearOrden";
+            this.btnCrearOrden.Size = new System.Drawing.Size(152, 52);
+            this.btnCrearOrden.TabIndex = 9;
+            this.btnCrearOrden.Text = "Crear Orden";
+            this.btnCrearOrden.UseVisualStyleBackColor = true;
+            this.btnCrearOrden.Click += new System.EventHandler(this.btnCrearOrden_Click);
+            // 
             // FormAdmin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.Rectangle_52;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.btnCrearOrden);
+            this.Controls.Add(this.dataGridViewOrdenesAdmin);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.Ordenes);
             this.Controls.Add(this.btnMenu);
@@ -111,6 +135,7 @@
             this.Name = "FormAdmin";
             this.Text = "FormAdmin";
             this.Load += new System.EventHandler(this.FormAdmin_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewOrdenesAdmin)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -124,5 +149,7 @@
         private System.Windows.Forms.Button btnMenu;
         private System.Windows.Forms.Button Ordenes;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.DataGridView dataGridViewOrdenesAdmin;
+        private System.Windows.Forms.Button btnCrearOrden;
     }
 }

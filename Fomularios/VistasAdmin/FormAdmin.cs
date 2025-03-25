@@ -17,6 +17,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         public FormAdmin()
         {
             InitializeComponent();
+            CargarOrdenes();
 
             // Si el usuario no es administrador, cierra el formulario
             if (SesionUsuario.Rol != 1)
@@ -24,6 +25,11 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 MessageBox.Show("Acceso denegado. No tienes permisos de administrador.", "Acceso Restringido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+        }
+
+        private void CargarOrdenes()
+        {
+            dataGridViewOrdenesAdmin.DataSource = OrdenesService.ListarOrdenes();
         }
 
         private void btnGestionUsuarios_Click(object sender, EventArgs e)
@@ -66,6 +72,21 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             FormAdminFunciones formFunciones = new FormAdminFunciones();
             formFunciones.ShowDialog();
+        }
+
+        private void dataGridViewOrdenesAdmin_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void btnCrearOrden_Click(object sender, EventArgs e)
+        {
+            using (CrearOrden formOrden = new CrearOrden())
+            {
+                formOrden.ShowDialog(); // Mostrar como modal
+                CargarOrdenes(); // Refrescar lista de órdenes después de cerrar
+            }
+
         }
     }
 }
