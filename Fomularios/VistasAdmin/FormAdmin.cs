@@ -30,6 +30,8 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         private void CargarOrdenes()
         {
             dataGridViewOrdenesAdmin.DataSource = OrdenesService.ListarOrdenes();
+
+            dataGridViewOrdenesAdmin.Columns["id_orden"].Visible = false;
         }
 
         private void btnGestionUsuarios_Click(object sender, EventArgs e)
@@ -64,7 +66,9 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void FormAdmin_Load(object sender, EventArgs e)
         {
-
+            // Asegurar que se seleccione toda la fila al hacer clic
+            dataGridViewOrdenesAdmin.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridViewOrdenesAdmin.MultiSelect = false;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -77,6 +81,9 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             if (e.RowIndex >= 0) // Verifica que no sea un encabezado
             {
+                // Seleccionar toda la fila al hacer clic en cualquier celda
+                dataGridViewOrdenesAdmin.Rows[e.RowIndex].Selected = true;
+
                 DataGridViewRow row = dataGridViewOrdenesAdmin.Rows[e.RowIndex];
 
                 int idOrden = Convert.ToInt32(row.Cells["id_orden"].Value);
