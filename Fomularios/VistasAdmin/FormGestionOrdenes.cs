@@ -13,15 +13,23 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 {
     public partial class FormGestionOrdenes: Form
     {
-        public FormGestionOrdenes()
+        public FormGestionOrdenes(int idOrden, string nombreCliente, decimal total, decimal descuento, string fechaOrden, string numeroMesa, string tipoPago, string nombreUsuario, string estadoOrden)
         {
             InitializeComponent();
-            CargarOrdenes();
+            CargarDatosOrden(idOrden, nombreCliente, total, descuento, fechaOrden, numeroMesa, tipoPago, nombreUsuario, estadoOrden);
         }
 
-        private void CargarOrdenes()
+        private void CargarDatosOrden(int idOrden, string nombreCliente, decimal total, decimal descuento, string fechaOrden, string numeroMesa, string tipoPago, string nombreUsuario, string estadoOrden)
         {
-            dataGridViewOrdenes.DataSource = OrdenesService.ListarOrdenes();
+            lblIdOrden.Text = idOrden.ToString();
+            lblNombreCliente.Text = nombreCliente;
+            lblTotal.Text = total.ToString("C");
+            lblDescuento.Text = descuento.ToString("C");
+            lblFechaOrden.Text = fechaOrden;
+            lblNumeroMesa.Text = numeroMesa;
+            lblTipoPago.Text = tipoPago;
+            lblNombreUsuario.Text = nombreUsuario;
+            lblEstadoOrden.Text = estadoOrden;
         }
 
         private void FormGestionOrdenes_Load(object sender, EventArgs e)
@@ -29,9 +37,5 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         }
 
-        private void dataGridViewOrdenes_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
     }
 }

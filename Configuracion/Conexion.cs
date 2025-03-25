@@ -18,7 +18,7 @@ namespace LaCaguamaSV.Configuracion
         private static string contrasenia = "root";
         private static string bd = "lacaguamabd";
         private static string ip = "localhost";
-        private static string puerto = "3306";
+        private static string puerto = "3307";
 
         string cadenaConexion = $"Server={ip};Port={puerto};Database={bd};User Id={usuario};Password={contrasenia};";
 
