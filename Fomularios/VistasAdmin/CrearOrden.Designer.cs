@@ -93,7 +93,7 @@
             // 
             // btnCrearOrden
             // 
-            this.btnCrearOrden.Location = new System.Drawing.Point(146, 250);
+            this.btnCrearOrden.Location = new System.Drawing.Point(181, 224);
             this.btnCrearOrden.Name = "btnCrearOrden";
             this.btnCrearOrden.Size = new System.Drawing.Size(75, 23);
             this.btnCrearOrden.TabIndex = 6;
@@ -103,7 +103,7 @@
             // 
             // btnCancelar
             // 
-            this.btnCancelar.Location = new System.Drawing.Point(293, 250);
+            this.btnCancelar.Location = new System.Drawing.Point(392, 224);
             this.btnCancelar.Name = "btnCancelar";
             this.btnCancelar.Size = new System.Drawing.Size(75, 23);
             this.btnCancelar.TabIndex = 7;

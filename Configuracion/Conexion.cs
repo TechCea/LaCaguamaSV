@@ -30,7 +30,6 @@ namespace LaCaguamaSV.Configuracion
             {
                 conectar = new MySqlConnection(cadenaConexion);
                 conectar.Open();
-                MessageBox.Show("Conexión establecida");
                 return conectar;
             }
             catch (Exception e)
