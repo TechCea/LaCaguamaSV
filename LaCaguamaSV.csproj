@@ -199,6 +199,12 @@
     <Compile Include="Fomularios\VistasAdmin\FormGestionOrdenes.Designer.cs">
       <DependentUpon>FormGestionOrdenes.cs</DependentUpon>
     </Compile>
+    <Compile Include="Fomularios\VistasAdmin\FormInventarioAdmin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Fomularios\VistasAdmin\FormInventarioAdmin.Designer.cs">
+      <DependentUpon>FormInventarioAdmin.cs</DependentUpon>
+    </Compile>
     <Compile Include="Fomularios\VistasAdmin\FormMenuAdmin.cs">
       <SubType>Form</SubType>
     </Compile>

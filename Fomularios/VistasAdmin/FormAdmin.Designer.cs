@@ -37,13 +37,14 @@
             this.dataGridViewOrdenesAdmin = new System.Windows.Forms.DataGridView();
             this.btnCrearOrden = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
+            this.btnInventario = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewOrdenesAdmin)).BeginInit();
             this.SuspendLayout();
             // 
             // btnGestionUsuarios
             // 
             this.btnGestionUsuarios.Location = new System.Drawing.Point(772, 91);
-            this.btnGestionUsuarios.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnGestionUsuarios.Margin = new System.Windows.Forms.Padding(4);
             this.btnGestionUsuarios.Name = "btnGestionUsuarios";
             this.btnGestionUsuarios.Size = new System.Drawing.Size(223, 76);
             this.btnGestionUsuarios.TabIndex = 2;
@@ -53,8 +54,8 @@
             // 
             // btnCerrarSesion
             // 
-            this.btnCerrarSesion.Location = new System.Drawing.Point(855, 511);
-            this.btnCerrarSesion.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnCerrarSesion.Location = new System.Drawing.Point(875, 569);
+            this.btnCerrarSesion.Margin = new System.Windows.Forms.Padding(4);
             this.btnCerrarSesion.Name = "btnCerrarSesion";
             this.btnCerrarSesion.Size = new System.Drawing.Size(100, 28);
             this.btnCerrarSesion.TabIndex = 3;
@@ -86,7 +87,7 @@
             // Ordenes
             // 
             this.Ordenes.Location = new System.Drawing.Point(772, 15);
-            this.Ordenes.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Ordenes.Margin = new System.Windows.Forms.Padding(4);
             this.Ordenes.Name = "Ordenes";
             this.Ordenes.Size = new System.Drawing.Size(149, 68);
             this.Ordenes.TabIndex = 6;
@@ -97,7 +98,7 @@
             // button1
             // 
             this.button1.Location = new System.Drawing.Point(772, 242);
-            this.button1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button1.Margin = new System.Windows.Forms.Padding(4);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(203, 82);
             this.button1.TabIndex = 7;
@@ -109,17 +110,17 @@
             // 
             this.dataGridViewOrdenesAdmin.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewOrdenesAdmin.Location = new System.Drawing.Point(16, 46);
-            this.dataGridViewOrdenesAdmin.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dataGridViewOrdenesAdmin.Margin = new System.Windows.Forms.Padding(4);
             this.dataGridViewOrdenesAdmin.Name = "dataGridViewOrdenesAdmin";
             this.dataGridViewOrdenesAdmin.RowHeadersWidth = 51;
-            this.dataGridViewOrdenesAdmin.Size = new System.Drawing.Size(737, 464);
+            this.dataGridViewOrdenesAdmin.Size = new System.Drawing.Size(737, 551);
             this.dataGridViewOrdenesAdmin.TabIndex = 8;
             this.dataGridViewOrdenesAdmin.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewOrdenesAdmin_CellContentClick);
             // 
             // btnCrearOrden
             // 
             this.btnCrearOrden.Location = new System.Drawing.Point(772, 332);
-            this.btnCrearOrden.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnCrearOrden.Margin = new System.Windows.Forms.Padding(4);
             this.btnCrearOrden.Name = "btnCrearOrden";
             this.btnCrearOrden.Size = new System.Drawing.Size(203, 64);
             this.btnCrearOrden.TabIndex = 9;
@@ -129,20 +130,31 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(777, 414);
+            this.button2.Location = new System.Drawing.Point(772, 403);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(197, 69);
+            this.button2.Size = new System.Drawing.Size(203, 69);
             this.button2.TabIndex = 10;
             this.button2.Text = "Gestionar mesas";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // btnInventario
+            // 
+            this.btnInventario.Location = new System.Drawing.Point(772, 478);
+            this.btnInventario.Name = "btnInventario";
+            this.btnInventario.Size = new System.Drawing.Size(203, 69);
+            this.btnInventario.TabIndex = 11;
+            this.btnInventario.Text = "Gestionar inventario";
+            this.btnInventario.UseVisualStyleBackColor = true;
+            this.btnInventario.Click += new System.EventHandler(this.btnInventario_Click);
             // 
             // FormAdmin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.Rectangle_52;
-            this.ClientSize = new System.Drawing.Size(1067, 554);
+            this.ClientSize = new System.Drawing.Size(1071, 630);
+            this.Controls.Add(this.btnInventario);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.btnCrearOrden);
             this.Controls.Add(this.dataGridViewOrdenesAdmin);
@@ -152,7 +164,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnCerrarSesion);
             this.Controls.Add(this.btnGestionUsuarios);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FormAdmin";
             this.Text = "FormAdmin";
             this.Load += new System.EventHandler(this.FormAdmin_Load);
@@ -173,5 +185,6 @@
         private System.Windows.Forms.DataGridView dataGridViewOrdenesAdmin;
         private System.Windows.Forms.Button btnCrearOrden;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button btnInventario;
     }
 }

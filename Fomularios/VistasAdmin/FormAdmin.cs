@@ -116,5 +116,11 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             FormMesasAdmin formmesas = new FormMesasAdmin();
             formmesas.ShowDialog();
         }
+
+        private void btnInventario_Click(object sender, EventArgs e)
+        {
+            FormInventarioAdmin formminven = new FormInventarioAdmin();
+            formminven.ShowDialog();
+        }
     }
 }
