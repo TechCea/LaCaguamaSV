@@ -31,7 +31,17 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             dataGridViewOrdenesAdmin.DataSource = OrdenesService.ListarOrdenes();
 
+            // Evitar edición de la tabla
+            dataGridViewOrdenesAdmin.ReadOnly = true;
+
+            // Selección completa de filas
+            dataGridViewOrdenesAdmin.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+
+            // Evitar selección de múltiples filas
+            dataGridViewOrdenesAdmin.MultiSelect = false;
+
             dataGridViewOrdenesAdmin.Columns["id_orden"].Visible = false;
+
         }
 
         private void btnGestionUsuarios_Click(object sender, EventArgs e)
@@ -66,7 +76,8 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void FormAdmin_Load(object sender, EventArgs e)
         {
-            // Asegurar que se seleccione toda la fila al hacer clic
+            // Asegurar que el DataGridView no sea editable y seleccione filas completas
+            dataGridViewOrdenesAdmin.ReadOnly = true;
             dataGridViewOrdenesAdmin.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridViewOrdenesAdmin.MultiSelect = false;
         }
@@ -79,13 +90,15 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void dataGridViewOrdenesAdmin_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0) // Verifica que no sea un encabezado
+            if (e.RowIndex >= 0) // Asegurar que no se haga clic en el encabezado
             {
-                // Seleccionar toda la fila al hacer clic en cualquier celda
+                // Seleccionar fila completa
                 dataGridViewOrdenesAdmin.Rows[e.RowIndex].Selected = true;
 
+                // Obtener la fila seleccionada
                 DataGridViewRow row = dataGridViewOrdenesAdmin.Rows[e.RowIndex];
 
+                // Obtener datos de la orden
                 int idOrden = Convert.ToInt32(row.Cells["id_orden"].Value);
                 string nombreCliente = row.Cells["nombreCliente"].Value.ToString();
                 decimal total = Convert.ToDecimal(row.Cells["total"].Value);
@@ -96,7 +109,10 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 string nombreUsuario = row.Cells["nombre_usuario"].Value.ToString();
                 string estadoOrden = row.Cells["estado_orden"].Value.ToString();
 
-                FormGestionOrdenes formOrden = new FormGestionOrdenes(idOrden, nombreCliente, total, descuento, fechaOrden, numeroMesa, tipoPago, nombreUsuario, estadoOrden);
+                // Abrir formulario de gestión de órdenes con los datos seleccionados
+                FormGestionOrdenes formOrden = new FormGestionOrdenes(idOrden, nombreCliente, total,
+                                                                      descuento, fechaOrden, numeroMesa,
+                                                                      tipoPago, nombreUsuario, estadoOrden);
                 formOrden.ShowDialog();
             }
         }
