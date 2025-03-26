@@ -81,11 +81,14 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
                 // Ocultamos el panel de ingreso de monto
                 panelIngresoMonto.Visible = false; // Ocultamos panelIngresoMonto
+                                               
+           
             }
             else
             {
                 MessageBox.Show("Ingrese un monto válido.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            
         }
 
         private decimal ObtenerTotalEfectivo(DateTime fecha)
@@ -105,6 +108,8 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         private void btnCancelarMonto_Click(object sender, EventArgs e)
         {
             panelIngresoMonto.Visible = false; // Ocultar la ventana de ingreso
+                                               // Limpiar el TextBox
+            txtMontoContado.Clear();
         }
         private decimal ObtenerTotalGeneradoEfectivo()
         {
