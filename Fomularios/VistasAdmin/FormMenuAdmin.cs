@@ -19,18 +19,21 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void btnBebidas_Click(object sender, EventArgs e)
         {
+            this.Close();
             FormBebidasMenuAdmin formBebida = new FormBebidasMenuAdmin();
             formBebida.ShowDialog();
         }
 
         private void btnComidas_Click(object sender, EventArgs e)
         {
+            this.Close();
             FormComidasMenuAdmin formComida = new FormComidasMenuAdmin();
             formComida.ShowDialog();
         }
 
         private void btnExtras_Click(object sender, EventArgs e)
         {
+            this.Close();
             FormExtrasMenuAdmin formExtras = new FormExtrasMenuAdmin();
             formExtras.ShowDialog();
         }
@@ -39,5 +42,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
 
         }
+
     }
 }

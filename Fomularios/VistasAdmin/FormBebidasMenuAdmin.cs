@@ -87,7 +87,9 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void btnRegresarMenu_Click(object sender, EventArgs e)
         {
-
+            this.Close();
+            FormMenuAdmin FormMenuAdmin = new FormMenuAdmin();
+            FormMenuAdmin.Show();
         }
 
         private void btnActualizarB_Click(object sender, EventArgs e)

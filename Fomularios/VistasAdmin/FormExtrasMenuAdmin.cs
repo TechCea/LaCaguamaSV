@@ -141,6 +141,13 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 MessageBox.Show("No se pudo actualizar el extra.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void btnRegresarMenu_Click(object sender, EventArgs e)
+        {
+            this.Close();
+            FormMenuAdmin FormMenuAdmin = new FormMenuAdmin();
+            FormMenuAdmin.Show();
+        }
     }
 }
 

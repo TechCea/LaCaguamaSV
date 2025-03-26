@@ -487,19 +487,6 @@ namespace LaCaguamaSV.Configuracion
         }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
         public bool EliminarBebida(int idBebida)
         {
             try
@@ -878,10 +865,6 @@ namespace LaCaguamaSV.Configuracion
                 catch (Exception ex)
                 {
                     MessageBox.Show("Error al actualizar mesa: " + ex.Message);
-                }
-                finally
-                {
-                    CerrarConexion();
                 }
             }
             return actualizado;

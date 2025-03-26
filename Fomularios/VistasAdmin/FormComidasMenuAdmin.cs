@@ -191,7 +191,9 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         // Tu botón regresar se mantiene igual
         private void btnRegresarMenu_Click(object sender, EventArgs e)
         {
-            this.Close(); // Cierra este formulario y regresa al menú anterior
+            this.Close();
+            FormMenuAdmin FormMenuAdmin = new FormMenuAdmin();
+            FormMenuAdmin.Show();
         }
     }
 }

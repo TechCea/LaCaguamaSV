@@ -883,6 +883,7 @@
             this.btnvolver.TabIndex = 1;
             this.btnvolver.Text = "Volver";
             this.btnvolver.UseVisualStyleBackColor = false;
+            this.btnvolver.Click += new System.EventHandler(this.btnvolver_Click);
             // 
             // btnDisponible
             // 

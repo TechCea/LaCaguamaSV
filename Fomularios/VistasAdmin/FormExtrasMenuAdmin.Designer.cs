@@ -31,14 +31,14 @@
             this.btnRegresarMenu = new System.Windows.Forms.Button();
             this.dgvExtras = new System.Windows.Forms.DataGridView();
             this.gbDatosExtras = new System.Windows.Forms.GroupBox();
+            this.txtPrecioUE = new System.Windows.Forms.TextBox();
+            this.txtNombreE = new System.Windows.Forms.TextBox();
+            this.lblPrecioExtraU = new System.Windows.Forms.Label();
             this.lblSeleccionExtra = new System.Windows.Forms.Label();
+            this.lblNombreE = new System.Windows.Forms.Label();
+            this.btnCrearExtra = new System.Windows.Forms.Button();
             this.btnEliminarE = new System.Windows.Forms.Button();
             this.btnActualizarB = new System.Windows.Forms.Button();
-            this.btnCrearExtra = new System.Windows.Forms.Button();
-            this.lblNombreE = new System.Windows.Forms.Label();
-            this.lblPrecioExtraU = new System.Windows.Forms.Label();
-            this.txtNombreE = new System.Windows.Forms.TextBox();
-            this.txtPrecioUE = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvExtras)).BeginInit();
             this.gbDatosExtras.SuspendLayout();
             this.SuspendLayout();
@@ -52,6 +52,7 @@
             this.btnRegresarMenu.TabIndex = 5;
             this.btnRegresarMenu.Text = "Regresar Menú";
             this.btnRegresarMenu.UseVisualStyleBackColor = true;
+            this.btnRegresarMenu.Click += new System.EventHandler(this.btnRegresarMenu_Click);
             // 
             // dgvExtras
             // 
@@ -81,6 +82,29 @@
             this.gbDatosExtras.TabStop = false;
             this.gbDatosExtras.Text = "Datos extras";
             // 
+            // txtPrecioUE
+            // 
+            this.txtPrecioUE.Location = new System.Drawing.Point(222, 165);
+            this.txtPrecioUE.Name = "txtPrecioUE";
+            this.txtPrecioUE.Size = new System.Drawing.Size(147, 22);
+            this.txtPrecioUE.TabIndex = 13;
+            // 
+            // txtNombreE
+            // 
+            this.txtNombreE.Location = new System.Drawing.Point(222, 105);
+            this.txtNombreE.Name = "txtNombreE";
+            this.txtNombreE.Size = new System.Drawing.Size(147, 22);
+            this.txtNombreE.TabIndex = 12;
+            // 
+            // lblPrecioExtraU
+            // 
+            this.lblPrecioExtraU.AutoSize = true;
+            this.lblPrecioExtraU.Location = new System.Drawing.Point(36, 171);
+            this.lblPrecioExtraU.Name = "lblPrecioExtraU";
+            this.lblPrecioExtraU.Size = new System.Drawing.Size(95, 16);
+            this.lblPrecioExtraU.TabIndex = 11;
+            this.lblPrecioExtraU.Text = "Precio unitario:";
+            // 
             // lblSeleccionExtra
             // 
             this.lblSeleccionExtra.AutoSize = true;
@@ -90,6 +114,25 @@
             this.lblSeleccionExtra.Size = new System.Drawing.Size(241, 18);
             this.lblSeleccionExtra.TabIndex = 8;
             this.lblSeleccionExtra.Text = "Selecciona una extra a editar/borrar";
+            // 
+            // lblNombreE
+            // 
+            this.lblNombreE.AutoSize = true;
+            this.lblNombreE.Location = new System.Drawing.Point(33, 111);
+            this.lblNombreE.Name = "lblNombreE";
+            this.lblNombreE.Size = new System.Drawing.Size(113, 16);
+            this.lblNombreE.TabIndex = 10;
+            this.lblNombreE.Text = "Nombre del extra:";
+            // 
+            // btnCrearExtra
+            // 
+            this.btnCrearExtra.Location = new System.Drawing.Point(39, 367);
+            this.btnCrearExtra.Name = "btnCrearExtra";
+            this.btnCrearExtra.Size = new System.Drawing.Size(129, 43);
+            this.btnCrearExtra.TabIndex = 9;
+            this.btnCrearExtra.Text = "Añadir nuevo extra";
+            this.btnCrearExtra.UseVisualStyleBackColor = true;
+            this.btnCrearExtra.Click += new System.EventHandler(this.btnCrearExtra_Click);
             // 
             // btnEliminarE
             // 
@@ -110,48 +153,6 @@
             this.btnActualizarB.Text = "Actualizar datos";
             this.btnActualizarB.UseVisualStyleBackColor = true;
             this.btnActualizarB.Click += new System.EventHandler(this.btnActualizarB_Click);
-            // 
-            // btnCrearExtra
-            // 
-            this.btnCrearExtra.Location = new System.Drawing.Point(39, 367);
-            this.btnCrearExtra.Name = "btnCrearExtra";
-            this.btnCrearExtra.Size = new System.Drawing.Size(129, 43);
-            this.btnCrearExtra.TabIndex = 9;
-            this.btnCrearExtra.Text = "Añadir nuevo extra";
-            this.btnCrearExtra.UseVisualStyleBackColor = true;
-            this.btnCrearExtra.Click += new System.EventHandler(this.btnCrearExtra_Click);
-            // 
-            // lblNombreE
-            // 
-            this.lblNombreE.AutoSize = true;
-            this.lblNombreE.Location = new System.Drawing.Point(33, 111);
-            this.lblNombreE.Name = "lblNombreE";
-            this.lblNombreE.Size = new System.Drawing.Size(113, 16);
-            this.lblNombreE.TabIndex = 10;
-            this.lblNombreE.Text = "Nombre del extra:";
-            // 
-            // lblPrecioExtraU
-            // 
-            this.lblPrecioExtraU.AutoSize = true;
-            this.lblPrecioExtraU.Location = new System.Drawing.Point(36, 171);
-            this.lblPrecioExtraU.Name = "lblPrecioExtraU";
-            this.lblPrecioExtraU.Size = new System.Drawing.Size(95, 16);
-            this.lblPrecioExtraU.TabIndex = 11;
-            this.lblPrecioExtraU.Text = "Precio unitario:";
-            // 
-            // txtNombreE
-            // 
-            this.txtNombreE.Location = new System.Drawing.Point(222, 105);
-            this.txtNombreE.Name = "txtNombreE";
-            this.txtNombreE.Size = new System.Drawing.Size(147, 22);
-            this.txtNombreE.TabIndex = 12;
-            // 
-            // txtPrecioUE
-            // 
-            this.txtPrecioUE.Location = new System.Drawing.Point(222, 165);
-            this.txtPrecioUE.Name = "txtPrecioUE";
-            this.txtPrecioUE.Size = new System.Drawing.Size(147, 22);
-            this.txtPrecioUE.TabIndex = 13;
             // 
             // FormExtrasMenuAdmin
             // 
