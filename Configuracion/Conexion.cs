@@ -15,7 +15,7 @@ namespace LaCaguamaSV.Configuracion
         private MySqlConnection conectar = null;
         //hola
         private static string usuario = "root";
-        private static string contrasenia = "180294";
+        private static string contrasenia = "slenderman";
         private static string bd = "lacaguamabd";
         private static string ip = "localhost";
         private static string puerto = "3306"; // o 3307 si eres javier 
@@ -684,24 +684,26 @@ namespace LaCaguamaSV.Configuracion
         public decimal ObtenerCajaInicial(DateTime fecha)
         {
             decimal cajaInicial = 0;
-            string query = "SELECT cantidad FROM caja WHERE DATE(fecha) = @fecha LIMIT 1";
+            string query = @"SELECT cantidad FROM caja WHERE DATE(fecha) = @fecha LIMIT 1";
 
             using (MySqlConnection conn = new MySqlConnection(cadenaConexion))
-            using (MySqlCommand cmd = new MySqlCommand(query, conn))
             {
-                cmd.Parameters.AddWithValue("@fecha", fecha.ToString("yyyy-MM-dd"));
-                try
+                using (MySqlCommand cmd = new MySqlCommand(query, conn))
                 {
-                    conn.Open();
-                    object result = cmd.ExecuteScalar();
-                    if (result != DBNull.Value && result != null)
+                    cmd.Parameters.AddWithValue("@fecha", fecha.ToString("yyyy-MM-dd"));
+                    try
                     {
-                        cajaInicial = Convert.ToDecimal(result);
+                        conn.Open();
+                        object result = cmd.ExecuteScalar();
+                        if (result != DBNull.Value && result != null)
+                        {
+                            cajaInicial = Convert.ToDecimal(result);
+                        }
                     }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error al obtener la caja inicial: " + ex.Message);
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error al obtener la caja inicial: " + ex.Message);
+                    }
                 }
             }
             return cajaInicial;
@@ -776,31 +778,78 @@ namespace LaCaguamaSV.Configuracion
             }
             return total;
         }
-
-        public decimal ObtenerTotalGastos(DateTime fecha)
+        public decimal ObtenerTotalGenerado(DateTime fecha)
         {
-            decimal total = 0;
-            string query = "SELECT COALESCE(SUM(cantidad), 0) FROM gastos WHERE DATE(fecha) = @fecha";
+            decimal totalGenerado = 0;
+
+            string query = @"
+    SELECT 
+        IFNULL(SUM(o.total - IFNULL(o.descuento, 0)), 0) AS totalGenerado
+    FROM 
+        ordenes o
+    WHERE 
+        o.tipo_pago = 1  -- Solo efectivo
+        AND DATE(o.fecha_orden) = @Fecha  -- Solo las órdenes de la fecha seleccionada
+        AND o.id_estadoO = 2;  -- Solo órdenes cerradas";
 
             using (MySqlConnection conn = new MySqlConnection(cadenaConexion))
             using (MySqlCommand cmd = new MySqlCommand(query, conn))
             {
-                cmd.Parameters.AddWithValue("@fecha", fecha.ToString("yyyy-MM-dd"));
+                // Convertimos la fecha a string antes de pasarla como parámetro
+                cmd.Parameters.AddWithValue("@Fecha", fecha.ToString("yyyy-MM-dd"));
+
                 try
                 {
-                    conn.Open();
-                    object result = cmd.ExecuteScalar();
-                    if (result != DBNull.Value && result != null)
+                    conn.Open(); // Asegurarse de que la conexión esté abierta antes de ejecutar la consulta
+                    object result = cmd.ExecuteScalar(); // Ejecutamos la consulta
+
+                    if (result != null && result != DBNull.Value) // Verificamos si el resultado no es nulo o DBNull
                     {
-                        total = Convert.ToDecimal(result);
+                        totalGenerado = Convert.ToDecimal(result); // Convertimos el resultado a decimal
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error al obtener los gastos: " + ex.Message);
+                    Console.WriteLine($"Error al obtener el total generado: {ex.Message}");
+                }
+            }
+
+            return totalGenerado;
+
+        }
+
+        public decimal ObtenerTotalGastos(DateTime fecha)
+        {
+            decimal total = 0;
+            string query = @"
+        SELECT COALESCE(SUM(cantidad), 0)
+        FROM gastos
+        WHERE DATE(fecha) = @fecha;
+    ";
+
+            using (MySqlConnection conn = new MySqlConnection(cadenaConexion))
+            {
+                using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@fecha", fecha.Date);
+
+                    try
+                    {
+                        conn.Open();
+                        object result = cmd.ExecuteScalar();
+                        if (result != DBNull.Value && result != null)
+                        {
+                            total = Convert.ToDecimal(result);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error al obtener los gastos: " + ex.Message);
+                    }
                 }
             }
             return total;
         }
 }
         }
+

@@ -60,42 +60,37 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             if (decimal.TryParse(txtMontoContado.Text, out decimal montoContado))
             {
-                decimal cajaInicial = ObtenerCajaInicial(); // Ahora obtiene el valor dinámico de la BD
-                decimal totalEfectivo = ObtenerTotalEfectivo(); // Obtiene ingresos solo en efectivo
-                decimal totalGastos = ObtenerTotalGastos(); // Obtiene los gastos
-                decimal totalEsperado = cajaInicial + totalEfectivo - totalGastos;
-                decimal diferencia = montoContado - totalEsperado;
+                DateTime fechaActual = DateTime.Now;
+                decimal cajaInicial = conexion.ObtenerCajaInicial(DateTime.Now);
+                decimal totalEfectivo = ObtenerTotalEfectivo(fechaActual);
+                decimal totalGastos = ObtenerTotalGastos(fechaActual);
+                decimal totalGenerado = conexion.ObtenerTotalGenerado(DateTime.Now);
+                decimal totalEsperado = cajaInicial + totalGenerado - totalGastos;
+             
 
-                string resultado = diferencia > 0 ? $"Sobrante: ${diferencia}" :
-                                   diferencia < 0 ? $"Faltante: ${Math.Abs(diferencia)}" :
-                                   "Sin diferencia.";
+                string mensaje = $"Corte de caja confirmado.\n" +
+                                 $"Monto contado: ${montoContado}\n" +
+                                 $"Caja inicial: ${cajaInicial}\n" +
+                                 $"Total generado: ${totalGenerado}\n" +
+                                 $"Gastos: ${totalGastos}\n" +
+                                 $"Total esperado: ${totalEsperado}\n" ;
 
-                // Mostrar mensaje de confirmación
-                MessageBox.Show($"Corte de caja confirmado.\n" +
-                                $"Monto contado: ${montoContado}\n" +
-                                $"Caja inicial: ${cajaInicial}\n" +
-                                $"Total generado: ${totalEfectivo}\n" +
-                                $"Gastos: ${totalGastos}\n" +
-                                $"Total esperado: ${totalEsperado}\n" +
-                                $"{resultado}",
-                                "Confirmación", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                panelIngresoMonto.Visible = false;
+                MessageBox.Show(mensaje, "Confirmación", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {
                 MessageBox.Show("Ingrese un monto válido.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-       
-        private decimal ObtenerTotalEfectivo()
+
+        private decimal ObtenerTotalEfectivo(DateTime fecha)
         {
-            return conexion.ObtenerTotalEfectivo(DateTime.Now);
+            return conexion.ObtenerTotalEfectivo(fecha);
         }
 
-        private decimal ObtenerTotalGastos()
+        private decimal ObtenerTotalGastos(DateTime fecha)
         {
-            return conexion.ObtenerTotalGastos(DateTime.Now);
+            return conexion.ObtenerTotalGastos(fecha);
         }
         private decimal ObtenerCajaInicial()
         {
