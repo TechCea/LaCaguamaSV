@@ -110,5 +110,11 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             }
 
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            FormMesasAdmin formmesas = new FormMesasAdmin();
+            formmesas.ShowDialog();
+        }
     }
 }
