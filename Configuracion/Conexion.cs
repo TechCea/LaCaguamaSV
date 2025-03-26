@@ -13,9 +13,8 @@ namespace LaCaguamaSV.Configuracion
     class Conexion
     {
         private MySqlConnection conectar = null;
-        //hola
         private static string usuario = "root";
-        private static string contrasenia = "slenderman";
+        private static string contrasenia = "180294";
         private static string bd = "lacaguamabd";
         private static string ip = "localhost";
         private static string puerto = "3306"; // o 3307 si eres javier 
@@ -716,11 +715,11 @@ namespace LaCaguamaSV.Configuracion
         {
             decimal total = 0;
             string query = @"
-        SELECT COALESCE(SUM(o.total), 0) 
-        FROM ordenes o
-        INNER JOIN tipopago t ON o.id_pago = t.id_pago
-        WHERE t.nombrePago = 'Efectivo' AND DATE(o.fecha) = @fecha;
-    ";
+                            SELECT COALESCE(SUM(o.total), 0) 
+                            FROM ordenes o
+                            INNER JOIN tipopago t ON o.id_pago = t.id_pago
+                            WHERE t.nombrePago = 'Efectivo' AND DATE(o.fecha) = @fecha;
+                                ";
 
             using (MySqlConnection conn = new MySqlConnection(cadenaConexion))
             {
@@ -749,11 +748,11 @@ namespace LaCaguamaSV.Configuracion
         {
             decimal total = 0;
             string query = @"
-        SELECT COALESCE(SUM(o.total), 0)
-        FROM ordenes o
-        INNER JOIN tipopago t ON o.id_pago = t.id_pago
-        WHERE t.nombrePago = 'Efectivo' AND DATE(o.fecha) = @fecha;
-    ";
+                            SELECT COALESCE(SUM(o.total), 0)
+                            FROM ordenes o
+                            INNER JOIN tipopago t ON o.id_pago = t.id_pago
+                            WHERE t.nombrePago = 'Efectivo' AND DATE(o.fecha) = @fecha;
+                        ";
 
             using (MySqlConnection conn = new MySqlConnection(cadenaConexion))
             {
@@ -783,14 +782,14 @@ namespace LaCaguamaSV.Configuracion
             decimal totalGenerado = 0;
 
             string query = @"
-    SELECT 
-        IFNULL(SUM(o.total - IFNULL(o.descuento, 0)), 0) AS totalGenerado
-    FROM 
-        ordenes o
-    WHERE 
-        o.tipo_pago = 1  -- Solo efectivo
-        AND DATE(o.fecha_orden) = @Fecha  -- Solo las órdenes de la fecha seleccionada
-        AND o.id_estadoO = 2;  -- Solo órdenes cerradas";
+                        SELECT 
+                            IFNULL(SUM(o.total - IFNULL(o.descuento, 0)), 0) AS totalGenerado
+                        FROM 
+                            ordenes o
+                        WHERE 
+                            o.tipo_pago = 1  -- Solo efectivo
+                            AND DATE(o.fecha_orden) = @Fecha  -- Solo las órdenes de la fecha seleccionada
+                            AND o.id_estadoO = 2;  -- Solo órdenes cerradas";
 
             using (MySqlConnection conn = new MySqlConnection(cadenaConexion))
             using (MySqlCommand cmd = new MySqlCommand(query, conn))
@@ -822,10 +821,10 @@ namespace LaCaguamaSV.Configuracion
         {
             decimal total = 0;
             string query = @"
-        SELECT COALESCE(SUM(cantidad), 0)
-        FROM gastos
-        WHERE DATE(fecha) = @fecha;
-    ";
+                        SELECT COALESCE(SUM(cantidad), 0)
+                        FROM gastos
+                        WHERE DATE(fecha) = @fecha;
+                    ";
 
             using (MySqlConnection conn = new MySqlConnection(cadenaConexion))
             {
@@ -850,6 +849,44 @@ namespace LaCaguamaSV.Configuracion
             }
             return total;
         }
-}
+
+        // 🔹 Nueva función para actualizar el estado de la mesa
+        public bool ActualizarEstadoMesa(int idMesa, int nuevoEstado)
+        {
+            bool actualizado = false;
+
+            using (MySqlConnection conn = EstablecerConexion())
+            {
+                if (conn == null)
+                {
+                    MessageBox.Show("No se pudo conectar a la base de datos.");
+                    return false;
+                }
+
+                try
+                {
+                    string query = "UPDATE mesas SET id_estadoM = @nuevoEstado WHERE id_mesa = @idMesa";
+                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@nuevoEstado", nuevoEstado);
+                        cmd.Parameters.AddWithValue("@idMesa", idMesa);
+
+                        int filasAfectadas = cmd.ExecuteNonQuery();
+                        actualizado = filasAfectadas > 0;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al actualizar mesa: " + ex.Message);
+                }
+                finally
+                {
+                    CerrarConexion();
+                }
+            }
+            return actualizado;
         }
+    }
+}
+
 
