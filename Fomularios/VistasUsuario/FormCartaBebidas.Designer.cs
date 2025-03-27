@@ -30,8 +30,8 @@
         {
             this.dgvCartaB = new System.Windows.Forms.DataGridView();
             this.btnRegresar = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
             this.cbxFiltrarCB = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCartaB)).BeginInit();
             this.SuspendLayout();
             // 
@@ -57,17 +57,6 @@
             this.btnRegresar.UseVisualStyleBackColor = false;
             this.btnRegresar.Click += new System.EventHandler(this.btnRegresar_Click);
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label1.Location = new System.Drawing.Point(379, 32);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(166, 22);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Filtrar por categoria";
-            // 
             // cbxFiltrarCB
             // 
             this.cbxFiltrarCB.FormattingEnabled = true;
@@ -77,14 +66,25 @@
             this.cbxFiltrarCB.TabIndex = 3;
             this.cbxFiltrarCB.SelectedIndexChanged += new System.EventHandler(this.cbxFiltrarCB_SelectedIndexChanged);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.label1.Location = new System.Drawing.Point(403, 30);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(166, 22);
+            this.label1.TabIndex = 7;
+            this.label1.Text = "Filtrar por categoria";
+            // 
             // FormCartaBebidas
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.cbxFiltrarCB);
             this.Controls.Add(this.label1);
+            this.Controls.Add(this.cbxFiltrarCB);
             this.Controls.Add(this.btnRegresar);
             this.Controls.Add(this.dgvCartaB);
             this.Name = "FormCartaBebidas";
@@ -99,7 +99,7 @@
 
         private System.Windows.Forms.DataGridView dgvCartaB;
         private System.Windows.Forms.Button btnRegresar;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox cbxFiltrarCB;
+        private System.Windows.Forms.Label label1;
     }
 }

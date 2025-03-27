@@ -7,39 +7,61 @@ namespace LaCaguamaSV.Fomularios.VistasUsuario
 {
     public partial class FormCartaPlatos : Form
     {
-        private Conexion conexion;
+        private Conexion conexion = new Conexion();
 
         public FormCartaPlatos()
         {
             InitializeComponent();
-            conexion = new Conexion();
+            CargarCategoriasComida();
+            CargarComidas();
+            cbxFiltrarCP.SelectedIndexChanged += cbxFiltrarCP_SelectedIndexChanged;
         }
 
-        private void FormCartaPlatos_Load(object sender, EventArgs e)
+        private void CargarComidas()
         {
-            // Cargar los platos sin filtro
             dgvCartaP.DataSource = conexion.ObtenerComidas();
-
-            // Cargar categorías en el ComboBox
-            cbxFiltrarCP.DataSource = conexion.ObtenerCategoriasComida();
-            cbxFiltrarCP.DisplayMember = "tipo"; // Nombre de la columna para mostrar
-            cbxFiltrarCP.ValueMember = "tipo"; // Valor a seleccionar
+            dgvCartaP.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
         }
 
-        private void btnRegresar_Click(object sender, EventArgs e)
+        private void CargarCategoriasComida()
         {
-            this.Close(); // Cerrar el formulario
-        }
+            DataTable dtCategorias = conexion.ObtenerCategoriasComida();
+            cbxFiltrarCP.Items.Add("Todas"); // Opción para mostrar todas las comidas
 
-        private void dgvCartaP_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-            // Puedes agregar la lógica para cuando se haga click en una celda, si es necesario.
+            foreach (DataRow row in dtCategorias.Rows)
+            {
+                cbxFiltrarCP.Items.Add(row["tipo"].ToString());
+            }
+
+            cbxFiltrarCP.SelectedIndex = 0; // Selecciona "Todas" por defecto
         }
 
         private void cbxFiltrarCP_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string categoriaSeleccionada = cbxFiltrarCP.SelectedValue.ToString();
-            dgvCartaP.DataSource = conexion.ObtenerComidasPorCategoria(categoriaSeleccionada);
+            if (cbxFiltrarCP.SelectedItem != null)
+            {
+                string categoriaSeleccionada = cbxFiltrarCP.SelectedItem.ToString();
+
+                if (categoriaSeleccionada == "Todas")
+                {
+                    CargarComidas();
+                }
+                else
+                {
+                    dgvCartaP.DataSource = conexion.ObtenerComidasPorCategoria(categoriaSeleccionada);
+                    dgvCartaP.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                }
+            }
+        }
+
+        private void btnRegresar_Click(object sender, EventArgs e)
+        {
+            this.Close(); // Cierra el formulario
+        }
+
+        private void dgvCartaP_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // Puedes agregar funcionalidad aquí si quieres editar o eliminar
         }
     }
 }

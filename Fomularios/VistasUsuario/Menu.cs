@@ -53,7 +53,7 @@ namespace LaCaguamaSV.Fomularios.VistasUsuario
         // Cierra la aplicación
         private void btnSalir_Click(object sender, EventArgs e)
         {
-            Application.Exit(); // Cierra la aplicación completamente
+            this.Close(); // Cierra el formulario
         }
     }
 }

@@ -7,29 +7,30 @@ namespace LaCaguamaSV.Fomularios.VistasUsuario
 {
     public partial class FormCartaExtras : Form
     {
-        private Conexion conexion;
+        private Conexion conexion = new Conexion();
 
         public FormCartaExtras()
         {
             InitializeComponent();
-            conexion = new Conexion();
+            CargarExtras();
         }
 
-        private void FormCartaExtras_Load(object sender, EventArgs e)
+        private void CargarExtras()
         {
-            // Cargar los extras
             dgvCartaE.DataSource = conexion.ObtenerExtras();
+            dgvCartaE.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
         }
 
         private void btnRegresar_Click(object sender, EventArgs e)
         {
-            this.Close(); // Cerrar el formulario
+            this.Close(); // Cierra el formulario
         }
 
         private void dgvCartaE_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            // Puedes agregar la lógica para cuando se haga click en una celda, si es necesario.
+            // Puedes agregar funcionalidad aquí si quieres editar o eliminar
         }
     }
 }
+
 
