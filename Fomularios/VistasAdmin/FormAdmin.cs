@@ -29,7 +29,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void CargarOrdenes()
         {
-            dataGridViewOrdenesAdmin.DataSource = OrdenesService.ListarOrdenes();
             // Limpiar el DataSource para forzar la actualización
             dataGridViewOrdenesAdmin.DataSource = null;
             dataGridViewOrdenesAdmin.DataSource = OrdenesService.ListarOrdenes();

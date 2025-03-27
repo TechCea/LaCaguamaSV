@@ -381,7 +381,9 @@
             // 
             this.dataGridViewMenu.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewMenu.Location = new System.Drawing.Point(219, 133);
+            this.dataGridViewMenu.MultiSelect = false;
             this.dataGridViewMenu.Name = "dataGridViewMenu";
+            this.dataGridViewMenu.ReadOnly = true;
             this.dataGridViewMenu.Size = new System.Drawing.Size(533, 305);
             this.dataGridViewMenu.TabIndex = 32;
             this.dataGridViewMenu.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewMenu_CellDoubleClick);
