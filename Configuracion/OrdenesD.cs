@@ -143,6 +143,48 @@ namespace LaCaguamaSV.Configuracion
             }
             return idOrden;
         }
+        public static DataTable ObtenerBebidas()
+        {
+            DataTable dt = new DataTable();
+            using (MySqlConnection conexion = new Conexion().EstablecerConexion())
+            {
+                string query = @"
+            SELECT b.id_bebida AS ID, i.nombreBebida AS nombre, b.precioUnitario 
+            FROM bebidas b 
+            JOIN inventario i ON b.id_inventario = i.id_inventario";
+
+                MySqlCommand cmd = new MySqlCommand(query, conexion);
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                da.Fill(dt);
+            }
+            return dt;
+        }
+
+        public static DataTable ObtenerPlatos()
+        {
+            DataTable dt = new DataTable();
+            using (MySqlConnection conexion = new Conexion().EstablecerConexion())
+            {
+                string query = "SELECT id_plato AS ID, nombrePlato AS nombre, precioUnitario FROM platos";
+                MySqlCommand cmd = new MySqlCommand(query, conexion);
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                da.Fill(dt);
+            }
+            return dt;
+        }
+
+        public static DataTable ObtenerExtras()
+        {
+            DataTable dt = new DataTable();
+            using (MySqlConnection conexion = new Conexion().EstablecerConexion())
+            {
+                string query = "SELECT id_extra AS ID, nombre, precioUnitario FROM extras";
+                MySqlCommand cmd = new MySqlCommand(query, conexion);
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                da.Fill(dt);
+            }
+            return dt;
+        }
 
 
 

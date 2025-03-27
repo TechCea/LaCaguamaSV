@@ -30,18 +30,34 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         private void CargarOrdenes()
         {
             dataGridViewOrdenesAdmin.DataSource = OrdenesService.ListarOrdenes();
+            // Limpiar el DataSource para forzar la actualización
+            dataGridViewOrdenesAdmin.DataSource = null;
+            dataGridViewOrdenesAdmin.DataSource = OrdenesService.ListarOrdenes();
 
-            // Evitar edición de la tabla
+            // Configuración del DataGridView
             dataGridViewOrdenesAdmin.ReadOnly = true;
-
-            // Selección completa de filas
             dataGridViewOrdenesAdmin.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-
-            // Evitar selección de múltiples filas
             dataGridViewOrdenesAdmin.MultiSelect = false;
-
             dataGridViewOrdenesAdmin.Columns["id_orden"].Visible = false;
 
+            // Formatear columnas numéricas
+            if (dataGridViewOrdenesAdmin.Columns["total"] != null)
+            {
+                dataGridViewOrdenesAdmin.Columns["total"].DefaultCellStyle.Format = "C";
+            }
+            if (dataGridViewOrdenesAdmin.Columns["descuento"] != null)
+            {
+                dataGridViewOrdenesAdmin.Columns["descuento"].DefaultCellStyle.Format = "C";
+            }
+
+            // Autoajustar columnas
+            dataGridViewOrdenesAdmin.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
+
+        }
+
+        public void RefrescarOrdenes()
+        {
+            CargarOrdenes();
         }
 
         private void btnGestionUsuarios_Click(object sender, EventArgs e)
@@ -114,6 +130,8 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                                                                       descuento, fechaOrden, numeroMesa,
                                                                       tipoPago, nombreUsuario, estadoOrden);
                 formOrden.ShowDialog();
+
+                CargarOrdenes();
             }
         }
 
