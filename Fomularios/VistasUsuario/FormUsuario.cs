@@ -52,5 +52,14 @@ namespace LaCaguamaSV.Fomularios.VistasUsuario
         {
 
         }
+
+        private void btnMenu_Click(object sender, EventArgs e)
+        {
+            using (Menu menuForm = new Menu()) // Crea la instancia dentro de 'using'
+            {
+                menuForm.ShowDialog(); // Muestra el formulario como modal
+            }
+
+        }
     }
 }

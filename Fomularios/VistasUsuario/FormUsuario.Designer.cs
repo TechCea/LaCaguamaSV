@@ -32,24 +32,24 @@
             this.label1 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.textBox8 = new System.Windows.Forms.TextBox();
+            this.textBox7 = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.textBox6 = new System.Windows.Forms.TextBox();
+            this.textBox5 = new System.Windows.Forms.TextBox();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.panel5 = new System.Windows.Forms.Panel();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
             this.textBox4 = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.textBox5 = new System.Windows.Forms.TextBox();
-            this.textBox6 = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.textBox7 = new System.Windows.Forms.TextBox();
-            this.textBox8 = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
+            this.panel5 = new System.Windows.Forms.Panel();
+            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
@@ -61,6 +61,7 @@
             this.button10 = new System.Windows.Forms.Button();
             this.button12 = new System.Windows.Forms.Button();
             this.button13 = new System.Windows.Forms.Button();
+            this.btnMenu = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -112,10 +113,72 @@
             this.panel1.Controls.Add(this.textBox6);
             this.panel1.Controls.Add(this.textBox5);
             this.panel1.Controls.Add(this.label1);
-            this.panel1.Location = new System.Drawing.Point(0, 278);
+            this.panel1.Location = new System.Drawing.Point(1, 289);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(209, 173);
+            this.panel1.Size = new System.Drawing.Size(209, 181);
             this.panel1.TabIndex = 5;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.ForeColor = System.Drawing.SystemColors.ButtonFace;
+            this.label7.Location = new System.Drawing.Point(12, 132);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(31, 13);
+            this.label7.TabIndex = 11;
+            this.label7.Text = "Total";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.ForeColor = System.Drawing.Color.Red;
+            this.label6.Location = new System.Drawing.Point(12, 97);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(64, 13);
+            this.label6.TabIndex = 10;
+            this.label6.Text = "Descuentos";
+            // 
+            // textBox8
+            // 
+            this.textBox8.Location = new System.Drawing.Point(125, 132);
+            this.textBox8.Name = "textBox8";
+            this.textBox8.Size = new System.Drawing.Size(63, 20);
+            this.textBox8.TabIndex = 9;
+            this.textBox8.Text = "$ 0.00";
+            // 
+            // textBox7
+            // 
+            this.textBox7.Location = new System.Drawing.Point(125, 97);
+            this.textBox7.Name = "textBox7";
+            this.textBox7.Size = new System.Drawing.Size(63, 20);
+            this.textBox7.TabIndex = 8;
+            this.textBox7.Text = "$ 0.00";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.ForeColor = System.Drawing.SystemColors.ButtonFace;
+            this.label5.Location = new System.Drawing.Point(12, 61);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(46, 13);
+            this.label5.TabIndex = 7;
+            this.label5.Text = "Subtotal";
+            // 
+            // textBox6
+            // 
+            this.textBox6.Location = new System.Drawing.Point(125, 58);
+            this.textBox6.Name = "textBox6";
+            this.textBox6.Size = new System.Drawing.Size(63, 20);
+            this.textBox6.TabIndex = 6;
+            this.textBox6.Text = "$ 0.00";
+            // 
+            // textBox5
+            // 
+            this.textBox5.Location = new System.Drawing.Point(125, 17);
+            this.textBox5.Name = "textBox5";
+            this.textBox5.Size = new System.Drawing.Size(63, 20);
+            this.textBox5.TabIndex = 5;
+            this.textBox5.Text = "$ 0.00";
             // 
             // panel2
             // 
@@ -123,7 +186,7 @@
             this.panel2.Controls.Add(this.panel4);
             this.panel2.Location = new System.Drawing.Point(0, 25);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(208, 257);
+            this.panel2.Size = new System.Drawing.Size(208, 266);
             this.panel2.TabIndex = 6;
             // 
             // panel4
@@ -143,6 +206,23 @@
             this.panel3.Size = new System.Drawing.Size(207, 24);
             this.panel3.TabIndex = 7;
             // 
+            // textBox4
+            // 
+            this.textBox4.Location = new System.Drawing.Point(94, 2);
+            this.textBox4.Name = "textBox4";
+            this.textBox4.Size = new System.Drawing.Size(82, 20);
+            this.textBox4.TabIndex = 6;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.label4.Location = new System.Drawing.Point(47, 5);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(41, 13);
+            this.label4.TabIndex = 5;
+            this.label4.Text = "Cuenta";
+            // 
             // panel5
             // 
             this.panel5.BackColor = System.Drawing.Color.Gray;
@@ -155,6 +235,27 @@
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(590, 33);
             this.panel5.TabIndex = 8;
+            // 
+            // textBox3
+            // 
+            this.textBox3.Location = new System.Drawing.Point(316, 6);
+            this.textBox3.Name = "textBox3";
+            this.textBox3.Size = new System.Drawing.Size(52, 20);
+            this.textBox3.TabIndex = 4;
+            // 
+            // textBox2
+            // 
+            this.textBox2.Location = new System.Drawing.Point(229, 6);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(52, 20);
+            this.textBox2.TabIndex = 3;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(69, 6);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(52, 20);
+            this.textBox1.TabIndex = 2;
             // 
             // label3
             // 
@@ -177,110 +278,10 @@
             this.label2.TabIndex = 0;
             this.label2.Text = "Mesa";
             // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(69, 6);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(52, 20);
-            this.textBox1.TabIndex = 2;
-            // 
-            // textBox2
-            // 
-            this.textBox2.Location = new System.Drawing.Point(229, 6);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(52, 20);
-            this.textBox2.TabIndex = 3;
-            // 
-            // textBox3
-            // 
-            this.textBox3.Location = new System.Drawing.Point(316, 6);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(52, 20);
-            this.textBox3.TabIndex = 4;
-            // 
-            // textBox4
-            // 
-            this.textBox4.Location = new System.Drawing.Point(94, 2);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(82, 20);
-            this.textBox4.TabIndex = 6;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.label4.Location = new System.Drawing.Point(47, 5);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(41, 13);
-            this.label4.TabIndex = 5;
-            this.label4.Text = "Cuenta";
-            // 
-            // textBox5
-            // 
-            this.textBox5.Location = new System.Drawing.Point(125, 17);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(63, 20);
-            this.textBox5.TabIndex = 5;
-            this.textBox5.Text = "$ 0.00";
-            // 
-            // textBox6
-            // 
-            this.textBox6.Location = new System.Drawing.Point(125, 58);
-            this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(63, 20);
-            this.textBox6.TabIndex = 6;
-            this.textBox6.Text = "$ 0.00";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label5.Location = new System.Drawing.Point(12, 61);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(46, 13);
-            this.label5.TabIndex = 7;
-            this.label5.Text = "Subtotal";
-            // 
-            // textBox7
-            // 
-            this.textBox7.Location = new System.Drawing.Point(125, 97);
-            this.textBox7.Name = "textBox7";
-            this.textBox7.Size = new System.Drawing.Size(63, 20);
-            this.textBox7.TabIndex = 8;
-            this.textBox7.Text = "$ 0.00";
-            // 
-            // textBox8
-            // 
-            this.textBox8.Location = new System.Drawing.Point(125, 132);
-            this.textBox8.Name = "textBox8";
-            this.textBox8.Size = new System.Drawing.Size(63, 20);
-            this.textBox8.TabIndex = 9;
-            this.textBox8.Text = "$ 0.00";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.ForeColor = System.Drawing.Color.Red;
-            this.label6.Location = new System.Drawing.Point(12, 97);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(64, 13);
-            this.label6.TabIndex = 10;
-            this.label6.Text = "Descuentos";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label7.Location = new System.Drawing.Point(12, 132);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(31, 13);
-            this.label7.TabIndex = 11;
-            this.label7.Text = "Total";
-            // 
             // button2
             // 
             this.button2.BackColor = System.Drawing.Color.Yellow;
-            this.button2.Location = new System.Drawing.Point(214, 55);
+            this.button2.Location = new System.Drawing.Point(214, 82);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(85, 29);
             this.button2.TabIndex = 9;
@@ -290,7 +291,7 @@
             // button3
             // 
             this.button3.BackColor = System.Drawing.Color.Yellow;
-            this.button3.Location = new System.Drawing.Point(305, 56);
+            this.button3.Location = new System.Drawing.Point(305, 83);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(81, 28);
             this.button3.TabIndex = 10;
@@ -300,7 +301,7 @@
             // button4
             // 
             this.button4.BackColor = System.Drawing.Color.Yellow;
-            this.button4.Location = new System.Drawing.Point(392, 55);
+            this.button4.Location = new System.Drawing.Point(392, 82);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(81, 28);
             this.button4.TabIndex = 11;
@@ -310,7 +311,7 @@
             // button5
             // 
             this.button5.BackColor = System.Drawing.Color.Cyan;
-            this.button5.Location = new System.Drawing.Point(479, 55);
+            this.button5.Location = new System.Drawing.Point(479, 82);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(81, 28);
             this.button5.TabIndex = 12;
@@ -320,7 +321,7 @@
             // button6
             // 
             this.button6.BackColor = System.Drawing.Color.MediumSpringGreen;
-            this.button6.Location = new System.Drawing.Point(566, 56);
+            this.button6.Location = new System.Drawing.Point(566, 83);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(81, 28);
             this.button6.TabIndex = 13;
@@ -330,7 +331,7 @@
             // button7
             // 
             this.button7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.button7.Location = new System.Drawing.Point(653, 56);
+            this.button7.Location = new System.Drawing.Point(653, 83);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(81, 28);
             this.button7.TabIndex = 14;
@@ -340,7 +341,7 @@
             // button8
             // 
             this.button8.BackColor = System.Drawing.Color.Green;
-            this.button8.Location = new System.Drawing.Point(214, 90);
+            this.button8.Location = new System.Drawing.Point(214, 117);
             this.button8.Name = "button8";
             this.button8.Size = new System.Drawing.Size(81, 28);
             this.button8.TabIndex = 15;
@@ -350,7 +351,7 @@
             // button9
             // 
             this.button9.BackColor = System.Drawing.Color.SteelBlue;
-            this.button9.Location = new System.Drawing.Point(305, 90);
+            this.button9.Location = new System.Drawing.Point(305, 117);
             this.button9.Name = "button9";
             this.button9.Size = new System.Drawing.Size(81, 28);
             this.button9.TabIndex = 16;
@@ -360,7 +361,7 @@
             // button10
             // 
             this.button10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.button10.Location = new System.Drawing.Point(392, 90);
+            this.button10.Location = new System.Drawing.Point(392, 117);
             this.button10.Name = "button10";
             this.button10.Size = new System.Drawing.Size(121, 28);
             this.button10.TabIndex = 17;
@@ -370,7 +371,7 @@
             // button12
             // 
             this.button12.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.button12.Location = new System.Drawing.Point(524, 89);
+            this.button12.Location = new System.Drawing.Point(524, 116);
             this.button12.Name = "button12";
             this.button12.Size = new System.Drawing.Size(81, 28);
             this.button12.TabIndex = 19;
@@ -380,19 +381,31 @@
             // button13
             // 
             this.button13.BackColor = System.Drawing.Color.Cyan;
-            this.button13.Location = new System.Drawing.Point(626, 89);
+            this.button13.Location = new System.Drawing.Point(626, 116);
             this.button13.Name = "button13";
             this.button13.Size = new System.Drawing.Size(108, 28);
             this.button13.TabIndex = 20;
             this.button13.Text = "LLAMAR CUENTA";
             this.button13.UseVisualStyleBackColor = false;
             // 
+            // btnMenu
+            // 
+            this.btnMenu.BackColor = System.Drawing.SystemColors.ActiveBorder;
+            this.btnMenu.Location = new System.Drawing.Point(210, 32);
+            this.btnMenu.Name = "btnMenu";
+            this.btnMenu.Size = new System.Drawing.Size(85, 29);
+            this.btnMenu.TabIndex = 21;
+            this.btnMenu.Text = "MENU";
+            this.btnMenu.UseVisualStyleBackColor = false;
+            this.btnMenu.Click += new System.EventHandler(this.btnMenu_Click);
+            // 
             // FormUsuario
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(800, 470);
+            this.Controls.Add(this.btnMenu);
             this.Controls.Add(this.button13);
             this.Controls.Add(this.button12);
             this.Controls.Add(this.button10);
@@ -459,5 +472,6 @@
         private System.Windows.Forms.Button button10;
         private System.Windows.Forms.Button button12;
         private System.Windows.Forms.Button button13;
+        private System.Windows.Forms.Button btnMenu;
     }
 }

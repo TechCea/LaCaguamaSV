@@ -20,25 +20,34 @@ namespace LaCaguamaSV.Fomularios.VistasUsuario
         // Redirige al formulario de bebidas
         private void btnBMU_Click(object sender, EventArgs e)
         {
-            FormCartaBebidas formBebidas = new FormCartaBebidas();
-            formBebidas.Show(); // Muestra el formulario de bebidas
-            this.Hide(); // Oculta el formulario actual (Menu)
+            using (FormCartaBebidas formBebidas = new FormCartaBebidas())
+            {
+                this.Hide(); // Oculta el menú
+                formBebidas.ShowDialog(); // Muestra el formulario de bebidas de forma modal
+                this.Show(); // Vuelve a mostrar el menú cuando el formulario de bebidas se cierra
+            }
         }
 
         // Redirige al formulario de extras
         private void btnEMU_Click(object sender, EventArgs e)
         {
-            FormCartaExtras formExtras = new FormCartaExtras();
-            formExtras.Show(); // Muestra el formulario de extras
-            this.Hide(); // Oculta el formulario actual (Menu)
+            using (FormCartaExtras formExtras = new FormCartaExtras())
+            {
+                this.Hide(); // Oculta el menú
+                formExtras.ShowDialog(); // Muestra el formulario de extras de forma modal
+                this.Show(); // Vuelve a mostrar el menú cuando el formulario de extras se cierra
+            }
         }
 
         // Redirige al formulario de platos
         private void btnCMU_Click(object sender, EventArgs e)
         {
-            FormCartaPlatos formPlatos = new FormCartaPlatos();
-            formPlatos.Show(); // Muestra el formulario de platos
-            this.Hide(); // Oculta el formulario actual (Menu)
+            using (FormCartaPlatos formPlatos = new FormCartaPlatos())
+            {
+                this.Hide(); // Oculta el menú
+                formPlatos.ShowDialog(); // Muestra el formulario de platos de forma modal
+                this.Show(); // Vuelve a mostrar el menú cuando el formulario de platos se cierra
+            }
         }
 
         // Cierra la aplicación
@@ -48,4 +57,3 @@ namespace LaCaguamaSV.Fomularios.VistasUsuario
         }
     }
 }
-
