@@ -14,7 +14,7 @@ namespace LaCaguamaSV.Configuracion
     {
         private MySqlConnection conectar = null;
         private static string usuario = "root";
-        private static string contrasenia = "180294";
+        private static string contrasenia = "slenderman";
         private static string bd = "lacaguamabd";
         private static string ip = "localhost";
         private static string puerto = "3306"; // o 3307 si eres javier 
@@ -91,6 +91,7 @@ namespace LaCaguamaSV.Configuracion
         public DataTable ObtenerUsuarios()
         {
             DataTable dt = new DataTable();
+           
             try
             {
                 using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
@@ -869,7 +870,53 @@ namespace LaCaguamaSV.Configuracion
             }
             return actualizado;
         }
+        // Iniciar Caja
+        public bool RegistrarCajaInicial(decimal cantidad, int idUsuario)
+        {
+            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+            {
+                string query = "INSERT INTO caja (cantidad, fecha, id_usuario) VALUES (@cantidad, NOW(), @idUsuario)";
+                using (MySqlCommand comando = new MySqlCommand(query, conexion))
+                {
+                    comando.Parameters.AddWithValue("@cantidad", cantidad);
+                    comando.Parameters.AddWithValue("@idUsuario", idUsuario);
+
+                    try
+                    {
+                        conexion.Open();
+                        return comando.ExecuteNonQuery() > 0;
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Error: " + ex.Message);
+                        return false;
+                    }
+                }
+            }
+        }
+        public bool CajaInicialYaEstablecida()
+        {
+            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+            {
+                string query = "SELECT COUNT(*) FROM caja WHERE DATE(fecha) = CURDATE()";
+                using (MySqlCommand comando = new MySqlCommand(query, conexion))
+                {
+                    try
+                    {
+                        conexion.Open();
+                        int count = Convert.ToInt32(comando.ExecuteScalar());
+                        return count > 0;
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Error: " + ex.Message);
+                        return false;
+                    }
+                }
+            }
+        }
     }
 }
+
 
 

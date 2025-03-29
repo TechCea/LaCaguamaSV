@@ -19,13 +19,15 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private decimal dineroContado;
 
-        public FormAdminFunciones()
+        public FormAdminFunciones(int usuarioId)
         {
             InitializeComponent();
             panelConfirmacion.Visible = false; // Ocultar la ventana de confirmación al inicio
             this.Controls.Add(panelIngresoMonto);
             panelIngresoMonto.Visible = false; // Lo ocultamos al inicio
             panelResultadoCorte.Visible = false; // Ocultamos el panel de resultado
+
+            VerificarEstadoCaja();
         }
 
         private void label5_Click(object sender, EventArgs e)
@@ -168,6 +170,74 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         private void labelResultado_Click(object sender, EventArgs e)
         {
            
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnCajaInicial_Click(object sender, EventArgs e)
+        {
+            panelCaja.Visible = true;
+        }
+
+        private void btnConfirmarCaja_Click(object sender, EventArgs e)
+        {
+            if (decimal.TryParse(txtMontoCaja.Text, out decimal cajaInicial) && cajaInicial > 0)
+            {
+                if (!conexion.CajaInicialYaEstablecida())
+                {
+                    // Usamos SesionUsuario.IdUsuario para registrar la caja inicial
+                    if (conexion.RegistrarCajaInicial(cajaInicial, SesionUsuario.IdUsuario)) // Usamos el IdUsuario de la sesión
+                    {
+                        MessageBox.Show("Caja inicial establecida correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        btnCajaInicial.Enabled = false;
+                        Corte_Caja.Enabled = true;
+                        panelCaja.Visible = false;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Error al establecer la caja inicial.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("La caja inicial ya fue establecida hoy.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Ingrese un monto válido.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private void btnCancelarCaja_Click(object sender, EventArgs e)
+        {
+            panelCaja.Visible = false;
+        }
+
+        private void txtMontoCaja_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+        private void VerificarEstadoCaja()
+        {
+            if (conexion.CajaInicialYaEstablecida())
+            {
+                btnCajaInicial.Enabled = false;
+                Corte_Caja.Enabled = true;
+            }
+            else
+            {
+                btnCajaInicial.Enabled = true;
+                Corte_Caja.Enabled = false;
+            }
+        }
+
+        private void panelCaja_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }
