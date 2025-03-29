@@ -37,7 +37,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void FormAdminFunciones_Load(object sender, EventArgs e)
         {
-
+            VerificarEstadoCaja();
         }
 
         private void Corte_Caja_Click(object sender, EventArgs e)
@@ -83,14 +83,15 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
                 // Ocultamos el panel de ingreso de monto
                 panelIngresoMonto.Visible = false; // Ocultamos panelIngresoMonto
-                                               
-           
+
+                // Actualizamos el estado de los botones
+                VerificarEstadoCaja();
             }
             else
             {
                 MessageBox.Show("Ingrese un monto válido.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            
+
         }
 
         private decimal ObtenerTotalEfectivo(DateTime fecha)
@@ -155,6 +156,11 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             // Lógica de impresión del recibo (ejemplo)
             MessageBox.Show("Imprimiendo el recibo...", "Impresión", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+
+
+
+
         }
 
         private void btnCerrarPanel_Click_Click(object sender, EventArgs e)

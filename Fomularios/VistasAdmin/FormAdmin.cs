@@ -99,7 +99,8 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void button1_Click(object sender, EventArgs e)
         {
-            FormAdminFunciones formFunciones = new FormAdminFunciones();
+            int usuarioId = SesionUsuario.IdUsuario;  // Suponiendo que ya tienes el ID del usuario
+            FormAdminFunciones formFunciones = new FormAdminFunciones(usuarioId);
             formFunciones.ShowDialog();
         }
 

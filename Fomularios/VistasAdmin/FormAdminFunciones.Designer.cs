@@ -115,7 +115,7 @@
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.label3.Location = new System.Drawing.Point(637, 29);
+            this.label3.Location = new System.Drawing.Point(676, 29);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(75, 20);
             this.label3.TabIndex = 4;
@@ -175,9 +175,10 @@
             this.panelConfirmacion.BackColor = System.Drawing.Color.Blue;
             this.panelConfirmacion.Controls.Add(this.btnCancelarCorte);
             this.panelConfirmacion.Controls.Add(this.btnConfirmarCorte);
+            this.panelConfirmacion.Controls.Add(this.panelIngresoMonto);
             this.panelConfirmacion.Controls.Add(this.label5);
             this.panelConfirmacion.Controls.Add(this.label4);
-            this.panelConfirmacion.Location = new System.Drawing.Point(706, 293);
+            this.panelConfirmacion.Location = new System.Drawing.Point(208, 52);
             this.panelConfirmacion.Name = "panelConfirmacion";
             this.panelConfirmacion.Size = new System.Drawing.Size(423, 299);
             this.panelConfirmacion.TabIndex = 12;
@@ -239,7 +240,7 @@
             this.panelIngresoMonto.Controls.Add(this.btnConfirmarMonto);
             this.panelIngresoMonto.Controls.Add(this.txtMontoContado);
             this.panelIngresoMonto.Controls.Add(this.Label6);
-            this.panelIngresoMonto.Location = new System.Drawing.Point(450, 393);
+            this.panelIngresoMonto.Location = new System.Drawing.Point(0, 20);
             this.panelIngresoMonto.Name = "panelIngresoMonto";
             this.panelIngresoMonto.Size = new System.Drawing.Size(423, 299);
             this.panelIngresoMonto.TabIndex = 13;
@@ -298,7 +299,7 @@
             this.panelResultadoCorte.Controls.Add(this.labelResultado);
             this.panelResultadoCorte.Controls.Add(this.btnCerrarPanel_Click);
             this.panelResultadoCorte.Controls.Add(this.btnImprimirRecibo_Click);
-            this.panelResultadoCorte.Location = new System.Drawing.Point(21, 393);
+            this.panelResultadoCorte.Location = new System.Drawing.Point(208, 52);
             this.panelResultadoCorte.Name = "panelResultadoCorte";
             this.panelResultadoCorte.Size = new System.Drawing.Size(423, 386);
             this.panelResultadoCorte.TabIndex = 14;
@@ -356,7 +357,7 @@
             // 
             // button6
             // 
-            this.button6.Location = new System.Drawing.Point(588, 65);
+            this.button6.Location = new System.Drawing.Point(634, 65);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(162, 55);
             this.button6.TabIndex = 16;
@@ -365,7 +366,7 @@
             // 
             // button7
             // 
-            this.button7.Location = new System.Drawing.Point(588, 129);
+            this.button7.Location = new System.Drawing.Point(634, 129);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(162, 55);
             this.button7.TabIndex = 17;
@@ -374,7 +375,7 @@
             // 
             // button8
             // 
-            this.button8.Location = new System.Drawing.Point(588, 190);
+            this.button8.Location = new System.Drawing.Point(634, 190);
             this.button8.Name = "button8";
             this.button8.Size = new System.Drawing.Size(162, 55);
             this.button8.TabIndex = 18;
@@ -389,7 +390,7 @@
             this.panelCaja.Controls.Add(this.txtMontoCaja);
             this.panelCaja.Location = new System.Drawing.Point(208, 52);
             this.panelCaja.Name = "panelCaja";
-            this.panelCaja.Size = new System.Drawing.Size(440, 286);
+            this.panelCaja.Size = new System.Drawing.Size(423, 286);
             this.panelCaja.TabIndex = 19;
             this.panelCaja.Visible = false;
             this.panelCaja.Paint += new System.Windows.Forms.PaintEventHandler(this.panelCaja_Paint);
@@ -432,10 +433,9 @@
             this.Controls.Add(this.panelCaja);
             this.Controls.Add(this.button8);
             this.Controls.Add(this.button7);
+            this.Controls.Add(this.panelResultadoCorte);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.btnCajaInicial);
-            this.Controls.Add(this.panelResultadoCorte);
-            this.Controls.Add(this.panelIngresoMonto);
             this.Controls.Add(this.panelConfirmacion);
             this.Controls.Add(this.button9);
             this.Controls.Add(this.button5);

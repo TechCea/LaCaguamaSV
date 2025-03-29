@@ -875,16 +875,17 @@ namespace LaCaguamaSV.Configuracion
         {
             using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
             {
-                string query = "INSERT INTO caja (cantidad, fecha, id_usuario) VALUES (@cantidad, NOW(), @idUsuario)";
+                string query = "INSERT INTO caja (monto_inicial, id_usuario, estado_caja, fecha) VALUES (@cantidad, @idUsuario, 1, @fecha)";
                 using (MySqlCommand comando = new MySqlCommand(query, conexion))
                 {
                     comando.Parameters.AddWithValue("@cantidad", cantidad);
                     comando.Parameters.AddWithValue("@idUsuario", idUsuario);
+                    comando.Parameters.AddWithValue("@fecha", DateTime.Now);
 
                     try
                     {
                         conexion.Open();
-                        return comando.ExecuteNonQuery() > 0;
+                        return comando.ExecuteNonQuery() > 0; // Si se insertó correctamente, devuelve true
                     }
                     catch (Exception ex)
                     {
@@ -896,6 +897,7 @@ namespace LaCaguamaSV.Configuracion
         }
         public bool CajaInicialYaEstablecida()
         {
+            
             using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
             {
                 string query = "SELECT COUNT(*) FROM caja WHERE DATE(fecha) = CURDATE()";
