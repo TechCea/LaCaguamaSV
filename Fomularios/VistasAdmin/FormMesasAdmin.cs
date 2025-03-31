@@ -53,7 +53,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
                         Panel panelMesa = Controls.Find($"panel{index}", true).FirstOrDefault() as Panel;
                         Label lblMesa = Controls.Find($"lblmesa{index}", true).FirstOrDefault() as Label;
-                        PictureBox imgMesa = Controls.Find($"imgmesa{index}", true).FirstOrDefault() as PictureBox; // Imagen dentro del panel
+                        PictureBox imgMesa = Controls.Find($"imgmesa{index}", true).FirstOrDefault() as PictureBox; 
 
                         if (panelMesa != null && lblMesa != null && imgMesa != null)
                         {
