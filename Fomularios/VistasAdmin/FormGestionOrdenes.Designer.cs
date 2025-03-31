@@ -1,4 +1,6 @@
-﻿namespace LaCaguamaSV.Fomularios.VistasAdmin
+﻿using System;
+
+namespace LaCaguamaSV.Fomularios.VistasAdmin
 {
     partial class FormGestionOrdenes
     {
@@ -34,10 +36,10 @@
             this.lblDescuento = new System.Windows.Forms.Label();
             this.lblFechaOrden = new System.Windows.Forms.Label();
             this.lblTipoPago = new System.Windows.Forms.Label();
-            this.lblNumeroMesa = new System.Windows.Forms.Label();
             this.lblEstadoOrden = new System.Windows.Forms.Label();
             this.lblNombreUsuario = new System.Windows.Forms.Label();
             this.panel5 = new System.Windows.Forms.Panel();
+            this.comboBoxMesas = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
@@ -63,20 +65,18 @@
             // lblIdOrden
             // 
             this.lblIdOrden.AutoSize = true;
-            this.lblIdOrden.Location = new System.Drawing.Point(15, 6);
-            this.lblIdOrden.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblIdOrden.Location = new System.Drawing.Point(11, 5);
             this.lblIdOrden.Name = "lblIdOrden";
-            this.lblIdOrden.Size = new System.Drawing.Size(28, 16);
+            this.lblIdOrden.Size = new System.Drawing.Size(24, 13);
             this.lblIdOrden.TabIndex = 0;
             this.lblIdOrden.Text = "IdO";
             // 
             // lblNombreCliente
             // 
             this.lblNombreCliente.AutoSize = true;
-            this.lblNombreCliente.Location = new System.Drawing.Point(125, 6);
-            this.lblNombreCliente.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblNombreCliente.Location = new System.Drawing.Point(94, 5);
             this.lblNombreCliente.Name = "lblNombreCliente";
-            this.lblNombreCliente.Size = new System.Drawing.Size(37, 16);
+            this.lblNombreCliente.Size = new System.Drawing.Size(29, 13);
             this.lblNombreCliente.TabIndex = 0;
             this.lblNombreCliente.Text = "label";
             // 
@@ -84,10 +84,9 @@
             // 
             this.lblTotal.AutoSize = true;
             this.lblTotal.BackColor = System.Drawing.Color.AliceBlue;
-            this.lblTotal.Location = new System.Drawing.Point(153, 26);
-            this.lblTotal.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblTotal.Location = new System.Drawing.Point(115, 21);
             this.lblTotal.Name = "lblTotal";
-            this.lblTotal.Size = new System.Drawing.Size(44, 16);
+            this.lblTotal.Size = new System.Drawing.Size(35, 13);
             this.lblTotal.TabIndex = 0;
             this.lblTotal.Text = "label1";
             this.lblTotal.Click += new System.EventHandler(this.lblTotal_Click);
@@ -96,52 +95,36 @@
             // 
             this.lblDescuento.AutoSize = true;
             this.lblDescuento.BackColor = System.Drawing.Color.AliceBlue;
-            this.lblDescuento.Location = new System.Drawing.Point(153, 63);
-            this.lblDescuento.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblDescuento.Location = new System.Drawing.Point(115, 51);
             this.lblDescuento.Name = "lblDescuento";
-            this.lblDescuento.Size = new System.Drawing.Size(44, 16);
+            this.lblDescuento.Size = new System.Drawing.Size(35, 13);
             this.lblDescuento.TabIndex = 0;
             this.lblDescuento.Text = "label1";
             // 
             // lblFechaOrden
             // 
             this.lblFechaOrden.AutoSize = true;
-            this.lblFechaOrden.Location = new System.Drawing.Point(431, 12);
-            this.lblFechaOrden.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblFechaOrden.Location = new System.Drawing.Point(323, 10);
             this.lblFechaOrden.Name = "lblFechaOrden";
-            this.lblFechaOrden.Size = new System.Drawing.Size(44, 16);
+            this.lblFechaOrden.Size = new System.Drawing.Size(35, 13);
             this.lblFechaOrden.TabIndex = 0;
             this.lblFechaOrden.Text = "label1";
             // 
             // lblTipoPago
             // 
             this.lblTipoPago.AutoSize = true;
-            this.lblTipoPago.Location = new System.Drawing.Point(153, 161);
-            this.lblTipoPago.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblTipoPago.Location = new System.Drawing.Point(115, 131);
             this.lblTipoPago.Name = "lblTipoPago";
-            this.lblTipoPago.Size = new System.Drawing.Size(44, 16);
+            this.lblTipoPago.Size = new System.Drawing.Size(35, 13);
             this.lblTipoPago.TabIndex = 0;
             this.lblTipoPago.Text = "label1";
-            // 
-            // lblNumeroMesa
-            // 
-            this.lblNumeroMesa.AutoSize = true;
-            this.lblNumeroMesa.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.lblNumeroMesa.Location = new System.Drawing.Point(92, 11);
-            this.lblNumeroMesa.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.lblNumeroMesa.Name = "lblNumeroMesa";
-            this.lblNumeroMesa.Size = new System.Drawing.Size(44, 16);
-            this.lblNumeroMesa.TabIndex = 0;
-            this.lblNumeroMesa.Text = "label1";
-            this.lblNumeroMesa.Click += new System.EventHandler(this.lblNumeroMesa_Click);
             // 
             // lblEstadoOrden
             // 
             this.lblEstadoOrden.AutoSize = true;
-            this.lblEstadoOrden.Location = new System.Drawing.Point(531, 15);
-            this.lblEstadoOrden.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblEstadoOrden.Location = new System.Drawing.Point(398, 12);
             this.lblEstadoOrden.Name = "lblEstadoOrden";
-            this.lblEstadoOrden.Size = new System.Drawing.Size(44, 16);
+            this.lblEstadoOrden.Size = new System.Drawing.Size(35, 13);
             this.lblEstadoOrden.TabIndex = 0;
             this.lblEstadoOrden.Text = "label1";
             // 
@@ -149,10 +132,9 @@
             // 
             this.lblNombreUsuario.AutoSize = true;
             this.lblNombreUsuario.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.lblNombreUsuario.Location = new System.Drawing.Point(305, 11);
-            this.lblNombreUsuario.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblNombreUsuario.Location = new System.Drawing.Point(229, 9);
             this.lblNombreUsuario.Name = "lblNombreUsuario";
-            this.lblNombreUsuario.Size = new System.Drawing.Size(44, 16);
+            this.lblNombreUsuario.Size = new System.Drawing.Size(35, 13);
             this.lblNombreUsuario.TabIndex = 0;
             this.lblNombreUsuario.Text = "label1";
             this.lblNombreUsuario.Click += new System.EventHandler(this.lblNombreUsuario_Click);
@@ -160,26 +142,34 @@
             // panel5
             // 
             this.panel5.BackColor = System.Drawing.Color.Gray;
+            this.panel5.Controls.Add(this.comboBoxMesas);
             this.panel5.Controls.Add(this.label3);
             this.panel5.Controls.Add(this.label2);
             this.panel5.Controls.Add(this.lblNombreUsuario);
             this.panel5.Controls.Add(this.lblEstadoOrden);
-            this.panel5.Controls.Add(this.lblNumeroMesa);
             this.panel5.Controls.Add(this.lblFechaOrden);
-            this.panel5.Location = new System.Drawing.Point(277, -1);
-            this.panel5.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel5.Location = new System.Drawing.Point(208, -1);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(787, 41);
+            this.panel5.Size = new System.Drawing.Size(590, 33);
             this.panel5.TabIndex = 11;
+            // 
+            // comboBoxMesas
+            // 
+            this.comboBoxMesas.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxMesas.FormattingEnabled = true;
+            this.comboBoxMesas.Location = new System.Drawing.Point(38, 6);
+            this.comboBoxMesas.Name = "comboBoxMesas";
+            this.comboBoxMesas.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxMesas.TabIndex = 2;
+            this.comboBoxMesas.SelectedIndexChanged += new System.EventHandler(this.comboBoxMesas_SelectedIndexChanged);
             // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.label3.Location = new System.Drawing.Point(248, 11);
-            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label3.Location = new System.Drawing.Point(186, 9);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(47, 16);
+            this.label3.Size = new System.Drawing.Size(37, 13);
             this.label3.TabIndex = 1;
             this.label3.Text = "Cajero";
             // 
@@ -187,10 +177,9 @@
             // 
             this.label2.AutoSize = true;
             this.label2.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.label2.Location = new System.Drawing.Point(40, 11);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label2.Location = new System.Drawing.Point(8, 9);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(41, 16);
+            this.label2.Size = new System.Drawing.Size(33, 13);
             this.label2.TabIndex = 0;
             this.label2.Text = "Mesa";
             // 
@@ -201,19 +190,17 @@
             this.panel3.Controls.Add(this.lblIdOrden);
             this.panel3.Controls.Add(this.lblNombreCliente);
             this.panel3.Location = new System.Drawing.Point(1, 0);
-            this.panel3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(276, 30);
+            this.panel3.Size = new System.Drawing.Size(207, 24);
             this.panel3.TabIndex = 10;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
             this.label4.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.label4.Location = new System.Drawing.Point(63, 6);
-            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label4.Location = new System.Drawing.Point(47, 5);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(49, 16);
+            this.label4.Size = new System.Drawing.Size(41, 13);
             this.label4.TabIndex = 5;
             this.label4.Text = "Cuenta";
             // 
@@ -227,20 +214,18 @@
             this.panel1.Controls.Add(this.label1);
             this.panel1.Controls.Add(this.lblDescuento);
             this.panel1.Controls.Add(this.lblTotal);
-            this.panel1.Location = new System.Drawing.Point(1, 338);
-            this.panel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel1.Location = new System.Drawing.Point(1, 275);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(276, 213);
+            this.panel1.Size = new System.Drawing.Size(207, 173);
             this.panel1.TabIndex = 12;
             // 
             // label7
             // 
             this.label7.AutoSize = true;
             this.label7.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label7.Location = new System.Drawing.Point(16, 111);
-            this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label7.Location = new System.Drawing.Point(12, 90);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(38, 16);
+            this.label7.Size = new System.Drawing.Size(31, 13);
             this.label7.TabIndex = 11;
             this.label7.Text = "Total";
             // 
@@ -248,10 +233,9 @@
             // 
             this.label6.AutoSize = true;
             this.label6.ForeColor = System.Drawing.Color.Red;
-            this.label6.Location = new System.Drawing.Point(16, 63);
-            this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label6.Location = new System.Drawing.Point(12, 51);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(79, 16);
+            this.label6.Size = new System.Drawing.Size(64, 13);
             this.label6.TabIndex = 10;
             this.label6.Text = "Descuentos";
             // 
@@ -259,10 +243,9 @@
             // 
             this.label5.AutoSize = true;
             this.label5.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label5.Location = new System.Drawing.Point(16, 26);
-            this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label5.Location = new System.Drawing.Point(12, 21);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(56, 16);
+            this.label5.Size = new System.Drawing.Size(46, 13);
             this.label5.TabIndex = 7;
             this.label5.Text = "Subtotal";
             // 
@@ -270,20 +253,18 @@
             // 
             this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.Color.AliceBlue;
-            this.label1.Location = new System.Drawing.Point(153, 111);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Location = new System.Drawing.Point(115, 90);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(44, 16);
+            this.label1.Size = new System.Drawing.Size(35, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "label1";
             // 
             // button12
             // 
             this.button12.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.button12.Location = new System.Drawing.Point(645, 67);
-            this.button12.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button12.Location = new System.Drawing.Point(484, 54);
             this.button12.Name = "button12";
-            this.button12.Size = new System.Drawing.Size(108, 34);
+            this.button12.Size = new System.Drawing.Size(81, 28);
             this.button12.TabIndex = 30;
             this.button12.Text = "PAGAR";
             this.button12.UseVisualStyleBackColor = false;
@@ -291,10 +272,9 @@
             // button9
             // 
             this.button9.BackColor = System.Drawing.Color.SteelBlue;
-            this.button9.Location = new System.Drawing.Point(761, 68);
-            this.button9.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button9.Location = new System.Drawing.Point(571, 55);
             this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(108, 34);
+            this.button9.Size = new System.Drawing.Size(81, 28);
             this.button9.TabIndex = 28;
             this.button9.Text = "PRECUENTA";
             this.button9.UseVisualStyleBackColor = false;
@@ -302,10 +282,9 @@
             // btnCargarExtras
             // 
             this.btnCargarExtras.BackColor = System.Drawing.Color.Yellow;
-            this.btnCargarExtras.Location = new System.Drawing.Point(529, 66);
-            this.btnCargarExtras.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnCargarExtras.Location = new System.Drawing.Point(397, 54);
             this.btnCargarExtras.Name = "btnCargarExtras";
-            this.btnCargarExtras.Size = new System.Drawing.Size(108, 34);
+            this.btnCargarExtras.Size = new System.Drawing.Size(81, 28);
             this.btnCargarExtras.TabIndex = 23;
             this.btnCargarExtras.Text = "EXTRAS";
             this.btnCargarExtras.UseVisualStyleBackColor = false;
@@ -314,10 +293,9 @@
             // btnCargarPlatos
             // 
             this.btnCargarPlatos.BackColor = System.Drawing.Color.Yellow;
-            this.btnCargarPlatos.Location = new System.Drawing.Point(413, 68);
-            this.btnCargarPlatos.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnCargarPlatos.Location = new System.Drawing.Point(310, 55);
             this.btnCargarPlatos.Name = "btnCargarPlatos";
-            this.btnCargarPlatos.Size = new System.Drawing.Size(108, 34);
+            this.btnCargarPlatos.Size = new System.Drawing.Size(81, 28);
             this.btnCargarPlatos.TabIndex = 22;
             this.btnCargarPlatos.Text = "COMIDA";
             this.btnCargarPlatos.UseVisualStyleBackColor = false;
@@ -326,10 +304,9 @@
             // btnCargarBebidas
             // 
             this.btnCargarBebidas.BackColor = System.Drawing.Color.Yellow;
-            this.btnCargarBebidas.Location = new System.Drawing.Point(292, 66);
-            this.btnCargarBebidas.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnCargarBebidas.Location = new System.Drawing.Point(219, 54);
             this.btnCargarBebidas.Name = "btnCargarBebidas";
-            this.btnCargarBebidas.Size = new System.Drawing.Size(113, 36);
+            this.btnCargarBebidas.Size = new System.Drawing.Size(85, 29);
             this.btnCargarBebidas.TabIndex = 21;
             this.btnCargarBebidas.Text = "BEBIDAS";
             this.btnCargarBebidas.UseVisualStyleBackColor = false;
@@ -338,13 +315,12 @@
             // dataGridViewMenu
             // 
             this.dataGridViewMenu.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewMenu.Location = new System.Drawing.Point(292, 164);
-            this.dataGridViewMenu.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dataGridViewMenu.Location = new System.Drawing.Point(219, 133);
             this.dataGridViewMenu.MultiSelect = false;
             this.dataGridViewMenu.Name = "dataGridViewMenu";
             this.dataGridViewMenu.ReadOnly = true;
             this.dataGridViewMenu.RowHeadersWidth = 51;
-            this.dataGridViewMenu.Size = new System.Drawing.Size(711, 375);
+            this.dataGridViewMenu.Size = new System.Drawing.Size(533, 305);
             this.dataGridViewMenu.TabIndex = 32;
             this.dataGridViewMenu.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewMenu_CellClick);
             // 
@@ -353,19 +329,18 @@
             this.flowLayoutPanelPedidos.AutoScroll = true;
             this.flowLayoutPanelPedidos.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.flowLayoutPanelPedidos.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flowLayoutPanelPedidos.Location = new System.Drawing.Point(1, 26);
-            this.flowLayoutPanelPedidos.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.flowLayoutPanelPedidos.Location = new System.Drawing.Point(1, 21);
             this.flowLayoutPanelPedidos.Name = "flowLayoutPanelPedidos";
-            this.flowLayoutPanelPedidos.Size = new System.Drawing.Size(276, 316);
+            this.flowLayoutPanelPedidos.Size = new System.Drawing.Size(207, 257);
             this.flowLayoutPanelPedidos.TabIndex = 33;
             this.flowLayoutPanelPedidos.WrapContents = false;
             this.flowLayoutPanelPedidos.Paint += new System.Windows.Forms.PaintEventHandler(this.flowLayoutPanelPedidos_Paint);
             // 
             // FormGestionOrdenes
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1067, 554);
+            this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.flowLayoutPanelPedidos);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.dataGridViewMenu);
@@ -376,7 +351,6 @@
             this.Controls.Add(this.btnCargarBebidas);
             this.Controls.Add(this.panel5);
             this.Controls.Add(this.panel3);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "FormGestionOrdenes";
             this.Text = "FormGestionOrdenes";
             this.Load += new System.EventHandler(this.FormGestionOrdenes_Load);
@@ -391,6 +365,11 @@
 
         }
 
+        private void comboBoxMesas_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
 
         private System.Windows.Forms.Label lblIdOrden;
@@ -399,7 +378,6 @@
         private System.Windows.Forms.Label lblDescuento;
         private System.Windows.Forms.Label lblFechaOrden;
         private System.Windows.Forms.Label lblTipoPago;
-        private System.Windows.Forms.Label lblNumeroMesa;
         private System.Windows.Forms.Label lblEstadoOrden;
         private System.Windows.Forms.Label lblNombreUsuario;
         private System.Windows.Forms.Panel panel5;
@@ -419,5 +397,6 @@
         private System.Windows.Forms.Button btnCargarBebidas;
         private System.Windows.Forms.DataGridView dataGridViewMenu;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanelPedidos;
+        private System.Windows.Forms.ComboBox comboBoxMesas;
     }
 }

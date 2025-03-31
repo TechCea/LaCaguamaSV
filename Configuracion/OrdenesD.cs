@@ -192,8 +192,97 @@ namespace LaCaguamaSV.Configuracion
                 da.Fill(dt);
             }
             return dt;
-        }   
+        }
+        public static DataTable ObtenerMesasDisponibles(int idMesaActual)
+        {
+            DataTable dt = new DataTable();
+            using (MySqlConnection conexion = new Conexion().EstablecerConexion())
+            {
+                string query = @"SELECT id_mesa, nombreMesa 
+                      FROM mesas 
+                      WHERE id_estadoM = 1 OR id_mesa = @idMesaActual
+                      ORDER BY nombreMesa";
 
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@idMesaActual", idMesaActual);
+                    MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                    da.Fill(dt);
+                }
+            }
+            return dt;
+        }
+
+        public static async Task<bool> CambiarMesaOrdenAsync(int idOrden, int mesaActualId, int nuevaMesaId)
+        {
+            using (MySqlConnection conexion = new Conexion().EstablecerConexion())
+            {
+
+                using (MySqlTransaction transaction = conexion.BeginTransaction())
+                {
+                    try
+                    {
+                        // 1. Actualizar orden con nueva mesa
+                        string updateOrden = @"UPDATE ordenes 
+                                    SET id_mesa = @nuevaMesaId 
+                                    WHERE id_orden = @idOrden";
+
+                        using (MySqlCommand cmd = new MySqlCommand(updateOrden, conexion, transaction))
+                        {
+                            cmd.Parameters.AddWithValue("@nuevaMesaId", nuevaMesaId);
+                            cmd.Parameters.AddWithValue("@idOrden", idOrden);
+                            await cmd.ExecuteNonQueryAsync();
+                        }
+
+                        // 2. Liberar mesa actual (estado = 1 - Disponible)
+                        string liberarMesa = @"UPDATE mesas 
+                                      SET id_estadoM = 1 
+                                      WHERE id_mesa = @mesaActualId";
+
+                        using (MySqlCommand cmd = new MySqlCommand(liberarMesa, conexion, transaction))
+                        {
+                            cmd.Parameters.AddWithValue("@mesaActualId", mesaActualId);
+                            await cmd.ExecuteNonQueryAsync();
+                        }
+
+                        // 3. Ocupar nueva mesa (estado = 2 - Ocupado)
+                        string ocuparMesa = @"UPDATE mesas 
+                                     SET id_estadoM = 2 
+                                     WHERE id_mesa = @nuevaMesaId";
+
+                        using (MySqlCommand cmd = new MySqlCommand(ocuparMesa, conexion, transaction))
+                        {
+                            cmd.Parameters.AddWithValue("@nuevaMesaId", nuevaMesaId);
+                            await cmd.ExecuteNonQueryAsync();
+                        }
+
+                        await transaction.CommitAsync();
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        await transaction.RollbackAsync();
+                        Console.WriteLine("Error al cambiar mesa: " + ex.Message);
+                        return false;
+                    }
+                }
+            }
+        }
+
+        // Método para obtener ID de mesa por nombre
+        public static int ObtenerIdMesaPorNombre(string nombreMesa)
+        {
+            using (MySqlConnection conexion = new Conexion().EstablecerConexion())
+            {
+                string query = "SELECT id_mesa FROM mesas WHERE nombreMesa = @nombreMesa";
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@nombreMesa", nombreMesa);
+                    object result = cmd.ExecuteScalar();
+                    return result != null ? Convert.ToInt32(result) : -1;
+                }
+            }
+        }
 
 
     }

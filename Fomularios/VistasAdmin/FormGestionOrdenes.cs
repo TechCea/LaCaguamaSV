@@ -12,8 +12,9 @@ using MySql.Data.MySqlClient;
 
 namespace LaCaguamaSV.Fomularios.VistasAdmin
 {
-    public partial class FormGestionOrdenes: Form
+    public partial class FormGestionOrdenes : Form
     {
+        private int idMesaActual; // Almacenar el ID de la mesa actual
         public FormGestionOrdenes(int idOrden, string nombreCliente, decimal total, decimal descuento, string fechaOrden, string numeroMesa, string tipoPago, string nombreUsuario, string estadoOrden)
         {
             InitializeComponent();
@@ -50,17 +51,143 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         }
 
 
-        private void CargarDatosOrden(int idOrden, string nombreCliente, decimal total, decimal descuento, string fechaOrden, string numeroMesa, string tipoPago, string nombreUsuario, string estadoOrden)
+        private void CargarDatosOrden(int idOrden, string nombreCliente, decimal total, decimal descuento,
+                    string fechaOrden, string numeroMesa, string tipoPago,
+                    string nombreUsuario, string estadoOrden)
         {
             lblIdOrden.Text = idOrden.ToString();
             lblNombreCliente.Text = nombreCliente;
             lblTotal.Text = total.ToString("C");
             lblDescuento.Text = descuento.ToString("C");
             lblFechaOrden.Text = fechaOrden;
-            lblNumeroMesa.Text = numeroMesa;
+
+            // Obtener ID de mesa actual con manejo robusto
+            idMesaActual = ObtenerIdMesaActual(numeroMesa);
+
+            if (idMesaActual <= 0)
+            {
+                MessageBox.Show("Error: No se pudo obtener la mesa actual");
+                return;
+            }
+
+            // Cargar mesas disponibles
+            var mesasDisponibles = OrdenesD.ObtenerMesasDisponibles(idMesaActual);
+
+            // Verificar que se obtuvieron resultados
+            if (mesasDisponibles.Rows.Count == 0)
+            {
+                MessageBox.Show("No se encontraron mesas disponibles");
+                return;
+            }
+
+            // Configurar ComboBox
+            comboBoxMesas.BeginUpdate(); // Evitar parpadeo
+            comboBoxMesas.DataSource = mesasDisponibles;
+            comboBoxMesas.DisplayMember = "nombreMesa";
+            comboBoxMesas.ValueMember = "id_mesa";
+
+            // Asegurar que el valor sea del tipo correcto
+            try
+            {
+                comboBoxMesas.SelectedValue = idMesaActual;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al seleccionar mesa: {ex.Message}");
+                // Seleccionar el primer elemento como fallback
+                if (comboBoxMesas.Items.Count > 0)
+                    comboBoxMesas.SelectedIndex = 0;
+            }
+            finally
+            {
+                comboBoxMesas.EndUpdate();
+            }
+
             lblTipoPago.Text = tipoPago;
             lblNombreUsuario.Text = nombreUsuario;
             lblEstadoOrden.Text = estadoOrden;
+        }
+
+        private int ObtenerIdMesaActual(string nombreMesa)
+        {
+            try
+            {
+                using (MySqlConnection conexion = new Conexion().EstablecerConexion())
+                {
+                    string query = "SELECT id_mesa FROM mesas WHERE nombreMesa = @nombreMesa";
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@nombreMesa", nombreMesa);
+                        object result = cmd.ExecuteScalar();
+
+                        if (result == null || result == DBNull.Value)
+                        {
+                            MessageBox.Show($"No se encontró la mesa: {nombreMesa}");
+                            return -1;
+                        }
+
+                        // Convertir explícitamente a int
+                        return Convert.ToInt32(result);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error crítico al obtener ID de mesa: {ex.Message}");
+                return -1;
+            }
+        }
+
+        public static DataTable ObtenerMesasDisponibles(int idMesaActual)
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                using (MySqlConnection conexion = new Conexion().EstablecerConexion())
+                {
+                    string query = @"SELECT id_mesa, nombreMesa 
+                          FROM mesas 
+                          WHERE id_estadoM = 1 OR id_mesa = @idMesaActual
+                          ORDER BY nombreMesa";
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        // Asegurar el tipo de parámetro
+                        cmd.Parameters.Add("@idMesaActual", MySqlDbType.Int32).Value = idMesaActual;
+
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+
+                            // Verificar que la mesa actual está incluida
+                            bool contieneMesaActual = false;
+                            foreach (DataRow row in dt.Rows)
+                            {
+                                if (Convert.ToInt32(row["id_mesa"]) == idMesaActual)
+                                {
+                                    contieneMesaActual = true;
+                                    break;
+                                }
+                            }
+
+                            if (!contieneMesaActual && idMesaActual > 0)
+                            {
+                                // Agregar la mesa actual si no está en los resultados
+                                DataRow newRow = dt.NewRow();
+                                newRow["id_mesa"] = idMesaActual;
+                                newRow["nombreMesa"] = "[Mesa Actual]";
+                                dt.Rows.InsertAt(newRow, 0);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al cargar mesas: {ex.Message}");
+            }
+
+            return dt;
         }
 
         private void FormGestionOrdenes_Load(object sender, EventArgs e)
@@ -69,16 +196,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         }
 
         private void lblNombreUsuario_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void lblNumeroMesa_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox1_TextChanged(object sender, EventArgs e)
         {
 
         }
@@ -375,6 +492,80 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
 
         }
+
+        private async void comboBoxMesas_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Evitar ejecución durante inicialización
+            if (comboBoxMesas.SelectedValue == null ||
+                !(comboBoxMesas.SelectedValue is int) ||
+                comboBoxMesas.SelectedIndex == -1)
+            {
+                return;
+            }
+
+            int nuevaMesaId;
+            try
+            {
+                // Conversión segura
+                nuevaMesaId = (int)comboBoxMesas.SelectedValue;
+            }
+            catch (InvalidCastException)
+            {
+                // Manejar caso donde el valor no es int
+                MessageBox.Show("Error: El ID de mesa no es válido");
+                comboBoxMesas.SelectedValue = idMesaActual;
+                return;
+            }
+
+            // Si es la misma mesa, no hacer nada
+            if (nuevaMesaId == idMesaActual)
+                return;
+
+            // Confirmar cambio
+            var confirmacion = MessageBox.Show($"¿Cambiar a {comboBoxMesas.Text}?",
+                                             "Confirmar cambio de mesa",
+                                             MessageBoxButtons.YesNo,
+                                             MessageBoxIcon.Question);
+
+            if (confirmacion != DialogResult.Yes)
+            {
+                comboBoxMesas.SelectedValue = idMesaActual;
+                return;
+            }
+
+            try
+            {
+                bool exito = await OrdenesD.CambiarMesaOrdenAsync(
+                    Convert.ToInt32(lblIdOrden.Text),
+                    idMesaActual,
+                    nuevaMesaId);
+
+                if (exito)
+                {
+                    idMesaActual = nuevaMesaId;
+                    MessageBox.Show("Mesa cambiada exitosamente");
+
+                    // Actualizar la lista de órdenes en el formulario principal
+                    foreach (Form form in Application.OpenForms)
+                    {
+                        if (form is FormAdmin adminForm)
+                        {
+                            adminForm.RefrescarOrdenes();
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    comboBoxMesas.SelectedValue = idMesaActual;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al cambiar mesa: {ex.Message}");
+                comboBoxMesas.SelectedValue = idMesaActual;
+            }
+        }
     }
-    
+
 }
