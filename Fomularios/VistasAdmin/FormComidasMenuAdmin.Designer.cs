@@ -43,7 +43,6 @@
             this.lbNombreBebida = new System.Windows.Forms.Label();
             this.btnEliminarC = new System.Windows.Forms.Button();
             this.btnActualizarC = new System.Windows.Forms.Button();
-            this.btnaAgregarC = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvComidas)).BeginInit();
             this.gbDatosBebida.SuspendLayout();
             this.SuspendLayout();
@@ -195,7 +194,7 @@
             this.btnEliminarC.BackColor = System.Drawing.Color.Brown;
             this.btnEliminarC.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnEliminarC.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.btnEliminarC.Location = new System.Drawing.Point(1020, 511);
+            this.btnEliminarC.Location = new System.Drawing.Point(1169, 511);
             this.btnEliminarC.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnEliminarC.Name = "btnEliminarC";
             this.btnEliminarC.Size = new System.Drawing.Size(124, 58);
@@ -209,7 +208,7 @@
             this.btnActualizarC.BackColor = System.Drawing.Color.ForestGreen;
             this.btnActualizarC.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnActualizarC.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.btnActualizarC.Location = new System.Drawing.Point(852, 511);
+            this.btnActualizarC.Location = new System.Drawing.Point(1001, 511);
             this.btnActualizarC.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnActualizarC.Name = "btnActualizarC";
             this.btnActualizarC.Size = new System.Drawing.Size(139, 58);
@@ -217,20 +216,6 @@
             this.btnActualizarC.Text = "Actualizar datos";
             this.btnActualizarC.UseVisualStyleBackColor = false;
             this.btnActualizarC.Click += new System.EventHandler(this.btnActualizarC_Click);
-            // 
-            // btnaAgregarC
-            // 
-            this.btnaAgregarC.BackColor = System.Drawing.Color.ForestGreen;
-            this.btnaAgregarC.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnaAgregarC.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.btnaAgregarC.Location = new System.Drawing.Point(1172, 511);
-            this.btnaAgregarC.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.btnaAgregarC.Name = "btnaAgregarC";
-            this.btnaAgregarC.Size = new System.Drawing.Size(119, 58);
-            this.btnaAgregarC.TabIndex = 9;
-            this.btnaAgregarC.Text = "Agregar";
-            this.btnaAgregarC.UseVisualStyleBackColor = false;
-            this.btnaAgregarC.Click += new System.EventHandler(this.button1_Click);
             // 
             // FormComidasMenuAdmin
             // 
@@ -240,7 +225,6 @@
             this.ClientSize = new System.Drawing.Size(1321, 598);
             this.Controls.Add(this.gbDatosBebida);
             this.Controls.Add(this.btnRegresarMenu);
-            this.Controls.Add(this.btnaAgregarC);
             this.Controls.Add(this.cbCategoriaC);
             this.Controls.Add(this.dgvComidas);
             this.Controls.Add(this.btnEliminarC);
@@ -261,7 +245,6 @@
         private System.Windows.Forms.ComboBox cbCategoriaC;
         private System.Windows.Forms.DataGridView dgvComidas;
         private System.Windows.Forms.GroupBox gbDatosBebida;
-        private System.Windows.Forms.Button btnaAgregarC;
         private System.Windows.Forms.Label lblSeleccionBebida;
         private System.Windows.Forms.Button btnEliminarC;
         private System.Windows.Forms.Button btnActualizarC;

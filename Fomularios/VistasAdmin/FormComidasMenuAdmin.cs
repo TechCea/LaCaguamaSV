@@ -99,30 +99,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             }
         }
 
-        private void button1_Click(object sender, EventArgs e) // AGREGAR NUEVO PLATO
-        {
-            string nombre = txtNombreC.Text;
-            string descripcion = txtDescripcionC.Text;
-            string categoria = cbCategoriaB.SelectedItem?.ToString();
-            decimal precio;
-
-            if (!decimal.TryParse(txtPrecioU.Text, out precio))
-            {
-                MessageBox.Show("Precio inválido");
-                return;
-            }
-
-            if (conexion.AgregarPlato(nombre, descripcion, precio, categoria))
-            {
-                MessageBox.Show("Plato agregado");
-                CargarComidas();
-                LimpiarCampos();
-            }
-            else
-            {
-                MessageBox.Show("Error al agregar el plato");
-            }
-        }
 
         private void btnActualizarC_Click(object sender, EventArgs e)
         {
@@ -137,21 +113,34 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             string categoria = cbCategoriaB.SelectedItem?.ToString();
             decimal precio;
 
-            if (!decimal.TryParse(txtPrecioU.Text, out precio))
+            if (string.IsNullOrWhiteSpace(nombre))
             {
-                MessageBox.Show("Precio inválido");
+                MessageBox.Show("El nombre del plato no puede estar vacío.");
                 return;
             }
 
+            if (string.IsNullOrWhiteSpace(categoria))
+            {
+                MessageBox.Show("Selecciona una categoría.");
+                return;
+            }
+
+            if (!decimal.TryParse(txtPrecioU.Text, out precio) || precio <= 0)
+            {
+                MessageBox.Show("Precio inválido o menor que 0.");
+                return;
+            }
+
+            // Llamada a la función ActualizarPlato con los parámetros correctos
             if (conexion.ActualizarPlato(idPlatoSeleccionado, nombre, descripcion, precio, categoria))
             {
-                MessageBox.Show("Plato actualizado");
-                CargarComidas();
-                LimpiarCampos();
+                MessageBox.Show("Plato actualizado correctamente.");
+                CargarComidas();  // Recargar la lista de platos
+                LimpiarCampos();  // Limpiar los campos de texto
             }
             else
             {
-                MessageBox.Show("Error al actualizar");
+                MessageBox.Show("Error al actualizar el plato.");
             }
         }
 
@@ -188,7 +177,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             if (cbCategoriaB.Items.Count > 0) cbCategoriaB.SelectedIndex = 0;
         }
 
-        // Tu botón regresar se mantiene igual
         private void btnRegresarMenu_Click(object sender, EventArgs e)
         {
             this.Close();
