@@ -108,7 +108,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             CargarExtras();
         }
 
-        private void dataGridViewMenu_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        private void dataGridViewMenu_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0)
             {
@@ -175,62 +175,54 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             flowLayoutPanelPedidos.Controls.Clear();
 
-            // Agrupar pedidos iguales
             var pedidosAgrupados = pedidos
-                .GroupBy(p => p.idPedido)
+                .GroupBy(p => (p.idPedido, p.nombre, p.precio))
                 .Select(g => new {
-                    IdPedido = g.Key,
-                    Nombre = g.First().nombre,
-                    Precio = g.First().precio,
+                    IdPedido = g.Key.idPedido,
+                    Nombre = g.Key.nombre,
+                    Precio = g.Key.precio,
                     Cantidad = g.Count()
-                });
+                })
+                .OrderBy(x => x.Nombre);
 
             foreach (var grupo in pedidosAgrupados)
             {
-                // Crear un Panel contenedor para cada pedido
                 Panel panelPedido = new Panel
                 {
                     BorderStyle = BorderStyle.FixedSingle,
                     BackColor = Color.DarkGreen,
                     Margin = new Padding(5),
                     Padding = new Padding(5),
-                    AutoSize = true,
-                    Tag = grupo.IdPedido
+                    Width = flowLayoutPanelPedidos.Width - 25,
+                    Height = 40
                 };
 
-                // Label con la información del pedido
                 Label lblPedido = new Label
                 {
                     Text = $"{grupo.Nombre} - {grupo.Precio:C} x{grupo.Cantidad}",
-                    AutoSize = true,
                     ForeColor = Color.White,
-                    Cursor = Cursors.Hand,
-                    Dock = DockStyle.Fill
+                    Dock = DockStyle.Fill,
+                    TextAlign = ContentAlignment.MiddleLeft,
+                    Cursor = Cursors.Hand
                 };
 
-                // Botón para eliminar
                 Button btnEliminar = new Button
                 {
                     Text = "X",
-                    ForeColor = Color.Red,
+                    ForeColor = Color.White,
                     BackColor = Color.Red,
                     FlatStyle = FlatStyle.Flat,
-                    Width = 15,
-                    Height = 10,
+                    Width = 30,
                     Dock = DockStyle.Right,
                     Cursor = Cursors.Hand,
                     Tag = grupo.IdPedido
                 };
 
-                // Configurar el evento Click para el label y el botón
                 lblPedido.Click += (sender, e) => MostrarConfirmacionEliminacion(grupo.IdPedido, grupo.Nombre, grupo.Cantidad);
                 btnEliminar.Click += (sender, e) => MostrarConfirmacionEliminacion(grupo.IdPedido, grupo.Nombre, grupo.Cantidad);
 
-                // Agregar controles al panel
                 panelPedido.Controls.Add(lblPedido);
                 panelPedido.Controls.Add(btnEliminar);
-
-                // Agregar el panel al flowLayoutPanel
                 flowLayoutPanelPedidos.Controls.Add(panelPedido);
             }
         }
@@ -278,22 +270,18 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             {
                 try
                 {
-                    // Calcular el total REAL consultando todos los pedidos
                     string queryTotal = @"
-                SELECT 
-                    IFNULL(SUM(
-                        CASE 
-                            WHEN p.id_plato IS NOT NULL THEN pl.precioUnitario * p.Cantidad
-                            WHEN p.id_bebida IS NOT NULL THEN b.precioUnitario * p.Cantidad
-                            WHEN p.id_extra IS NOT NULL THEN e.precioUnitario * p.Cantidad
-                            ELSE 0
-                        END
-                    ), 0) AS Total
-                FROM pedidos p
-                LEFT JOIN platos pl ON p.id_plato = pl.id_plato
-                LEFT JOIN bebidas b ON p.id_bebida = b.id_bebida
-                LEFT JOIN extras e ON p.id_extra = e.id_extra
-                WHERE p.id_orden = @idOrden";
+                    SELECT 
+                        IFNULL(SUM(
+                            CASE 
+                                WHEN p.id_plato IS NOT NULL THEN (SELECT pl.precioUnitario FROM platos pl WHERE pl.id_plato = p.id_plato) * p.Cantidad
+                                WHEN p.id_bebida IS NOT NULL THEN (SELECT b.precioUnitario FROM bebidas b WHERE b.id_bebida = p.id_bebida) * p.Cantidad
+                                WHEN p.id_extra IS NOT NULL THEN (SELECT e.precioUnitario FROM extras e WHERE e.id_extra = p.id_extra) * p.Cantidad
+                                ELSE 0
+                            END
+                        ), 0) AS Total
+                    FROM pedidos p
+                    WHERE p.id_orden = @idOrden";
 
                     decimal nuevoTotal = 0;
 
@@ -307,7 +295,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                         }
                     }
 
-                    // Actualizar el total en la orden
                     string queryUpdate = "UPDATE ordenes SET total = @total WHERE id_orden = @idOrden";
                     using (MySqlCommand cmdUpdate = new MySqlCommand(queryUpdate, conexion))
                     {
@@ -316,18 +303,16 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                         cmdUpdate.ExecuteNonQuery();
                     }
 
-                    // Actualizar la UI
                     totalOrden = nuevoTotal;
                     lblTotal.Text = totalOrden.ToString("C");
-
-                    // Recargar los pedidos desde la BD para mantener consistencia
                     CargarPedidosDesdeBD();
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show("Error al actualizar el total: " + ex.Message);
                 }
-                // Notificar al FormAdmin para que actualice la lista de órdenes
+
+                // Notificar al FormAdmin para actualizar
                 foreach (Form form in Application.OpenForms)
                 {
                     if (form is FormAdmin)
@@ -346,18 +331,21 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             using (MySqlConnection conexion = new Conexion().EstablecerConexion())
             {
                 string query = @"
-        SELECT 
-            p.id_pedido,
-            COALESCE(pl.id_plato, b.id_bebida, e.id_extra) AS id_item,
-            COALESCE(pl.nombrePlato, i.nombreBebida, e.nombre) AS nombre,
-            COALESCE(pl.precioUnitario, b.precioUnitario, e.precioUnitario) AS precio,
-            p.Cantidad
-        FROM pedidos p
-        LEFT JOIN platos pl ON p.id_plato = pl.id_plato
-        LEFT JOIN bebidas b ON p.id_bebida = b.id_bebida
-        LEFT JOIN inventario i ON b.id_inventario = i.id_inventario
-        LEFT JOIN extras e ON p.id_extra = e.id_extra
-        WHERE p.id_orden = @idOrden";
+                SELECT 
+                    p.id_pedido,
+                    COALESCE(
+                        (SELECT i.nombreAlimento FROM platos pl JOIN inventario i ON pl.id_inventario = i.id_inventario WHERE pl.id_plato = p.id_plato),
+                        (SELECT i.nombreAlimento FROM bebidas b JOIN inventario i ON b.id_inventario = i.id_inventario WHERE b.id_bebida = p.id_bebida),
+                        (SELECT i.nombreAlimento FROM extras e JOIN inventario i ON e.id_inventario = i.id_inventario WHERE e.id_extra = p.id_extra)
+                    ) AS nombre,
+                    COALESCE(
+                        (SELECT pl.precioUnitario FROM platos pl WHERE pl.id_plato = p.id_plato),
+                        (SELECT b.precioUnitario FROM bebidas b WHERE b.id_bebida = p.id_bebida),
+                        (SELECT e.precioUnitario FROM extras e WHERE e.id_extra = p.id_extra)
+                    ) AS precio,
+                    p.Cantidad
+                FROM pedidos p
+                WHERE p.id_orden = @idOrden";
 
                 using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                 {
@@ -372,7 +360,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                             decimal precio = reader.GetDecimal("precio");
                             int cantidad = reader.GetInt32("Cantidad");
 
-                            // Agregamos cada item con su ID de pedido
                             for (int i = 0; i < cantidad; i++)
                             {
                                 pedidos.Add((idPedido, nombre, precio));
@@ -384,7 +371,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
             MostrarPedidosEnPanel();
         }
-
         private void flowLayoutPanelPedidos_Paint(object sender, PaintEventArgs e)
         {
 

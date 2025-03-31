@@ -346,7 +346,7 @@
             this.dataGridViewMenu.RowHeadersWidth = 51;
             this.dataGridViewMenu.Size = new System.Drawing.Size(711, 375);
             this.dataGridViewMenu.TabIndex = 32;
-            this.dataGridViewMenu.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewMenu_CellDoubleClick);
+            this.dataGridViewMenu.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewMenu_CellClick);
             // 
             // flowLayoutPanelPedidos
             // 

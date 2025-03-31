@@ -149,9 +149,9 @@ namespace LaCaguamaSV.Configuracion
             using (MySqlConnection conexion = new Conexion().EstablecerConexion())
             {
                 string query = @"
-            SELECT b.id_bebida AS ID, i.nombreBebida AS nombre, b.precioUnitario 
-            FROM bebidas b 
-            JOIN inventario i ON b.id_inventario = i.id_inventario";
+                SELECT b.id_bebida AS ID, i.nombreAlimento AS nombre, b.precioUnitario 
+                FROM bebidas b 
+                JOIN inventario i ON b.id_inventario = i.id_inventario";
 
                 MySqlCommand cmd = new MySqlCommand(query, conexion);
                 MySqlDataAdapter da = new MySqlDataAdapter(cmd);
@@ -165,7 +165,11 @@ namespace LaCaguamaSV.Configuracion
             DataTable dt = new DataTable();
             using (MySqlConnection conexion = new Conexion().EstablecerConexion())
             {
-                string query = "SELECT id_plato AS ID, nombrePlato AS nombre, precioUnitario FROM platos";
+                string query = @"
+                SELECT p.id_plato AS ID, i.nombreAlimento AS nombre, p.precioUnitario 
+                FROM platos p 
+                JOIN inventario i ON p.id_inventario = i.id_inventario";
+
                 MySqlCommand cmd = new MySqlCommand(query, conexion);
                 MySqlDataAdapter da = new MySqlDataAdapter(cmd);
                 da.Fill(dt);
@@ -178,13 +182,17 @@ namespace LaCaguamaSV.Configuracion
             DataTable dt = new DataTable();
             using (MySqlConnection conexion = new Conexion().EstablecerConexion())
             {
-                string query = "SELECT id_extra AS ID, nombre, precioUnitario FROM extras";
+                string query = @"
+                SELECT e.id_extra AS ID, i.nombreAlimento AS nombre, e.precioUnitario 
+                FROM extras e 
+                JOIN inventario i ON e.id_inventario = i.id_inventario";
+
                 MySqlCommand cmd = new MySqlCommand(query, conexion);
                 MySqlDataAdapter da = new MySqlDataAdapter(cmd);
                 da.Fill(dt);
             }
             return dt;
-        }
+        }   
 
 
 
