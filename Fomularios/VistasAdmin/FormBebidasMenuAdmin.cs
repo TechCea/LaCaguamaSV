@@ -24,6 +24,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             CargarCategoriasBebidas(); // Cargar categorías en cbCategoriaB
             cbCategoria.SelectedIndexChanged += CbCategoria_SelectedIndexChanged;
             dgvBebidas.SelectionChanged += dgvBebidas_SelectionChanged;
+            dgvBebidas.CellClick += dgvBebidas_CellClick;
         }
 
         private void CargarBebidas()
@@ -98,18 +99,36 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             {
                 int idBebida = Convert.ToInt32(dgvBebidas.SelectedRows[0].Cells["ID Bebida"].Value);
                 string nuevoNombre = txtNombreB.Text;
-                string nuevaCategoria = cbCategoriaB.SelectedItem.ToString();
+                string nuevaCategoria = cbCategoriaB.SelectedItem?.ToString();
                 decimal nuevoPrecio;
 
-                if (!decimal.TryParse(txtPrecioU.Text, out nuevoPrecio))
+                if (string.IsNullOrWhiteSpace(nuevoNombre))
                 {
-                    MessageBox.Show("Ingrese un precio válido.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("El nombre de la bebida no puede estar vacío.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                if (string.IsNullOrWhiteSpace(nuevaCategoria))
+                {
+                    MessageBox.Show("Seleccione una categoría válida.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                if (!decimal.TryParse(txtPrecioU.Text, out nuevoPrecio) || nuevoPrecio <= 0)
+                {
+                    MessageBox.Show("Ingrese un precio válido mayor a 0.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
                 if (conexion.ActualizarBebida(idBebida, nuevoNombre, nuevaCategoria, nuevoPrecio))
                 {
                     MessageBox.Show("Bebida actualizada correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    // Limpiar los TextBox después de la actualización
+                    txtNombreB.Clear();
+                    txtPrecioU.Clear();
+                    cbCategoriaB.SelectedIndex = -1; // Desseleccionar categoría
+
                     CargarBebidas(); // Recargar la lista después de actualizar
                 }
                 else
@@ -166,8 +185,19 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 DataGridViewRow row = dgvBebidas.Rows[e.RowIndex];
 
                 txtNombreB.Text = row.Cells["Nombre Bebida"].Value.ToString();
-                cbCategoriaB.SelectedItem = row.Cells["Categoría"].Value.ToString();
                 txtPrecioU.Text = row.Cells["Precio Unitario"].Value.ToString();
+
+                // Buscar la categoría en el ComboBox y seleccionarla
+                string categoria = row.Cells["Categoría"].Value.ToString();
+                int index = cbCategoriaB.FindStringExact(categoria);
+                if (index >= 0)
+                {
+                    cbCategoriaB.SelectedIndex = index;
+                }
+                else
+                {
+                    cbCategoriaB.SelectedIndex = -1; // Si no la encuentra, lo deja sin selección
+                }
             }
         }
 

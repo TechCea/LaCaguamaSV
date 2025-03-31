@@ -14,10 +14,10 @@ namespace LaCaguamaSV.Configuracion
     {
         private MySqlConnection conectar = null;
         private static string usuario = "root";
-        private static string contrasenia = "root";
+        private static string contrasenia = "180294";
         private static string bd = "lacaguamabd";
         private static string ip = "localhost";
-        private static string puerto = "3307"; // o 3307 si eres javier 
+        private static string puerto = "3306"; // o 3307 si eres javier 
 
         string cadenaConexion = $"Server={ip};Port={puerto};Database={bd};User Id={usuario};Password={contrasenia};";
 
@@ -237,7 +237,7 @@ namespace LaCaguamaSV.Configuracion
                 {
                     conexion.Open();
                     string query = "SELECT b.id_bebida AS 'ID Bebida', " +
-                                   "i.nombreBebida AS 'Nombre Bebida', " +
+                                   "i.nombreAlimento AS 'Nombre Bebida', " + // Se ajusta al nuevo nombre del campo
                                    "c.tipo AS 'Categoría', " +
                                    "b.precioUnitario AS 'Precio Unitario' " +
                                    "FROM bebidas b " +
@@ -268,8 +268,9 @@ namespace LaCaguamaSV.Configuracion
                 using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
                 {
                     conexion.Open();
-                    string query = "SELECT i.nombreBebida AS 'Nombre Bebida', " +
-                                   "b.id_bebida AS 'ID Bebida', b.precioUnitario AS 'Precio Unitario', " +
+                    string query = "SELECT i.nombreAlimento AS 'Nombre Bebida', " + // Se ajusta al nuevo nombre del campo
+                                   "b.id_bebida AS 'ID Bebida', " +
+                                   "b.precioUnitario AS 'Precio Unitario', " +
                                    "c.tipo AS 'Categoría' " +
                                    "FROM bebidas b " +
                                    "JOIN inventario i ON b.id_inventario = i.id_inventario " +
@@ -279,8 +280,10 @@ namespace LaCaguamaSV.Configuracion
                     using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                     {
                         cmd.Parameters.AddWithValue("@categoria", categoria);
-                        MySqlDataAdapter da = new MySqlDataAdapter(cmd);
-                        da.Fill(dt);
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
                     }
                 }
             }
@@ -290,6 +293,162 @@ namespace LaCaguamaSV.Configuracion
             }
             return dt;
         }
+
+        public bool EliminarBebida(int idBebida)
+        {
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    using (MySqlTransaction transaccion = conexion.BeginTransaction()) // Se usa transacción para evitar inconsistencias
+                    {
+                        try
+                        {
+                            // Obtener el ID del inventario asociado a la bebida antes de eliminarla
+                            string obtenerInventarioQuery = "SELECT id_inventario FROM bebidas WHERE id_bebida = @idBebida";
+                            int idInventario = -1;
+
+                            using (MySqlCommand cmdObtener = new MySqlCommand(obtenerInventarioQuery, conexion, transaccion))
+                            {
+                                cmdObtener.Parameters.AddWithValue("@idBebida", idBebida);
+                                var result = cmdObtener.ExecuteScalar();
+                                if (result != null)
+                                {
+                                    idInventario = Convert.ToInt32(result);
+                                }
+                            }
+
+                            // Primero, eliminar la bebida de la tabla bebidas
+                            string eliminarBebidaQuery = "DELETE FROM bebidas WHERE id_bebida = @idBebida";
+                            using (MySqlCommand cmdEliminarBebida = new MySqlCommand(eliminarBebidaQuery, conexion, transaccion))
+                            {
+                                cmdEliminarBebida.Parameters.AddWithValue("@idBebida", idBebida);
+                                cmdEliminarBebida.ExecuteNonQuery();
+                            }
+
+                            // Luego, eliminar el registro del inventario si existe
+                            if (idInventario != -1)
+                            {
+                                string eliminarInventarioQuery = "DELETE FROM inventario WHERE id_inventario = @idInventario";
+                                using (MySqlCommand cmdEliminarInventario = new MySqlCommand(eliminarInventarioQuery, conexion, transaccion))
+                                {
+                                    cmdEliminarInventario.Parameters.AddWithValue("@idInventario", idInventario);
+                                    cmdEliminarInventario.ExecuteNonQuery();
+                                }
+                            }
+
+                            transaccion.Commit(); // Confirmar la transacción
+                            return true;
+                        }
+                        catch (Exception)
+                        {
+                            transaccion.Rollback(); // Deshacer cambios si hay un error
+                            throw;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al eliminar la bebida: " + ex.Message);
+                return false;
+            }
+        }
+
+        //Actualizar nombre de bebidas (en inventario), precio y categoria en la tabla bebidas
+        public bool ActualizarBebida(int idBebida, string nuevoNombre, string nuevaCategoria, decimal nuevoPrecio)
+        {
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    using (MySqlTransaction transaccion = conexion.BeginTransaction()) // Transacción para asegurar consistencia
+                    {
+                        try
+                        {
+                            // Obtener el ID de la categoría seleccionada
+                            string queryCategoria = "SELECT id_categoria FROM categorias WHERE tipo = @tipo";
+                            int idCategoria;
+
+                            using (MySqlCommand cmdCategoria = new MySqlCommand(queryCategoria, conexion, transaccion))
+                            {
+                                cmdCategoria.Parameters.AddWithValue("@tipo", nuevaCategoria);
+                                object resultado = cmdCategoria.ExecuteScalar();
+                                if (resultado == null)
+                                {
+                                    MessageBox.Show("Categoría no encontrada.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    transaccion.Rollback();
+                                    return false;
+                                }
+                                idCategoria = Convert.ToInt32(resultado);
+                            }
+
+                            // Obtener el ID del inventario asociado a la bebida
+                            string queryObtenerInventario = "SELECT id_inventario FROM bebidas WHERE id_bebida = @idBebida";
+                            int idInventario;
+
+                            using (MySqlCommand cmdInventario = new MySqlCommand(queryObtenerInventario, conexion, transaccion))
+                            {
+                                cmdInventario.Parameters.AddWithValue("@idBebida", idBebida);
+                                object resultado = cmdInventario.ExecuteScalar();
+                                if (resultado == null)
+                                {
+                                    MessageBox.Show("Inventario no encontrado para la bebida.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    transaccion.Rollback();
+                                    return false;
+                                }
+                                idInventario = Convert.ToInt32(resultado);
+                            }
+
+                            // Actualizar el nombre en la tabla Inventario (nombreAlimento en la nueva base de datos)
+                            string queryActualizarInventario = "UPDATE inventario SET nombreAlimento = @nuevoNombre WHERE id_inventario = @idInventario";
+
+                            using (MySqlCommand cmdActualizarInventario = new MySqlCommand(queryActualizarInventario, conexion, transaccion))
+                            {
+                                cmdActualizarInventario.Parameters.AddWithValue("@nuevoNombre", nuevoNombre);
+                                cmdActualizarInventario.Parameters.AddWithValue("@idInventario", idInventario);
+                                cmdActualizarInventario.ExecuteNonQuery();
+                            }
+
+                            // Actualizar la categoría y el precio en la tabla Bebidas
+                            string queryActualizarBebida = "UPDATE bebidas SET id_categoria = @idCategoria, precioUnitario = @nuevoPrecio WHERE id_bebida = @idBebida";
+
+                            using (MySqlCommand cmdActualizarBebida = new MySqlCommand(queryActualizarBebida, conexion, transaccion))
+                            {
+                                cmdActualizarBebida.Parameters.AddWithValue("@idCategoria", idCategoria);
+                                cmdActualizarBebida.Parameters.AddWithValue("@nuevoPrecio", nuevoPrecio);
+                                cmdActualizarBebida.Parameters.AddWithValue("@idBebida", idBebida);
+                                int filasAfectadas = cmdActualizarBebida.ExecuteNonQuery();
+
+                                if (filasAfectadas > 0)
+                                {
+                                    transaccion.Commit(); // Confirmar la transacción
+                                    return true;
+                                }
+                                else
+                                {
+                                    transaccion.Rollback();
+                                    return false;
+                                }
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            transaccion.Rollback();
+                            throw;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al actualizar la bebida: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+        }
+
 
         public DataTable ObtenerCategorias()
         {
@@ -409,7 +568,6 @@ namespace LaCaguamaSV.Configuracion
 
 
         //Función para agregar comidas
-
         public bool AgregarPlato(string nombre, string descripcion, decimal precio, string categoria)
         {
             try
@@ -483,86 +641,6 @@ namespace LaCaguamaSV.Configuracion
             }
             catch
             {
-                return false;
-            }
-        }
-
-
-        public bool EliminarBebida(int idBebida)
-        {
-            try
-            {
-                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
-                {
-                    conexion.Open();
-                    string query = "DELETE FROM bebidas WHERE id_bebida = @idBebida";
-
-                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
-                    {
-                        cmd.Parameters.AddWithValue("@idBebida", idBebida);
-                        int filasAfectadas = cmd.ExecuteNonQuery();
-                        return filasAfectadas > 0;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al eliminar la bebida: " + ex.Message);
-                return false;
-            }
-        }
-
-        //Actualizar nombre de bebidas (en inventario), precio y categoria en la tabla bebidas
-        public bool ActualizarBebida(int idBebida, string nuevoNombre, string nuevaCategoria, decimal nuevoPrecio)
-        {
-            try
-            {
-                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
-                {
-                    conexion.Open();
-
-                    // Obtener el ID de la categoría seleccionada
-                    string queryCategoria = "SELECT id_categoria FROM categorias WHERE tipo = @tipo";
-                    int idCategoria;
-
-                    using (MySqlCommand cmdCategoria = new MySqlCommand(queryCategoria, conexion))
-                    {
-                        cmdCategoria.Parameters.AddWithValue("@tipo", nuevaCategoria);
-                        object resultado = cmdCategoria.ExecuteScalar();
-                        if (resultado == null)
-                        {
-                            MessageBox.Show("Categoría no encontrada.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            return false;
-                        }
-                        idCategoria = Convert.ToInt32(resultado);
-                    }
-
-                    // Actualizar el nombre en la tabla Inventario
-                    string queryInventario = "UPDATE inventario SET nombreBebida = @nuevoNombre WHERE id_inventario = (SELECT id_inventario FROM bebidas WHERE id_bebida = @idBebida)";
-
-                    using (MySqlCommand cmdInventario = new MySqlCommand(queryInventario, conexion))
-                    {
-                        cmdInventario.Parameters.AddWithValue("@nuevoNombre", nuevoNombre);
-                        cmdInventario.Parameters.AddWithValue("@idBebida", idBebida);
-                        cmdInventario.ExecuteNonQuery();
-                    }
-
-                    // Actualizar la categoría y el precio en la tabla Bebidas
-                    string queryBebida = "UPDATE bebidas SET id_categoria = @idCategoria, precioUnitario = @nuevoPrecio WHERE id_bebida = @idBebida";
-
-                    using (MySqlCommand cmdBebida = new MySqlCommand(queryBebida, conexion))
-                    {
-                        cmdBebida.Parameters.AddWithValue("@idCategoria", idCategoria);
-                        cmdBebida.Parameters.AddWithValue("@nuevoPrecio", nuevoPrecio);
-                        cmdBebida.Parameters.AddWithValue("@idBebida", idBebida);
-                        int filasAfectadas = cmdBebida.ExecuteNonQuery();
-                        return filasAfectadas > 0;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al actualizar la bebida: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
         }
