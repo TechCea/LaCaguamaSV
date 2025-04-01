@@ -253,6 +253,12 @@
     <Compile Include="Fomularios\VistasUsuario\FormUsuario.Designer.cs">
       <DependentUpon>FormUsuario.cs</DependentUpon>
     </Compile>
+    <Compile Include="Fomularios\VistasUsuario\FormUsuarioGestionOrdenes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Fomularios\VistasUsuario\FormUsuarioGestionOrdenes.Designer.cs">
+      <DependentUpon>FormUsuarioGestionOrdenes.cs</DependentUpon>
+    </Compile>
     <Compile Include="Fomularios\VistasUsuario\Menu.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -314,6 +320,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Fomularios\VistasUsuario\FormUsuario.resx">
       <DependentUpon>FormUsuario.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fomularios\VistasUsuario\FormUsuarioGestionOrdenes.resx">
+      <DependentUpon>FormUsuarioGestionOrdenes.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fomularios\VistasUsuario\Menu.resx">
       <DependentUpon>Menu.cs</DependentUpon>
