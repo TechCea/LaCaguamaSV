@@ -27,6 +27,12 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         private void CargarExtras()
         {
             dgvExtras.DataSource = conexion.ObtenerExtras();
+        }        
+        
+        private void limpiar()
+        {
+            txtNombreE.Clear();
+            txtPrecioUE.Clear();
         }
 
         private void btnEliminarE_Click(object sender, EventArgs e)
@@ -45,6 +51,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                     {
                         MessageBox.Show("Extra eliminado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         CargarExtras(); // Recarga los datos del DataGridView
+                        limpiar();
                     }
                     else
                     {
@@ -105,9 +112,8 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             if (conexion.ActualizarExtra(idExtra, nuevoNombre, nuevoPrecio))
             {
                 MessageBox.Show("Extra actualizado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                txtNombreE.Clear();
-                txtPrecioUE.Clear();
                 CargarExtras(); // Recarga los datos del DataGridView
+                limpiar();
             }
             else
             {

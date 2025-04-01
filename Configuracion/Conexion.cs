@@ -14,10 +14,10 @@ namespace LaCaguamaSV.Configuracion
     {
         private MySqlConnection conectar = null;
         private static string usuario = "root";
-        private static string contrasenia = "root";
+        private static string contrasenia = "180294";
         private static string bd = "lacaguamabd";
         private static string ip = "localhost";
-        private static string puerto = "3307"; // o 3307 si eres javier 
+        private static string puerto = "3306"; // o 3307 si eres javier 
 
         string cadenaConexion = $"Server={ip};Port={puerto};Database={bd};User Id={usuario};Password={contrasenia};";
 
@@ -237,7 +237,7 @@ namespace LaCaguamaSV.Configuracion
                 {
                     conexion.Open();
                     string query = "SELECT b.id_bebida AS 'ID Bebida', " +
-                                   "i.nombreAlimento AS 'Nombre Bebida', " + // Se ajusta al nuevo nombre del campo
+                                   "i.nombreProducto AS 'Nombre Bebida', " + // Se ajusta al nuevo nombre del campo
                                    "c.tipo AS 'Categoría', " +
                                    "b.precioUnitario AS 'Precio Unitario' " +
                                    "FROM bebidas b " +
@@ -268,7 +268,7 @@ namespace LaCaguamaSV.Configuracion
                 using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
                 {
                     conexion.Open();
-                    string query = "SELECT i.nombreAlimento AS 'Nombre Bebida', " + // Se ajusta al nuevo nombre del campo
+                    string query = "SELECT i.nombreProducto AS 'Nombre Bebida', " + // Se ajusta al nuevo nombre del campo
                                    "b.id_bebida AS 'ID Bebida', " +
                                    "b.precioUnitario AS 'Precio Unitario', " +
                                    "c.tipo AS 'Categoría' " +
@@ -364,11 +364,11 @@ namespace LaCaguamaSV.Configuracion
                 using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
                 {
                     conexion.Open();
-                    using (MySqlTransaction transaccion = conexion.BeginTransaction()) // Transacción para asegurar consistencia
+                    using (MySqlTransaction transaccion = conexion.BeginTransaction())
                     {
                         try
                         {
-                            // Obtener el ID de la categoría seleccionada
+                            // Obtener el ID de la categoría
                             string queryCategoria = "SELECT id_categoria FROM categorias WHERE tipo = @tipo";
                             int idCategoria;
 
@@ -376,16 +376,17 @@ namespace LaCaguamaSV.Configuracion
                             {
                                 cmdCategoria.Parameters.AddWithValue("@tipo", nuevaCategoria);
                                 object resultado = cmdCategoria.ExecuteScalar();
+
                                 if (resultado == null)
                                 {
-                                    MessageBox.Show("Categoría no encontrada.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    MessageBox.Show($"Categoría '{nuevaCategoria}' no encontrada.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                     transaccion.Rollback();
                                     return false;
                                 }
                                 idCategoria = Convert.ToInt32(resultado);
                             }
 
-                            // Obtener el ID del inventario asociado a la bebida
+                            // Obtener el ID del inventario asociado
                             string queryObtenerInventario = "SELECT id_inventario FROM bebidas WHERE id_bebida = @idBebida";
                             int idInventario;
 
@@ -393,17 +394,18 @@ namespace LaCaguamaSV.Configuracion
                             {
                                 cmdInventario.Parameters.AddWithValue("@idBebida", idBebida);
                                 object resultado = cmdInventario.ExecuteScalar();
+
                                 if (resultado == null)
                                 {
-                                    MessageBox.Show("Inventario no encontrado para la bebida.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    MessageBox.Show($"No se encontró inventario para la bebida con ID {idBebida}.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                     transaccion.Rollback();
                                     return false;
                                 }
                                 idInventario = Convert.ToInt32(resultado);
                             }
 
-                            // Actualizar el nombre en la tabla Inventario (nombreAlimento en la nueva base de datos)
-                            string queryActualizarInventario = "UPDATE inventario SET nombreAlimento = @nuevoNombre WHERE id_inventario = @idInventario";
+                            // Actualizar el nombre del producto en inventario
+                            string queryActualizarInventario = "UPDATE inventario SET nombreProducto = @nuevoNombre WHERE id_inventario = @idInventario";
 
                             using (MySqlCommand cmdActualizarInventario = new MySqlCommand(queryActualizarInventario, conexion, transaccion))
                             {
@@ -422,29 +424,29 @@ namespace LaCaguamaSV.Configuracion
                                 cmdActualizarBebida.Parameters.AddWithValue("@idBebida", idBebida);
                                 int filasAfectadas = cmdActualizarBebida.ExecuteNonQuery();
 
-                                if (filasAfectadas > 0)
+                                if (filasAfectadas == 0)
                                 {
-                                    transaccion.Commit(); // Confirmar la transacción
-                                    return true;
-                                }
-                                else
-                                {
+                                    MessageBox.Show("No se realizaron cambios en la bebida. Verifique si los valores ingresados son diferentes a los actuales.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
                                     transaccion.Rollback();
                                     return false;
                                 }
+
+                                transaccion.Commit(); // Confirmar la transacción
+                                return true;
                             }
                         }
-                        catch (Exception)
+                        catch (Exception ex)
                         {
                             transaccion.Rollback();
-                            throw;
+                            MessageBox.Show("Error al actualizar la bebida: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return false;
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al actualizar la bebida: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Error de conexión: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
         }
@@ -485,18 +487,19 @@ namespace LaCaguamaSV.Configuracion
                 {
                     conexion.Open();
                     string query = "SELECT p.id_plato AS 'ID Plato', " +
-                                   "i.nombreAlimento AS 'Nombre Plato', " +
+                                   "p.nombrePlato AS 'Nombre Plato', " +
                                    "p.precioUnitario AS 'Precio Unitario', " +
                                    "p.descripcion AS 'Descripción', " +
                                    "cp.tipo AS 'Categoría' " +
                                    "FROM platos p " +
-                                   "JOIN inventario i ON p.id_inventario = i.id_inventario " +
                                    "JOIN categoria_platos cp ON p.id_categoriaP = cp.id_categoriaP";
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                     {
-                        MySqlDataAdapter da = new MySqlDataAdapter(cmd);
-                        da.Fill(dt);
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
                     }
                 }
             }
@@ -517,20 +520,21 @@ namespace LaCaguamaSV.Configuracion
                 {
                     conexion.Open();
                     string query = "SELECT p.id_plato AS 'ID Plato', " +
-                                   "i.nombreAlimento AS 'Nombre Plato', " +
+                                   "p.nombrePlato AS 'Nombre Plato', " +
                                    "p.precioUnitario AS 'Precio Unitario', " +
                                    "p.descripcion AS 'Descripción', " +
                                    "cp.tipo AS 'Categoría' " +
                                    "FROM platos p " +
-                                   "JOIN inventario i ON p.id_inventario = i.id_inventario " +
                                    "JOIN categoria_platos cp ON p.id_categoriaP = cp.id_categoriaP " +
                                    "WHERE cp.tipo = @categoria";
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                     {
                         cmd.Parameters.AddWithValue("@categoria", categoria);
-                        MySqlDataAdapter da = new MySqlDataAdapter(cmd);
-                        da.Fill(dt);
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
                     }
                 }
             }
@@ -576,33 +580,27 @@ namespace LaCaguamaSV.Configuracion
                 {
                     conexion.Open();
 
-                    // Primero actualizamos el nombre en la tabla inventario usando el id_inventario de la tabla platos
-                    string queryInventario = "UPDATE inventario SET nombreAlimento = @nombre WHERE id_inventario = (SELECT id_inventario FROM platos WHERE id_plato = @idPlato)";
-                    using (MySqlCommand cmdInventario = new MySqlCommand(queryInventario, conexion))
-                    {
-                        cmdInventario.Parameters.AddWithValue("@nombre", nombre);
-                        cmdInventario.Parameters.AddWithValue("@idPlato", idPlato);
-                        cmdInventario.ExecuteNonQuery(); // Ejecutamos la actualización del nombre
-                    }
+                    // Actualizamos los datos del plato en una sola consulta
+                    string query = "UPDATE platos SET nombrePlato = @nombre, descripcion = @descripcion, " +
+                                   "precioUnitario = @precio, id_categoriaP = " +
+                                   "(SELECT id_categoriaP FROM categoria_platos WHERE tipo = @categoria) " +
+                                   "WHERE id_plato = @idPlato";
 
-                    // Ahora actualizamos los demás campos en la tabla platos (descripcion, precio, categoria)
-                    string queryPlato = "UPDATE platos SET descripcion = @descripcion, precioUnitario = @precio, " +
-                                        "id_categoriaP = (SELECT id_categoriaP FROM categoria_platos WHERE tipo = @categoria) " +
-                                        "WHERE id_plato = @idPlato";
-
-                    using (MySqlCommand cmdPlato = new MySqlCommand(queryPlato, conexion))
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                     {
-                        cmdPlato.Parameters.AddWithValue("@descripcion", descripcion);
-                        cmdPlato.Parameters.AddWithValue("@precio", precio);
-                        cmdPlato.Parameters.AddWithValue("@categoria", categoria);
-                        cmdPlato.Parameters.AddWithValue("@idPlato", idPlato);
-                        return cmdPlato.ExecuteNonQuery() > 0; // Ejecutamos la actualización del plato
+                        cmd.Parameters.AddWithValue("@nombre", nombre);
+                        cmd.Parameters.AddWithValue("@descripcion", descripcion);
+                        cmd.Parameters.AddWithValue("@precio", precio);
+                        cmd.Parameters.AddWithValue("@categoria", categoria);
+                        cmd.Parameters.AddWithValue("@idPlato", idPlato);
+
+                        return cmd.ExecuteNonQuery() > 0; // Devuelve true si al menos una fila fue afectada
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al actualizar el plato: " + ex.Message);
+                MessageBox.Show("Error al actualizar el plato: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
         }
@@ -616,58 +614,20 @@ namespace LaCaguamaSV.Configuracion
                 {
                     conexion.Open();
 
-                    // Primero, obtenemos el id_inventario del plato que se quiere eliminar
-                    string queryInventario = "SELECT id_inventario FROM platos WHERE id_plato = @idPlato";
-                    int idInventario = 0;
-
-                    using (MySqlCommand cmdInventario = new MySqlCommand(queryInventario, conexion))
-                    {
-                        cmdInventario.Parameters.AddWithValue("@idPlato", idPlato);
-                        object result = cmdInventario.ExecuteScalar();
-                        if (result != null)
-                        {
-                            idInventario = Convert.ToInt32(result);
-                        }
-                        else
-                        {
-                            MessageBox.Show("Plato no encontrado.");
-                            return false;
-                        }
-                    }
-
-                    // Ahora eliminamos el plato de la tabla platos
+                    // Eliminamos el plato de la tabla platos
                     string queryPlato = "DELETE FROM platos WHERE id_plato = @idPlato";
                     using (MySqlCommand cmdPlato = new MySqlCommand(queryPlato, conexion))
                     {
                         cmdPlato.Parameters.AddWithValue("@idPlato", idPlato);
                         int rowsAffected = cmdPlato.ExecuteNonQuery();
 
-                        // Si se eliminó correctamente el plato, revisamos si debemos eliminar el inventario
                         if (rowsAffected > 0)
                         {
-                            // Comprobamos si hay más platos usando el mismo id_inventario
-                            string queryInventarioUso = "SELECT COUNT(*) FROM platos WHERE id_inventario = @idInventario";
-                            using (MySqlCommand cmdInventarioUso = new MySqlCommand(queryInventarioUso, conexion))
-                            {
-                                cmdInventarioUso.Parameters.AddWithValue("@idInventario", idInventario);
-                                int count = Convert.ToInt32(cmdInventarioUso.ExecuteScalar());
-
-                                // Si no hay más platos que usen ese id_inventario, eliminamos el inventario
-                                if (count == 0)
-                                {
-                                    string queryEliminarInventario = "DELETE FROM inventario WHERE id_inventario = @idInventario";
-                                    using (MySqlCommand cmdEliminarInventario = new MySqlCommand(queryEliminarInventario, conexion))
-                                    {
-                                        cmdEliminarInventario.Parameters.AddWithValue("@idInventario", idInventario);
-                                        cmdEliminarInventario.ExecuteNonQuery();
-                                    }
-                                }
-                            }
-                            return true;
+                            return true; // Plato eliminado correctamente
                         }
                         else
                         {
-                            MessageBox.Show("Error al eliminar el plato.");
+                            MessageBox.Show("El plato no existe o ya fue eliminado.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                             return false;
                         }
                     }
@@ -675,7 +635,7 @@ namespace LaCaguamaSV.Configuracion
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al eliminar el plato: " + ex.Message);
+                MessageBox.Show("Error al eliminar el plato: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
         }
@@ -690,7 +650,7 @@ namespace LaCaguamaSV.Configuracion
                 {
                     conexion.Open();
                     // La consulta ahora toma el nombre de extra desde la tabla 'inventario' y el precio desde 'extras'
-                    string query = "SELECT e.id_extra AS 'ID', i.nombreAlimento AS 'Nombre', e.precioUnitario AS 'Precio Unitario' " +
+                    string query = "SELECT e.id_extra AS 'ID', i.nombreProducto AS 'Nombre', e.precioUnitario AS 'Precio Unitario' " +
                                    "FROM extras e " +
                                    "JOIN inventario i ON e.id_inventario = i.id_inventario";
 
@@ -821,7 +781,7 @@ namespace LaCaguamaSV.Configuracion
                     // Si el nombre cambió, actualizamos también el inventario
                     if (!string.IsNullOrEmpty(nuevoNombre))
                     {
-                        string queryInventario = "UPDATE inventario SET nombreAlimento = @nuevoNombre WHERE id_inventario = @idInventario";
+                        string queryInventario = "UPDATE inventario SET nombreProducto = @nuevoNombre WHERE id_inventario = @idInventario";
                         using (MySqlCommand cmdInventario = new MySqlCommand(queryInventario, conexion))
                         {
                             cmdInventario.Parameters.AddWithValue("@nuevoNombre", nuevoNombre);

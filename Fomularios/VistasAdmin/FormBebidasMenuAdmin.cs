@@ -30,7 +30,16 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         private void CargarBebidas()
         {
             dgvBebidas.DataSource = conexion.ObtenerBebidas();
+        }        
+        
+        private void limpiar()
+        {
+            // Limpiar los TextBox después de la actualización
+            txtNombreB.Clear();
+            txtPrecioU.Clear();
+            cbCategoriaB.SelectedIndex = -1; // Desseleccionar categoría
         }
+
 
         private void CargarCategorias()
         {
@@ -124,12 +133,8 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 {
                     MessageBox.Show("Bebida actualizada correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    // Limpiar los TextBox después de la actualización
-                    txtNombreB.Clear();
-                    txtPrecioU.Clear();
-                    cbCategoriaB.SelectedIndex = -1; // Desseleccionar categoría
-
                     CargarBebidas(); // Recargar la lista después de actualizar
+                    limpiar();
                 }
                 else
                 {
@@ -158,6 +163,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                     {
                         MessageBox.Show("Bebida eliminada correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         CargarBebidas(); // Recargar la tabla después de eliminar
+                        limpiar();
                     }
                     else
                     {
