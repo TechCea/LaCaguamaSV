@@ -107,10 +107,10 @@
             // 
             // txtDescripcionC
             // 
-            this.txtDescripcionC.Location = new System.Drawing.Point(165, 223);
-            this.txtDescripcionC.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtDescripcionC.Location = new System.Drawing.Point(168, 225);
+            this.txtDescripcionC.Margin = new System.Windows.Forms.Padding(4);
             this.txtDescripcionC.Name = "txtDescripcionC";
-            this.txtDescripcionC.Size = new System.Drawing.Size(229, 26);
+            this.txtDescripcionC.Size = new System.Drawing.Size(227, 26);
             this.txtDescripcionC.TabIndex = 11;
             this.txtDescripcionC.TextChanged += new System.EventHandler(this.txtDescripcionC_TextChanged);
             // 
@@ -176,7 +176,7 @@
             this.txtNombreC.Location = new System.Drawing.Point(168, 81);
             this.txtNombreC.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtNombreC.Name = "txtNombreC";
-            this.txtNombreC.Size = new System.Drawing.Size(227, 26);
+            this.txtNombreC.Size = new System.Drawing.Size(225, 26);
             this.txtNombreC.TabIndex = 1;
             this.txtNombreC.TextChanged += new System.EventHandler(this.txtNombreC_TextChanged);
             // 
@@ -194,7 +194,7 @@
             this.btnEliminarC.BackColor = System.Drawing.Color.Brown;
             this.btnEliminarC.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnEliminarC.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.btnEliminarC.Location = new System.Drawing.Point(1169, 511);
+            this.btnEliminarC.Location = new System.Drawing.Point(852, 511);
             this.btnEliminarC.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnEliminarC.Name = "btnEliminarC";
             this.btnEliminarC.Size = new System.Drawing.Size(124, 58);
@@ -208,7 +208,7 @@
             this.btnActualizarC.BackColor = System.Drawing.Color.ForestGreen;
             this.btnActualizarC.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnActualizarC.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.btnActualizarC.Location = new System.Drawing.Point(1001, 511);
+            this.btnActualizarC.Location = new System.Drawing.Point(1152, 511);
             this.btnActualizarC.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnActualizarC.Name = "btnActualizarC";
             this.btnActualizarC.Size = new System.Drawing.Size(139, 58);
@@ -229,7 +229,7 @@
             this.Controls.Add(this.dgvComidas);
             this.Controls.Add(this.btnEliminarC);
             this.Controls.Add(this.btnActualizarC);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FormComidasMenuAdmin";
             this.Text = "FormComidasMenuAdmin";
             ((System.ComponentModel.ISupportInitialize)(this.dgvComidas)).EndInit();

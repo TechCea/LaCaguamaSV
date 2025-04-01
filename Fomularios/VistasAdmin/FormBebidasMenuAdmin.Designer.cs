@@ -85,8 +85,6 @@
             // 
             this.gbDatosBebida.BackColor = System.Drawing.SystemColors.ControlDark;
             this.gbDatosBebida.Controls.Add(this.lblSeleccionBebida);
-            this.gbDatosBebida.Controls.Add(this.btnEliminarB);
-            this.gbDatosBebida.Controls.Add(this.btnActualizarB);
             this.gbDatosBebida.Controls.Add(this.cbCategoriaB);
             this.gbDatosBebida.Controls.Add(this.txtPrecioU);
             this.gbDatosBebida.Controls.Add(this.label2);
@@ -96,7 +94,7 @@
             this.gbDatosBebida.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.gbDatosBebida.Location = new System.Drawing.Point(689, 66);
             this.gbDatosBebida.Name = "gbDatosBebida";
-            this.gbDatosBebida.Size = new System.Drawing.Size(439, 451);
+            this.gbDatosBebida.Size = new System.Drawing.Size(439, 349);
             this.gbDatosBebida.TabIndex = 3;
             this.gbDatosBebida.TabStop = false;
             this.gbDatosBebida.Text = "Datos bebida";
@@ -113,9 +111,10 @@
             // 
             // btnEliminarB
             // 
-            this.btnEliminarB.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            this.btnEliminarB.BackColor = System.Drawing.Color.Brown;
+            this.btnEliminarB.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.btnEliminarB.ForeColor = System.Drawing.SystemColors.HighlightText;
-            this.btnEliminarB.Location = new System.Drawing.Point(292, 350);
+            this.btnEliminarB.Location = new System.Drawing.Point(689, 457);
             this.btnEliminarB.Name = "btnEliminarB";
             this.btnEliminarB.Size = new System.Drawing.Size(119, 60);
             this.btnEliminarB.TabIndex = 7;
@@ -126,8 +125,9 @@
             // btnActualizarB
             // 
             this.btnActualizarB.BackColor = System.Drawing.Color.ForestGreen;
+            this.btnActualizarB.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.btnActualizarB.ForeColor = System.Drawing.SystemColors.HighlightText;
-            this.btnActualizarB.Location = new System.Drawing.Point(116, 350);
+            this.btnActualizarB.Location = new System.Drawing.Point(970, 457);
             this.btnActualizarB.Name = "btnActualizarB";
             this.btnActualizarB.Size = new System.Drawing.Size(158, 60);
             this.btnActualizarB.TabIndex = 6;
@@ -138,7 +138,7 @@
             // cbCategoriaB
             // 
             this.cbCategoriaB.FormattingEnabled = true;
-            this.cbCategoriaB.Location = new System.Drawing.Point(168, 149);
+            this.cbCategoriaB.Location = new System.Drawing.Point(175, 179);
             this.cbCategoriaB.Name = "cbCategoriaB";
             this.cbCategoriaB.Size = new System.Drawing.Size(226, 28);
             this.cbCategoriaB.TabIndex = 5;
@@ -146,7 +146,7 @@
             // 
             // txtPrecioU
             // 
-            this.txtPrecioU.Location = new System.Drawing.Point(168, 208);
+            this.txtPrecioU.Location = new System.Drawing.Point(175, 238);
             this.txtPrecioU.Name = "txtPrecioU";
             this.txtPrecioU.Size = new System.Drawing.Size(227, 26);
             this.txtPrecioU.TabIndex = 4;
@@ -154,7 +154,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(30, 214);
+            this.label2.Location = new System.Drawing.Point(37, 244);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(122, 20);
             this.label2.TabIndex = 3;
@@ -163,7 +163,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(30, 149);
+            this.label1.Location = new System.Drawing.Point(37, 179);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(86, 20);
             this.label1.TabIndex = 2;
@@ -171,7 +171,7 @@
             // 
             // txtNombreB
             // 
-            this.txtNombreB.Location = new System.Drawing.Point(168, 81);
+            this.txtNombreB.Location = new System.Drawing.Point(175, 111);
             this.txtNombreB.Name = "txtNombreB";
             this.txtNombreB.Size = new System.Drawing.Size(227, 26);
             this.txtNombreB.TabIndex = 1;
@@ -179,7 +179,7 @@
             // lbNombreBebida
             // 
             this.lbNombreBebida.AutoSize = true;
-            this.lbNombreBebida.Location = new System.Drawing.Point(30, 81);
+            this.lbNombreBebida.Location = new System.Drawing.Point(37, 111);
             this.lbNombreBebida.Name = "lbNombreBebida";
             this.lbNombreBebida.Size = new System.Drawing.Size(127, 20);
             this.lbNombreBebida.TabIndex = 0;
@@ -192,7 +192,9 @@
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.ClientSize = new System.Drawing.Size(1167, 622);
             this.Controls.Add(this.gbDatosBebida);
+            this.Controls.Add(this.btnEliminarB);
             this.Controls.Add(this.btnRegresarMenu);
+            this.Controls.Add(this.btnActualizarB);
             this.Controls.Add(this.cbCategoria);
             this.Controls.Add(this.dgvBebidas);
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);

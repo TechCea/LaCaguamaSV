@@ -567,33 +567,6 @@ namespace LaCaguamaSV.Configuracion
         }
 
 
-        //Función para agregar comidas
-        //public bool AgregarPlato(string nombre, string descripcion, decimal precio, string categoria)
-        //{
-        //    try
-        //    {
-        //        using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
-        //        {
-        //            conexion.Open();
-        //            string query = "INSERT INTO platos (nombrePlato, descripcion, precioUnitario, id_categoriaP) " +
-        //                           "VALUES (@nombre, @descripcion, @precio, (SELECT id_categoriaP FROM categoria_platos WHERE tipo = @categoria))";
-
-        //            using (MySqlCommand cmd = new MySqlCommand(query, conexion))
-        //            {
-        //                cmd.Parameters.AddWithValue("@nombre", nombre);
-        //                cmd.Parameters.AddWithValue("@descripcion", descripcion);
-        //                cmd.Parameters.AddWithValue("@precio", precio);
-        //                cmd.Parameters.AddWithValue("@categoria", categoria);
-        //                return cmd.ExecuteNonQuery() > 0;
-        //            }
-        //        }
-        //    }
-        //    catch
-        //    {
-        //        return false;
-        //    }
-        //}
-
         //Función para Actualizar comidas
         public bool ActualizarPlato(int idPlato, string nombre, string descripcion, decimal precio, string categoria)
         {
@@ -707,6 +680,7 @@ namespace LaCaguamaSV.Configuracion
             }
         }
 
+        //Función para obtener extras
         public DataTable ObtenerExtras()
         {
             DataTable dt = new DataTable();
@@ -715,7 +689,10 @@ namespace LaCaguamaSV.Configuracion
                 using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
                 {
                     conexion.Open();
-                    string query = "SELECT id_extra AS 'ID', nombre AS 'Nombre', precioUnitario AS 'Precio Unitario' FROM extras";
+                    // La consulta ahora toma el nombre de extra desde la tabla 'inventario' y el precio desde 'extras'
+                    string query = "SELECT e.id_extra AS 'ID', i.nombreAlimento AS 'Nombre', e.precioUnitario AS 'Precio Unitario' " +
+                                   "FROM extras e " +
+                                   "JOIN inventario i ON e.id_inventario = i.id_inventario";
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                     {
@@ -731,6 +708,7 @@ namespace LaCaguamaSV.Configuracion
             return dt;
         }
 
+        //Función para elimiminar extra
         public bool EliminarExtra(int idExtra)
         {
             try
@@ -738,13 +716,61 @@ namespace LaCaguamaSV.Configuracion
                 using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
                 {
                     conexion.Open();
-                    string query = "DELETE FROM extras WHERE id_extra = @idExtra";
 
-                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    // Primero, obtenemos el id_inventario relacionado con el extra
+                    string obtenerInventarioQuery = "SELECT id_inventario FROM extras WHERE id_extra = @idExtra";
+                    int idInventario = 0;
+
+                    using (MySqlCommand cmd = new MySqlCommand(obtenerInventarioQuery, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@idExtra", idExtra);
+                        var result = cmd.ExecuteScalar();
+
+                        if (result != null)
+                        {
+                            idInventario = Convert.ToInt32(result);
+                        }
+                        else
+                        {
+                            MessageBox.Show("No se encontró el extra con el ID proporcionado.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return false;
+                        }
+                    }
+
+                    // Eliminamos el extra de la tabla extras
+                    string eliminarExtraQuery = "DELETE FROM extras WHERE id_extra = @idExtra";
+
+                    using (MySqlCommand cmd = new MySqlCommand(eliminarExtraQuery, conexion))
                     {
                         cmd.Parameters.AddWithValue("@idExtra", idExtra);
                         int filasAfectadas = cmd.ExecuteNonQuery();
-                        return filasAfectadas > 0;
+
+                        if (filasAfectadas > 0)
+                        {
+                            // Verificamos si hay más registros en extras que utilicen el mismo id_inventario
+                            string verificarExtrasQuery = "SELECT COUNT(*) FROM extras WHERE id_inventario = @idInventario";
+                            using (MySqlCommand cmdVerificar = new MySqlCommand(verificarExtrasQuery, conexion))
+                            {
+                                cmdVerificar.Parameters.AddWithValue("@idInventario", idInventario);
+                                int count = Convert.ToInt32(cmdVerificar.ExecuteScalar());
+
+                                // Si no hay más registros en extras con este id_inventario, podemos eliminar el inventario
+                                if (count == 0)
+                                {
+                                    string eliminarInventarioQuery = "DELETE FROM inventario WHERE id_inventario = @idInventario";
+                                    using (MySqlCommand cmdInventario = new MySqlCommand(eliminarInventarioQuery, conexion))
+                                    {
+                                        cmdInventario.Parameters.AddWithValue("@idInventario", idInventario);
+                                        cmdInventario.ExecuteNonQuery();
+                                    }
+                                }
+                            }
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
                     }
                 }
             }
@@ -755,32 +781,7 @@ namespace LaCaguamaSV.Configuracion
             }
         }
 
-        public bool AgregarExtra(string nombre, decimal precio)
-        {
-            try
-            {
-                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
-                {
-                    conexion.Open();
-                    string query = "INSERT INTO extras (nombre, precioUnitario) VALUES (@nombre, @precio)";
-
-                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
-                    {
-                        cmd.Parameters.AddWithValue("@nombre", nombre);
-                        cmd.Parameters.AddWithValue("@precio", precio);
-
-                        int filasAfectadas = cmd.ExecuteNonQuery();
-                        return filasAfectadas > 0;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al agregar el extra: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
-        }
-
+        //Actualizar datos del extra
         public bool ActualizarExtra(int idExtra, string nuevoNombre, decimal nuevoPrecio)
         {
             try
@@ -788,17 +789,48 @@ namespace LaCaguamaSV.Configuracion
                 using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
                 {
                     conexion.Open();
-                    string query = "UPDATE extras SET nombre = @nombre, precioUnitario = @precio WHERE id_extra = @idExtra";
 
+                    // Obtenemos el id_inventario del extra seleccionado
+                    string obtenerInventarioQuery = "SELECT id_inventario FROM extras WHERE id_extra = @idExtra";
+                    int idInventario = 0;
+
+                    using (MySqlCommand cmd = new MySqlCommand(obtenerInventarioQuery, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@idExtra", idExtra);
+                        var result = cmd.ExecuteScalar();
+                        if (result != null)
+                        {
+                            idInventario = Convert.ToInt32(result);
+                        }
+                        else
+                        {
+                            MessageBox.Show("No se encontró el extra con el ID proporcionado.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return false;
+                        }
+                    }
+
+                    // Actualizamos la tabla extras
+                    string query = "UPDATE extras SET precioUnitario = @precio WHERE id_extra = @idExtra";
                     using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                     {
-                        cmd.Parameters.AddWithValue("@nombre", nuevoNombre);
                         cmd.Parameters.AddWithValue("@precio", nuevoPrecio);
                         cmd.Parameters.AddWithValue("@idExtra", idExtra);
-
-                        int filasAfectadas = cmd.ExecuteNonQuery();
-                        return filasAfectadas > 0;
+                        cmd.ExecuteNonQuery();
                     }
+
+                    // Si el nombre cambió, actualizamos también el inventario
+                    if (!string.IsNullOrEmpty(nuevoNombre))
+                    {
+                        string queryInventario = "UPDATE inventario SET nombreAlimento = @nuevoNombre WHERE id_inventario = @idInventario";
+                        using (MySqlCommand cmdInventario = new MySqlCommand(queryInventario, conexion))
+                        {
+                            cmdInventario.Parameters.AddWithValue("@nuevoNombre", nuevoNombre);
+                            cmdInventario.Parameters.AddWithValue("@idInventario", idInventario);
+                            cmdInventario.ExecuteNonQuery();
+                        }
+                    }
+
+                    return true;
                 }
             }
             catch (Exception ex)
@@ -807,6 +839,8 @@ namespace LaCaguamaSV.Configuracion
                 return false;
             }
         }
+
+
         // caja incial
         public decimal ObtenerCajaInicial(DateTime fecha)
         {

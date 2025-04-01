@@ -58,49 +58,20 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             }
         }
 
-        private void btnCrearExtra_Click(object sender, EventArgs e)
-        {
-            string nombreExtra = txtNombreE.Text.Trim();
-            string precioTexto = txtPrecioUE.Text.Trim();
-
-            // Validar que los campos no estén vacíos
-            if (string.IsNullOrEmpty(nombreExtra) || string.IsNullOrEmpty(precioTexto))
-            {
-                MessageBox.Show("Por favor, complete todos los campos.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            // Validar que el precio sea un número válido
-            if (!decimal.TryParse(precioTexto, out decimal precioExtra) || precioExtra <= 0)
-            {
-                MessageBox.Show("Ingrese un precio válido.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            // Insertar en la base de datos
-            Conexion conexion = new Conexion();
-            if (conexion.AgregarExtra(nombreExtra, precioExtra))
-            {
-                MessageBox.Show("Extra agregado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                txtNombreE.Clear();
-                txtPrecioUE.Clear();
-                CargarExtras(); // Recargar DataGridView
-            }
-            else
-            {
-                MessageBox.Show("No se pudo agregar el extra.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
 
         private void dgvExtras_SelectionChanged(object sender, EventArgs e)
         {
             if (dgvExtras.SelectedRows.Count > 0)
             {
-                // Obtener el nombre del extra desde la fila seleccionada
-                string nombreExtra = dgvExtras.SelectedRows[0].Cells["nombre"].Value.ToString();
+                // Obtener el ID y el nombre del extra desde la fila seleccionada
+                int idExtra = Convert.ToInt32(dgvExtras.SelectedRows[0].Cells["ID"].Value);
+                string nombreExtra = dgvExtras.SelectedRows[0].Cells["Nombre"].Value.ToString();
+                decimal precioExtra = Convert.ToDecimal(dgvExtras.SelectedRows[0].Cells["Precio Unitario"].Value);
 
-                // Mostrar el nombre en el label
-                lblSeleccionExtra.Text = $"Extra seleccionado: {nombreExtra}";
+                // Asignar el nombre y el precio a los TextBox
+                txtNombreE.Text = nombreExtra;
+                txtPrecioUE.Text = precioExtra.ToString("0.00");
+
             }
         }
 
@@ -112,6 +83,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 return;
             }
 
+            // Obtener el idExtra de la fila seleccionada en el DataGridView
             int idExtra = Convert.ToInt32(dgvExtras.SelectedRows[0].Cells["ID"].Value);
             string nuevoNombre = txtNombreE.Text.Trim();
             string precioTexto = txtPrecioUE.Text.Trim();
@@ -128,13 +100,14 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 return;
             }
 
+            // Actualizamos el extra con los nuevos datos
             Conexion conexion = new Conexion();
             if (conexion.ActualizarExtra(idExtra, nuevoNombre, nuevoPrecio))
             {
                 MessageBox.Show("Extra actualizado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 txtNombreE.Clear();
                 txtPrecioUE.Clear();
-                CargarExtras();
+                CargarExtras(); // Recarga los datos del DataGridView
             }
             else
             {

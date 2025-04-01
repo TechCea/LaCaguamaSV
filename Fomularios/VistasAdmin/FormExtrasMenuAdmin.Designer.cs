@@ -36,7 +36,6 @@
             this.lblPrecioExtraU = new System.Windows.Forms.Label();
             this.lblSeleccionExtra = new System.Windows.Forms.Label();
             this.lblNombreE = new System.Windows.Forms.Label();
-            this.btnCrearExtra = new System.Windows.Forms.Button();
             this.btnEliminarE = new System.Windows.Forms.Button();
             this.btnActualizarB = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvExtras)).BeginInit();
@@ -45,19 +44,22 @@
             // 
             // btnRegresarMenu
             // 
-            this.btnRegresarMenu.Location = new System.Drawing.Point(37, 551);
+            this.btnRegresarMenu.BackColor = System.Drawing.Color.SaddleBrown;
+            this.btnRegresarMenu.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.btnRegresarMenu.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.btnRegresarMenu.Location = new System.Drawing.Point(37, 538);
             this.btnRegresarMenu.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnRegresarMenu.Name = "btnRegresarMenu";
-            this.btnRegresarMenu.Size = new System.Drawing.Size(147, 34);
+            this.btnRegresarMenu.Size = new System.Drawing.Size(177, 47);
             this.btnRegresarMenu.TabIndex = 5;
             this.btnRegresarMenu.Text = "Regresar Menú";
-            this.btnRegresarMenu.UseVisualStyleBackColor = true;
+            this.btnRegresarMenu.UseVisualStyleBackColor = false;
             this.btnRegresarMenu.Click += new System.EventHandler(this.btnRegresarMenu_Click);
             // 
             // dgvExtras
             // 
             this.dgvExtras.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvExtras.Location = new System.Drawing.Point(37, 101);
+            this.dgvExtras.Location = new System.Drawing.Point(37, 62);
             this.dgvExtras.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.dgvExtras.Name = "dgvExtras";
             this.dgvExtras.RowHeadersWidth = 51;
@@ -67,17 +69,16 @@
             // 
             // gbDatosExtras
             // 
+            this.gbDatosExtras.BackColor = System.Drawing.SystemColors.ControlDark;
             this.gbDatosExtras.Controls.Add(this.txtPrecioUE);
             this.gbDatosExtras.Controls.Add(this.txtNombreE);
             this.gbDatosExtras.Controls.Add(this.lblPrecioExtraU);
             this.gbDatosExtras.Controls.Add(this.lblSeleccionExtra);
             this.gbDatosExtras.Controls.Add(this.lblNombreE);
-            this.gbDatosExtras.Controls.Add(this.btnCrearExtra);
-            this.gbDatosExtras.Controls.Add(this.btnEliminarE);
-            this.gbDatosExtras.Controls.Add(this.btnActualizarB);
+            this.gbDatosExtras.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.gbDatosExtras.Location = new System.Drawing.Point(500, 62);
             this.gbDatosExtras.Name = "gbDatosExtras";
-            this.gbDatosExtras.Size = new System.Drawing.Size(439, 451);
+            this.gbDatosExtras.Size = new System.Drawing.Size(439, 289);
             this.gbDatosExtras.TabIndex = 6;
             this.gbDatosExtras.TabStop = false;
             this.gbDatosExtras.Text = "Datos extras";
@@ -86,32 +87,32 @@
             // 
             this.txtPrecioUE.Location = new System.Drawing.Point(222, 165);
             this.txtPrecioUE.Name = "txtPrecioUE";
-            this.txtPrecioUE.Size = new System.Drawing.Size(147, 22);
+            this.txtPrecioUE.Size = new System.Drawing.Size(147, 26);
             this.txtPrecioUE.TabIndex = 13;
             // 
             // txtNombreE
             // 
             this.txtNombreE.Location = new System.Drawing.Point(222, 105);
             this.txtNombreE.Name = "txtNombreE";
-            this.txtNombreE.Size = new System.Drawing.Size(147, 22);
+            this.txtNombreE.Size = new System.Drawing.Size(147, 26);
             this.txtNombreE.TabIndex = 12;
             // 
             // lblPrecioExtraU
             // 
             this.lblPrecioExtraU.AutoSize = true;
-            this.lblPrecioExtraU.Location = new System.Drawing.Point(36, 171);
+            this.lblPrecioExtraU.Location = new System.Drawing.Point(33, 171);
             this.lblPrecioExtraU.Name = "lblPrecioExtraU";
-            this.lblPrecioExtraU.Size = new System.Drawing.Size(95, 16);
+            this.lblPrecioExtraU.Size = new System.Drawing.Size(122, 20);
             this.lblPrecioExtraU.TabIndex = 11;
             this.lblPrecioExtraU.Text = "Precio unitario:";
             // 
             // lblSeleccionExtra
             // 
             this.lblSeleccionExtra.AutoSize = true;
-            this.lblSeleccionExtra.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.lblSeleccionExtra.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.lblSeleccionExtra.Location = new System.Drawing.Point(33, 53);
             this.lblSeleccionExtra.Name = "lblSeleccionExtra";
-            this.lblSeleccionExtra.Size = new System.Drawing.Size(241, 18);
+            this.lblSeleccionExtra.Size = new System.Drawing.Size(276, 20);
             this.lblSeleccionExtra.TabIndex = 8;
             this.lblSeleccionExtra.Text = "Selecciona una extra a editar/borrar";
             // 
@@ -120,48 +121,47 @@
             this.lblNombreE.AutoSize = true;
             this.lblNombreE.Location = new System.Drawing.Point(33, 111);
             this.lblNombreE.Name = "lblNombreE";
-            this.lblNombreE.Size = new System.Drawing.Size(113, 16);
+            this.lblNombreE.Size = new System.Drawing.Size(142, 20);
             this.lblNombreE.TabIndex = 10;
             this.lblNombreE.Text = "Nombre del extra:";
             // 
-            // btnCrearExtra
-            // 
-            this.btnCrearExtra.Location = new System.Drawing.Point(39, 367);
-            this.btnCrearExtra.Name = "btnCrearExtra";
-            this.btnCrearExtra.Size = new System.Drawing.Size(129, 43);
-            this.btnCrearExtra.TabIndex = 9;
-            this.btnCrearExtra.Text = "Añadir nuevo extra";
-            this.btnCrearExtra.UseVisualStyleBackColor = true;
-            this.btnCrearExtra.Click += new System.EventHandler(this.btnCrearExtra_Click);
-            // 
             // btnEliminarE
             // 
-            this.btnEliminarE.Location = new System.Drawing.Point(312, 367);
+            this.btnEliminarE.BackColor = System.Drawing.Color.Brown;
+            this.btnEliminarE.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.btnEliminarE.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.btnEliminarE.Location = new System.Drawing.Point(500, 420);
             this.btnEliminarE.Name = "btnEliminarE";
-            this.btnEliminarE.Size = new System.Drawing.Size(103, 43);
+            this.btnEliminarE.Size = new System.Drawing.Size(106, 54);
             this.btnEliminarE.TabIndex = 7;
             this.btnEliminarE.Text = "Eliminar";
-            this.btnEliminarE.UseVisualStyleBackColor = true;
+            this.btnEliminarE.UseVisualStyleBackColor = false;
             this.btnEliminarE.Click += new System.EventHandler(this.btnEliminarE_Click);
             // 
             // btnActualizarB
             // 
-            this.btnActualizarB.Location = new System.Drawing.Point(177, 367);
+            this.btnActualizarB.BackColor = System.Drawing.Color.ForestGreen;
+            this.btnActualizarB.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.btnActualizarB.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.btnActualizarB.Location = new System.Drawing.Point(798, 420);
             this.btnActualizarB.Name = "btnActualizarB";
-            this.btnActualizarB.Size = new System.Drawing.Size(126, 43);
+            this.btnActualizarB.Size = new System.Drawing.Size(141, 54);
             this.btnActualizarB.TabIndex = 6;
             this.btnActualizarB.Text = "Actualizar datos";
-            this.btnActualizarB.UseVisualStyleBackColor = true;
+            this.btnActualizarB.UseVisualStyleBackColor = false;
             this.btnActualizarB.Click += new System.EventHandler(this.btnActualizarB_Click);
             // 
             // FormExtrasMenuAdmin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.ClientSize = new System.Drawing.Size(976, 614);
             this.Controls.Add(this.gbDatosExtras);
             this.Controls.Add(this.btnRegresarMenu);
             this.Controls.Add(this.dgvExtras);
+            this.Controls.Add(this.btnEliminarE);
+            this.Controls.Add(this.btnActualizarB);
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FormExtrasMenuAdmin";
             this.Text = "FormExtrasMenuAdmin";
@@ -180,7 +180,6 @@
         private System.Windows.Forms.Label lblSeleccionExtra;
         private System.Windows.Forms.Button btnEliminarE;
         private System.Windows.Forms.Button btnActualizarB;
-        private System.Windows.Forms.Button btnCrearExtra;
         private System.Windows.Forms.Label lblPrecioExtraU;
         private System.Windows.Forms.Label lblNombreE;
         private System.Windows.Forms.TextBox txtPrecioUE;
