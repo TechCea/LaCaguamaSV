@@ -282,6 +282,9 @@
     <EmbeddedResource Include="Fomularios\VistasAdmin\FormGestionOrdenes.resx">
       <DependentUpon>FormGestionOrdenes.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Fomularios\VistasAdmin\FormInventarioAdmin.resx">
+      <DependentUpon>FormInventarioAdmin.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Fomularios\VistasAdmin\FormMenuAdmin.resx">
       <DependentUpon>FormMenuAdmin.cs</DependentUpon>
     </EmbeddedResource>
