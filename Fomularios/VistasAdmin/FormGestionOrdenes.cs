@@ -235,25 +235,122 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 string nombre = row.Cells["nombre"].Value.ToString();
                 decimal precio = Convert.ToDecimal(row.Cells["precioUnitario"].Value);
 
-                // Intentar agregar a la base de datos
-                bool agregado = AgregarPedido(idItem, 1); // Se asume cantidad = 1, puedes cambiarlo
+                using (var inputDialog = new Form())
+                {
+                    inputDialog.Text = $"Seleccionar cantidad para {nombre}";
+                    inputDialog.FormBorderStyle = FormBorderStyle.FixedDialog;
+                    inputDialog.MaximizeBox = false;
+                    inputDialog.MinimizeBox = false;
+                    inputDialog.StartPosition = FormStartPosition.CenterParent;
+                    inputDialog.Size = new Size(300, 150);
 
-                if (agregado)
-                {
-                    pedidos.Add((idItem, nombre, precio));
-                    totalOrden += precio;
-                    MostrarPedidosEnPanel();
-                    ActualizarTotal();
-                }
-                else
-                {
-                    MessageBox.Show("No se pudo agregar el pedido a la base de datos.");
+                    Label lblCantidad = new Label()
+                    {
+                        Text = "Ingrese la cantidad:",
+                        Dock = DockStyle.Top,
+                        TextAlign = ContentAlignment.MiddleCenter,
+                        Padding = new Padding(10)
+                    };
+
+                    NumericUpDown numericUpDown = new NumericUpDown()
+                    {
+                        Minimum = 1,
+                        Maximum = 100,
+                        Value = 1,
+                        Dock = DockStyle.Top,
+                        TextAlign = HorizontalAlignment.Center,
+                        Font = new Font("Arial", 12, FontStyle.Bold)
+                    };
+
+                    Button okButton = new Button()
+                    {
+                        Text = "Aceptar",
+                        DialogResult = DialogResult.OK,
+                        Dock = DockStyle.Bottom,
+                        BackColor = Color.LightGreen,
+                        Font = new Font("Arial", 10, FontStyle.Bold)
+                    };
+
+                    inputDialog.Controls.Add(numericUpDown);
+                    inputDialog.Controls.Add(lblCantidad);
+                    inputDialog.Controls.Add(okButton);
+                    inputDialog.AcceptButton = okButton;
+
+                    if (inputDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        int cantidad = (int)numericUpDown.Value;
+                        bool agregado = AgregarPedido(idItem, cantidad);
+
+                        if (agregado)
+                        {
+                            for (int i = 0; i < cantidad; i++)
+                            {
+                                pedidos.Add((-1, nombre, precio));
+                            }
+                            MostrarPedidosEnPanel();
+                            ActualizarTotal();
+                        }
+                    }
                 }
             }
         }
 
         private bool AgregarPedido(int idItem, int cantidad)
         {
+            // Verificar inventario antes de agregar
+            string mensajeInventario = "";
+
+            // Versión compatible con C# 7.3
+            if (tipoItemActual == "plato")
+            {
+                mensajeInventario = OrdenesD.VerificarInventarioPlato(idItem);
+            }
+            else if (tipoItemActual == "bebida")
+            {
+                mensajeInventario = OrdenesD.VerificarInventarioBebida(idItem);
+            }
+            else if (tipoItemActual == "extra")
+            {
+                mensajeInventario = OrdenesD.VerificarInventarioExtra(idItem);
+            }
+
+            // Mostrar advertencia si hay inventario bajo
+            if (!string.IsNullOrEmpty(mensajeInventario))
+            {
+                string tipoItem;
+                if (tipoItemActual == "plato")
+                {
+                    tipoItem = "plato";
+                }
+                else if (tipoItemActual == "bebida")
+                {
+                    tipoItem = "bebida";
+                }
+                else if (tipoItemActual == "extra")
+                {
+                    tipoItem = "extra";
+                }
+                else
+                {
+                    tipoItem = "ítem";
+                }
+
+                DialogResult result = MessageBox.Show(
+                    $"⚠️ Advertencia: Algunos ingredientes o productos tienen un inventario bajo:\n\n" +
+                    $"{mensajeInventario}\n\n" +
+                    "Para reponer stock, por favor contacte a un supervisor o administrador.\n\n" +
+                    "¿Desea continuar con el pedido de todas formas?",
+                    "Inventario Bajo",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning);
+
+                if (result != DialogResult.Yes)
+                {
+                    return false;
+                }
+            }
+
+            // Resto del método permanece igual...
             using (MySqlConnection conexion = new Conexion().EstablecerConexion())
             {
                 try
@@ -448,21 +545,22 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             using (MySqlConnection conexion = new Conexion().EstablecerConexion())
             {
                 string query = @"
-                SELECT 
-                    p.id_pedido,
-                    COALESCE(
-                        (SELECT i.nombreAlimento FROM platos pl JOIN inventario i ON pl.id_inventario = i.id_inventario WHERE pl.id_plato = p.id_plato),
-                        (SELECT i.nombreAlimento FROM bebidas b JOIN inventario i ON b.id_inventario = i.id_inventario WHERE b.id_bebida = p.id_bebida),
-                        (SELECT i.nombreAlimento FROM extras e JOIN inventario i ON e.id_inventario = i.id_inventario WHERE e.id_extra = p.id_extra)
-                    ) AS nombre,
-                    COALESCE(
-                        (SELECT pl.precioUnitario FROM platos pl WHERE pl.id_plato = p.id_plato),
-                        (SELECT b.precioUnitario FROM bebidas b WHERE b.id_bebida = p.id_bebida),
-                        (SELECT e.precioUnitario FROM extras e WHERE e.id_extra = p.id_extra)
-                    ) AS precio,
-                    p.Cantidad
-                FROM pedidos p
-                WHERE p.id_orden = @idOrden";
+            SELECT 
+                p.id_pedido,
+                COALESCE(
+                    pl.nombrePlato,
+                    (SELECT i.nombreProducto FROM bebidas b JOIN inventario i ON b.id_inventario = i.id_inventario WHERE b.id_bebida = p.id_bebida),
+                    (SELECT i.nombreProducto FROM extras e JOIN inventario i ON e.id_inventario = i.id_inventario WHERE e.id_extra = p.id_extra)
+                ) AS nombre,
+                COALESCE(
+                    pl.precioUnitario,
+                    (SELECT b.precioUnitario FROM bebidas b WHERE b.id_bebida = p.id_bebida),
+                    (SELECT e.precioUnitario FROM extras e WHERE e.id_extra = p.id_extra)
+                ) AS precio,
+                p.Cantidad
+            FROM pedidos p
+            LEFT JOIN platos pl ON p.id_plato = pl.id_plato
+            WHERE p.id_orden = @idOrden";
 
                 using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                 {
@@ -488,6 +586,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
             MostrarPedidosEnPanel();
         }
+
         private void flowLayoutPanelPedidos_Paint(object sender, PaintEventArgs e)
         {
 
@@ -565,6 +664,18 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 MessageBox.Show($"Error al cambiar mesa: {ex.Message}");
                 comboBoxMesas.SelectedValue = idMesaActual;
             }
+        }
+
+        private void btnPrecuenta_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(lblIdOrden.Text) || !int.TryParse(lblIdOrden.Text, out int idOrden))
+            {
+                MessageBox.Show("No hay una orden seleccionada válida");
+                return;
+            }
+
+            FormAdminPrecuenta precuentaForm = new FormAdminPrecuenta(idOrden);
+            precuentaForm.ShowDialog();
         }
     }
 

@@ -50,12 +50,12 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             this.label5 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.button12 = new System.Windows.Forms.Button();
-            this.button9 = new System.Windows.Forms.Button();
             this.btnCargarExtras = new System.Windows.Forms.Button();
             this.btnCargarPlatos = new System.Windows.Forms.Button();
             this.btnCargarBebidas = new System.Windows.Forms.Button();
             this.dataGridViewMenu = new System.Windows.Forms.DataGridView();
             this.flowLayoutPanelPedidos = new System.Windows.Forms.FlowLayoutPanel();
+            this.btnPrecuenta = new System.Windows.Forms.Button();
             this.panel5.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -269,16 +269,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             this.button12.Text = "PAGAR";
             this.button12.UseVisualStyleBackColor = false;
             // 
-            // button9
-            // 
-            this.button9.BackColor = System.Drawing.Color.SteelBlue;
-            this.button9.Location = new System.Drawing.Point(571, 55);
-            this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(81, 28);
-            this.button9.TabIndex = 28;
-            this.button9.Text = "PRECUENTA";
-            this.button9.UseVisualStyleBackColor = false;
-            // 
             // btnCargarExtras
             // 
             this.btnCargarExtras.BackColor = System.Drawing.Color.Yellow;
@@ -315,7 +305,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             // dataGridViewMenu
             // 
             this.dataGridViewMenu.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewMenu.Location = new System.Drawing.Point(219, 133);
+            this.dataGridViewMenu.Location = new System.Drawing.Point(214, 89);
             this.dataGridViewMenu.MultiSelect = false;
             this.dataGridViewMenu.Name = "dataGridViewMenu";
             this.dataGridViewMenu.ReadOnly = true;
@@ -336,16 +326,27 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             this.flowLayoutPanelPedidos.WrapContents = false;
             this.flowLayoutPanelPedidos.Paint += new System.Windows.Forms.PaintEventHandler(this.flowLayoutPanelPedidos_Paint);
             // 
+            // btnPrecuenta
+            // 
+            this.btnPrecuenta.BackColor = System.Drawing.Color.SteelBlue;
+            this.btnPrecuenta.Location = new System.Drawing.Point(571, 55);
+            this.btnPrecuenta.Name = "btnPrecuenta";
+            this.btnPrecuenta.Size = new System.Drawing.Size(81, 28);
+            this.btnPrecuenta.TabIndex = 34;
+            this.btnPrecuenta.Text = "PRECUENTA";
+            this.btnPrecuenta.UseVisualStyleBackColor = false;
+            this.btnPrecuenta.Click += new System.EventHandler(this.btnPrecuenta_Click);
+            // 
             // FormGestionOrdenes
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.btnPrecuenta);
             this.Controls.Add(this.flowLayoutPanelPedidos);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.dataGridViewMenu);
             this.Controls.Add(this.button12);
-            this.Controls.Add(this.button9);
             this.Controls.Add(this.btnCargarExtras);
             this.Controls.Add(this.btnCargarPlatos);
             this.Controls.Add(this.btnCargarBebidas);
@@ -363,6 +364,11 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMenu)).EndInit();
             this.ResumeLayout(false);
 
+        }
+
+        private void ButPrecuenta_Click(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         private void comboBoxMesas_SelectedIndexChanged_1(object sender, EventArgs e)
@@ -391,12 +397,12 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button button12;
-        private System.Windows.Forms.Button button9;
         private System.Windows.Forms.Button btnCargarExtras;
         private System.Windows.Forms.Button btnCargarPlatos;
         private System.Windows.Forms.Button btnCargarBebidas;
         private System.Windows.Forms.DataGridView dataGridViewMenu;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanelPedidos;
         private System.Windows.Forms.ComboBox comboBoxMesas;
+        private System.Windows.Forms.Button btnPrecuenta;
     }
 }

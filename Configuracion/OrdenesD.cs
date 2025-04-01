@@ -149,9 +149,12 @@ namespace LaCaguamaSV.Configuracion
             using (MySqlConnection conexion = new Conexion().EstablecerConexion())
             {
                 string query = @"
-                SELECT b.id_bebida AS ID, i.nombreAlimento AS nombre, b.precioUnitario 
-                FROM bebidas b 
-                JOIN inventario i ON b.id_inventario = i.id_inventario";
+            SELECT 
+                b.id_bebida AS ID, 
+                i.nombreProducto AS nombre, 
+                b.precioUnitario 
+            FROM bebidas b 
+            JOIN inventario i ON b.id_inventario = i.id_inventario";
 
                 MySqlCommand cmd = new MySqlCommand(query, conexion);
                 MySqlDataAdapter da = new MySqlDataAdapter(cmd);
@@ -166,9 +169,11 @@ namespace LaCaguamaSV.Configuracion
             using (MySqlConnection conexion = new Conexion().EstablecerConexion())
             {
                 string query = @"
-                SELECT p.id_plato AS ID, i.nombreAlimento AS nombre, p.precioUnitario 
-                FROM platos p 
-                JOIN inventario i ON p.id_inventario = i.id_inventario";
+            SELECT 
+                p.id_plato AS ID, 
+                p.nombrePlato AS nombre, 
+                p.precioUnitario
+            FROM platos p";
 
                 MySqlCommand cmd = new MySqlCommand(query, conexion);
                 MySqlDataAdapter da = new MySqlDataAdapter(cmd);
@@ -176,6 +181,8 @@ namespace LaCaguamaSV.Configuracion
             }
             return dt;
         }
+
+
 
         public static DataTable ObtenerExtras()
         {
@@ -183,9 +190,12 @@ namespace LaCaguamaSV.Configuracion
             using (MySqlConnection conexion = new Conexion().EstablecerConexion())
             {
                 string query = @"
-                SELECT e.id_extra AS ID, i.nombreAlimento AS nombre, e.precioUnitario 
-                FROM extras e 
-                JOIN inventario i ON e.id_inventario = i.id_inventario";
+            SELECT 
+                e.id_extra AS ID, 
+                i.nombreProducto AS nombre, 
+                e.precioUnitario 
+            FROM extras e 
+            JOIN inventario i ON e.id_inventario = i.id_inventario";
 
                 MySqlCommand cmd = new MySqlCommand(query, conexion);
                 MySqlDataAdapter da = new MySqlDataAdapter(cmd);
@@ -193,6 +203,8 @@ namespace LaCaguamaSV.Configuracion
             }
             return dt;
         }
+
+
         public static DataTable ObtenerMesasDisponibles(int idMesaActual)
         {
             DataTable dt = new DataTable();
@@ -284,6 +296,90 @@ namespace LaCaguamaSV.Configuracion
             }
         }
 
+        // Agrega estos métodos en tu clase OrdenesD
+        public static string VerificarInventarioPlato(int idPlato)
+        {
+            StringBuilder mensaje = new StringBuilder();
+            using (MySqlConnection conexion = new Conexion().EstablecerConexion())
+            {
+                string query = @"
+            SELECT i.nombreProducto, i.cantidad, r.cantidad_necesaria 
+            FROM recetas r
+            JOIN inventario i ON r.id_inventario = i.id_inventario
+            WHERE r.id_plato = @idPlato AND i.cantidad < 10";
 
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@idPlato", idPlato);
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            string ingrediente = reader.GetString("nombreProducto");
+                            decimal cantidad = reader.GetDecimal("cantidad");
+                            decimal necesaria = reader.GetDecimal("cantidad_necesaria");
+                            mensaje.AppendLine($"- {ingrediente} (Stock: {cantidad}, Necesario: {necesaria})");
+                        }
+                    }
+                }
+            }
+            return mensaje.ToString();
+        }
+
+        public static string VerificarInventarioBebida(int idBebida)
+        {
+            StringBuilder mensaje = new StringBuilder();
+            using (MySqlConnection conexion = new Conexion().EstablecerConexion())
+            {
+                string query = @"
+            SELECT i.nombreProducto, i.cantidad 
+            FROM bebidas b
+            JOIN inventario i ON b.id_inventario = i.id_inventario
+            WHERE b.id_bebida = @idBebida AND i.cantidad < 10";
+
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@idBebida", idBebida);
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            string bebida = reader.GetString("nombreProducto");
+                            decimal cantidad = reader.GetDecimal("cantidad");
+                            mensaje.AppendLine($"- {bebida} (Stock: {cantidad})");
+                        }
+                    }
+                }
+            }
+            return mensaje.ToString();
+        }
+
+        public static string VerificarInventarioExtra(int idExtra)
+        {
+            StringBuilder mensaje = new StringBuilder();
+            using (MySqlConnection conexion = new Conexion().EstablecerConexion())
+            {
+                string query = @"
+            SELECT i.nombreProducto, i.cantidad 
+            FROM extras e
+            JOIN inventario i ON e.id_inventario = i.id_inventario
+            WHERE e.id_extra = @idExtra AND i.cantidad < 10";
+
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@idExtra", idExtra);
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            string extra = reader.GetString("nombreProducto");
+                            decimal cantidad = reader.GetDecimal("cantidad");
+                            mensaje.AppendLine($"- {extra} (Stock: {cantidad})");
+                        }
+                    }
+                }
+            }
+            return mensaje.ToString();
+        }
     }
 }

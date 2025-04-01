@@ -175,6 +175,12 @@
     <Compile Include="Fomularios\VistasAdmin\FormAdminFunciones.Designer.cs">
       <DependentUpon>FormAdminFunciones.cs</DependentUpon>
     </Compile>
+    <Compile Include="Fomularios\VistasAdmin\FormAdminPrecuenta.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Fomularios\VistasAdmin\FormAdminPrecuenta.Designer.cs">
+      <DependentUpon>FormAdminPrecuenta.cs</DependentUpon>
+    </Compile>
     <Compile Include="Fomularios\VistasAdmin\FormBebidasMenuAdmin.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -269,6 +275,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Fomularios\VistasAdmin\FormAdminFunciones.resx">
       <DependentUpon>FormAdminFunciones.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fomularios\VistasAdmin\FormAdminPrecuenta.resx">
+      <DependentUpon>FormAdminPrecuenta.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fomularios\VistasAdmin\FormBebidasMenuAdmin.resx">
       <DependentUpon>FormBebidasMenuAdmin.cs</DependentUpon>
