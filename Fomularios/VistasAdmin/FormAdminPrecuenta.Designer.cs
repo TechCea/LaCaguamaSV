@@ -34,10 +34,10 @@
             this.lblFecha = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.lblCliente = new System.Windows.Forms.Label();
-            this.dgvDetalle = new System.Windows.Forms.DataGridView();
             this.lblHora = new System.Windows.Forms.Label();
-            this.lblAtendidoPor = new System.Windows.Forms.Label();
             this.lblMesa = new System.Windows.Forms.Label();
+            this.lblAtendidoPor = new System.Windows.Forms.Label();
+            this.dgvDetalle = new System.Windows.Forms.DataGridView();
             this.lblSubtotal = new System.Windows.Forms.Label();
             this.lblTotal = new System.Windows.Forms.Label();
             this.lblDescuento = new System.Windows.Forms.Label();
@@ -45,7 +45,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.btnDescuento = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDetalle)).BeginInit();
             this.SuspendLayout();
@@ -109,15 +108,6 @@
             this.lblCliente.TabIndex = 6;
             this.lblCliente.Text = "Cliente";
             // 
-            // dgvDetalle
-            // 
-            this.dgvDetalle.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvDetalle.Location = new System.Drawing.Point(13, 53);
-            this.dgvDetalle.Name = "dgvDetalle";
-            this.dgvDetalle.Size = new System.Drawing.Size(510, 255);
-            this.dgvDetalle.TabIndex = 5;
-            this.dgvDetalle.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvDetalle_CellContentClick);
-            // 
             // lblHora
             // 
             this.lblHora.AutoSize = true;
@@ -126,6 +116,15 @@
             this.lblHora.Size = new System.Drawing.Size(30, 13);
             this.lblHora.TabIndex = 6;
             this.lblHora.Text = "Hora";
+            // 
+            // lblMesa
+            // 
+            this.lblMesa.AutoSize = true;
+            this.lblMesa.Location = new System.Drawing.Point(272, 9);
+            this.lblMesa.Name = "lblMesa";
+            this.lblMesa.Size = new System.Drawing.Size(33, 13);
+            this.lblMesa.TabIndex = 6;
+            this.lblMesa.Text = "Mesa";
             // 
             // lblAtendidoPor
             // 
@@ -136,14 +135,14 @@
             this.lblAtendidoPor.TabIndex = 6;
             this.lblAtendidoPor.Text = "AtendidoPor";
             // 
-            // lblMesa
+            // dgvDetalle
             // 
-            this.lblMesa.AutoSize = true;
-            this.lblMesa.Location = new System.Drawing.Point(272, 9);
-            this.lblMesa.Name = "lblMesa";
-            this.lblMesa.Size = new System.Drawing.Size(33, 13);
-            this.lblMesa.TabIndex = 6;
-            this.lblMesa.Text = "Mesa";
+            this.dgvDetalle.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvDetalle.Location = new System.Drawing.Point(13, 53);
+            this.dgvDetalle.Name = "dgvDetalle";
+            this.dgvDetalle.Size = new System.Drawing.Size(510, 255);
+            this.dgvDetalle.TabIndex = 5;
+            this.dgvDetalle.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvDetalle_CellContentClick);
             // 
             // lblSubtotal
             // 
@@ -212,22 +211,11 @@
             this.label3.Text = "_ _ _ _ _ _ _ _ _ _ _ _ ";
             this.label3.Click += new System.EventHandler(this.label1_Click);
             // 
-            // btnDescuento
-            // 
-            this.btnDescuento.Location = new System.Drawing.Point(565, 247);
-            this.btnDescuento.Name = "btnDescuento";
-            this.btnDescuento.Size = new System.Drawing.Size(110, 32);
-            this.btnDescuento.TabIndex = 8;
-            this.btnDescuento.Text = "Aplicar Descuento";
-            this.btnDescuento.UseVisualStyleBackColor = true;
-            this.btnDescuento.Click += new System.EventHandler(this.btnDescuento_Click);
-            // 
             // FormAdminPrecuenta
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.btnDescuento);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -270,6 +258,5 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Button btnDescuento;
     }
 }
