@@ -41,18 +41,18 @@
             // btnComidas
             // 
             this.btnComidas.BackColor = System.Drawing.Color.Yellow;
-            this.btnComidas.Location = new System.Drawing.Point(472, 91);
+            this.btnComidas.Location = new System.Drawing.Point(454, 91);
             this.btnComidas.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnComidas.Name = "btnComidas";
-            this.btnComidas.Size = new System.Drawing.Size(159, 52);
+            this.btnComidas.Size = new System.Drawing.Size(177, 52);
             this.btnComidas.TabIndex = 5;
-            this.btnComidas.Text = "Gestionar comidas";
+            this.btnComidas.Text = "Gestionar ingredientes y platos";
             this.btnComidas.UseVisualStyleBackColor = false;
             // 
             // btnExtras
             // 
             this.btnExtras.BackColor = System.Drawing.Color.Yellow;
-            this.btnExtras.Location = new System.Drawing.Point(279, 91);
+            this.btnExtras.Location = new System.Drawing.Point(268, 91);
             this.btnExtras.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnExtras.Name = "btnExtras";
             this.btnExtras.Size = new System.Drawing.Size(145, 53);
@@ -63,7 +63,7 @@
             // btnBebidas
             // 
             this.btnBebidas.BackColor = System.Drawing.Color.Yellow;
-            this.btnBebidas.Location = new System.Drawing.Point(72, 91);
+            this.btnBebidas.Location = new System.Drawing.Point(58, 91);
             this.btnBebidas.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnBebidas.Name = "btnBebidas";
             this.btnBebidas.Size = new System.Drawing.Size(159, 52);
