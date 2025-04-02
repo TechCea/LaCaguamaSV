@@ -454,24 +454,26 @@ namespace LaCaguamaSV.Configuracion
 
         public DataTable ObtenerCategorias()
         {
-            DataTable dt = new DataTable();
-            try
-            {
-                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
-                {
-                    conexion.Open();
-                    string query = "SELECT tipo FROM categorias";
+            string query = "SELECT id_categoria, tipo FROM categorias"; // Consulta corregida
 
-                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
-                    {
-                        MySqlDataAdapter da = new MySqlDataAdapter(cmd);
-                        da.Fill(dt);
-                    }
-                }
-            }
-            catch (Exception ex)
+            DataTable dt = new DataTable();
+            using (MySqlConnection conn = new MySqlConnection(cadenaConexion))
             {
-                MessageBox.Show("Error al obtener categorías: " + ex.Message);
+                try
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand(query, conn);
+                    MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                    adapter.Fill(dt);
+
+                    // Diagnóstico (puedes eliminar esto después)
+                    Console.WriteLine($"Columnas obtenidas: {string.Join(", ", dt.Columns.Cast<DataColumn>().Select(c => c.ColumnName))}");
+                    Console.WriteLine($"Registros obtenidos: {dt.Rows.Count}");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error al obtener categorías: {ex.Message}");
+                }
             }
             return dt;
         }
@@ -1151,6 +1153,149 @@ namespace LaCaguamaSV.Configuracion
                 return false;
             }
         }
+
+
+        // Función para obtener el inventario de bebidas uniendo las tablas inventario y bebidas
+        public DataTable ObtenerInventarioBebidas()
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    string query = "SELECT i.id_inventario AS 'ID', " +
+                                   "i.nombreProducto AS 'Nombre', " +
+                                   "i.cantidad AS 'Cantidad', " +
+                                   "b.precioUnitario AS 'Precio', " +
+                                   "i.id_proveedor AS 'ID_Proveedor', " +
+                                   "b.id_categoria AS 'ID_Categoria' " +
+                                   "FROM inventario i " +
+                                   "JOIN bebidas b ON i.id_inventario = b.id_inventario";
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                        da.Fill(dt);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al obtener inventario de bebidas: " + ex.Message);
+            }
+            return dt;
+        }
+
+        // Función para agregar una bebida al inventario
+        public bool AgregarInventarioBebida(string nombre, decimal cantidad, decimal precio, int idProveedor, int idCategoria)
+        {
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    // Inserción en inventario
+                    string queryInventario = "INSERT INTO inventario (nombreProducto, cantidad, id_proveedor) " +
+                                             "VALUES (@nombre, @cantidad, @idProveedor); SELECT LAST_INSERT_ID();";
+                    int idInventario;
+                    using (MySqlCommand cmd = new MySqlCommand(queryInventario, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@nombre", nombre);
+                        cmd.Parameters.AddWithValue("@cantidad", cantidad);
+                        cmd.Parameters.AddWithValue("@idProveedor", idProveedor);
+                        idInventario = Convert.ToInt32(cmd.ExecuteScalar());
+                    }
+                    // Inserción en bebidas
+                    string queryBebidas = "INSERT INTO bebidas (precioUnitario, id_inventario, id_categoria) " +
+                                          "VALUES (@precio, @idInventario, @idCategoria)";
+                    using (MySqlCommand cmd = new MySqlCommand(queryBebidas, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@precio", precio);
+                        cmd.Parameters.AddWithValue("@idInventario", idInventario);
+                        cmd.Parameters.AddWithValue("@idCategoria", idCategoria);
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al agregar bebida al inventario: " + ex.Message);
+                return false;
+            }
+        }
+
+        // Función para actualizar el inventario de una bebida
+        public bool ActualizarInventarioBebida(int idInventario, string nombre, decimal cantidad, decimal precio, int idProveedor, int idCategoria)
+        {
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    // Actualización en inventario
+                    string queryInventario = "UPDATE inventario SET nombreProducto = @nombre, cantidad = @cantidad, id_proveedor = @idProveedor " +
+                                             "WHERE id_inventario = @idInventario";
+                    using (MySqlCommand cmd = new MySqlCommand(queryInventario, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@nombre", nombre);
+                        cmd.Parameters.AddWithValue("@cantidad", cantidad);
+                        cmd.Parameters.AddWithValue("@idProveedor", idProveedor);
+                        cmd.Parameters.AddWithValue("@idInventario", idInventario);
+                        cmd.ExecuteNonQuery();
+                    }
+                    // Actualización en bebidas
+                    string queryBebidas = "UPDATE bebidas SET precioUnitario = @precio, id_categoria = @idCategoria " +
+                                          "WHERE id_inventario = @idInventario";
+                    using (MySqlCommand cmd = new MySqlCommand(queryBebidas, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@precio", precio);
+                        cmd.Parameters.AddWithValue("@idCategoria", idCategoria);
+                        cmd.Parameters.AddWithValue("@idInventario", idInventario);
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al actualizar inventario de bebida: " + ex.Message);
+                return false;
+            }
+        }
+
+        // Función para eliminar el inventario de una bebida
+        public bool EliminarInventarioBebida(int idInventario)
+        {
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    // Primero, eliminamos de la tabla bebidas
+                    string queryBebidas = "DELETE FROM bebidas WHERE id_inventario = @idInventario";
+                    using (MySqlCommand cmd = new MySqlCommand(queryBebidas, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@idInventario", idInventario);
+                        cmd.ExecuteNonQuery();
+                    }
+                    // Luego, eliminamos de la tabla inventario
+                    string queryInventario = "DELETE FROM inventario WHERE id_inventario = @idInventario";
+                    using (MySqlCommand cmd = new MySqlCommand(queryInventario, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@idInventario", idInventario);
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al eliminar inventario de bebida: " + ex.Message);
+                return false;
+            }
+        }
+
 
 
     }

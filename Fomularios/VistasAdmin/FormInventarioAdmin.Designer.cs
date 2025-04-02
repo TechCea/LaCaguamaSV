@@ -70,6 +70,7 @@
             this.btnBebidas.TabIndex = 3;
             this.btnBebidas.Text = "Gestionar bebidas";
             this.btnBebidas.UseVisualStyleBackColor = false;
+            this.btnBebidas.Click += new System.EventHandler(this.btnBebidas_Click);
             // 
             // button1
             // 
