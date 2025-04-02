@@ -39,5 +39,11 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 this.Show(); // Vuelve a mostrar el menú cuando el formulario de proveedore se cierra
             }
         }
+
+        private void btnComidas_Click(object sender, EventArgs e)
+        {
+            FormIngredientesInv formIngredientes = new FormIngredientesInv();
+            formIngredientes.ShowDialog();
+        }
     }
 }

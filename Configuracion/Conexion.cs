@@ -1296,7 +1296,184 @@ namespace LaCaguamaSV.Configuracion
             }
         }
 
+        //CODIGO DE TODO LO DE INVENTARIO:
+        // Funciones para los ingredientes de inventario
+        public DataTable ObtenerIngredientes()
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    string query = @"
+                            SELECT i.id_inventario AS 'ID', 
+                                   i.nombreProducto AS 'Nombre', 
+                                   i.cantidad AS 'Cantidad', 
+                                   p.nombreProv AS 'Proveedor'
+                            FROM inventario i
+                            JOIN proveedores p ON i.id_proveedor = p.id_proveedor
+                            WHERE NOT EXISTS (SELECT 1 FROM bebidas b WHERE b.id_inventario = i.id_inventario)";
 
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                    {
+                        da.Fill(dt);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al obtener ingredientes: " + ex.Message);
+            }
+            return dt;
+        }
+
+        //Filtrar ingrediente spor el  proveedor
+        public DataTable FiltrarIngredientesPorProveedor(string nombreProveedor)
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    string query = @"
+                    SELECT i.id_inventario AS 'ID', 
+                           i.nombreProducto AS 'Nombre', 
+                           i.cantidad AS 'Cantidad', 
+                           p.nombreProv AS 'Proveedor'
+                    FROM inventario i
+                    JOIN proveedores p ON i.id_proveedor = p.id_proveedor
+                    WHERE NOT EXISTS (SELECT 1 FROM bebidas b WHERE b.id_inventario = i.id_inventario)
+                      AND (p.nombreProv = @nombreProveedor OR @nombreProveedor = 'Todos')";
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@nombreProveedor", nombreProveedor);
+
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al filtrar ingredientes: " + ex.Message);
+            }
+            return dt;
+        }
+
+        //Obtener el nombre de los proveedores
+        public DataTable ObtenerProveedoresIngredientes()
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    string query = "SELECT id_proveedor, nombreProv FROM proveedores";
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                    {
+                        da.Fill(dt);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al obtener proveedores: " + ex.Message);
+            }
+            return dt;
+        }
+
+        //Agregar ingrediente nuevo
+        public bool AgregarIngrediente(string nombreProducto, decimal cantidad, int idProveedor)
+        {
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    string query = "INSERT INTO inventario (nombreProducto, cantidad, id_proveedor) " +
+                                   "VALUES (@nombreProducto, @cantidad, @idProveedor)";
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@nombreProducto", nombreProducto);
+                        cmd.Parameters.AddWithValue("@cantidad", cantidad);
+                        cmd.Parameters.AddWithValue("@idProveedor", idProveedor);
+
+                        int result = cmd.ExecuteNonQuery();
+                        return result > 0; // Retorna true si se insertó correctamente
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al agregar ingrediente: " + ex.Message);
+                return false;
+            }
+        }
+
+        //Eliminar ingrediente
+        public bool EliminarIngrediente(int idInventario)
+        {
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    string query = "DELETE FROM inventario WHERE id_inventario = @idInventario";
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@idInventario", idInventario);
+
+                        int result = cmd.ExecuteNonQuery();
+                        return result > 0; // Retorna true si se eliminó correctamente
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al eliminar ingrediente: " + ex.Message);
+                return false;
+            }
+        }
+
+        //Agregar un nuevo ingrediente
+        public bool EditarIngrediente(int idInventario, string nuevoNombre, decimal nuevaCantidad, int nuevoIdProveedor)
+        {
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    string query = "UPDATE inventario SET nombreProducto = @nuevoNombre, cantidad = @nuevaCantidad, id_proveedor = @nuevoIdProveedor WHERE id_inventario = @idInventario";
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@nuevoNombre", nuevoNombre);
+                        cmd.Parameters.AddWithValue("@nuevaCantidad", nuevaCantidad);
+                        cmd.Parameters.AddWithValue("@nuevoIdProveedor", nuevoIdProveedor);
+                        cmd.Parameters.AddWithValue("@idInventario", idInventario);
+
+                        int result = cmd.ExecuteNonQuery();
+                        return result > 0; // Retorna true si se actualizó correctamente
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al editar ingrediente: " + ex.Message);
+                return false;
+            }
+        }
 
     }
 }
