@@ -1475,6 +1475,35 @@ namespace LaCaguamaSV.Configuracion
             }
         }
 
+        //Agregar plato:
+        public bool AgregarPlato(string nombrePlato, decimal precioUnitario, string descripcion, int idCategoria)
+        {
+            try
+            {
+                using (var conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    string query = "INSERT INTO platos (nombrePlato, precioUnitario, descripcion, id_categoriaP) VALUES (@nombre, @precio, @descripcion, @idCategoria)";
+
+                    using (var comando = new MySqlCommand(query, conexion))
+                    {
+                        comando.Parameters.AddWithValue("@nombre", nombrePlato);
+                        comando.Parameters.AddWithValue("@precio", precioUnitario);
+                        comando.Parameters.AddWithValue("@descripcion", descripcion);
+                        comando.Parameters.AddWithValue("@idCategoria", idCategoria);
+
+                        int filasAfectadas = comando.ExecuteNonQuery();
+                        return filasAfectadas > 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al agregar el plato: " + ex.Message);
+                return false;
+            }
+        }
+
     }
 }
 

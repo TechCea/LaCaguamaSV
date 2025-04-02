@@ -253,6 +253,12 @@
     <Compile Include="Fomularios\VistasAdmin\FormPlatosMenu.Designer.cs">
       <DependentUpon>FormPlatosMenu.cs</DependentUpon>
     </Compile>
+    <Compile Include="Fomularios\VistasAdmin\FormRecetaPlato.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Fomularios\VistasAdmin\FormRecetaPlato.Designer.cs">
+      <DependentUpon>FormRecetaPlato.cs</DependentUpon>
+    </Compile>
     <Compile Include="Fomularios\VistasAdmin\FormUsuariosAdmin.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -350,6 +356,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Fomularios\VistasAdmin\FormPlatosMenu.resx">
       <DependentUpon>FormPlatosMenu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fomularios\VistasAdmin\FormRecetaPlato.resx">
+      <DependentUpon>FormRecetaPlato.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fomularios\VistasAdmin\FormUsuariosAdmin.resx">
       <DependentUpon>FormUsuariosAdmin.cs</DependentUpon>

@@ -185,9 +185,9 @@
             this.lbNombreBebida.AutoSize = true;
             this.lbNombreBebida.Location = new System.Drawing.Point(29, 81);
             this.lbNombreBebida.Name = "lbNombreBebida";
-            this.lbNombreBebida.Size = new System.Drawing.Size(127, 20);
+            this.lbNombreBebida.Size = new System.Drawing.Size(114, 20);
             this.lbNombreBebida.TabIndex = 0;
-            this.lbNombreBebida.Text = "Nombre bebida:";
+            this.lbNombreBebida.Text = "Nombre plato:";
             // 
             // btnEliminarC
             // 
