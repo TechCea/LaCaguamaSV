@@ -115,6 +115,67 @@ namespace LaCaguamaSV.Configuracion
             return dt;
         }
 
+        public bool ExisteCampo(string campo, string valor, int? idUsuario = null)
+        {
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    string query = $"SELECT COUNT(*) FROM usuarios WHERE {campo} = @valor";
+
+                    if (idUsuario.HasValue)
+                    {
+                        query += " AND id_usuario != @idUsuario";
+                    }
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@valor", valor);
+                        if (idUsuario.HasValue)
+                        {
+                            cmd.Parameters.AddWithValue("@idUsuario", idUsuario.Value);
+                        }
+
+                        int count = Convert.ToInt32(cmd.ExecuteScalar());
+                        return count > 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al verificar {campo}: " + ex.Message);
+                return false;
+            }
+        }
+
+        public bool ValidarCredencialesUnicas(string usuario, string nombre, string contrasena)
+        {
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    string query = "SELECT COUNT(*) FROM usuarios WHERE usuario = @usuario OR nombre = @nombre OR contrasenya = @contrasena";
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@usuario", usuario);
+                        cmd.Parameters.AddWithValue("@nombre", nombre);
+                        cmd.Parameters.AddWithValue("@contrasena", contrasena);
+
+                        int count = Convert.ToInt32(cmd.ExecuteScalar());
+                        return count == 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al validar credenciales únicas: " + ex.Message);
+                return false;
+            }
+        }
+
         public bool AgregarUsuario(string nombre, string correo, string usuario, string contrasena, string telefono, int idRol)
         {
             try
@@ -122,6 +183,21 @@ namespace LaCaguamaSV.Configuracion
                 using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
                 {
                     conexion.Open();
+
+                    // Verificar si ya existe el usuario, nombre o contraseña
+                    if (!ValidarCredencialesUnicas(usuario, nombre, contrasena))
+                    {
+                        MessageBox.Show("El nombre de usuario, nombre completo o contraseña ya están en uso");
+                        return false;
+                    }
+
+                    // Verificar si el correo ya existe
+                    if (ExisteCampo("correo", correo))
+                    {
+                        MessageBox.Show("Este correo electrónico ya está registrado");
+                        return false;
+                    }
+
                     string query = "INSERT INTO usuarios (nombre, correo, usuario, contrasenya, telefono_contacto, id_rol) " +
                                    "VALUES (@nombre, @correo, @usuario, @contrasena, @telefono, @idRol)";
 
@@ -201,6 +277,35 @@ namespace LaCaguamaSV.Configuracion
                 using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
                 {
                     conexion.Open();
+
+                    // Verificar si el nuevo usuario ya existe en otro registro
+                    if (ExisteCampo("usuario", usuario, idUsuario))
+                    {
+                        MessageBox.Show("Este nombre de usuario ya está en uso por otro usuario");
+                        return false;
+                    }
+
+                    // Verificar si el nuevo nombre ya existe en otro registro
+                    if (ExisteCampo("nombre", nombre, idUsuario))
+                    {
+                        MessageBox.Show("Este nombre completo ya está en uso por otro usuario");
+                        return false;
+                    }
+
+                    // Verificar si la nueva contraseña ya existe en otro registro
+                    if (ExisteCampo("contrasenya", contrasena, idUsuario))
+                    {
+                        MessageBox.Show("Esta contraseña ya está en uso por otro usuario");
+                        return false;
+                    }
+
+                    // Verificar si el nuevo correo ya existe en otro registro
+                    if (ExisteCampo("correo", correo, idUsuario))
+                    {
+                        MessageBox.Show("Este correo electrónico ya está registrado por otro usuario");
+                        return false;
+                    }
+
                     string query = "UPDATE usuarios SET usuario = @usuario, nombre = @nombre, correo = @correo, " +
                                    "contrasenya = @contrasena, telefono_contacto = @telefono, id_rol = @idRol " +
                                    "WHERE id_usuario = @idUsuario";
@@ -227,8 +332,9 @@ namespace LaCaguamaSV.Configuracion
             }
         }
 
-        //Funcion para obtener las bebidas
-        public DataTable ObtenerBebidas()
+
+//Funcion para obtener las bebidas
+public DataTable ObtenerBebidas()
         {
             DataTable dt = new DataTable();
             try
