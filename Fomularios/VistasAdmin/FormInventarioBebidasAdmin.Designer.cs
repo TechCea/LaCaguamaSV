@@ -80,7 +80,7 @@
             this.gbDatosExtras.Size = new System.Drawing.Size(391, 372);
             this.gbDatosExtras.TabIndex = 11;
             this.gbDatosExtras.TabStop = false;
-            this.gbDatosExtras.Text = "Datos extras";
+            this.gbDatosExtras.Text = "Datos Bebidas";
             // 
             // txtPrecio
             // 
@@ -136,9 +136,9 @@
             this.lblSeleccionExtra.Location = new System.Drawing.Point(25, 43);
             this.lblSeleccionExtra.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblSeleccionExtra.Name = "lblSeleccionExtra";
-            this.lblSeleccionExtra.Size = new System.Drawing.Size(261, 17);
+            this.lblSeleccionExtra.Size = new System.Drawing.Size(244, 17);
             this.lblSeleccionExtra.TabIndex = 8;
-            this.lblSeleccionExtra.Text = "Selecciona un proveedor a editar/borrar";
+            this.lblSeleccionExtra.Text = "Selecciona un registro a editar/borrar";
             // 
             // label2
             // 

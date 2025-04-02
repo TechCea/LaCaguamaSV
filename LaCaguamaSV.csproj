@@ -229,6 +229,12 @@
     <Compile Include="Fomularios\VistasAdmin\FormInventarioBebidasAdmin.Designer.cs">
       <DependentUpon>FormInventarioBebidasAdmin.cs</DependentUpon>
     </Compile>
+    <Compile Include="Fomularios\VistasAdmin\FormInventarioExtrasAdmin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Fomularios\VistasAdmin\FormInventarioExtrasAdmin.Designer.cs">
+      <DependentUpon>FormInventarioExtrasAdmin.cs</DependentUpon>
+    </Compile>
     <Compile Include="Fomularios\VistasAdmin\FormMenuAdmin.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -326,6 +332,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Fomularios\VistasAdmin\FormInventarioBebidasAdmin.resx">
       <DependentUpon>FormInventarioBebidasAdmin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fomularios\VistasAdmin\FormInventarioExtrasAdmin.resx">
+      <DependentUpon>FormInventarioExtrasAdmin.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fomularios\VistasAdmin\FormMenuAdmin.resx">
       <DependentUpon>FormMenuAdmin.cs</DependentUpon>

@@ -1298,6 +1298,190 @@ namespace LaCaguamaSV.Configuracion
 
 
 
+
+        public DataTable EjecutarConsulta(string query)
+        {
+            DataTable dt = new DataTable();
+            using (MySqlConnection conn = new MySqlConnection(cadenaConexion))
+            {
+                try
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand(query, conn);
+                    MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                    adapter.Fill(dt);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error en consulta: {ex.Message}\nConsulta: {query}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            return dt;
+        }
+
+        public int EjecutarNonQuery(string query)
+        {
+            int resultado = 0;
+            using (MySqlConnection conn = new MySqlConnection(cadenaConexion))
+            {
+                try
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand(query, conn);
+                    resultado = cmd.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error en ejecución: {ex.Message}\nConsulta: {query}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            return resultado;
+        }
+
+
+        public DataTable ObtenerExtrasCompletos()
+        {
+            string query = @"
+        SELECT 
+            e.id_extra AS 'ID',
+            i.nombreProducto AS 'Nombre',
+            e.precioUnitario AS 'Precio',
+            i.cantidad AS 'Cantidad',
+            p.nombreProveedor AS 'Proveedor',
+            i.id_proveedor AS 'ID_Proveedor',
+            e.id_inventario AS 'ID_Inventario'
+        FROM extras e
+        JOIN inventario i ON e.id_inventario = i.id_inventario
+        JOIN proveedor p ON i.id_proveedor = p.id_proveedor";
+
+            return EjecutarConsulta(query);
+        }
+
+        public bool AgregarExtraConInventario(string nombre, decimal precio, int cantidad, int idProveedor)
+        {
+            using (MySqlConnection conn = new MySqlConnection(cadenaConexion))
+            {
+                conn.Open();
+                MySqlTransaction transaction = conn.BeginTransaction();
+
+                try
+                {
+                    // 1. Insertar en inventario
+                    string queryInventario = @"
+                INSERT INTO inventario 
+                (nombreProducto, cantidad, id_proveedor) 
+                VALUES (@nombre, @cantidad, @idProveedor);
+                SELECT LAST_INSERT_ID();";
+
+                    MySqlCommand cmdInventario = new MySqlCommand(queryInventario, conn, transaction);
+                    cmdInventario.Parameters.AddWithValue("@nombre", nombre);
+                    cmdInventario.Parameters.AddWithValue("@cantidad", cantidad);
+                    cmdInventario.Parameters.AddWithValue("@idProveedor", idProveedor);
+
+                    int idInventario = Convert.ToInt32(cmdInventario.ExecuteScalar());
+
+                    // 2. Insertar en extras
+                    string queryExtra = @"
+                INSERT INTO extras 
+                (precioUnitario, id_inventario) 
+                VALUES (@precio, @idInventario)";
+
+                    MySqlCommand cmdExtra = new MySqlCommand(queryExtra, conn, transaction);
+                    cmdExtra.Parameters.AddWithValue("@precio", precio);
+                    cmdExtra.Parameters.AddWithValue("@idInventario", idInventario);
+                    cmdExtra.ExecuteNonQuery();
+
+                    transaction.Commit();
+                    return true;
+                }
+                catch
+                {
+                    transaction.Rollback();
+                    throw;
+                }
+            }
+        }
+
+        public bool ActualizarExtraConInventario(int idExtra, int idInventario, string nombre, decimal precio, int cantidad, int idProveedor)
+        {
+            using (MySqlConnection conn = new MySqlConnection(cadenaConexion))
+            {
+                conn.Open();
+                MySqlTransaction transaction = conn.BeginTransaction();
+
+                try
+                {
+                    // 1. Actualizar inventario
+                    string queryInventario = @"
+                UPDATE inventario SET 
+                    nombreProducto = @nombre,
+                    cantidad = @cantidad,
+                    id_proveedor = @idProveedor
+                WHERE id_inventario = @idInventario";
+
+                    MySqlCommand cmdInventario = new MySqlCommand(queryInventario, conn, transaction);
+                    cmdInventario.Parameters.AddWithValue("@nombre", nombre);
+                    cmdInventario.Parameters.AddWithValue("@cantidad", cantidad);
+                    cmdInventario.Parameters.AddWithValue("@idProveedor", idProveedor);
+                    cmdInventario.Parameters.AddWithValue("@idInventario", idInventario);
+                    cmdInventario.ExecuteNonQuery();
+
+                    // 2. Actualizar extras
+                    string queryExtra = @"
+                UPDATE extras SET 
+                    precioUnitario = @precio
+                WHERE id_extra = @idExtra";
+
+                    MySqlCommand cmdExtra = new MySqlCommand(queryExtra, conn, transaction);
+                    cmdExtra.Parameters.AddWithValue("@precio", precio);
+                    cmdExtra.Parameters.AddWithValue("@idExtra", idExtra);
+                    cmdExtra.ExecuteNonQuery();
+
+                    transaction.Commit();
+                    return true;
+                }
+                catch
+                {
+                    transaction.Rollback();
+                    throw;
+                }
+            }
+        }
+
+        public bool EliminarExtraConInventario(int idExtra, int idInventario)
+        {
+            using (MySqlConnection conn = new MySqlConnection(cadenaConexion))
+            {
+                conn.Open();
+                MySqlTransaction transaction = conn.BeginTransaction();
+
+                try
+                {
+                    // 1. Eliminar de extras
+                    string queryExtra = "DELETE FROM extras WHERE id_extra = @idExtra";
+                    MySqlCommand cmdExtra = new MySqlCommand(queryExtra, conn, transaction);
+                    cmdExtra.Parameters.AddWithValue("@idExtra", idExtra);
+                    cmdExtra.ExecuteNonQuery();
+
+                    // 2. Eliminar de inventario
+                    string queryInventario = "DELETE FROM inventario WHERE id_inventario = @idInventario";
+                    MySqlCommand cmdInventario = new MySqlCommand(queryInventario, conn, transaction);
+                    cmdInventario.Parameters.AddWithValue("@idInventario", idInventario);
+                    cmdInventario.ExecuteNonQuery();
+
+                    transaction.Commit();
+                    return true;
+                }
+                catch
+                {
+                    transaction.Rollback();
+                    throw;
+                }
+            }
+        }
+
+        
+
     }
 }
 
