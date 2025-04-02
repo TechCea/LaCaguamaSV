@@ -37,7 +37,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             dataGridViewOrdenesAdmin.ReadOnly = true;
             dataGridViewOrdenesAdmin.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridViewOrdenesAdmin.MultiSelect = false;
-            dataGridViewOrdenesAdmin.Columns["id_orden"].Visible = false;
+           
 
             // Formatear columnas numéricas
             if (dataGridViewOrdenesAdmin.Columns["total"] != null)

@@ -14,7 +14,7 @@ namespace LaCaguamaSV.Configuracion
     {
         private MySqlConnection conectar = null;
         private static string usuario = "root";
-        private static string contrasenia = "180294";
+        private static string contrasenia = "1234";
         private static string bd = "lacaguamabd";
         private static string ip = "localhost";
         private static string puerto = "3306"; // o 3307 si eres javier 
@@ -1051,6 +1051,108 @@ namespace LaCaguamaSV.Configuracion
                 }
             }
         }
+
+
+        public DataTable ObtenerProveedores()
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    string query = "SELECT id_proveedor AS 'ID', nombreProv AS 'Nombre', telefono_contacto AS 'Contacto', direccion AS 'Direccion' FROM proveedores";
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                        da.Fill(dt);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al obtener proveedores: " + ex.Message);
+            }
+            return dt;
+        }
+
+        public bool AgregarProveedor(string nombre, string contacto, string direccion)
+        {
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    // Usamos nombreProv y telefono_contacto
+                    string query = "INSERT INTO proveedores (nombreProv, telefono_contacto, direccion) VALUES (@nombre, @contacto, @direccion)";
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@nombre", nombre);
+                        cmd.Parameters.AddWithValue("@contacto", contacto);
+                        cmd.Parameters.AddWithValue("@direccion", direccion);
+                        cmd.ExecuteNonQuery();
+                    }
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al agregar proveedor: " + ex.Message);
+                return false;
+            }
+        }
+
+        public bool ActualizarProveedor(int id, string nombre, string contacto, string direccion)
+        {
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    // Actualizamos usando nombreProv y telefono_contacto
+                    string query = "UPDATE proveedores SET nombreProv = @nombre, telefono_contacto = @contacto, direccion = @direccion WHERE id_proveedor = @id";
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@id", id);
+                        cmd.Parameters.AddWithValue("@nombre", nombre);
+                        cmd.Parameters.AddWithValue("@contacto", contacto);
+                        cmd.Parameters.AddWithValue("@direccion", direccion);
+                        cmd.ExecuteNonQuery();
+                    }
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al actualizar proveedor: " + ex.Message);
+                return false;
+            }
+        }
+
+        public bool EliminarProveedor(int id)
+        {
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    string query = "DELETE FROM proveedores WHERE id_proveedor = @id";
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@id", id);
+                        cmd.ExecuteNonQuery();
+                    }
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al eliminar proveedor: " + ex.Message);
+                return false;
+            }
+        }
+
+
     }
 }
 
