@@ -31,12 +31,12 @@
             this.btnGestionUsuarios = new System.Windows.Forms.Button();
             this.btnCerrarSesion = new System.Windows.Forms.Button();
             this.btnMenu = new System.Windows.Forms.Button();
-            this.Ordenes = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.dataGridViewOrdenesAdmin = new System.Windows.Forms.DataGridView();
             this.btnCrearOrden = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.btnInventario = new System.Windows.Forms.Button();
+            this.BtnHistorialPagos = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewOrdenesAdmin)).BeginInit();
             this.SuspendLayout();
             // 
@@ -85,21 +85,6 @@
             this.btnMenu.Text = "Gestionar Menú";
             this.btnMenu.UseVisualStyleBackColor = false;
             this.btnMenu.Click += new System.EventHandler(this.btnMenu_Click);
-            // 
-            // Ordenes
-            // 
-            this.Ordenes.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
-            this.Ordenes.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.Ordenes.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.Ordenes.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Ordenes.ForeColor = System.Drawing.SystemColors.Control;
-            this.Ordenes.Location = new System.Drawing.Point(639, 32);
-            this.Ordenes.Name = "Ordenes";
-            this.Ordenes.Size = new System.Drawing.Size(164, 55);
-            this.Ordenes.TabIndex = 6;
-            this.Ordenes.Text = "Ordenes";
-            this.Ordenes.UseVisualStyleBackColor = false;
-            this.Ordenes.Click += new System.EventHandler(this.Ordenes_Click);
             // 
             // button1
             // 
@@ -174,6 +159,21 @@
             this.btnInventario.UseVisualStyleBackColor = false;
             this.btnInventario.Click += new System.EventHandler(this.btnInventario_Click);
             // 
+            // BtnHistorialPagos
+            // 
+            this.BtnHistorialPagos.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
+            this.BtnHistorialPagos.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.BtnHistorialPagos.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.BtnHistorialPagos.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BtnHistorialPagos.ForeColor = System.Drawing.SystemColors.Control;
+            this.BtnHistorialPagos.Location = new System.Drawing.Point(628, 32);
+            this.BtnHistorialPagos.Name = "BtnHistorialPagos";
+            this.BtnHistorialPagos.Size = new System.Drawing.Size(164, 55);
+            this.BtnHistorialPagos.TabIndex = 12;
+            this.BtnHistorialPagos.Text = "Ordenes";
+            this.BtnHistorialPagos.UseVisualStyleBackColor = false;
+            this.BtnHistorialPagos.Click += new System.EventHandler(this.BtnHistorialPagos_Click);
+            // 
             // FormAdmin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -182,12 +182,12 @@
             this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.fondo;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1038, 608);
+            this.Controls.Add(this.BtnHistorialPagos);
             this.Controls.Add(this.btnInventario);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.btnCrearOrden);
             this.Controls.Add(this.dataGridViewOrdenesAdmin);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.Ordenes);
             this.Controls.Add(this.btnMenu);
             this.Controls.Add(this.btnCerrarSesion);
             this.Controls.Add(this.btnGestionUsuarios);
@@ -204,11 +204,11 @@
         private System.Windows.Forms.Button btnGestionUsuarios;
         private System.Windows.Forms.Button btnCerrarSesion;
         private System.Windows.Forms.Button btnMenu;
-        private System.Windows.Forms.Button Ordenes;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.DataGridView dataGridViewOrdenesAdmin;
         private System.Windows.Forms.Button btnCrearOrden;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button btnInventario;
+        private System.Windows.Forms.Button BtnHistorialPagos;
     }
 }

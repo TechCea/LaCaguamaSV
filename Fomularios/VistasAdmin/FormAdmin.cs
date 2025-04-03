@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using LaCaguamaSV.Configuracion;
+using MySql.Data.MySqlClient;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace LaCaguamaSV.Fomularios.VistasAdmin
@@ -136,32 +137,168 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             if (e.RowIndex >= 0) // Asegurar que no se haga clic en el encabezado
             {
-                // Seleccionar fila completa
-                dataGridViewOrdenesAdmin.Rows[e.RowIndex].Selected = true;
-
                 // Obtener la fila seleccionada
                 DataGridViewRow row = dataGridViewOrdenesAdmin.Rows[e.RowIndex];
 
-                // Obtener datos de la orden
-                int idOrden = Convert.ToInt32(row.Cells["id_orden"].Value);
-                string nombreCliente = row.Cells["nombreCliente"].Value.ToString();
-                decimal total = Convert.ToDecimal(row.Cells["total"].Value);
-                decimal descuento = Convert.ToDecimal(row.Cells["descuento"].Value);
-                string fechaOrden = row.Cells["fecha_orden"].Value.ToString();
-                string numeroMesa = row.Cells["numero_mesa"].Value.ToString();
-                string tipoPago = row.Cells["tipo_pago"].Value.ToString();
-                string nombreUsuario = row.Cells["nombre_usuario"].Value.ToString();
+                // Obtener el estado de la orden
                 string estadoOrden = row.Cells["estado_orden"].Value.ToString();
+                int idOrden = Convert.ToInt32(row.Cells["id_orden"].Value);
 
-                // Abrir formulario de gestión de órdenes con los datos seleccionados
-                FormGestionOrdenes formOrden = new FormGestionOrdenes(idOrden, nombreCliente, total,
-                                                                      descuento, fechaOrden, numeroMesa,
-                                                                      tipoPago, nombreUsuario, estadoOrden);
-                formOrden.ShowDialog();
+                if (estadoOrden == "Cerrada")
+                {
+                    // Mostrar factura/comprobante para órdenes cerradas
+                    MostrarFacturaOrden(idOrden);
+                }
+                else
+                {
+                    // Abrir gestión de orden para órdenes abiertas
+                    AbrirGestionOrden(row);
+                }
+            }
 
-                CargarOrdenes();
+        }
+
+        private void MostrarFacturaOrden(int idOrden)
+        {
+            try
+            {
+                using (MySqlConnection conexion = new Conexion().EstablecerConexion())
+                {
+                    // Obtener información del pago
+                    string queryPago = @"
+                SELECT p.monto, p.recibido, p.cambio, tp.nombrePago, p.fecha_pago, 
+                       u.nombre AS nombre_usuario, o.nombreCliente
+                FROM pagos p
+                JOIN tipoPago tp ON p.id_tipo_pago = tp.id_pago
+                JOIN usuarios u ON p.id_usuario = u.id_usuario
+                JOIN ordenes o ON p.id_orden = o.id_orden
+                WHERE p.id_orden = @idOrden";
+
+                    using (MySqlCommand cmd = new MySqlCommand(queryPago, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@idOrden", idOrden);
+
+                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                decimal monto = reader.GetDecimal("monto");
+                                decimal recibido = reader.GetDecimal("recibido");
+                                decimal cambio = reader.GetDecimal("cambio");
+                                string metodoPago = reader.GetString("nombrePago");
+                                string fechaPago = reader.GetDateTime("fecha_pago").ToString("g");
+                                string usuario = reader.GetString("nombre_usuario");
+                                string cliente = reader.GetString("nombreCliente");
+
+                                // Obtener detalles de la orden
+                                string detalle = ObtenerDetalleOrden(idOrden);
+
+                                // Generar comprobante
+                                StringBuilder comprobante = new StringBuilder();
+                                comprobante.AppendLine("FACTURA / COMPROBANTE DE PAGO");
+                                comprobante.AppendLine("-----------------------------");
+                                comprobante.AppendLine($"Orden: #{idOrden}");
+                                comprobante.AppendLine($"Cliente: {cliente}");
+                                comprobante.AppendLine($"Fecha: {fechaPago}");
+                                comprobante.AppendLine($"Atendido por: {usuario}");
+                                comprobante.AppendLine();
+                                comprobante.AppendLine("Detalle de la orden:");
+                                comprobante.AppendLine(detalle);
+                                comprobante.AppendLine();
+                                comprobante.AppendLine($"Total: {monto.ToString("C")}");
+                                comprobante.AppendLine($"Método de pago: {metodoPago}");
+
+                                if (metodoPago == "Efectivo")
+                                {
+                                    comprobante.AppendLine($"Recibido: {recibido.ToString("C")}");
+                                    comprobante.AppendLine($"Cambio: {cambio.ToString("C")}");
+                                }
+
+                                comprobante.AppendLine();
+                                comprobante.AppendLine("¡Gracias por su visita!");
+
+                                MessageBox.Show(comprobante.ToString(), "Comprobante de Pago",
+                                              MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al generar comprobante: {ex.Message}", "Error",
+                               MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+
+        private string ObtenerDetalleOrden(int idOrden)
+        {
+            StringBuilder detalle = new StringBuilder();
+
+            using (MySqlConnection conexion = new Conexion().EstablecerConexion())
+            {
+                string query = @"
+            SELECT 
+                COALESCE(
+                    pl.nombrePlato,
+                    (SELECT i.nombreProducto FROM bebidas b JOIN inventario i ON b.id_inventario = i.id_inventario WHERE b.id_bebida = p.id_bebida),
+                    (SELECT i.nombreProducto FROM extras e JOIN inventario i ON e.id_inventario = i.id_inventario WHERE e.id_extra = p.id_extra)
+                ) AS Producto,
+                p.Cantidad,
+                COALESCE(
+                    pl.precioUnitario,
+                    (SELECT b.precioUnitario FROM bebidas b WHERE b.id_bebida = p.id_bebida),
+                    (SELECT e.precioUnitario FROM extras e WHERE e.id_extra = p.id_extra)
+                ) AS PrecioUnitario,
+                (p.Cantidad * COALESCE(
+                    pl.precioUnitario,
+                    (SELECT b.precioUnitario FROM bebidas b WHERE b.id_bebida = p.id_bebida),
+                    (SELECT e.precioUnitario FROM extras e WHERE e.id_extra = p.id_extra)
+                )) AS Subtotal
+            FROM pedidos p
+            LEFT JOIN platos pl ON p.id_plato = pl.id_plato
+            WHERE p.id_orden = @idOrden";
+
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@idOrden", idOrden);
+
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            detalle.AppendLine($"{reader["Producto"]} x{reader["Cantidad"]} - {Convert.ToDecimal(reader["Subtotal"]).ToString("C")}");
+                        }
+                    }
+                }
+            }
+
+            return detalle.ToString();
+        }
+
+        private void AbrirGestionOrden(DataGridViewRow row)
+        {
+            // Obtener datos de la orden
+            int idOrden = Convert.ToInt32(row.Cells["id_orden"].Value);
+            string nombreCliente = row.Cells["nombreCliente"].Value.ToString();
+            decimal total = Convert.ToDecimal(row.Cells["total"].Value);
+            decimal descuento = Convert.ToDecimal(row.Cells["descuento"].Value);
+            string fechaOrden = row.Cells["fecha_orden"].Value.ToString();
+            string numeroMesa = row.Cells["numero_mesa"].Value.ToString();
+            string tipoPago = row.Cells["tipo_pago"].Value.ToString();
+            string nombreUsuario = row.Cells["nombre_usuario"].Value.ToString();
+            string estadoOrden = row.Cells["estado_orden"].Value.ToString();
+
+            // Abrir formulario de gestión de órdenes
+            FormGestionOrdenes formOrden = new FormGestionOrdenes(idOrden, nombreCliente, total,
+                                                                  descuento, fechaOrden, numeroMesa,
+                                                                  tipoPago, nombreUsuario, estadoOrden);
+            formOrden.ShowDialog();
+
+            CargarOrdenes(); // Refrescar lista después de cerrar
+        }
+
 
         private void btnCrearOrden_Click(object sender, EventArgs e)
         {
@@ -204,6 +341,21 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             {
                 ReleaseCapture();
                 SendMessage(Handle, WM_NCLBUTTONDOWN, HTCAPTION, 0);
+            }
+        }
+
+        private void BtnHistorialPagos_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Crear y mostrar el formulario de historial de pagos
+                FormHistorialPagosAdmin historialForm = new FormHistorialPagosAdmin();
+                historialForm.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al abrir el historial de pagos: {ex.Message}", "Error",
+                              MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }
