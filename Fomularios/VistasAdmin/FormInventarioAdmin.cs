@@ -9,6 +9,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using LaCaguamaSV.Configuracion;
 using LaCaguamaSV.Fomularios.VistasUsuario;
 
 namespace LaCaguamaSV.Fomularios.VistasAdmin
@@ -33,6 +34,14 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         public FormInventarioAdmin()
         {
             InitializeComponent();
+
+            // Si el usuario no es administrador, cierra el formulario
+            if (SesionUsuario.Rol != 1)
+            {
+                MessageBox.Show("Acceso denegado. No tienes permisos de administrador.", "Acceso Restringido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
 
             this.FormBorderStyle = FormBorderStyle.None;
             Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 20, 20));

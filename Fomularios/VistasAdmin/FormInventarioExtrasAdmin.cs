@@ -16,6 +16,13 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             InitializeComponent();
 
+            // Si el usuario no es administrador, cierra el formulario
+            if (SesionUsuario.Rol != 1)
+            {
+                MessageBox.Show("Acceso denegado. No tienes permisos de administrador.", "Acceso Restringido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             // Solo usando los elementos originales
             CargarDatosIniciales();
             ConfigurarDataGridView();

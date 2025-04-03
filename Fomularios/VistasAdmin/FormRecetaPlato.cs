@@ -18,6 +18,14 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         public FormRecetaPlato(int idPlato, string nombrePlato)
         {
             InitializeComponent();
+
+            // Si el usuario no es administrador, cierra el formulario
+            if (SesionUsuario.Rol != 1)
+            {
+                MessageBox.Show("Acceso denegado. No tienes permisos de administrador.", "Acceso Restringido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             // Asignar los valores a los labels
             lblIDPLATO.Text = idPlato.ToString();
             lblPlato.Text = nombrePlato;

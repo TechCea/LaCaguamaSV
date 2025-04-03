@@ -126,5 +126,9 @@ namespace LaCaguamaSV.Fomularios.VistasUsuario
             }
         }
 
+        private void Ordenes_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

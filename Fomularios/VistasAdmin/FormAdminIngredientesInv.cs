@@ -9,6 +9,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using LaCaguamaSV.Configuracion;
 
 namespace LaCaguamaSV.Fomularios.VistasAdmin
 {
@@ -31,6 +32,13 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         public FormAdminIngredientesInv()
         {
             InitializeComponent();
+
+            // Si el usuario no es administrador, cierra el formulario
+            if (SesionUsuario.Rol != 1)
+            {
+                MessageBox.Show("Acceso denegado. No tienes permisos de administrador.", "Acceso Restringido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
         }
 
         private void FormAdminIngredientesInv_Load(object sender, EventArgs e)
