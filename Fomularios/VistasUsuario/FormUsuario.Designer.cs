@@ -28,60 +28,50 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.btnInventario = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.btnMesas = new System.Windows.Forms.Button();
             this.btnCrearOrden = new System.Windows.Forms.Button();
-            this.dataGridViewOrdenesAdmin = new System.Windows.Forms.DataGridView();
+            this.dataGridViewOrdenesUsuario = new System.Windows.Forms.DataGridView();
             this.button1 = new System.Windows.Forms.Button();
             this.Ordenes = new System.Windows.Forms.Button();
-            this.btnMenu = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.btnCerrarSesion = new System.Windows.Forms.Button();
-            this.btnGestionUsuarios = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewOrdenesAdmin)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewOrdenesUsuario)).BeginInit();
             this.SuspendLayout();
             // 
-            // btnInventario
+            // btnMesas
             // 
-            this.btnInventario.Location = new System.Drawing.Point(600, 375);
-            this.btnInventario.Margin = new System.Windows.Forms.Padding(2);
-            this.btnInventario.Name = "btnInventario";
-            this.btnInventario.Size = new System.Drawing.Size(152, 56);
-            this.btnInventario.TabIndex = 21;
-            this.btnInventario.Text = "Gestionar inventario";
-            this.btnInventario.UseVisualStyleBackColor = true;
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(600, 314);
-            this.button2.Margin = new System.Windows.Forms.Padding(2);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(152, 56);
-            this.button2.TabIndex = 20;
-            this.button2.Text = "Gestionar mesas";
-            this.button2.UseVisualStyleBackColor = true;
+            this.btnMesas.Location = new System.Drawing.Point(600, 215);
+            this.btnMesas.Margin = new System.Windows.Forms.Padding(2);
+            this.btnMesas.Name = "btnMesas";
+            this.btnMesas.Size = new System.Drawing.Size(152, 56);
+            this.btnMesas.TabIndex = 20;
+            this.btnMesas.Text = "Gestionar mesas";
+            this.btnMesas.UseVisualStyleBackColor = true;
+            this.btnMesas.Click += new System.EventHandler(this.btnMesas_Click);
             // 
             // btnCrearOrden
             // 
-            this.btnCrearOrden.Location = new System.Drawing.Point(600, 257);
+            this.btnCrearOrden.Location = new System.Drawing.Point(600, 158);
             this.btnCrearOrden.Name = "btnCrearOrden";
             this.btnCrearOrden.Size = new System.Drawing.Size(152, 52);
             this.btnCrearOrden.TabIndex = 19;
             this.btnCrearOrden.Text = "Crear Orden";
             this.btnCrearOrden.UseVisualStyleBackColor = true;
+            this.btnCrearOrden.Click += new System.EventHandler(this.btnCrearOrden_Click);
             // 
-            // dataGridViewOrdenesAdmin
+            // dataGridViewOrdenesUsuario
             // 
-            this.dataGridViewOrdenesAdmin.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewOrdenesAdmin.Location = new System.Drawing.Point(33, 24);
-            this.dataGridViewOrdenesAdmin.Name = "dataGridViewOrdenesAdmin";
-            this.dataGridViewOrdenesAdmin.RowHeadersWidth = 51;
-            this.dataGridViewOrdenesAdmin.Size = new System.Drawing.Size(553, 448);
-            this.dataGridViewOrdenesAdmin.TabIndex = 18;
+            this.dataGridViewOrdenesUsuario.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewOrdenesUsuario.Location = new System.Drawing.Point(33, 24);
+            this.dataGridViewOrdenesUsuario.Name = "dataGridViewOrdenesUsuario";
+            this.dataGridViewOrdenesUsuario.RowHeadersWidth = 51;
+            this.dataGridViewOrdenesUsuario.Size = new System.Drawing.Size(553, 448);
+            this.dataGridViewOrdenesUsuario.TabIndex = 18;
+            this.dataGridViewOrdenesUsuario.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewOrdenesUsuario_CellContentClick);
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(600, 184);
+            this.button1.Location = new System.Drawing.Point(600, 85);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(152, 67);
             this.button1.TabIndex = 17;
@@ -90,22 +80,12 @@
             // 
             // Ordenes
             // 
-            this.Ordenes.Location = new System.Drawing.Point(600, -1);
+            this.Ordenes.Location = new System.Drawing.Point(600, 24);
             this.Ordenes.Name = "Ordenes";
             this.Ordenes.Size = new System.Drawing.Size(112, 55);
             this.Ordenes.TabIndex = 16;
             this.Ordenes.Text = "Ordenes";
             this.Ordenes.UseVisualStyleBackColor = true;
-            // 
-            // btnMenu
-            // 
-            this.btnMenu.Location = new System.Drawing.Point(600, 127);
-            this.btnMenu.Margin = new System.Windows.Forms.Padding(2);
-            this.btnMenu.Name = "btnMenu";
-            this.btnMenu.Size = new System.Drawing.Size(167, 52);
-            this.btnMenu.TabIndex = 15;
-            this.btnMenu.Text = "Gestionar Menú";
-            this.btnMenu.UseVisualStyleBackColor = true;
             // 
             // label1
             // 
@@ -125,15 +105,7 @@
             this.btnCerrarSesion.TabIndex = 13;
             this.btnCerrarSesion.Text = "Cerrar";
             this.btnCerrarSesion.UseVisualStyleBackColor = true;
-            // 
-            // btnGestionUsuarios
-            // 
-            this.btnGestionUsuarios.Location = new System.Drawing.Point(600, 61);
-            this.btnGestionUsuarios.Name = "btnGestionUsuarios";
-            this.btnGestionUsuarios.Size = new System.Drawing.Size(167, 62);
-            this.btnGestionUsuarios.TabIndex = 12;
-            this.btnGestionUsuarios.Text = "Administrar Usuarios";
-            this.btnGestionUsuarios.UseVisualStyleBackColor = true;
+            this.btnCerrarSesion.Click += new System.EventHandler(this.btnCerrarSesion_Click);
             // 
             // FormUsuario
             // 
@@ -141,36 +113,29 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.ClientSize = new System.Drawing.Size(800, 500);
-            this.Controls.Add(this.btnInventario);
-            this.Controls.Add(this.button2);
+            this.Controls.Add(this.btnMesas);
             this.Controls.Add(this.btnCrearOrden);
-            this.Controls.Add(this.dataGridViewOrdenesAdmin);
+            this.Controls.Add(this.dataGridViewOrdenesUsuario);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.Ordenes);
-            this.Controls.Add(this.btnMenu);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnCerrarSesion);
-            this.Controls.Add(this.btnGestionUsuarios);
             this.Name = "FormUsuario";
             this.Text = "FormUsuario";
             this.Load += new System.EventHandler(this.FormUsuario_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewOrdenesAdmin)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewOrdenesUsuario)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.Button btnInventario;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button btnMesas;
         private System.Windows.Forms.Button btnCrearOrden;
-        private System.Windows.Forms.DataGridView dataGridViewOrdenesAdmin;
+        private System.Windows.Forms.DataGridView dataGridViewOrdenesUsuario;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button Ordenes;
-        private System.Windows.Forms.Button btnMenu;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnCerrarSesion;
-        private System.Windows.Forms.Button btnGestionUsuarios;
     }
 }

@@ -217,6 +217,12 @@
     <Compile Include="Fomularios\VistasAdmin\FormGestionOrdenes.Designer.cs">
       <DependentUpon>FormGestionOrdenes.cs</DependentUpon>
     </Compile>
+    <Compile Include="Fomularios\VistasAdmin\FormIngredientesInv.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Fomularios\VistasAdmin\FormIngredientesInv.Designer.cs">
+      <DependentUpon>FormIngredientesInv.cs</DependentUpon>
+    </Compile>
     <Compile Include="Fomularios\VistasAdmin\FormInventarioAdmin.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -247,6 +253,18 @@
     <Compile Include="Fomularios\VistasAdmin\FormMesasAdmin.Designer.cs">
       <DependentUpon>FormMesasAdmin.cs</DependentUpon>
     </Compile>
+    <Compile Include="Fomularios\VistasAdmin\FormPlatosMenu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Fomularios\VistasAdmin\FormPlatosMenu.Designer.cs">
+      <DependentUpon>FormPlatosMenu.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Fomularios\VistasAdmin\FormRecetaPlato.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Fomularios\VistasAdmin\FormRecetaPlato.Designer.cs">
+      <DependentUpon>FormRecetaPlato.cs</DependentUpon>
+    </Compile>
     <Compile Include="Fomularios\VistasAdmin\FormUsuariosAdmin.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -270,6 +288,12 @@
     </Compile>
     <Compile Include="Fomularios\VistasUsuario\FormCartaPlatos.Designer.cs">
       <DependentUpon>FormCartaPlatos.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Fomularios\VistasUsuario\FormMesasUsuario.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Fomularios\VistasUsuario\FormMesasUsuario.Designer.cs">
+      <DependentUpon>FormMesasUsuario.cs</DependentUpon>
     </Compile>
     <Compile Include="Fomularios\VistasUsuario\FormUsuario.cs">
       <SubType>Form</SubType>
@@ -327,6 +351,9 @@
     <EmbeddedResource Include="Fomularios\VistasAdmin\FormGestionOrdenes.resx">
       <DependentUpon>FormGestionOrdenes.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Fomularios\VistasAdmin\FormIngredientesInv.resx">
+      <DependentUpon>FormIngredientesInv.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Fomularios\VistasAdmin\FormInventarioAdmin.resx">
       <DependentUpon>FormInventarioAdmin.cs</DependentUpon>
     </EmbeddedResource>
@@ -341,6 +368,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Fomularios\VistasAdmin\FormMesasAdmin.resx">
       <DependentUpon>FormMesasAdmin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fomularios\VistasAdmin\FormPlatosMenu.resx">
+      <DependentUpon>FormPlatosMenu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fomularios\VistasAdmin\FormRecetaPlato.resx">
+      <DependentUpon>FormRecetaPlato.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fomularios\VistasAdmin\FormUsuariosAdmin.resx">
       <DependentUpon>FormUsuariosAdmin.cs</DependentUpon>

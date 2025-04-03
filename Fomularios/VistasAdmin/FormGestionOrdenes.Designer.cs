@@ -262,12 +262,13 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             // button12
             // 
             this.button12.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.button12.Location = new System.Drawing.Point(484, 54);
+            this.button12.Location = new System.Drawing.Point(572, 55);
             this.button12.Name = "button12";
             this.button12.Size = new System.Drawing.Size(81, 28);
             this.button12.TabIndex = 30;
             this.button12.Text = "PAGAR";
             this.button12.UseVisualStyleBackColor = false;
+            this.button12.Click += new System.EventHandler(this.button12_Click);
             // 
             // btnCargarExtras
             // 
@@ -329,7 +330,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             // btnPrecuenta
             // 
             this.btnPrecuenta.BackColor = System.Drawing.Color.SteelBlue;
-            this.btnPrecuenta.Location = new System.Drawing.Point(571, 55);
+            this.btnPrecuenta.Location = new System.Drawing.Point(485, 55);
             this.btnPrecuenta.Name = "btnPrecuenta";
             this.btnPrecuenta.Size = new System.Drawing.Size(81, 28);
             this.btnPrecuenta.TabIndex = 34;

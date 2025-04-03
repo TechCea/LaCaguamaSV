@@ -14,10 +14,10 @@ namespace LaCaguamaSV.Configuracion
     {
         private MySqlConnection conectar = null;
         private static string usuario = "root";
-        private static string contrasenia = "1234";
+        private static string contrasenia = "root";
         private static string bd = "lacaguamabd";
         private static string ip = "localhost";
-        private static string puerto = "3306"; // o 3307 si eres javier 
+        private static string puerto = "3307"; // o 3307 si eres javier 
 
         string cadenaConexion = $"Server={ip};Port={puerto};Database={bd};User Id={usuario};Password={contrasenia};";
 
@@ -115,6 +115,67 @@ namespace LaCaguamaSV.Configuracion
             return dt;
         }
 
+        public bool ExisteCampo(string campo, string valor, int? idUsuario = null)
+        {
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    string query = $"SELECT COUNT(*) FROM usuarios WHERE {campo} = @valor";
+
+                    if (idUsuario.HasValue)
+                    {
+                        query += " AND id_usuario != @idUsuario";
+                    }
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@valor", valor);
+                        if (idUsuario.HasValue)
+                        {
+                            cmd.Parameters.AddWithValue("@idUsuario", idUsuario.Value);
+                        }
+
+                        int count = Convert.ToInt32(cmd.ExecuteScalar());
+                        return count > 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al verificar {campo}: " + ex.Message);
+                return false;
+            }
+        }
+
+        public bool ValidarCredencialesUnicas(string usuario, string nombre, string contrasena)
+        {
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    string query = "SELECT COUNT(*) FROM usuarios WHERE usuario = @usuario OR nombre = @nombre OR contrasenya = @contrasena";
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@usuario", usuario);
+                        cmd.Parameters.AddWithValue("@nombre", nombre);
+                        cmd.Parameters.AddWithValue("@contrasena", contrasena);
+
+                        int count = Convert.ToInt32(cmd.ExecuteScalar());
+                        return count == 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al validar credenciales únicas: " + ex.Message);
+                return false;
+            }
+        }
+
         public bool AgregarUsuario(string nombre, string correo, string usuario, string contrasena, string telefono, int idRol)
         {
             try
@@ -122,6 +183,21 @@ namespace LaCaguamaSV.Configuracion
                 using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
                 {
                     conexion.Open();
+
+                    // Verificar si ya existe el usuario, nombre o contraseña
+                    if (!ValidarCredencialesUnicas(usuario, nombre, contrasena))
+                    {
+                        MessageBox.Show("El nombre de usuario, nombre completo o contraseña ya están en uso");
+                        return false;
+                    }
+
+                    // Verificar si el correo ya existe
+                    if (ExisteCampo("correo", correo))
+                    {
+                        MessageBox.Show("Este correo electrónico ya está registrado");
+                        return false;
+                    }
+
                     string query = "INSERT INTO usuarios (nombre, correo, usuario, contrasenya, telefono_contacto, id_rol) " +
                                    "VALUES (@nombre, @correo, @usuario, @contrasena, @telefono, @idRol)";
 
@@ -201,6 +277,35 @@ namespace LaCaguamaSV.Configuracion
                 using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
                 {
                     conexion.Open();
+
+                    // Verificar si el nuevo usuario ya existe en otro registro
+                    if (ExisteCampo("usuario", usuario, idUsuario))
+                    {
+                        MessageBox.Show("Este nombre de usuario ya está en uso por otro usuario");
+                        return false;
+                    }
+
+                    // Verificar si el nuevo nombre ya existe en otro registro
+                    if (ExisteCampo("nombre", nombre, idUsuario))
+                    {
+                        MessageBox.Show("Este nombre completo ya está en uso por otro usuario");
+                        return false;
+                    }
+
+                    // Verificar si la nueva contraseña ya existe en otro registro
+                    if (ExisteCampo("contrasenya", contrasena, idUsuario))
+                    {
+                        MessageBox.Show("Esta contraseña ya está en uso por otro usuario");
+                        return false;
+                    }
+
+                    // Verificar si el nuevo correo ya existe en otro registro
+                    if (ExisteCampo("correo", correo, idUsuario))
+                    {
+                        MessageBox.Show("Este correo electrónico ya está registrado por otro usuario");
+                        return false;
+                    }
+
                     string query = "UPDATE usuarios SET usuario = @usuario, nombre = @nombre, correo = @correo, " +
                                    "contrasenya = @contrasena, telefono_contacto = @telefono, id_rol = @idRol " +
                                    "WHERE id_usuario = @idUsuario";
@@ -227,8 +332,9 @@ namespace LaCaguamaSV.Configuracion
             }
         }
 
-        //Funcion para obtener las bebidas
-        public DataTable ObtenerBebidas()
+
+//Funcion para obtener las bebidas
+public DataTable ObtenerBebidas()
         {
             DataTable dt = new DataTable();
             try
@@ -1296,7 +1402,213 @@ namespace LaCaguamaSV.Configuracion
             }
         }
 
+        //CODIGO DE TODO LO DE INVENTARIO:
+        // Funciones para los ingredientes de inventario
+        public DataTable ObtenerIngredientes()
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    string query = @"
+                            SELECT i.id_inventario AS 'ID', 
+                                   i.nombreProducto AS 'Nombre', 
+                                   i.cantidad AS 'Cantidad', 
+                                   p.nombreProv AS 'Proveedor'
+                            FROM inventario i
+                            JOIN proveedores p ON i.id_proveedor = p.id_proveedor
+                            WHERE NOT EXISTS (SELECT 1 FROM bebidas b WHERE b.id_inventario = i.id_inventario)";
 
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                    {
+                        da.Fill(dt);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al obtener ingredientes: " + ex.Message);
+            }
+            return dt;
+        }
+
+        //Filtrar ingrediente spor el  proveedor
+        public DataTable FiltrarIngredientesPorProveedor(string nombreProveedor)
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    string query = @"
+                    SELECT i.id_inventario AS 'ID', 
+                           i.nombreProducto AS 'Nombre', 
+                           i.cantidad AS 'Cantidad', 
+                           p.nombreProv AS 'Proveedor'
+                    FROM inventario i
+                    JOIN proveedores p ON i.id_proveedor = p.id_proveedor
+                    WHERE NOT EXISTS (SELECT 1 FROM bebidas b WHERE b.id_inventario = i.id_inventario)
+                      AND (p.nombreProv = @nombreProveedor OR @nombreProveedor = 'Todos')";
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@nombreProveedor", nombreProveedor);
+
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al filtrar ingredientes: " + ex.Message);
+            }
+            return dt;
+        }
+
+        //Obtener el nombre de los proveedores
+        public DataTable ObtenerProveedoresIngredientes()
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    string query = "SELECT id_proveedor, nombreProv FROM proveedores";
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                    {
+                        da.Fill(dt);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al obtener proveedores: " + ex.Message);
+            }
+            return dt;
+        }
+
+        //Agregar ingrediente nuevo
+        public bool AgregarIngrediente(string nombreProducto, decimal cantidad, int idProveedor)
+        {
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    string query = "INSERT INTO inventario (nombreProducto, cantidad, id_proveedor) " +
+                                   "VALUES (@nombreProducto, @cantidad, @idProveedor)";
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@nombreProducto", nombreProducto);
+                        cmd.Parameters.AddWithValue("@cantidad", cantidad);
+                        cmd.Parameters.AddWithValue("@idProveedor", idProveedor);
+
+                        int result = cmd.ExecuteNonQuery();
+                        return result > 0; // Retorna true si se insertó correctamente
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al agregar ingrediente: " + ex.Message);
+                return false;
+            }
+        }
+
+        //Eliminar ingrediente
+        public bool EliminarIngrediente(int idInventario)
+        {
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    string query = "DELETE FROM inventario WHERE id_inventario = @idInventario";
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@idInventario", idInventario);
+
+                        int result = cmd.ExecuteNonQuery();
+                        return result > 0; // Retorna true si se eliminó correctamente
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al eliminar ingrediente: " + ex.Message);
+                return false;
+            }
+        }
+
+        //Agregar un nuevo ingrediente
+        public bool EditarIngrediente(int idInventario, string nuevoNombre, decimal nuevaCantidad, int nuevoIdProveedor)
+        {
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    string query = "UPDATE inventario SET nombreProducto = @nuevoNombre, cantidad = @nuevaCantidad, id_proveedor = @nuevoIdProveedor WHERE id_inventario = @idInventario";
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@nuevoNombre", nuevoNombre);
+                        cmd.Parameters.AddWithValue("@nuevaCantidad", nuevaCantidad);
+                        cmd.Parameters.AddWithValue("@nuevoIdProveedor", nuevoIdProveedor);
+                        cmd.Parameters.AddWithValue("@idInventario", idInventario);
+
+                        int result = cmd.ExecuteNonQuery();
+                        return result > 0; // Retorna true si se actualizó correctamente
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al editar ingrediente: " + ex.Message);
+                return false;
+            }
+        }
+
+        //Agregar plato:
+        public bool AgregarPlato(string nombrePlato, decimal precioUnitario, string descripcion, int idCategoria)
+        {
+            try
+            {
+                using (var conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    string query = "INSERT INTO platos (nombrePlato, precioUnitario, descripcion, id_categoriaP) VALUES (@nombre, @precio, @descripcion, @idCategoria)";
+
+                    using (var comando = new MySqlCommand(query, conexion))
+                    {
+                        comando.Parameters.AddWithValue("@nombre", nombrePlato);
+                        comando.Parameters.AddWithValue("@precio", precioUnitario);
+                        comando.Parameters.AddWithValue("@descripcion", descripcion);
+                        comando.Parameters.AddWithValue("@idCategoria", idCategoria);
+
+                        int filasAfectadas = comando.ExecuteNonQuery();
+                        return filasAfectadas > 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al agregar el plato: " + ex.Message);
+                return false;
+            }
+        }
 
 
         public DataTable EjecutarConsulta(string query)

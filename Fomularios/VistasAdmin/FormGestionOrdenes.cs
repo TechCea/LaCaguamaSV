@@ -336,7 +336,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 }
 
                 DialogResult result = MessageBox.Show(
-                    $"⚠️ Advertencia: Algunos ingredientes o productos tienen un inventario bajo:\n\n" +
+                    $"⚠ Advertencia: Algunos ingredientes o productos tienen un inventario bajo:\n\n" +
                     $"{mensajeInventario}\n\n" +
                     "Para reponer stock, por favor contacte a un supervisor o administrador.\n\n" +
                     "¿Desea continuar con el pedido de todas formas?",
@@ -484,48 +484,31 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             {
                 try
                 {
-                    // Primero obtener el descuento actual
-                    decimal descuento = 0;
-                    string queryDescuento = "SELECT descuento FROM ordenes WHERE id_orden = @idOrden";
-                    using (MySqlCommand cmdDescuento = new MySqlCommand(queryDescuento, conexion))
-                    {
-                        cmdDescuento.Parameters.AddWithValue("@idOrden", Convert.ToInt32(lblIdOrden.Text));
-                        object result = cmdDescuento.ExecuteScalar();
-                        if (result != DBNull.Value)
-                        {
-                            descuento = Convert.ToDecimal(result);
-                        }
-                    }
-
-                    // Calcular el nuevo subtotal (suma de todos los pedidos)
                     string queryTotal = @"
-            SELECT 
-                IFNULL(SUM(
-                    CASE 
-                        WHEN p.id_plato IS NOT NULL THEN (SELECT pl.precioUnitario FROM platos pl WHERE pl.id_plato = p.id_plato) * p.Cantidad
-                        WHEN p.id_bebida IS NOT NULL THEN (SELECT b.precioUnitario FROM bebidas b WHERE b.id_bebida = p.id_bebida) * p.Cantidad
-                        WHEN p.id_extra IS NOT NULL THEN (SELECT e.precioUnitario FROM extras e WHERE e.id_extra = p.id_extra) * p.Cantidad
-                        ELSE 0
-                    END
-                ), 0) AS Subtotal
-            FROM pedidos p
-            WHERE p.id_orden = @idOrden";
+                    SELECT 
+                        IFNULL(SUM(
+                            CASE 
+                                WHEN p.id_plato IS NOT NULL THEN (SELECT pl.precioUnitario FROM platos pl WHERE pl.id_plato = p.id_plato) * p.Cantidad
+                                WHEN p.id_bebida IS NOT NULL THEN (SELECT b.precioUnitario FROM bebidas b WHERE b.id_bebida = p.id_bebida) * p.Cantidad
+                                WHEN p.id_extra IS NOT NULL THEN (SELECT e.precioUnitario FROM extras e WHERE e.id_extra = p.id_extra) * p.Cantidad
+                                ELSE 0
+                            END
+                        ), 0) AS Total
+                    FROM pedidos p
+                    WHERE p.id_orden = @idOrden";
 
-                    decimal subtotal = 0;
+                    decimal nuevoTotal = 0;
+
                     using (MySqlCommand cmdTotal = new MySqlCommand(queryTotal, conexion))
                     {
                         cmdTotal.Parameters.AddWithValue("@idOrden", Convert.ToInt32(lblIdOrden.Text));
                         object result = cmdTotal.ExecuteScalar();
                         if (result != DBNull.Value)
                         {
-                            subtotal = Convert.ToDecimal(result);
+                            nuevoTotal = Convert.ToDecimal(result);
                         }
                     }
 
-                    // Calcular el nuevo total (subtotal - descuento)
-                    decimal nuevoTotal = subtotal - descuento;
-
-                    // Actualizar la base de datos
                     string queryUpdate = "UPDATE ordenes SET total = @total WHERE id_orden = @idOrden";
                     using (MySqlCommand cmdUpdate = new MySqlCommand(queryUpdate, conexion))
                     {
@@ -534,11 +517,8 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                         cmdUpdate.ExecuteNonQuery();
                     }
 
-                    // Actualizar la interfaz
                     totalOrden = nuevoTotal;
-                    lblTotal.Text = $"Total: {totalOrden:C}";
-                    lblDescuento.Text = $"Descuento: {descuento:C}";
-
+                    lblTotal.Text = totalOrden.ToString("C");
                     CargarPedidosDesdeBD();
                 }
                 catch (Exception ex)
@@ -696,6 +676,11 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
             FormAdminPrecuenta precuentaForm = new FormAdminPrecuenta(idOrden);
             precuentaForm.ShowDialog();
+        }
+
+        private void button12_Click(object sender, EventArgs e)
+        {
+
         }
     }
 
