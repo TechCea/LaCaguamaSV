@@ -49,13 +49,13 @@
             // 
             // btnRegresarMenu
             // 
-            this.btnRegresarMenu.BackColor = System.Drawing.Color.SaddleBrown;
+            this.btnRegresarMenu.BackColor = System.Drawing.Color.Black;
             this.btnRegresarMenu.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnRegresarMenu.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.btnRegresarMenu.Location = new System.Drawing.Point(71, 511);
-            this.btnRegresarMenu.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnRegresarMenu.Location = new System.Drawing.Point(53, 404);
+            this.btnRegresarMenu.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnRegresarMenu.Name = "btnRegresarMenu";
-            this.btnRegresarMenu.Size = new System.Drawing.Size(184, 58);
+            this.btnRegresarMenu.Size = new System.Drawing.Size(138, 47);
             this.btnRegresarMenu.TabIndex = 5;
             this.btnRegresarMenu.Text = "Regresar Menú";
             this.btnRegresarMenu.UseVisualStyleBackColor = false;
@@ -64,28 +64,29 @@
             // cbCategoriaC
             // 
             this.cbCategoriaC.FormattingEnabled = true;
-            this.cbCategoriaC.Location = new System.Drawing.Point(692, 25);
-            this.cbCategoriaC.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.cbCategoriaC.Location = new System.Drawing.Point(517, 20);
+            this.cbCategoriaC.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.cbCategoriaC.Name = "cbCategoriaC";
-            this.cbCategoriaC.Size = new System.Drawing.Size(121, 24);
+            this.cbCategoriaC.Size = new System.Drawing.Size(92, 21);
             this.cbCategoriaC.TabIndex = 4;
             this.cbCategoriaC.SelectedIndexChanged += new System.EventHandler(this.cbCategoriaC_SelectedIndexChanged);
             // 
             // dgvComidas
             // 
+            this.dgvComidas.BackgroundColor = System.Drawing.Color.Gray;
             this.dgvComidas.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvComidas.Location = new System.Drawing.Point(71, 66);
-            this.dgvComidas.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.dgvComidas.Location = new System.Drawing.Point(53, 54);
+            this.dgvComidas.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.dgvComidas.Name = "dgvComidas";
             this.dgvComidas.RowHeadersWidth = 51;
             this.dgvComidas.RowTemplate.Height = 24;
-            this.dgvComidas.Size = new System.Drawing.Size(741, 412);
+            this.dgvComidas.Size = new System.Drawing.Size(556, 335);
             this.dgvComidas.TabIndex = 3;
             this.dgvComidas.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvComidas_CellContentClick);
             // 
             // gbDatosBebida
             // 
-            this.gbDatosBebida.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.gbDatosBebida.BackColor = System.Drawing.Color.Gray;
             this.gbDatosBebida.Controls.Add(this.txtDescripcionC);
             this.gbDatosBebida.Controls.Add(this.label3);
             this.gbDatosBebida.Controls.Add(this.lblSeleccionBebida);
@@ -96,30 +97,32 @@
             this.gbDatosBebida.Controls.Add(this.txtNombreC);
             this.gbDatosBebida.Controls.Add(this.lbNombreBebida);
             this.gbDatosBebida.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gbDatosBebida.Location = new System.Drawing.Point(852, 66);
-            this.gbDatosBebida.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.gbDatosBebida.ForeColor = System.Drawing.SystemColors.Control;
+            this.gbDatosBebida.Location = new System.Drawing.Point(639, 54);
+            this.gbDatosBebida.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.gbDatosBebida.Name = "gbDatosBebida";
-            this.gbDatosBebida.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.gbDatosBebida.Size = new System.Drawing.Size(439, 412);
+            this.gbDatosBebida.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.gbDatosBebida.Size = new System.Drawing.Size(329, 335);
             this.gbDatosBebida.TabIndex = 6;
             this.gbDatosBebida.TabStop = false;
             this.gbDatosBebida.Text = "Datos Comida";
             // 
             // txtDescripcionC
             // 
-            this.txtDescripcionC.Location = new System.Drawing.Point(168, 225);
-            this.txtDescripcionC.Margin = new System.Windows.Forms.Padding(4);
+            this.txtDescripcionC.Location = new System.Drawing.Point(126, 183);
             this.txtDescripcionC.Name = "txtDescripcionC";
-            this.txtDescripcionC.Size = new System.Drawing.Size(227, 26);
+            this.txtDescripcionC.Size = new System.Drawing.Size(171, 23);
             this.txtDescripcionC.TabIndex = 11;
             this.txtDescripcionC.TextChanged += new System.EventHandler(this.txtDescripcionC_TextChanged);
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(29, 231);
+            this.label3.ForeColor = System.Drawing.SystemColors.Control;
+            this.label3.Location = new System.Drawing.Point(22, 188);
+            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(104, 20);
+            this.label3.Size = new System.Drawing.Size(86, 17);
             this.label3.TabIndex = 10;
             this.label3.Text = "Descripción:";
             this.label3.Click += new System.EventHandler(this.label3_Click);
@@ -128,76 +131,84 @@
             // 
             this.lblSeleccionBebida.AutoSize = true;
             this.lblSeleccionBebida.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.lblSeleccionBebida.Location = new System.Drawing.Point(29, 39);
+            this.lblSeleccionBebida.ForeColor = System.Drawing.SystemColors.Control;
+            this.lblSeleccionBebida.Location = new System.Drawing.Point(22, 32);
+            this.lblSeleccionBebida.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblSeleccionBebida.Name = "lblSeleccionBebida";
-            this.lblSeleccionBebida.Size = new System.Drawing.Size(278, 20);
+            this.lblSeleccionBebida.Size = new System.Drawing.Size(236, 17);
             this.lblSeleccionBebida.TabIndex = 8;
             this.lblSeleccionBebida.Text = "Selecciona un platillo a editar/borrar";
             // 
             // cbCategoriaB
             // 
             this.cbCategoriaB.FormattingEnabled = true;
-            this.cbCategoriaB.Location = new System.Drawing.Point(168, 149);
-            this.cbCategoriaB.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.cbCategoriaB.Location = new System.Drawing.Point(126, 121);
+            this.cbCategoriaB.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.cbCategoriaB.Name = "cbCategoriaB";
-            this.cbCategoriaB.Size = new System.Drawing.Size(225, 28);
+            this.cbCategoriaB.Size = new System.Drawing.Size(170, 24);
             this.cbCategoriaB.TabIndex = 5;
             this.cbCategoriaB.SelectedIndexChanged += new System.EventHandler(this.cbCategoriaB_SelectedIndexChanged);
             // 
             // txtPrecioU
             // 
-            this.txtPrecioU.Location = new System.Drawing.Point(168, 311);
-            this.txtPrecioU.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txtPrecioU.Location = new System.Drawing.Point(126, 253);
+            this.txtPrecioU.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtPrecioU.Name = "txtPrecioU";
-            this.txtPrecioU.Size = new System.Drawing.Size(227, 26);
+            this.txtPrecioU.Size = new System.Drawing.Size(171, 23);
             this.txtPrecioU.TabIndex = 4;
             this.txtPrecioU.TextChanged += new System.EventHandler(this.txtPrecioU_TextChanged);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(29, 318);
+            this.label2.ForeColor = System.Drawing.SystemColors.Control;
+            this.label2.Location = new System.Drawing.Point(22, 258);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(122, 20);
+            this.label2.Size = new System.Drawing.Size(103, 17);
             this.label2.TabIndex = 3;
             this.label2.Text = "Precio unitario:";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(29, 149);
+            this.label1.ForeColor = System.Drawing.SystemColors.Control;
+            this.label1.Location = new System.Drawing.Point(22, 121);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(86, 20);
+            this.label1.Size = new System.Drawing.Size(73, 17);
             this.label1.TabIndex = 2;
             this.label1.Text = "Categoría:";
             // 
             // txtNombreC
             // 
-            this.txtNombreC.Location = new System.Drawing.Point(168, 81);
-            this.txtNombreC.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txtNombreC.Location = new System.Drawing.Point(126, 66);
+            this.txtNombreC.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtNombreC.Name = "txtNombreC";
-            this.txtNombreC.Size = new System.Drawing.Size(225, 26);
+            this.txtNombreC.Size = new System.Drawing.Size(170, 23);
             this.txtNombreC.TabIndex = 1;
             this.txtNombreC.TextChanged += new System.EventHandler(this.txtNombreC_TextChanged);
             // 
             // lbNombreBebida
             // 
             this.lbNombreBebida.AutoSize = true;
-            this.lbNombreBebida.Location = new System.Drawing.Point(29, 81);
+            this.lbNombreBebida.ForeColor = System.Drawing.SystemColors.Control;
+            this.lbNombreBebida.Location = new System.Drawing.Point(22, 66);
+            this.lbNombreBebida.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbNombreBebida.Name = "lbNombreBebida";
-            this.lbNombreBebida.Size = new System.Drawing.Size(114, 20);
+            this.lbNombreBebida.Size = new System.Drawing.Size(97, 17);
             this.lbNombreBebida.TabIndex = 0;
             this.lbNombreBebida.Text = "Nombre plato:";
             // 
             // btnEliminarC
             // 
-            this.btnEliminarC.BackColor = System.Drawing.Color.Brown;
+            this.btnEliminarC.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(236)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
             this.btnEliminarC.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnEliminarC.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.btnEliminarC.Location = new System.Drawing.Point(852, 511);
-            this.btnEliminarC.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnEliminarC.Location = new System.Drawing.Point(875, 404);
+            this.btnEliminarC.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnEliminarC.Name = "btnEliminarC";
-            this.btnEliminarC.Size = new System.Drawing.Size(124, 58);
+            this.btnEliminarC.Size = new System.Drawing.Size(93, 47);
             this.btnEliminarC.TabIndex = 7;
             this.btnEliminarC.Text = "Eliminar";
             this.btnEliminarC.UseVisualStyleBackColor = false;
@@ -205,13 +216,13 @@
             // 
             // btnActualizarC
             // 
-            this.btnActualizarC.BackColor = System.Drawing.Color.ForestGreen;
+            this.btnActualizarC.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
             this.btnActualizarC.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnActualizarC.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.btnActualizarC.Location = new System.Drawing.Point(1152, 511);
-            this.btnActualizarC.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnActualizarC.Location = new System.Drawing.Point(641, 404);
+            this.btnActualizarC.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnActualizarC.Name = "btnActualizarC";
-            this.btnActualizarC.Size = new System.Drawing.Size(139, 58);
+            this.btnActualizarC.Size = new System.Drawing.Size(123, 47);
             this.btnActualizarC.TabIndex = 6;
             this.btnActualizarC.Text = "Actualizar datos";
             this.btnActualizarC.UseVisualStyleBackColor = false;
@@ -219,19 +230,19 @@
             // 
             // FormComidasMenuAdmin
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.ClientSize = new System.Drawing.Size(1321, 598);
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.ClientSize = new System.Drawing.Size(991, 486);
             this.Controls.Add(this.gbDatosBebida);
             this.Controls.Add(this.btnRegresarMenu);
             this.Controls.Add(this.cbCategoriaC);
             this.Controls.Add(this.dgvComidas);
             this.Controls.Add(this.btnEliminarC);
             this.Controls.Add(this.btnActualizarC);
-            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FormComidasMenuAdmin";
             this.Text = "FormComidasMenuAdmin";
+            this.Load += new System.EventHandler(this.FormComidasMenuAdmin_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvComidas)).EndInit();
             this.gbDatosBebida.ResumeLayout(false);
             this.gbDatosBebida.PerformLayout();

@@ -44,13 +44,13 @@
             // 
             // btnRegresarMenu
             // 
-            this.btnRegresarMenu.BackColor = System.Drawing.Color.SaddleBrown;
+            this.btnRegresarMenu.BackColor = System.Drawing.Color.Black;
             this.btnRegresarMenu.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.btnRegresarMenu.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btnRegresarMenu.Location = new System.Drawing.Point(37, 538);
-            this.btnRegresarMenu.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnRegresarMenu.Location = new System.Drawing.Point(28, 413);
+            this.btnRegresarMenu.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnRegresarMenu.Name = "btnRegresarMenu";
-            this.btnRegresarMenu.Size = new System.Drawing.Size(177, 47);
+            this.btnRegresarMenu.Size = new System.Drawing.Size(133, 44);
             this.btnRegresarMenu.TabIndex = 5;
             this.btnRegresarMenu.Text = "Regresar Menú";
             this.btnRegresarMenu.UseVisualStyleBackColor = false;
@@ -58,51 +58,59 @@
             // 
             // dgvExtras
             // 
+            this.dgvExtras.BackgroundColor = System.Drawing.Color.Gray;
             this.dgvExtras.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvExtras.Location = new System.Drawing.Point(37, 62);
-            this.dgvExtras.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.dgvExtras.Location = new System.Drawing.Point(28, 50);
+            this.dgvExtras.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.dgvExtras.Name = "dgvExtras";
             this.dgvExtras.RowHeadersWidth = 51;
             this.dgvExtras.RowTemplate.Height = 24;
-            this.dgvExtras.Size = new System.Drawing.Size(437, 412);
+            this.dgvExtras.Size = new System.Drawing.Size(328, 335);
             this.dgvExtras.TabIndex = 3;
             // 
             // gbDatosExtras
             // 
-            this.gbDatosExtras.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.gbDatosExtras.BackColor = System.Drawing.Color.Gray;
             this.gbDatosExtras.Controls.Add(this.txtPrecioUE);
             this.gbDatosExtras.Controls.Add(this.txtNombreE);
             this.gbDatosExtras.Controls.Add(this.lblPrecioExtraU);
             this.gbDatosExtras.Controls.Add(this.lblSeleccionExtra);
             this.gbDatosExtras.Controls.Add(this.lblNombreE);
             this.gbDatosExtras.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.gbDatosExtras.Location = new System.Drawing.Point(500, 62);
+            this.gbDatosExtras.ForeColor = System.Drawing.SystemColors.Control;
+            this.gbDatosExtras.Location = new System.Drawing.Point(375, 80);
+            this.gbDatosExtras.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.gbDatosExtras.Name = "gbDatosExtras";
-            this.gbDatosExtras.Size = new System.Drawing.Size(439, 289);
+            this.gbDatosExtras.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.gbDatosExtras.Size = new System.Drawing.Size(329, 235);
             this.gbDatosExtras.TabIndex = 6;
             this.gbDatosExtras.TabStop = false;
             this.gbDatosExtras.Text = "Datos extras";
             // 
             // txtPrecioUE
             // 
-            this.txtPrecioUE.Location = new System.Drawing.Point(222, 165);
+            this.txtPrecioUE.Location = new System.Drawing.Point(166, 134);
+            this.txtPrecioUE.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtPrecioUE.Name = "txtPrecioUE";
-            this.txtPrecioUE.Size = new System.Drawing.Size(147, 26);
+            this.txtPrecioUE.Size = new System.Drawing.Size(111, 23);
             this.txtPrecioUE.TabIndex = 13;
             // 
             // txtNombreE
             // 
-            this.txtNombreE.Location = new System.Drawing.Point(222, 105);
+            this.txtNombreE.Location = new System.Drawing.Point(166, 85);
+            this.txtNombreE.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtNombreE.Name = "txtNombreE";
-            this.txtNombreE.Size = new System.Drawing.Size(147, 26);
+            this.txtNombreE.Size = new System.Drawing.Size(111, 23);
             this.txtNombreE.TabIndex = 12;
             // 
             // lblPrecioExtraU
             // 
             this.lblPrecioExtraU.AutoSize = true;
-            this.lblPrecioExtraU.Location = new System.Drawing.Point(33, 171);
+            this.lblPrecioExtraU.ForeColor = System.Drawing.SystemColors.Control;
+            this.lblPrecioExtraU.Location = new System.Drawing.Point(25, 139);
+            this.lblPrecioExtraU.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblPrecioExtraU.Name = "lblPrecioExtraU";
-            this.lblPrecioExtraU.Size = new System.Drawing.Size(122, 20);
+            this.lblPrecioExtraU.Size = new System.Drawing.Size(103, 17);
             this.lblPrecioExtraU.TabIndex = 11;
             this.lblPrecioExtraU.Text = "Precio unitario:";
             // 
@@ -110,29 +118,34 @@
             // 
             this.lblSeleccionExtra.AutoSize = true;
             this.lblSeleccionExtra.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.lblSeleccionExtra.Location = new System.Drawing.Point(33, 53);
+            this.lblSeleccionExtra.ForeColor = System.Drawing.SystemColors.Control;
+            this.lblSeleccionExtra.Location = new System.Drawing.Point(25, 43);
+            this.lblSeleccionExtra.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblSeleccionExtra.Name = "lblSeleccionExtra";
-            this.lblSeleccionExtra.Size = new System.Drawing.Size(276, 20);
+            this.lblSeleccionExtra.Size = new System.Drawing.Size(235, 17);
             this.lblSeleccionExtra.TabIndex = 8;
             this.lblSeleccionExtra.Text = "Selecciona una extra a editar/borrar";
             // 
             // lblNombreE
             // 
             this.lblNombreE.AutoSize = true;
-            this.lblNombreE.Location = new System.Drawing.Point(33, 111);
+            this.lblNombreE.ForeColor = System.Drawing.SystemColors.Control;
+            this.lblNombreE.Location = new System.Drawing.Point(25, 90);
+            this.lblNombreE.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblNombreE.Name = "lblNombreE";
-            this.lblNombreE.Size = new System.Drawing.Size(142, 20);
+            this.lblNombreE.Size = new System.Drawing.Size(120, 17);
             this.lblNombreE.TabIndex = 10;
             this.lblNombreE.Text = "Nombre del extra:";
             // 
             // btnEliminarE
             // 
-            this.btnEliminarE.BackColor = System.Drawing.Color.Brown;
+            this.btnEliminarE.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(236)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
             this.btnEliminarE.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.btnEliminarE.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btnEliminarE.Location = new System.Drawing.Point(500, 420);
+            this.btnEliminarE.Location = new System.Drawing.Point(553, 341);
+            this.btnEliminarE.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnEliminarE.Name = "btnEliminarE";
-            this.btnEliminarE.Size = new System.Drawing.Size(106, 54);
+            this.btnEliminarE.Size = new System.Drawing.Size(133, 44);
             this.btnEliminarE.TabIndex = 7;
             this.btnEliminarE.Text = "Eliminar";
             this.btnEliminarE.UseVisualStyleBackColor = false;
@@ -140,12 +153,13 @@
             // 
             // btnActualizarB
             // 
-            this.btnActualizarB.BackColor = System.Drawing.Color.ForestGreen;
+            this.btnActualizarB.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
             this.btnActualizarB.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.btnActualizarB.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btnActualizarB.Location = new System.Drawing.Point(798, 420);
+            this.btnActualizarB.Location = new System.Drawing.Point(387, 341);
+            this.btnActualizarB.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnActualizarB.Name = "btnActualizarB";
-            this.btnActualizarB.Size = new System.Drawing.Size(141, 54);
+            this.btnActualizarB.Size = new System.Drawing.Size(133, 44);
             this.btnActualizarB.TabIndex = 6;
             this.btnActualizarB.Text = "Actualizar datos";
             this.btnActualizarB.UseVisualStyleBackColor = false;
@@ -153,18 +167,18 @@
             // 
             // FormExtrasMenuAdmin
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.ClientSize = new System.Drawing.Size(976, 614);
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.ClientSize = new System.Drawing.Size(732, 499);
             this.Controls.Add(this.gbDatosExtras);
             this.Controls.Add(this.btnRegresarMenu);
             this.Controls.Add(this.dgvExtras);
             this.Controls.Add(this.btnEliminarE);
             this.Controls.Add(this.btnActualizarB);
-            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FormExtrasMenuAdmin";
             this.Text = "FormExtrasMenuAdmin";
+            this.Load += new System.EventHandler(this.FormExtrasMenuAdmin_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvExtras)).EndInit();
             this.gbDatosExtras.ResumeLayout(false);
             this.gbDatosExtras.PerformLayout();

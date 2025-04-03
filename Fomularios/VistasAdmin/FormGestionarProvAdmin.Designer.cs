@@ -47,7 +47,7 @@
             // 
             // gbDatosExtras
             // 
-            this.gbDatosExtras.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.gbDatosExtras.BackColor = System.Drawing.Color.Gray;
             this.gbDatosExtras.Controls.Add(this.txtDirecion);
             this.gbDatosExtras.Controls.Add(this.label1);
             this.gbDatosExtras.Controls.Add(this.txtContacto);
@@ -56,7 +56,8 @@
             this.gbDatosExtras.Controls.Add(this.lblSeleccionExtra);
             this.gbDatosExtras.Controls.Add(this.lblNombreE);
             this.gbDatosExtras.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.gbDatosExtras.Location = new System.Drawing.Point(520, 15);
+            this.gbDatosExtras.ForeColor = System.Drawing.SystemColors.Control;
+            this.gbDatosExtras.Location = new System.Drawing.Point(520, 33);
             this.gbDatosExtras.Margin = new System.Windows.Forms.Padding(2);
             this.gbDatosExtras.Name = "gbDatosExtras";
             this.gbDatosExtras.Padding = new System.Windows.Forms.Padding(2);
@@ -77,6 +78,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
+            this.label1.ForeColor = System.Drawing.SystemColors.Control;
             this.label1.Location = new System.Drawing.Point(25, 201);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
@@ -105,6 +107,7 @@
             // lblPrecioExtraU
             // 
             this.lblPrecioExtraU.AutoSize = true;
+            this.lblPrecioExtraU.ForeColor = System.Drawing.SystemColors.Control;
             this.lblPrecioExtraU.Location = new System.Drawing.Point(25, 148);
             this.lblPrecioExtraU.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblPrecioExtraU.Name = "lblPrecioExtraU";
@@ -116,6 +119,7 @@
             // 
             this.lblSeleccionExtra.AutoSize = true;
             this.lblSeleccionExtra.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.lblSeleccionExtra.ForeColor = System.Drawing.SystemColors.Control;
             this.lblSeleccionExtra.Location = new System.Drawing.Point(25, 43);
             this.lblSeleccionExtra.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblSeleccionExtra.Name = "lblSeleccionExtra";
@@ -126,6 +130,7 @@
             // lblNombreE
             // 
             this.lblNombreE.AutoSize = true;
+            this.lblNombreE.ForeColor = System.Drawing.SystemColors.Control;
             this.lblNombreE.Location = new System.Drawing.Point(25, 90);
             this.lblNombreE.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblNombreE.Name = "lblNombreE";
@@ -135,13 +140,13 @@
             // 
             // btnRegresar
             // 
-            this.btnRegresar.BackColor = System.Drawing.Color.SaddleBrown;
+            this.btnRegresar.BackColor = System.Drawing.Color.Black;
             this.btnRegresar.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.btnRegresar.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btnRegresar.Location = new System.Drawing.Point(51, 402);
+            this.btnRegresar.Location = new System.Drawing.Point(29, 371);
             this.btnRegresar.Margin = new System.Windows.Forms.Padding(2);
             this.btnRegresar.Name = "btnRegresar";
-            this.btnRegresar.Size = new System.Drawing.Size(133, 38);
+            this.btnRegresar.Size = new System.Drawing.Size(106, 38);
             this.btnRegresar.TabIndex = 9;
             this.btnRegresar.Text = "Regresar";
             this.btnRegresar.UseVisualStyleBackColor = false;
@@ -149,6 +154,7 @@
             // 
             // dgvProveedor
             // 
+            this.dgvProveedor.BackgroundColor = System.Drawing.Color.Gray;
             this.dgvProveedor.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvProveedor.Location = new System.Drawing.Point(29, 15);
             this.dgvProveedor.Margin = new System.Windows.Forms.Padding(2);
@@ -163,10 +169,10 @@
             this.btnEliminarE.BackColor = System.Drawing.Color.Brown;
             this.btnEliminarE.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.btnEliminarE.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btnEliminarE.Location = new System.Drawing.Point(520, 306);
+            this.btnEliminarE.Location = new System.Drawing.Point(796, 306);
             this.btnEliminarE.Margin = new System.Windows.Forms.Padding(2);
             this.btnEliminarE.Name = "btnEliminarE";
-            this.btnEliminarE.Size = new System.Drawing.Size(80, 44);
+            this.btnEliminarE.Size = new System.Drawing.Size(106, 44);
             this.btnEliminarE.TabIndex = 12;
             this.btnEliminarE.Text = "Eliminar";
             this.btnEliminarE.UseVisualStyleBackColor = false;
@@ -174,10 +180,10 @@
             // 
             // btnActualizarP
             // 
-            this.btnActualizarP.BackColor = System.Drawing.Color.ForestGreen;
+            this.btnActualizarP.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
             this.btnActualizarP.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.btnActualizarP.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btnActualizarP.Location = new System.Drawing.Point(805, 306);
+            this.btnActualizarP.Location = new System.Drawing.Point(663, 306);
             this.btnActualizarP.Margin = new System.Windows.Forms.Padding(2);
             this.btnActualizarP.Name = "btnActualizarP";
             this.btnActualizarP.Size = new System.Drawing.Size(106, 44);
@@ -188,10 +194,10 @@
             // 
             // btnAgregarP
             // 
-            this.btnAgregarP.BackColor = System.Drawing.Color.ForestGreen;
+            this.btnAgregarP.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(207)))), ((int)(((byte)(111)))));
             this.btnAgregarP.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.btnAgregarP.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btnAgregarP.Location = new System.Drawing.Point(657, 306);
+            this.btnAgregarP.Location = new System.Drawing.Point(530, 306);
             this.btnAgregarP.Margin = new System.Windows.Forms.Padding(2);
             this.btnAgregarP.Name = "btnAgregarP";
             this.btnAgregarP.Size = new System.Drawing.Size(106, 44);
@@ -204,6 +210,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.ClientSize = new System.Drawing.Size(942, 450);
             this.Controls.Add(this.btnAgregarP);
             this.Controls.Add(this.gbDatosExtras);

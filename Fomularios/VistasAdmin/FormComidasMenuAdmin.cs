@@ -2,18 +2,50 @@
 using MySql.Data.MySqlClient;
 using System;
 using System.Data;
+using System.Drawing.Drawing2D;
+using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace LaCaguamaSV.Fomularios.VistasAdmin
 {
     public partial class FormComidasMenuAdmin : Form
     {
+
+        [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
+        private static extern IntPtr CreateRoundRectRgn(
+        int nLeftRect, int nTopRect, int nRightRect, int nBottomRect,
+        int nWidthEllipse, int nHeightEllipse);
+
+        [DllImport("user32.dll")]
+        private static extern void ReleaseCapture();
+
+        [DllImport("user32.dll")]
+        private static extern void SendMessage(IntPtr hWnd, int msg, int wParam, int lParam);
+
+        private const int WM_NCLBUTTONDOWN = 0xA1;
+        private const int HTCAPTION = 0x2;
+
+
         Conexion conexion = new Conexion();
         int idPlatoSeleccionado = -1;
 
         public FormComidasMenuAdmin()
         {
             InitializeComponent();
+            this.FormBorderStyle = FormBorderStyle.None;
+            Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 20, 20));
+
+            // Agregar evento para mover el formulario
+            this.MouseDown += new MouseEventHandler(FormComidasMenuAdmin_MouseDown);
+
+            // Aplicar esquinas redondeadas a controles específicos
+            RoundedControl.ApplyRoundedCorners(dgvComidas, 15);   // Redondear un Panel
+            RoundedControl.ApplyRoundedCorners(gbDatosBebida, 15);   // Redondear un Panel
+
+
+
+
             CargarCategoriasComida();
             CargarComidas();
             cbCategoriaC.SelectedIndexChanged += cbCategoriaC_SelectedIndexChanged;
@@ -182,6 +214,32 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             this.Close();
             FormMenuAdmin FormMenuAdmin = new FormMenuAdmin();
             FormMenuAdmin.Show();
+        }
+
+        private void FormComidasMenuAdmin_Load(object sender, EventArgs e)
+        {
+
+        }
+        private void FormComidasMenuAdmin_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                ReleaseCapture();
+                SendMessage(Handle, WM_NCLBUTTONDOWN, HTCAPTION, 0);
+            }
+        }
+        public class RoundedControl
+        {
+            public static void ApplyRoundedCorners(Control control, int radius)
+            {
+                GraphicsPath path = new GraphicsPath();
+                path.AddArc(0, 0, radius, radius, 180, 90);
+                path.AddArc(control.Width - radius, 0, radius, radius, 270, 90);
+                path.AddArc(control.Width - radius, control.Height - radius, radius, radius, 0, 90);
+                path.AddArc(0, control.Height - radius, radius, radius, 90, 90);
+                path.CloseFigure();
+                control.Region = new Region(path);
+            }
         }
     }
 }
