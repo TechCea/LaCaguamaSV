@@ -166,11 +166,11 @@
             this.BtnHistorialPagos.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.BtnHistorialPagos.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BtnHistorialPagos.ForeColor = System.Drawing.SystemColors.Control;
-            this.BtnHistorialPagos.Location = new System.Drawing.Point(628, 32);
+            this.BtnHistorialPagos.Location = new System.Drawing.Point(628, 27);
             this.BtnHistorialPagos.Name = "BtnHistorialPagos";
-            this.BtnHistorialPagos.Size = new System.Drawing.Size(164, 55);
+            this.BtnHistorialPagos.Size = new System.Drawing.Size(164, 60);
             this.BtnHistorialPagos.TabIndex = 12;
-            this.BtnHistorialPagos.Text = "Ordenes";
+            this.BtnHistorialPagos.Text = "Historial Pagos";
             this.BtnHistorialPagos.UseVisualStyleBackColor = false;
             this.BtnHistorialPagos.Click += new System.EventHandler(this.BtnHistorialPagos_Click);
             // 
