@@ -192,20 +192,39 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void btnAgregarIng_Click(object sender, EventArgs e)
         {
+            // Verificar que los campos no estén vacíos
+            if (string.IsNullOrWhiteSpace(txtNombreC.Text))
+            {
+                MessageBox.Show("Por favor, ingrese el nombre del producto.");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(txtCantidad.Text))
+            {
+                MessageBox.Show("Por favor, ingrese la cantidad.");
+                return;
+            }
+
+            if (cbProveedores.SelectedItem == null)
+            {
+                MessageBox.Show("Por favor, seleccione un proveedor.");
+                return;
+            }
+
             // Obtener datos de los controles
             string nombreProducto = txtNombreC.Text;
             decimal cantidad;
             bool esCantidadValida = decimal.TryParse(txtCantidad.Text, out cantidad);
-            string proveedorSeleccionado = cbProveedores.SelectedItem.ToString();
 
             // Verificar que la cantidad sea válida
-            if (!esCantidadValida)
+            if (!esCantidadValida || cantidad <= 0)
             {
-                MessageBox.Show("Por favor ingresa una cantidad válida.");
+                MessageBox.Show("Por favor, ingrese una cantidad válida y mayor a cero.");
                 return;
             }
 
             // Obtener el ID del proveedor
+            string proveedorSeleccionado = cbProveedores.SelectedItem.ToString();
             int idProveedor = ObtenerIdProveedor(proveedorSeleccionado);
 
             if (idProveedor == -1)
@@ -319,6 +338,13 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         private void FormIngredientesInv_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnRegresarMenu_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            FormInventarioAdmin forminventario = new FormInventarioAdmin();
+            forminventario.ShowDialog();
         }
     }
 }

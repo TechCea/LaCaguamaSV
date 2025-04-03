@@ -62,11 +62,11 @@
             this.gbDatosIngrediente.Controls.Add(this.lbNombreBebida);
             this.gbDatosIngrediente.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.gbDatosIngrediente.ForeColor = System.Drawing.SystemColors.Control;
-            this.gbDatosIngrediente.Location = new System.Drawing.Point(524, 63);
-            this.gbDatosIngrediente.Margin = new System.Windows.Forms.Padding(2);
+            this.gbDatosIngrediente.Location = new System.Drawing.Point(699, 78);
+            this.gbDatosIngrediente.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.gbDatosIngrediente.Name = "gbDatosIngrediente";
-            this.gbDatosIngrediente.Padding = new System.Windows.Forms.Padding(2);
-            this.gbDatosIngrediente.Size = new System.Drawing.Size(364, 324);
+            this.gbDatosIngrediente.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.gbDatosIngrediente.Size = new System.Drawing.Size(485, 399);
             this.gbDatosIngrediente.TabIndex = 11;
             this.gbDatosIngrediente.TabStop = false;
             this.gbDatosIngrediente.Text = "Datos Ingrediente";
@@ -78,10 +78,10 @@
             this.btnAgregarIng.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnAgregarIng.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAgregarIng.ForeColor = System.Drawing.SystemColors.HighlightText;
-            this.btnAgregarIng.Location = new System.Drawing.Point(25, 260);
-            this.btnAgregarIng.Margin = new System.Windows.Forms.Padding(2);
+            this.btnAgregarIng.Location = new System.Drawing.Point(33, 320);
+            this.btnAgregarIng.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnAgregarIng.Name = "btnAgregarIng";
-            this.btnAgregarIng.Size = new System.Drawing.Size(118, 49);
+            this.btnAgregarIng.Size = new System.Drawing.Size(157, 60);
             this.btnAgregarIng.TabIndex = 14;
             this.btnAgregarIng.Text = "Agregar ingrediente";
             this.btnAgregarIng.UseVisualStyleBackColor = false;
@@ -92,10 +92,9 @@
             this.lblSeleccion.AutoSize = true;
             this.lblSeleccion.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.lblSeleccion.ForeColor = System.Drawing.SystemColors.Control;
-            this.lblSeleccion.Location = new System.Drawing.Point(22, 32);
-            this.lblSeleccion.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblSeleccion.Location = new System.Drawing.Point(29, 39);
             this.lblSeleccion.Name = "lblSeleccion";
-            this.lblSeleccion.Size = new System.Drawing.Size(275, 17);
+            this.lblSeleccion.Size = new System.Drawing.Size(321, 20);
             this.lblSeleccion.TabIndex = 8;
             this.lblSeleccion.Text = "Selecciona una ingrediente a editar/borrar";
             // 
@@ -106,10 +105,10 @@
             this.btnEliminar.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnEliminar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnEliminar.ForeColor = System.Drawing.SystemColors.HighlightText;
-            this.btnEliminar.Location = new System.Drawing.Point(271, 260);
-            this.btnEliminar.Margin = new System.Windows.Forms.Padding(2);
+            this.btnEliminar.Location = new System.Drawing.Point(361, 320);
+            this.btnEliminar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnEliminar.Name = "btnEliminar";
-            this.btnEliminar.Size = new System.Drawing.Size(89, 49);
+            this.btnEliminar.Size = new System.Drawing.Size(119, 60);
             this.btnEliminar.TabIndex = 13;
             this.btnEliminar.Text = "Eliminar";
             this.btnEliminar.UseVisualStyleBackColor = false;
@@ -119,28 +118,27 @@
             // 
             this.cbProveedores.Cursor = System.Windows.Forms.Cursors.Hand;
             this.cbProveedores.FormattingEnabled = true;
-            this.cbProveedores.Location = new System.Drawing.Point(159, 192);
-            this.cbProveedores.Margin = new System.Windows.Forms.Padding(2);
+            this.cbProveedores.Location = new System.Drawing.Point(212, 236);
+            this.cbProveedores.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cbProveedores.Name = "cbProveedores";
-            this.cbProveedores.Size = new System.Drawing.Size(171, 24);
+            this.cbProveedores.Size = new System.Drawing.Size(227, 28);
             this.cbProveedores.TabIndex = 5;
             // 
             // txtCantidad
             // 
-            this.txtCantidad.Location = new System.Drawing.Point(159, 141);
-            this.txtCantidad.Margin = new System.Windows.Forms.Padding(2);
+            this.txtCantidad.Location = new System.Drawing.Point(212, 174);
+            this.txtCantidad.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtCantidad.Name = "txtCantidad";
-            this.txtCantidad.Size = new System.Drawing.Size(171, 23);
+            this.txtCantidad.Size = new System.Drawing.Size(227, 26);
             this.txtCantidad.TabIndex = 4;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.ForeColor = System.Drawing.SystemColors.Control;
-            this.label2.Location = new System.Drawing.Point(28, 198);
-            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label2.Location = new System.Drawing.Point(37, 244);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(129, 17);
+            this.label2.Size = new System.Drawing.Size(150, 20);
             this.label2.TabIndex = 3;
             this.label2.Text = "Asignar proveedor:";
             // 
@@ -151,10 +149,10 @@
             this.btnActualizarB.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnActualizarB.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnActualizarB.ForeColor = System.Drawing.SystemColors.HighlightText;
-            this.btnActualizarB.Location = new System.Drawing.Point(147, 260);
-            this.btnActualizarB.Margin = new System.Windows.Forms.Padding(2);
+            this.btnActualizarB.Location = new System.Drawing.Point(196, 320);
+            this.btnActualizarB.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnActualizarB.Name = "btnActualizarB";
-            this.btnActualizarB.Size = new System.Drawing.Size(118, 49);
+            this.btnActualizarB.Size = new System.Drawing.Size(157, 60);
             this.btnActualizarB.TabIndex = 12;
             this.btnActualizarB.Text = "Actualizar datos";
             this.btnActualizarB.UseVisualStyleBackColor = false;
@@ -164,29 +162,27 @@
             // 
             this.label1.AutoSize = true;
             this.label1.ForeColor = System.Drawing.SystemColors.Control;
-            this.label1.Location = new System.Drawing.Point(28, 145);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label1.Location = new System.Drawing.Point(37, 178);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(134, 17);
+            this.label1.Size = new System.Drawing.Size(156, 20);
             this.label1.TabIndex = 2;
             this.label1.Text = "Cantidad a agregar:";
             // 
             // txtNombreC
             // 
-            this.txtNombreC.Location = new System.Drawing.Point(159, 85);
-            this.txtNombreC.Margin = new System.Windows.Forms.Padding(2);
+            this.txtNombreC.Location = new System.Drawing.Point(212, 105);
+            this.txtNombreC.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtNombreC.Name = "txtNombreC";
-            this.txtNombreC.Size = new System.Drawing.Size(171, 23);
+            this.txtNombreC.Size = new System.Drawing.Size(227, 26);
             this.txtNombreC.TabIndex = 1;
             // 
             // lbNombreBebida
             // 
             this.lbNombreBebida.AutoSize = true;
             this.lbNombreBebida.ForeColor = System.Drawing.SystemColors.Control;
-            this.lbNombreBebida.Location = new System.Drawing.Point(28, 90);
-            this.lbNombreBebida.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lbNombreBebida.Location = new System.Drawing.Point(37, 111);
             this.lbNombreBebida.Name = "lbNombreBebida";
-            this.lbNombreBebida.Size = new System.Drawing.Size(122, 17);
+            this.lbNombreBebida.Size = new System.Drawing.Size(143, 20);
             this.lbNombreBebida.TabIndex = 0;
             this.lbNombreBebida.Text = "Nombre producto:";
             // 
@@ -197,34 +193,35 @@
             this.btnRegresarMenu.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnRegresarMenu.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnRegresarMenu.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnRegresarMenu.Location = new System.Drawing.Point(49, 405);
-            this.btnRegresarMenu.Margin = new System.Windows.Forms.Padding(2);
+            this.btnRegresarMenu.Location = new System.Drawing.Point(65, 498);
+            this.btnRegresarMenu.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnRegresarMenu.Name = "btnRegresarMenu";
-            this.btnRegresarMenu.Size = new System.Drawing.Size(190, 41);
+            this.btnRegresarMenu.Size = new System.Drawing.Size(253, 50);
             this.btnRegresarMenu.TabIndex = 10;
             this.btnRegresarMenu.Text = "Regresar a inventario";
             this.btnRegresarMenu.UseVisualStyleBackColor = false;
+            this.btnRegresarMenu.Click += new System.EventHandler(this.btnRegresarMenu_Click);
             // 
             // cbFiltrarProv
             // 
             this.cbFiltrarProv.Cursor = System.Windows.Forms.Cursors.Hand;
             this.cbFiltrarProv.FormattingEnabled = true;
-            this.cbFiltrarProv.Location = new System.Drawing.Point(337, 33);
-            this.cbFiltrarProv.Margin = new System.Windows.Forms.Padding(2);
+            this.cbFiltrarProv.Location = new System.Drawing.Point(449, 41);
+            this.cbFiltrarProv.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cbFiltrarProv.Name = "cbFiltrarProv";
-            this.cbFiltrarProv.Size = new System.Drawing.Size(139, 21);
+            this.cbFiltrarProv.Size = new System.Drawing.Size(184, 24);
             this.cbFiltrarProv.TabIndex = 9;
             // 
             // dgvIngredientes
             // 
             this.dgvIngredientes.BackgroundColor = System.Drawing.SystemColors.ControlDarkDark;
             this.dgvIngredientes.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvIngredientes.Location = new System.Drawing.Point(49, 63);
-            this.dgvIngredientes.Margin = new System.Windows.Forms.Padding(2);
+            this.dgvIngredientes.Location = new System.Drawing.Point(65, 78);
+            this.dgvIngredientes.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.dgvIngredientes.Name = "dgvIngredientes";
             this.dgvIngredientes.RowHeadersWidth = 51;
             this.dgvIngredientes.RowTemplate.Height = 24;
-            this.dgvIngredientes.Size = new System.Drawing.Size(436, 335);
+            this.dgvIngredientes.Size = new System.Drawing.Size(581, 412);
             this.dgvIngredientes.TabIndex = 8;
             // 
             // btncrearPlato
@@ -234,10 +231,10 @@
             this.btncrearPlato.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btncrearPlato.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btncrearPlato.ForeColor = System.Drawing.SystemColors.HighlightText;
-            this.btncrearPlato.Location = new System.Drawing.Point(622, 405);
-            this.btncrearPlato.Margin = new System.Windows.Forms.Padding(2);
+            this.btncrearPlato.Location = new System.Drawing.Point(829, 498);
+            this.btncrearPlato.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btncrearPlato.Name = "btncrearPlato";
-            this.btncrearPlato.Size = new System.Drawing.Size(190, 41);
+            this.btncrearPlato.Size = new System.Drawing.Size(253, 50);
             this.btncrearPlato.TabIndex = 14;
             this.btncrearPlato.Text = "Crear platos y recetas";
             this.btncrearPlato.UseVisualStyleBackColor = false;
@@ -245,18 +242,18 @@
             // 
             // FormIngredientesInv
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.fondo;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(929, 552);
+            this.ClientSize = new System.Drawing.Size(1239, 679);
             this.Controls.Add(this.btncrearPlato);
             this.Controls.Add(this.gbDatosIngrediente);
             this.Controls.Add(this.btnRegresarMenu);
             this.Controls.Add(this.cbFiltrarProv);
             this.Controls.Add(this.dgvIngredientes);
-            this.Margin = new System.Windows.Forms.Padding(2);
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "FormIngredientesInv";
             this.Text = "FormIngredientesInv";
             this.Load += new System.EventHandler(this.FormIngredientesInv_Load);

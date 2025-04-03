@@ -172,7 +172,9 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void btnRegresar_Click(object sender, EventArgs e)
         {
-            this.Close();
+            this.Hide();
+            FormInventarioAdmin forminventario = new FormInventarioAdmin();
+            forminventario.ShowDialog();
         }
 
         // Mantenemos estos métodos vacíos para compatibilidad con el diseñador

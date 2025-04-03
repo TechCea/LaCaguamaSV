@@ -280,9 +280,9 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         // Regresar al menú
         private void btnRegresar_Click(object sender, EventArgs e)
         {
-            this.Close();
-            FormMenuAdmin menu = new FormMenuAdmin();
-            menu.Show();
+            this.Hide();
+            FormInventarioAdmin forminventario = new FormInventarioAdmin();
+            forminventario.ShowDialog();
         }
 
         // Los demás eventos de cambio de texto se dejan vacíos si no se requiere funcionalidad adicional
