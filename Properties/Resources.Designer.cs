@@ -63,6 +63,17 @@ namespace LaCaguamaSV.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap _3560614_seamless_doodle_pattern_with_beer_lobsters_and_sausages_vector_black_and_white_illustration_with_beer_theme_icons_vetor {
+            get {
+                object obj = ResourceManager.GetObject("3560614-seamless-doodle-pattern-with-beer-lobsters-and-sausages-vector-black-and-" +
+                        "white-illustration-with-beer-theme-icons-vetor", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap caguama_logo {
             get {
                 object obj = ResourceManager.GetObject("caguama logo", resourceCulture);

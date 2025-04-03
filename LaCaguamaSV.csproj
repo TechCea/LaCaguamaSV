@@ -432,5 +432,8 @@
   <ItemGroup>
     <None Include="Resources\logo.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\3560614-seamless-doodle-pattern-with-beer-lobsters-and-sausages-vector-black-and-white-illustration-with-beer-theme-icons-vetor.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

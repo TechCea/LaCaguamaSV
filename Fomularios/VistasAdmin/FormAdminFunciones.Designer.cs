@@ -401,6 +401,7 @@
             // btnCancelarCaja
             // 
             this.btnCancelarCaja.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
+            this.btnCancelarCaja.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnCancelarCaja.Location = new System.Drawing.Point(260, 154);
             this.btnCancelarCaja.Name = "btnCancelarCaja";
             this.btnCancelarCaja.Size = new System.Drawing.Size(114, 58);
@@ -412,6 +413,7 @@
             // btnConfirmarCaja
             // 
             this.btnConfirmarCaja.BackColor = System.Drawing.Color.Lime;
+            this.btnConfirmarCaja.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnConfirmarCaja.Location = new System.Drawing.Point(92, 153);
             this.btnConfirmarCaja.Name = "btnConfirmarCaja";
             this.btnConfirmarCaja.Size = new System.Drawing.Size(124, 59);
