@@ -284,7 +284,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 }
             }
         }
-
+        //
         // Regresar al menú
         private void btnRegresar_Click(object sender, EventArgs e)
         {
