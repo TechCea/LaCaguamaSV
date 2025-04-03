@@ -70,7 +70,22 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 decimal totalGenerado = conexion.ObtenerTotalGenerado(fechaActual);
                 decimal totalEsperado = cajaInicial + totalGenerado - totalGastos;
 
-                // Aquí actualizamos el texto del label
+                // Guardar en la tabla corte_de_caja
+                int idEstadoCorte = 1; // Asegúrate de que este ID existe en la tabla estado_corte
+                if (conexion.RegistrarCorteDeCaja(montoContado, SesionUsuario.IdUsuario, idEstadoCorte))
+                {
+                    MessageBox.Show("Corte de caja registrado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    // Deshabilitar botón de corte y habilitar el de caja inicial
+                    btnCajaInicial.Enabled = true;
+                    Corte_Caja.Enabled = false;
+                }
+                else
+                {
+                    MessageBox.Show("Error al registrar el corte de caja.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
+                // Mostrar el resumen del corte
                 string mensaje = $"Corte de caja confirmado.\n" +
                                  $"Monto contado: ${montoContado}\n" +
                                  $"Caja inicial: ${cajaInicial}\n" +
@@ -78,14 +93,9 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                                  $"Gastos: ${totalGastos}\n" +
                                  $"Total esperado: ${totalEsperado}\n";
 
-                labelResultado.Text = mensaje; // Actualizamos el texto del Label
-                panelResultadoCorte.Visible = true; // Mostrar el panel de resultados
-
-                // Ocultamos el panel de ingreso de monto
-                panelIngresoMonto.Visible = false; // Ocultamos panelIngresoMonto
-
-                // Actualizamos el estado de los botones
-                VerificarEstadoCaja();
+                labelResultado.Text = mensaje;
+                panelResultadoCorte.Visible = true;
+                panelIngresoMonto.Visible = false;
             }
             else
             {
@@ -193,8 +203,14 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             {
                 if (!conexion.CajaInicialYaEstablecida())
                 {
-                    // Usamos SesionUsuario.IdUsuario para registrar la caja inicial
-                    if (conexion.RegistrarCajaInicial(cajaInicial, SesionUsuario.IdUsuario)) // Usamos el IdUsuario de la sesión
+                    // Verificar que el ID del usuario sea válido
+                    if (SesionUsuario.IdUsuario <= 0)
+                    {
+                        MessageBox.Show("Error: ID de usuario no válido.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    if (conexion.RegistrarCajaInicial(cajaInicial, SesionUsuario.IdUsuario))
                     {
                         MessageBox.Show("Caja inicial establecida correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         btnCajaInicial.Enabled = false;
@@ -237,6 +253,13 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             {
                 btnCajaInicial.Enabled = true;
                 Corte_Caja.Enabled = false;
+            }
+
+            // Si ya se hizo un corte hoy, deshabilitar el botón de corte de caja
+            if (conexion.CorteDeCajaRealizadoHoy())
+            {
+                btnCajaInicial.Enabled = true;  // Se permite iniciar nueva caja
+                Corte_Caja.Enabled = false;     // No se puede hacer otro corte en el mismo día
             }
         }
 

@@ -1047,6 +1047,63 @@ public DataTable ObtenerBebidas()
 
         }
 
+        public bool RegistrarCorteDeCaja(decimal cantidad, int idUsuario, int idEstadoCorte)
+        {
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    string query = "INSERT INTO corte_de_caja (cantidad, fecha, id_estado_corte, id_usuario) " +
+                                   "VALUES (@cantidad, NOW(), @idEstadoCorte, @idUsuario)";
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@cantidad", cantidad);
+                        cmd.Parameters.AddWithValue("@idUsuario", idUsuario);
+                        cmd.Parameters.AddWithValue("@idEstadoCorte", idEstadoCorte);
+
+                        // Mensaje de depuración
+                        MessageBox.Show($"Registrando corte: Cantidad={cantidad}, UsuarioID={idUsuario}, Estado={idEstadoCorte}");
+
+                        int filasAfectadas = cmd.ExecuteNonQuery();
+                        return filasAfectadas > 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al registrar el corte de caja: " + ex.Message);
+                return false;
+            }
+        }
+
+        public bool CorteDeCajaRealizadoHoy()
+        {
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    string query = "SELECT COUNT(*) FROM corte_de_caja WHERE DATE(fecha) = CURDATE()";
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        int count = Convert.ToInt32(cmd.ExecuteScalar());
+                        return count > 0; // Si hay al menos un registro, significa que ya se hizo un corte
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al verificar el corte de caja: " + ex.Message);
+                return false;
+            }
+        }
+
+
+
+
+
         public decimal ObtenerTotalGastos(DateTime fecha)
         {
             decimal total = 0;
@@ -1115,26 +1172,29 @@ public DataTable ObtenerBebidas()
         // Iniciar Caja
         public bool RegistrarCajaInicial(decimal cantidad, int idUsuario)
         {
-            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+            try
             {
-                string query = "INSERT INTO caja (monto_inicial, id_usuario, estado_caja, fecha) VALUES (@cantidad, @idUsuario, 1, @fecha)";
-                using (MySqlCommand comando = new MySqlCommand(query, conexion))
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
                 {
-                    comando.Parameters.AddWithValue("@cantidad", cantidad);
-                    comando.Parameters.AddWithValue("@idUsuario", idUsuario);
-                    comando.Parameters.AddWithValue("@fecha", DateTime.Now);
+                    conexion.Open();
+                    string query = "INSERT INTO caja (cantidad, fecha, id_usuario) VALUES (@cantidad, NOW(), @idUsuario)";
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@cantidad", cantidad);
+                        cmd.Parameters.AddWithValue("@idUsuario", idUsuario);
 
-                    try
-                    {
-                        conexion.Open();
-                        return comando.ExecuteNonQuery() > 0; // Si se insertó correctamente, devuelve true
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine("Error: " + ex.Message);
-                        return false;
+                        // Mensaje de depuración
+                        MessageBox.Show($"Registrando caja inicial: Cantidad={cantidad}, UsuarioID={idUsuario}");
+
+                        int filasAfectadas = cmd.ExecuteNonQuery();
+                        return filasAfectadas > 0;
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al registrar caja inicial: " + ex.Message);
+                return false;
             }
         }
         public bool CajaInicialYaEstablecida()
