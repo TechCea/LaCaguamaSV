@@ -181,6 +181,7 @@
             // 
             this.btnEliminarB.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(236)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
             this.btnEliminarB.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnEliminarB.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnEliminarB.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.btnEliminarB.ForeColor = System.Drawing.SystemColors.HighlightText;
             this.btnEliminarB.Location = new System.Drawing.Point(701, 353);
@@ -196,6 +197,7 @@
             // 
             this.btnActualizarB.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
             this.btnActualizarB.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnActualizarB.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnActualizarB.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.btnActualizarB.ForeColor = System.Drawing.SystemColors.HighlightText;
             this.btnActualizarB.Location = new System.Drawing.Point(542, 353);

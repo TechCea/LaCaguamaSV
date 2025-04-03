@@ -43,5 +43,9 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         }
 
+        private void btnCerrar_Click_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }

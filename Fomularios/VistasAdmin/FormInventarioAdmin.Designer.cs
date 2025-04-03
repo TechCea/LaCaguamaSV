@@ -43,6 +43,7 @@
             // 
             this.btnComidas.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
             this.btnComidas.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnComidas.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnComidas.ForeColor = System.Drawing.SystemColors.Control;
             this.btnComidas.Location = new System.Drawing.Point(340, 74);
             this.btnComidas.Margin = new System.Windows.Forms.Padding(2);
@@ -57,6 +58,7 @@
             // 
             this.btnExtras.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
             this.btnExtras.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnExtras.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnExtras.ForeColor = System.Drawing.SystemColors.Control;
             this.btnExtras.Location = new System.Drawing.Point(201, 74);
             this.btnExtras.Margin = new System.Windows.Forms.Padding(2);
@@ -71,6 +73,7 @@
             // 
             this.btnBebidas.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
             this.btnBebidas.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnBebidas.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnBebidas.ForeColor = System.Drawing.SystemColors.Control;
             this.btnBebidas.Location = new System.Drawing.Point(44, 74);
             this.btnBebidas.Margin = new System.Windows.Forms.Padding(2);
@@ -85,6 +88,7 @@
             // 
             this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
             this.button1.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button1.ForeColor = System.Drawing.SystemColors.Control;
             this.button1.Location = new System.Drawing.Point(54, 33);
             this.button1.Margin = new System.Windows.Forms.Padding(2);
@@ -131,6 +135,8 @@
             // 
             this.btnCerrar_Click.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(236)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
             this.btnCerrar_Click.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnCerrar_Click.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnCerrar_Click.ForeColor = System.Drawing.SystemColors.Control;
             this.btnCerrar_Click.Location = new System.Drawing.Point(545, 12);
             this.btnCerrar_Click.Name = "btnCerrar_Click";
             this.btnCerrar_Click.Size = new System.Drawing.Size(43, 23);

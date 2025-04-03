@@ -40,26 +40,26 @@
             this.panelConfirmacion = new System.Windows.Forms.Panel();
             this.btnCancelarCorte = new System.Windows.Forms.Button();
             this.btnConfirmarCorte = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             this.panelIngresoMonto = new System.Windows.Forms.Panel();
             this.btnCancelarMonto = new System.Windows.Forms.Button();
             this.btnConfirmarMonto = new System.Windows.Forms.Button();
             this.txtMontoContado = new System.Windows.Forms.TextBox();
             this.Label6 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
             this.panelResultadoCorte = new System.Windows.Forms.Panel();
             this.labelResultado = new System.Windows.Forms.Label();
             this.btnCerrarPanel_Click = new System.Windows.Forms.Button();
             this.btnImprimirRecibo_Click = new System.Windows.Forms.Button();
+            this.panelCaja = new System.Windows.Forms.Panel();
+            this.label7 = new System.Windows.Forms.Label();
+            this.btnCancelarCaja = new System.Windows.Forms.Button();
+            this.btnConfirmarCaja = new System.Windows.Forms.Button();
+            this.txtMontoCaja = new System.Windows.Forms.TextBox();
             this.btnCajaInicial = new System.Windows.Forms.Button();
             this.Gastos = new System.Windows.Forms.Button();
             this.button7 = new System.Windows.Forms.Button();
             this.button8 = new System.Windows.Forms.Button();
-            this.panelCaja = new System.Windows.Forms.Panel();
-            this.btnCancelarCaja = new System.Windows.Forms.Button();
-            this.btnConfirmarCaja = new System.Windows.Forms.Button();
-            this.txtMontoCaja = new System.Windows.Forms.TextBox();
-            this.label7 = new System.Windows.Forms.Label();
             this.panelConfirmacion.SuspendLayout();
             this.panelIngresoMonto.SuspendLayout();
             this.panelResultadoCorte.SuspendLayout();
@@ -82,6 +82,7 @@
             // 
             this.Corte_Caja.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
             this.Corte_Caja.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.Corte_Caja.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.Corte_Caja.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Corte_Caja.ForeColor = System.Drawing.SystemColors.Control;
             this.Corte_Caja.Location = new System.Drawing.Point(89, 167);
@@ -96,6 +97,7 @@
             // 
             this.button2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
             this.button2.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button2.ForeColor = System.Drawing.SystemColors.Control;
             this.button2.Location = new System.Drawing.Point(89, 258);
@@ -177,6 +179,7 @@
             // 
             this.button9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(236)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
             this.button9.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.button9.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button9.ForeColor = System.Drawing.Color.White;
             this.button9.Location = new System.Drawing.Point(938, 574);
@@ -194,7 +197,7 @@
             this.panelConfirmacion.Controls.Add(this.btnConfirmarCorte);
             this.panelConfirmacion.Controls.Add(this.label5);
             this.panelConfirmacion.Controls.Add(this.label4);
-            this.panelConfirmacion.Location = new System.Drawing.Point(304, 76);
+            this.panelConfirmacion.Location = new System.Drawing.Point(303, 56);
             this.panelConfirmacion.Name = "panelConfirmacion";
             this.panelConfirmacion.Size = new System.Drawing.Size(419, 267);
             this.panelConfirmacion.TabIndex = 12;
@@ -228,6 +231,29 @@
             this.btnConfirmarCorte.UseVisualStyleBackColor = false;
             this.btnConfirmarCorte.Click += new System.EventHandler(this.btnConfirmarCorte_Click);
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.label5.Location = new System.Drawing.Point(35, 80);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(371, 25);
+            this.label5.TabIndex = 1;
+            this.label5.Text = "Esta seguro de Realizar el corte ?";
+            this.label5.Click += new System.EventHandler(this.label5_Click);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.label4.Location = new System.Drawing.Point(95, 20);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(229, 25);
+            this.label4.TabIndex = 0;
+            this.label4.Text = "Confirmar Operacion";
+            // 
             // panelIngresoMonto
             // 
             this.panelIngresoMonto.BackColor = System.Drawing.SystemColors.ControlDarkDark;
@@ -235,7 +261,7 @@
             this.panelIngresoMonto.Controls.Add(this.btnConfirmarMonto);
             this.panelIngresoMonto.Controls.Add(this.txtMontoContado);
             this.panelIngresoMonto.Controls.Add(this.Label6);
-            this.panelIngresoMonto.Location = new System.Drawing.Point(298, 76);
+            this.panelIngresoMonto.Location = new System.Drawing.Point(300, 53);
             this.panelIngresoMonto.Name = "panelIngresoMonto";
             this.panelIngresoMonto.Size = new System.Drawing.Size(422, 267);
             this.panelIngresoMonto.TabIndex = 13;
@@ -245,6 +271,7 @@
             // 
             this.btnCancelarMonto.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(236)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
             this.btnCancelarMonto.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnCancelarMonto.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnCancelarMonto.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCancelarMonto.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.btnCancelarMonto.Location = new System.Drawing.Point(217, 150);
@@ -259,6 +286,7 @@
             // 
             this.btnConfirmarMonto.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(207)))), ((int)(((byte)(111)))));
             this.btnConfirmarMonto.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnConfirmarMonto.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnConfirmarMonto.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnConfirmarMonto.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.btnConfirmarMonto.Location = new System.Drawing.Point(72, 150);
@@ -291,37 +319,13 @@
             this.Label6.TabIndex = 13;
             this.Label6.Text = "Ingrese Efectivo Contado en Caja";
             // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.label5.Location = new System.Drawing.Point(35, 80);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(371, 25);
-            this.label5.TabIndex = 1;
-            this.label5.Text = "Esta seguro de Realizar el corte ?";
-            this.label5.Click += new System.EventHandler(this.label5_Click);
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.label4.Location = new System.Drawing.Point(95, 20);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(229, 25);
-            this.label4.TabIndex = 0;
-            this.label4.Text = "Confirmar Operacion";
-            // 
             // panelResultadoCorte
             // 
             this.panelResultadoCorte.BackColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.panelResultadoCorte.Controls.Add(this.panelCaja);
             this.panelResultadoCorte.Controls.Add(this.labelResultado);
             this.panelResultadoCorte.Controls.Add(this.btnCerrarPanel_Click);
             this.panelResultadoCorte.Controls.Add(this.btnImprimirRecibo_Click);
-            this.panelResultadoCorte.Location = new System.Drawing.Point(294, 64);
+            this.panelResultadoCorte.Location = new System.Drawing.Point(286, 83);
             this.panelResultadoCorte.Name = "panelResultadoCorte";
             this.panelResultadoCorte.Size = new System.Drawing.Size(423, 386);
             this.panelResultadoCorte.TabIndex = 14;
@@ -347,6 +351,7 @@
             // 
             this.btnCerrarPanel_Click.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(236)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
             this.btnCerrarPanel_Click.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnCerrarPanel_Click.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnCerrarPanel_Click.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCerrarPanel_Click.ForeColor = System.Drawing.SystemColors.Control;
             this.btnCerrarPanel_Click.Location = new System.Drawing.Point(226, 270);
@@ -361,6 +366,7 @@
             // 
             this.btnImprimirRecibo_Click.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
             this.btnImprimirRecibo_Click.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnImprimirRecibo_Click.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnImprimirRecibo_Click.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnImprimirRecibo_Click.ForeColor = System.Drawing.SystemColors.Control;
             this.btnImprimirRecibo_Click.Location = new System.Drawing.Point(54, 270);
@@ -371,60 +377,6 @@
             this.btnImprimirRecibo_Click.UseVisualStyleBackColor = false;
             this.btnImprimirRecibo_Click.Click += new System.EventHandler(this.btnImprimirRecibo_Click_Click);
             // 
-            // btnCajaInicial
-            // 
-            this.btnCajaInicial.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
-            this.btnCajaInicial.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnCajaInicial.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCajaInicial.ForeColor = System.Drawing.SystemColors.Control;
-            this.btnCajaInicial.Location = new System.Drawing.Point(89, 65);
-            this.btnCajaInicial.Name = "btnCajaInicial";
-            this.btnCajaInicial.Size = new System.Drawing.Size(171, 74);
-            this.btnCajaInicial.TabIndex = 15;
-            this.btnCajaInicial.Text = "Agregar Caja";
-            this.btnCajaInicial.UseVisualStyleBackColor = false;
-            this.btnCajaInicial.Click += new System.EventHandler(this.btnCajaInicial_Click);
-            // 
-            // Gastos
-            // 
-            this.Gastos.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(236)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
-            this.Gastos.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.Gastos.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Gastos.ForeColor = System.Drawing.SystemColors.Control;
-            this.Gastos.Location = new System.Drawing.Point(758, 76);
-            this.Gastos.Name = "Gastos";
-            this.Gastos.Size = new System.Drawing.Size(171, 74);
-            this.Gastos.TabIndex = 16;
-            this.Gastos.Text = "Gastos";
-            this.Gastos.UseVisualStyleBackColor = false;
-            this.Gastos.Click += new System.EventHandler(this.button6_Click);
-            // 
-            // button7
-            // 
-            this.button7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(207)))), ((int)(((byte)(111)))));
-            this.button7.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.button7.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button7.ForeColor = System.Drawing.SystemColors.Control;
-            this.button7.Location = new System.Drawing.Point(758, 167);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(171, 74);
-            this.button7.TabIndex = 17;
-            this.button7.Text = "button7";
-            this.button7.UseVisualStyleBackColor = false;
-            // 
-            // button8
-            // 
-            this.button8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(207)))), ((int)(((byte)(111)))));
-            this.button8.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.button8.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button8.ForeColor = System.Drawing.SystemColors.Control;
-            this.button8.Location = new System.Drawing.Point(758, 258);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(171, 74);
-            this.button8.TabIndex = 18;
-            this.button8.Text = "button8";
-            this.button8.UseVisualStyleBackColor = false;
-            // 
             // panelCaja
             // 
             this.panelCaja.BackColor = System.Drawing.SystemColors.ControlDarkDark;
@@ -432,17 +384,30 @@
             this.panelCaja.Controls.Add(this.btnCancelarCaja);
             this.panelCaja.Controls.Add(this.btnConfirmarCaja);
             this.panelCaja.Controls.Add(this.txtMontoCaja);
-            this.panelCaja.Location = new System.Drawing.Point(3, 12);
+            this.panelCaja.Location = new System.Drawing.Point(297, 111);
             this.panelCaja.Name = "panelCaja";
             this.panelCaja.Size = new System.Drawing.Size(426, 286);
             this.panelCaja.TabIndex = 19;
             this.panelCaja.Visible = false;
             this.panelCaja.Paint += new System.Windows.Forms.PaintEventHandler(this.panelCaja_Paint);
             // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.BackColor = System.Drawing.Color.Transparent;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.label7.Location = new System.Drawing.Point(102, 23);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(222, 25);
+            this.label7.TabIndex = 20;
+            this.label7.Text = "Ingresar Caja Inicial";
+            // 
             // btnCancelarCaja
             // 
             this.btnCancelarCaja.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(236)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
             this.btnCancelarCaja.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnCancelarCaja.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnCancelarCaja.Location = new System.Drawing.Point(229, 153);
             this.btnCancelarCaja.Name = "btnCancelarCaja";
             this.btnCancelarCaja.Size = new System.Drawing.Size(114, 58);
@@ -455,6 +420,7 @@
             // 
             this.btnConfirmarCaja.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(207)))), ((int)(((byte)(111)))));
             this.btnConfirmarCaja.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnConfirmarCaja.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnConfirmarCaja.Location = new System.Drawing.Point(73, 153);
             this.btnConfirmarCaja.Name = "btnConfirmarCaja";
             this.btnConfirmarCaja.Size = new System.Drawing.Size(124, 59);
@@ -472,17 +438,63 @@
             this.txtMontoCaja.TabIndex = 0;
             this.txtMontoCaja.TextChanged += new System.EventHandler(this.txtMontoCaja_TextChanged);
             // 
-            // label7
+            // btnCajaInicial
             // 
-            this.label7.AutoSize = true;
-            this.label7.BackColor = System.Drawing.Color.Transparent;
-            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.label7.Location = new System.Drawing.Point(102, 23);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(222, 25);
-            this.label7.TabIndex = 20;
-            this.label7.Text = "Ingresar Caja Inicial";
+            this.btnCajaInicial.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
+            this.btnCajaInicial.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnCajaInicial.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnCajaInicial.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCajaInicial.ForeColor = System.Drawing.SystemColors.Control;
+            this.btnCajaInicial.Location = new System.Drawing.Point(89, 65);
+            this.btnCajaInicial.Name = "btnCajaInicial";
+            this.btnCajaInicial.Size = new System.Drawing.Size(171, 74);
+            this.btnCajaInicial.TabIndex = 15;
+            this.btnCajaInicial.Text = "Agregar Caja";
+            this.btnCajaInicial.UseVisualStyleBackColor = false;
+            this.btnCajaInicial.Click += new System.EventHandler(this.btnCajaInicial_Click);
+            // 
+            // Gastos
+            // 
+            this.Gastos.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(236)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
+            this.Gastos.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.Gastos.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.Gastos.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Gastos.ForeColor = System.Drawing.SystemColors.Control;
+            this.Gastos.Location = new System.Drawing.Point(758, 76);
+            this.Gastos.Name = "Gastos";
+            this.Gastos.Size = new System.Drawing.Size(171, 74);
+            this.Gastos.TabIndex = 16;
+            this.Gastos.Text = "Gastos";
+            this.Gastos.UseVisualStyleBackColor = false;
+            this.Gastos.Click += new System.EventHandler(this.button6_Click);
+            // 
+            // button7
+            // 
+            this.button7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(207)))), ((int)(((byte)(111)))));
+            this.button7.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.button7.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.button7.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button7.ForeColor = System.Drawing.SystemColors.Control;
+            this.button7.Location = new System.Drawing.Point(758, 167);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(171, 74);
+            this.button7.TabIndex = 17;
+            this.button7.Text = "button7";
+            this.button7.UseVisualStyleBackColor = false;
+            // 
+            // button8
+            // 
+            this.button8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(207)))), ((int)(((byte)(111)))));
+            this.button8.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.button8.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.button8.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button8.ForeColor = System.Drawing.SystemColors.Control;
+            this.button8.Location = new System.Drawing.Point(758, 258);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(171, 74);
+            this.button8.TabIndex = 18;
+            this.button8.Text = "button8";
+            this.button8.UseVisualStyleBackColor = false;
             // 
             // FormAdminFunciones
             // 
@@ -492,8 +504,9 @@
             this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.fondo;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1030, 618);
-            this.Controls.Add(this.button8);
             this.Controls.Add(this.panelIngresoMonto);
+            this.Controls.Add(this.panelCaja);
+            this.Controls.Add(this.button8);
             this.Controls.Add(this.button7);
             this.Controls.Add(this.panelResultadoCorte);
             this.Controls.Add(this.panelConfirmacion);

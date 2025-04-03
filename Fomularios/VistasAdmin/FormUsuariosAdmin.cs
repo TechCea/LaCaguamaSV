@@ -400,5 +400,10 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             LimpiarCampos();
         }
+
+        private void btnCerrar_Click_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }

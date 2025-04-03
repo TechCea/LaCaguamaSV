@@ -113,5 +113,30 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             FormComidasMenuAdmin formplatos = new FormComidasMenuAdmin();
             formplatos.ShowDialog();
         }
+
+        private void FormPlatosMenu_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cbCategoriaB_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cbCategoriaC_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnRegresarInv_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

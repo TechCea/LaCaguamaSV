@@ -39,6 +39,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             this.lblEstadoOrden = new System.Windows.Forms.Label();
             this.lblNombreUsuario = new System.Windows.Forms.Label();
             this.panel5 = new System.Windows.Forms.Panel();
+            this.btnCerrar_Click = new System.Windows.Forms.Button();
             this.comboBoxMesas = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -56,7 +57,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             this.dataGridViewMenu = new System.Windows.Forms.DataGridView();
             this.flowLayoutPanelPedidos = new System.Windows.Forms.FlowLayoutPanel();
             this.btnPrecuenta = new System.Windows.Forms.Button();
-            this.btnCerrar_Click = new System.Windows.Forms.Button();
             this.panel5.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -158,6 +158,20 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(590, 33);
             this.panel5.TabIndex = 11;
+            // 
+            // btnCerrar_Click
+            // 
+            this.btnCerrar_Click.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(236)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
+            this.btnCerrar_Click.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnCerrar_Click.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnCerrar_Click.ForeColor = System.Drawing.SystemColors.Control;
+            this.btnCerrar_Click.Location = new System.Drawing.Point(544, 5);
+            this.btnCerrar_Click.Name = "btnCerrar_Click";
+            this.btnCerrar_Click.Size = new System.Drawing.Size(43, 23);
+            this.btnCerrar_Click.TabIndex = 35;
+            this.btnCerrar_Click.Text = "X";
+            this.btnCerrar_Click.UseVisualStyleBackColor = false;
+            this.btnCerrar_Click.Click += new System.EventHandler(this.btnCerrar_Click_Click);
             // 
             // comboBoxMesas
             // 
@@ -270,6 +284,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             // 
             this.button12.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
             this.button12.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.button12.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button12.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button12.ForeColor = System.Drawing.Color.White;
             this.button12.Location = new System.Drawing.Point(548, 46);
@@ -284,6 +299,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             // 
             this.btnCargarExtras.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
             this.btnCargarExtras.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnCargarExtras.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnCargarExtras.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCargarExtras.ForeColor = System.Drawing.Color.White;
             this.btnCargarExtras.Location = new System.Drawing.Point(332, 47);
@@ -298,6 +314,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             // 
             this.btnCargarPlatos.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
             this.btnCargarPlatos.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnCargarPlatos.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnCargarPlatos.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCargarPlatos.ForeColor = System.Drawing.Color.White;
             this.btnCargarPlatos.Location = new System.Drawing.Point(440, 47);
@@ -312,6 +329,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             // 
             this.btnCargarBebidas.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
             this.btnCargarBebidas.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnCargarBebidas.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnCargarBebidas.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCargarBebidas.ForeColor = System.Drawing.Color.White;
             this.btnCargarBebidas.Location = new System.Drawing.Point(224, 46);
@@ -351,6 +369,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             // 
             this.btnPrecuenta.BackColor = System.Drawing.Color.SteelBlue;
             this.btnPrecuenta.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnPrecuenta.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnPrecuenta.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnPrecuenta.ForeColor = System.Drawing.Color.White;
             this.btnPrecuenta.Location = new System.Drawing.Point(656, 47);
@@ -360,18 +379,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             this.btnPrecuenta.Text = "PRECUENTA";
             this.btnPrecuenta.UseVisualStyleBackColor = false;
             this.btnPrecuenta.Click += new System.EventHandler(this.btnPrecuenta_Click);
-            // 
-            // btnCerrar_Click
-            // 
-            this.btnCerrar_Click.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(236)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
-            this.btnCerrar_Click.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnCerrar_Click.Location = new System.Drawing.Point(544, 5);
-            this.btnCerrar_Click.Name = "btnCerrar_Click";
-            this.btnCerrar_Click.Size = new System.Drawing.Size(43, 23);
-            this.btnCerrar_Click.TabIndex = 35;
-            this.btnCerrar_Click.Text = "X";
-            this.btnCerrar_Click.UseVisualStyleBackColor = false;
-            this.btnCerrar_Click.Click += new System.EventHandler(this.btnCerrar_Click_Click);
             // 
             // FormGestionOrdenes
             // 

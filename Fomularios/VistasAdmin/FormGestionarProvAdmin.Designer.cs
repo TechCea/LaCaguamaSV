@@ -142,6 +142,7 @@
             // 
             this.btnRegresar.BackColor = System.Drawing.Color.White;
             this.btnRegresar.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnRegresar.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnRegresar.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.btnRegresar.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.btnRegresar.Location = new System.Drawing.Point(40, 373);
@@ -169,6 +170,7 @@
             // 
             this.btnEliminarE.BackColor = System.Drawing.Color.Brown;
             this.btnEliminarE.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnEliminarE.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnEliminarE.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.btnEliminarE.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.btnEliminarE.Location = new System.Drawing.Point(796, 306);
@@ -184,6 +186,7 @@
             // 
             this.btnActualizarP.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
             this.btnActualizarP.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnActualizarP.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnActualizarP.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.btnActualizarP.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.btnActualizarP.Location = new System.Drawing.Point(663, 306);
@@ -199,6 +202,7 @@
             // 
             this.btnAgregarP.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(207)))), ((int)(((byte)(111)))));
             this.btnAgregarP.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnAgregarP.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnAgregarP.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.btnAgregarP.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.btnAgregarP.Location = new System.Drawing.Point(530, 306);

@@ -44,6 +44,7 @@
             // 
             this.btnGestionUsuarios.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
             this.btnGestionUsuarios.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnGestionUsuarios.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnGestionUsuarios.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnGestionUsuarios.ForeColor = System.Drawing.SystemColors.Control;
             this.btnGestionUsuarios.Location = new System.Drawing.Point(95, 27);
@@ -58,6 +59,7 @@
             // 
             this.btnCerrarSesion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(236)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
             this.btnCerrarSesion.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnCerrarSesion.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnCerrarSesion.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCerrarSesion.ForeColor = System.Drawing.SystemColors.Control;
             this.btnCerrarSesion.Location = new System.Drawing.Point(951, 558);
@@ -72,6 +74,7 @@
             // 
             this.btnMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
             this.btnMenu.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnMenu.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnMenu.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMenu.ForeColor = System.Drawing.SystemColors.Control;
             this.btnMenu.Location = new System.Drawing.Point(459, 29);
@@ -87,6 +90,7 @@
             // 
             this.Ordenes.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
             this.Ordenes.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.Ordenes.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.Ordenes.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Ordenes.ForeColor = System.Drawing.SystemColors.Control;
             this.Ordenes.Location = new System.Drawing.Point(639, 32);
@@ -101,6 +105,7 @@
             // 
             this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
             this.button1.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button1.ForeColor = System.Drawing.SystemColors.Control;
             this.button1.Location = new System.Drawing.Point(277, 106);
@@ -126,6 +131,7 @@
             // 
             this.btnCrearOrden.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
             this.btnCrearOrden.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnCrearOrden.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnCrearOrden.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCrearOrden.ForeColor = System.Drawing.SystemColors.Control;
             this.btnCrearOrden.Location = new System.Drawing.Point(95, 106);
@@ -140,6 +146,7 @@
             // 
             this.button2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
             this.button2.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button2.ForeColor = System.Drawing.SystemColors.Control;
             this.button2.Location = new System.Drawing.Point(459, 106);
@@ -155,6 +162,7 @@
             // 
             this.btnInventario.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
             this.btnInventario.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnInventario.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnInventario.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnInventario.ForeColor = System.Drawing.SystemColors.Control;
             this.btnInventario.Location = new System.Drawing.Point(277, 28);
