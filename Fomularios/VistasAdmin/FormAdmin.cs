@@ -164,17 +164,29 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             {
                 using (MySqlConnection conexion = new Conexion().EstablecerConexion())
                 {
-                    // Obtener información del pago
-                    string queryPago = @"
-                SELECT p.monto, p.recibido, p.cambio, tp.nombrePago, p.fecha_pago, 
-                       u.nombre AS nombre_usuario, o.nombreCliente
-                FROM pagos p
-                JOIN tipoPago tp ON p.id_tipo_pago = tp.id_pago
-                JOIN usuarios u ON p.id_usuario = u.id_usuario
-                JOIN ordenes o ON p.id_orden = o.id_orden
-                WHERE p.id_orden = @idOrden";
+                    // Obtener información de la orden (incluyendo usuario creador)
+                    string queryOrden = @"
+                SELECT 
+                    o.nombreCliente, 
+                    o.total, 
+                    DATE_FORMAT(o.fecha_orden, '%Y-%m-%d %H:%i') AS fecha_orden,
+                    m.nombreMesa AS mesa,
+                    tp.nombrePago AS metodo_pago,
+                    u.nombre AS usuario_creador
+                FROM ordenes o
+                JOIN mesas m ON o.id_mesa = m.id_mesa
+                JOIN tipoPago tp ON o.tipo_pago = tp.id_pago
+                JOIN usuarios u ON o.id_usuario = u.id_usuario
+                WHERE o.id_orden = @idOrden";
 
-                    using (MySqlCommand cmd = new MySqlCommand(queryPago, conexion))
+                    string cliente = "";
+                    decimal total = 0;
+                    string fechaOrden = "";
+                    string mesa = "";
+                    string metodoPago = "";
+                    string usuarioCreador = "";
+
+                    using (MySqlCommand cmd = new MySqlCommand(queryOrden, conexion))
                     {
                         cmd.Parameters.AddWithValue("@idOrden", idOrden);
 
@@ -182,46 +194,64 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                         {
                             if (reader.Read())
                             {
-                                decimal monto = reader.GetDecimal("monto");
-                                decimal recibido = reader.GetDecimal("recibido");
-                                decimal cambio = reader.GetDecimal("cambio");
-                                string metodoPago = reader.GetString("nombrePago");
-                                string fechaPago = reader.GetDateTime("fecha_pago").ToString("g");
-                                string usuario = reader.GetString("nombre_usuario");
-                                string cliente = reader.GetString("nombreCliente");
-
-                                // Obtener detalles de la orden
-                                string detalle = ObtenerDetalleOrden(idOrden);
-
-                                // Generar comprobante
-                                StringBuilder comprobante = new StringBuilder();
-                                comprobante.AppendLine("FACTURA / COMPROBANTE DE PAGO");
-                                comprobante.AppendLine("-----------------------------");
-                                comprobante.AppendLine($"Orden: #{idOrden}");
-                                comprobante.AppendLine($"Cliente: {cliente}");
-                                comprobante.AppendLine($"Fecha: {fechaPago}");
-                                comprobante.AppendLine($"Atendido por: {usuario}");
-                                comprobante.AppendLine();
-                                comprobante.AppendLine("Detalle de la orden:");
-                                comprobante.AppendLine(detalle);
-                                comprobante.AppendLine();
-                                comprobante.AppendLine($"Total: {monto.ToString("C")}");
-                                comprobante.AppendLine($"Método de pago: {metodoPago}");
-
-                                if (metodoPago == "Efectivo")
-                                {
-                                    comprobante.AppendLine($"Recibido: {recibido.ToString("C")}");
-                                    comprobante.AppendLine($"Cambio: {cambio.ToString("C")}");
-                                }
-
-                                comprobante.AppendLine();
-                                comprobante.AppendLine("¡Gracias por su visita!");
-
-                                MessageBox.Show(comprobante.ToString(), "Comprobante de Pago",
-                                              MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                cliente = reader["nombreCliente"].ToString();
+                                total = Convert.ToDecimal(reader["total"]);
+                                fechaOrden = reader["fecha_orden"].ToString();
+                                mesa = reader["mesa"].ToString();
+                                metodoPago = reader["metodo_pago"].ToString();
+                                usuarioCreador = reader["usuario_creador"].ToString();
                             }
                         }
                     }
+
+                    // Obtener detalles de la orden (igual que antes)
+                    string detalle = ObtenerDetalleOrden(idOrden);
+
+                    // Generar comprobante
+                    StringBuilder comprobante = new StringBuilder();
+                    comprobante.AppendLine("FACTURA / COMPROBANTE DE PAGO");
+                    comprobante.AppendLine("-----------------------------");
+                    comprobante.AppendLine($"Orden: #{idOrden}");
+                    comprobante.AppendLine($"Cliente: {cliente}");
+                    comprobante.AppendLine($"Fecha: {fechaOrden}");
+                    comprobante.AppendLine($"Atendido por: {usuarioCreador}"); // Usamos usuario creador
+                    comprobante.AppendLine();
+                    comprobante.AppendLine("Detalle de la orden:");
+                    comprobante.AppendLine(detalle);
+                    comprobante.AppendLine();
+                    comprobante.AppendLine($"Total: {total.ToString("C")}");
+                    comprobante.AppendLine($"Método de pago: {metodoPago}");
+
+                    if (metodoPago == "Efectivo")
+                    {
+                        // Obtener información de pago en efectivo si existe
+                        string queryPago = @"
+                    SELECT recibido, cambio 
+                    FROM pagos 
+                    WHERE id_orden = @idOrden";
+
+                        using (MySqlCommand cmd = new MySqlCommand(queryPago, conexion))
+                        {
+                            cmd.Parameters.AddWithValue("@idOrden", idOrden);
+
+                            using (MySqlDataReader reader = cmd.ExecuteReader())
+                            {
+                                if (reader.Read())
+                                {
+                                    decimal recibido = reader.GetDecimal("recibido");
+                                    decimal cambio = reader.GetDecimal("cambio");
+                                    comprobante.AppendLine($"Recibido: {recibido.ToString("C")}");
+                                    comprobante.AppendLine($"Cambio: {cambio.ToString("C")}");
+                                }
+                            }
+                        }
+                    }
+
+                    comprobante.AppendLine();
+                    comprobante.AppendLine("¡Gracias por su visita!");
+
+                    MessageBox.Show(comprobante.ToString(), "Comprobante de Pago",
+                                  MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             catch (Exception ex)

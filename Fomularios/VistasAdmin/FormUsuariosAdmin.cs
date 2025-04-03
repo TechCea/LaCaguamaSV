@@ -396,6 +396,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void FormUsuariosAdmin_Load(object sender, EventArgs e)
         {
+            dgvUsuarios.DefaultCellStyle.ForeColor = Color.Black;
             CargarRoles();
         }
 

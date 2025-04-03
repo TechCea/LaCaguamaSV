@@ -42,7 +42,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
             // Aplicar esquinas redondeadas a controles específicos
             RoundedControl.ApplyRoundedCorners(dataGridViewMenu, 15);   // Redondear un Panel
-           
+
 
 
             CargarDatosOrden(idOrden, nombreCliente, total, descuento, fechaOrden, numeroMesa, tipoPago, nombreUsuario, estadoOrden);
@@ -763,19 +763,20 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                     return;
                 }
 
-                // Crear formulario de pago con parámetros validados
+                int idUsuarioCreador = ObtenerUsuarioCreadorOrden(Convert.ToInt32(lblIdOrden.Text));
+
+                // Crear formulario de pago con el usuario creador
                 using (var formPago = new FormAdminPagos(
                     ordenId,
                     lblNombreCliente.Text,
                     totalOrden,
                     idMesaActual,
-                    SesionUsuario.IdUsuario))
+                    idUsuarioCreador)) // Pasamos el usuario creador en lugar de SesionUsuario.IdUsuario
                 {
                     var result = formPago.ShowDialog();
 
                     if (result == DialogResult.OK)
                     {
-                        // Actualizar estado local si el pago fue exitoso
                         DialogResult = DialogResult.OK;
                         Close();
                     }
@@ -785,6 +786,21 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             {
                 MessageBox.Show($"Error inesperado: {ex.Message}", "Error",
                               MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        // Método para obtener el usuario creador de la orden
+        private int ObtenerUsuarioCreadorOrden(int idOrden)
+        {
+            using (MySqlConnection conexion = new Conexion().EstablecerConexion())
+            {
+                string query = "SELECT id_usuario FROM ordenes WHERE id_orden = @idOrden";
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@idOrden", idOrden);
+                    object result = cmd.ExecuteScalar();
+                    return result != null ? Convert.ToInt32(result) : -1;
+                }
             }
         }
 

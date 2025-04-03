@@ -12,18 +12,18 @@ using MySql.Data.MySqlClient;
 
 namespace LaCaguamaSV.Fomularios.VistasAdmin
 {
-    public partial class FormAdminPagos: Form
+    public partial class FormAdminPagos : Form
     {
         private int idOrden;
-        private int idUsuario;
+        private int idUsuarioCreador; // Cambiamos el nombre para claridad
         private decimal totalOrden;
         private int idMesa;
 
-        public FormAdminPagos(int idOrden, string nombreCliente, decimal total, int idMesa, int idUsuario)
+        public FormAdminPagos(int idOrden, string nombreCliente, decimal total, int idMesa, int idUsuarioCreador)
         {
             InitializeComponent();
             this.idOrden = idOrden;
-            this.idUsuario = idUsuario;
+            this.idUsuarioCreador = idUsuarioCreador; // Usamos el usuario creador
             this.totalOrden = total;
             this.idMesa = idMesa;
 
@@ -140,12 +140,12 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 {
                     try
                     {
-                        // 1. Registrar el pago
+                        // 1. Registrar el pago (usamos idUsuarioCreador en lugar de idUsuario)
                         string queryPago = @"
                 INSERT INTO pagos 
                     (id_orden, monto, recibido, cambio, id_usuario, id_tipo_pago) 
                 VALUES 
-                    (@idOrden, @total, @recibido, @cambio, @idUsuario, @tipoPago)";
+                    (@idOrden, @total, @recibido, @cambio, @idUsuarioCreador, @tipoPago)";
 
                         using (MySqlCommand cmd = new MySqlCommand(queryPago, conexion, transaction))
                         {
@@ -153,7 +153,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                             cmd.Parameters.AddWithValue("@total", totalOrden);
                             cmd.Parameters.AddWithValue("@recibido", metodoPago == 1 ? recibido : totalOrden);
                             cmd.Parameters.AddWithValue("@cambio", cambio);
-                            cmd.Parameters.AddWithValue("@idUsuario", idUsuario);
+                            cmd.Parameters.AddWithValue("@idUsuarioCreador", idUsuarioCreador); // Usamos el creador
                             cmd.Parameters.AddWithValue("@tipoPago", metodoPago);
 
                             cmd.ExecuteNonQuery();
@@ -407,6 +407,36 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         }
 
         private void FormAdminPagos_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblTotalP_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblCliente_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void label4_Click(object sender, EventArgs e)
         {
 
         }
