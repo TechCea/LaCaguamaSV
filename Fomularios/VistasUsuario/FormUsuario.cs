@@ -299,5 +299,11 @@ namespace LaCaguamaSV.Fomularios.VistasUsuario
         {
 
         }
+
+        private void BtnMenu_Click(object sender, EventArgs e)
+        {
+            Menu formMenu = new Menu();
+            formMenu.Show();
+        }
     }
 }
