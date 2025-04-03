@@ -45,5 +45,16 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             FormIngredientesInv formIngredientes = new FormIngredientesInv();
             formIngredientes.ShowDialog();
         }
+
+        private void btnExtras_Click(object sender, EventArgs e)
+        {
+            using (FormInventarioExtrasAdmin FormInventarioExtras = new FormInventarioExtrasAdmin())
+            {
+                this.Hide(); // Oculta el menú
+                FormInventarioExtras.ShowDialog(); // Muestra el formulario 
+                this.Show(); // Vuelve a mostrar el menú cuando el formulario de proveedore se cierra
+            }
+
+        }
     }
 }

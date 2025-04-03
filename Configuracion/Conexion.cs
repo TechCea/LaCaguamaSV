@@ -14,10 +14,10 @@ namespace LaCaguamaSV.Configuracion
     {
         private MySqlConnection conectar = null;
         private static string usuario = "root";
-        private static string contrasenia = "root";
+        private static string contrasenia = "1234";
         private static string bd = "lacaguamabd";
         private static string ip = "localhost";
-        private static string puerto = "3307"; // o 3307 si eres javier 
+        private static string puerto = "3306"; // o 3307 si eres javier 
 
         string cadenaConexion = $"Server={ip};Port={puerto};Database={bd};User Id={usuario};Password={contrasenia};";
 
@@ -1651,23 +1651,48 @@ public DataTable ObtenerBebidas()
         }
 
 
+
+        
+
+
         public DataTable ObtenerExtrasCompletos()
         {
-            string query = @"
-        SELECT 
-            e.id_extra AS 'ID',
-            i.nombreProducto AS 'Nombre',
-            e.precioUnitario AS 'Precio',
-            i.cantidad AS 'Cantidad',
-            p.nombreProveedor AS 'Proveedor',
-            i.id_proveedor AS 'ID_Proveedor',
-            e.id_inventario AS 'ID_Inventario'
-        FROM extras e
-        JOIN inventario i ON e.id_inventario = i.id_inventario
-        JOIN proveedor p ON i.id_proveedor = p.id_proveedor";
+            try
+            {
+                string query = @"SELECT 
+                        e.id_extra AS ID, 
+                        i.nombreProducto AS Nombre, 
+                        e.precioUnitario AS Precio, 
+                        i.cantidad AS Cantidad, 
+                        p.nombreProv AS Proveedor,
+                        i.id_proveedor AS ID_Proveedor, 
+                        e.id_inventario AS ID_Inventario 
+                        FROM extras e 
+                        INNER JOIN inventario i ON e.id_inventario = i.id_inventario 
+                        INNER JOIN proveedores p ON i.id_proveedor = p.id_proveedor";
 
-            return EjecutarConsulta(query);
+                DataTable result = EjecutarConsulta(query);
+
+                // Verificación básica de columnas
+                string[] requiredColumns = { "ID", "Nombre", "Precio", "Cantidad", "Proveedor", "ID_Proveedor", "ID_Inventario" };
+                foreach (var col in requiredColumns)
+                {
+                    if (!result.Columns.Contains(col))
+                        throw new Exception($"Falta la columna requerida: {col}");
+                }
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al obtener extras: {ex.Message}");
+                return new DataTable(); // Retorna tabla vacía para evitar null
+            }
         }
+
+
+
+
 
         public bool AgregarExtraConInventario(string nombre, decimal precio, int cantidad, int idProveedor)
         {
