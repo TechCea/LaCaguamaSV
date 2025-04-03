@@ -76,7 +76,7 @@
             this.btnAgregarIng.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(207)))), ((int)(((byte)(111)))));
             this.btnAgregarIng.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnAgregarIng.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnAgregarIng.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.btnAgregarIng.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAgregarIng.ForeColor = System.Drawing.SystemColors.HighlightText;
             this.btnAgregarIng.Location = new System.Drawing.Point(25, 260);
             this.btnAgregarIng.Margin = new System.Windows.Forms.Padding(2);
@@ -104,7 +104,7 @@
             this.btnEliminar.BackColor = System.Drawing.Color.Brown;
             this.btnEliminar.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnEliminar.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnEliminar.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.btnEliminar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnEliminar.ForeColor = System.Drawing.SystemColors.HighlightText;
             this.btnEliminar.Location = new System.Drawing.Point(271, 260);
             this.btnEliminar.Margin = new System.Windows.Forms.Padding(2);
@@ -149,7 +149,7 @@
             this.btnActualizarB.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
             this.btnActualizarB.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnActualizarB.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnActualizarB.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.btnActualizarB.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnActualizarB.ForeColor = System.Drawing.SystemColors.HighlightText;
             this.btnActualizarB.Location = new System.Drawing.Point(147, 260);
             this.btnActualizarB.Margin = new System.Windows.Forms.Padding(2);
@@ -195,7 +195,7 @@
             this.btnRegresarMenu.BackColor = System.Drawing.Color.White;
             this.btnRegresarMenu.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnRegresarMenu.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnRegresarMenu.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.btnRegresarMenu.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnRegresarMenu.ForeColor = System.Drawing.SystemColors.ControlText;
             this.btnRegresarMenu.Location = new System.Drawing.Point(49, 405);
             this.btnRegresarMenu.Margin = new System.Windows.Forms.Padding(2);
@@ -232,7 +232,7 @@
             this.btncrearPlato.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(207)))), ((int)(((byte)(111)))));
             this.btncrearPlato.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btncrearPlato.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btncrearPlato.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.btncrearPlato.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btncrearPlato.ForeColor = System.Drawing.SystemColors.HighlightText;
             this.btncrearPlato.Location = new System.Drawing.Point(622, 405);
             this.btncrearPlato.Margin = new System.Windows.Forms.Padding(2);

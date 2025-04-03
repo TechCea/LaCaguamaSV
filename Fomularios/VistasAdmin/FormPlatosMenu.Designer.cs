@@ -63,9 +63,9 @@
             this.gbDatosBebida.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gbDatosBebida.ForeColor = System.Drawing.SystemColors.Control;
             this.gbDatosBebida.Location = new System.Drawing.Point(602, 78);
-            this.gbDatosBebida.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.gbDatosBebida.Margin = new System.Windows.Forms.Padding(2);
             this.gbDatosBebida.Name = "gbDatosBebida";
-            this.gbDatosBebida.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.gbDatosBebida.Padding = new System.Windows.Forms.Padding(2);
             this.gbDatosBebida.Size = new System.Drawing.Size(329, 335);
             this.gbDatosBebida.TabIndex = 11;
             this.gbDatosBebida.TabStop = false;
@@ -107,7 +107,7 @@
             this.cbCategoriaB.Cursor = System.Windows.Forms.Cursors.Hand;
             this.cbCategoriaB.FormattingEnabled = true;
             this.cbCategoriaB.Location = new System.Drawing.Point(126, 121);
-            this.cbCategoriaB.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cbCategoriaB.Margin = new System.Windows.Forms.Padding(2);
             this.cbCategoriaB.Name = "cbCategoriaB";
             this.cbCategoriaB.Size = new System.Drawing.Size(170, 24);
             this.cbCategoriaB.TabIndex = 5;
@@ -116,7 +116,7 @@
             // txtPrecioU
             // 
             this.txtPrecioU.Location = new System.Drawing.Point(126, 253);
-            this.txtPrecioU.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtPrecioU.Margin = new System.Windows.Forms.Padding(2);
             this.txtPrecioU.Name = "txtPrecioU";
             this.txtPrecioU.Size = new System.Drawing.Size(171, 23);
             this.txtPrecioU.TabIndex = 4;
@@ -146,7 +146,7 @@
             // txtNombreC
             // 
             this.txtNombreC.Location = new System.Drawing.Point(126, 66);
-            this.txtNombreC.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtNombreC.Margin = new System.Windows.Forms.Padding(2);
             this.txtNombreC.Name = "txtNombreC";
             this.txtNombreC.Size = new System.Drawing.Size(170, 23);
             this.txtNombreC.TabIndex = 1;
@@ -167,10 +167,10 @@
             this.btnRegresarInv.BackColor = System.Drawing.Color.Snow;
             this.btnRegresarInv.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnRegresarInv.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnRegresarInv.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnRegresarInv.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnRegresarInv.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.btnRegresarInv.Location = new System.Drawing.Point(17, 427);
-            this.btnRegresarInv.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnRegresarInv.Margin = new System.Windows.Forms.Padding(2);
             this.btnRegresarInv.Name = "btnRegresarInv";
             this.btnRegresarInv.Size = new System.Drawing.Size(138, 47);
             this.btnRegresarInv.TabIndex = 10;
@@ -183,7 +183,7 @@
             this.cbCategoriaC.Cursor = System.Windows.Forms.Cursors.Hand;
             this.cbCategoriaC.FormattingEnabled = true;
             this.cbCategoriaC.Location = new System.Drawing.Point(482, 45);
-            this.cbCategoriaC.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cbCategoriaC.Margin = new System.Windows.Forms.Padding(2);
             this.cbCategoriaC.Name = "cbCategoriaC";
             this.cbCategoriaC.Size = new System.Drawing.Size(92, 21);
             this.cbCategoriaC.TabIndex = 9;
@@ -194,7 +194,7 @@
             this.dgvComidas.BackgroundColor = System.Drawing.SystemColors.ControlDarkDark;
             this.dgvComidas.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvComidas.Location = new System.Drawing.Point(16, 78);
-            this.dgvComidas.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.dgvComidas.Margin = new System.Windows.Forms.Padding(2);
             this.dgvComidas.Name = "dgvComidas";
             this.dgvComidas.RowHeadersWidth = 51;
             this.dgvComidas.RowTemplate.Height = 24;
@@ -206,10 +206,10 @@
             this.btnEliminarC.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
             this.btnEliminarC.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnEliminarC.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnEliminarC.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnEliminarC.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnEliminarC.ForeColor = System.Drawing.SystemColors.ControlLight;
             this.btnEliminarC.Location = new System.Drawing.Point(759, 427);
-            this.btnEliminarC.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnEliminarC.Margin = new System.Windows.Forms.Padding(2);
             this.btnEliminarC.Name = "btnEliminarC";
             this.btnEliminarC.Size = new System.Drawing.Size(149, 47);
             this.btnEliminarC.TabIndex = 13;
@@ -222,10 +222,10 @@
             this.btnCrearPlato.BackColor = System.Drawing.Color.ForestGreen;
             this.btnCrearPlato.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnCrearPlato.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnCrearPlato.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCrearPlato.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCrearPlato.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.btnCrearPlato.Location = new System.Drawing.Point(617, 427);
-            this.btnCrearPlato.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnCrearPlato.Margin = new System.Windows.Forms.Padding(2);
             this.btnCrearPlato.Name = "btnCrearPlato";
             this.btnCrearPlato.Size = new System.Drawing.Size(104, 47);
             this.btnCrearPlato.TabIndex = 12;
@@ -261,7 +261,7 @@
             this.Controls.Add(this.dgvComidas);
             this.Controls.Add(this.btnEliminarC);
             this.Controls.Add(this.btnCrearPlato);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "FormPlatosMenu";
             this.Text = "FormPlatosMenu";
             this.Load += new System.EventHandler(this.FormPlatosMenu_Load);

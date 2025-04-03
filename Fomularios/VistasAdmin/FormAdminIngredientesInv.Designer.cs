@@ -54,11 +54,11 @@
             this.gbDatosIngrediente.Controls.Add(this.txtDescripcionC);
             this.gbDatosIngrediente.Controls.Add(this.label3);
             this.gbDatosIngrediente.Controls.Add(this.lblSeleccionBebida);
+            this.gbDatosIngrediente.Controls.Add(this.btnEliminarI);
             this.gbDatosIngrediente.Controls.Add(this.cbProveedores);
             this.gbDatosIngrediente.Controls.Add(this.label2);
-            this.gbDatosIngrediente.Controls.Add(this.btnEliminarI);
-            this.gbDatosIngrediente.Controls.Add(this.btnActualizarC);
             this.gbDatosIngrediente.Controls.Add(this.label1);
+            this.gbDatosIngrediente.Controls.Add(this.btnActualizarC);
             this.gbDatosIngrediente.Controls.Add(this.txtNombreC);
             this.gbDatosIngrediente.Controls.Add(this.lbNombreBebida);
             this.gbDatosIngrediente.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -75,12 +75,12 @@
             // 
             // button1
             // 
-            this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(207)))), ((int)(((byte)(111)))));
+            this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
             this.button1.Cursor = System.Windows.Forms.Cursors.Hand;
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button1.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.button1.Location = new System.Drawing.Point(176, 258);
+            this.button1.Location = new System.Drawing.Point(179, 258);
             this.button1.Margin = new System.Windows.Forms.Padding(2);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(133, 47);
@@ -142,9 +142,9 @@
             this.btnEliminarI.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(236)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
             this.btnEliminarI.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnEliminarI.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnEliminarI.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnEliminarI.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnEliminarI.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.btnEliminarI.Location = new System.Drawing.Point(25, 258);
+            this.btnEliminarI.Location = new System.Drawing.Point(343, 258);
             this.btnEliminarI.Margin = new System.Windows.Forms.Padding(2);
             this.btnEliminarI.Name = "btnEliminarI";
             this.btnEliminarI.Size = new System.Drawing.Size(93, 47);
@@ -157,9 +157,9 @@
             this.btnActualizarC.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(207)))), ((int)(((byte)(111)))));
             this.btnActualizarC.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnActualizarC.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnActualizarC.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnActualizarC.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnActualizarC.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.btnActualizarC.Location = new System.Drawing.Point(326, 258);
+            this.btnActualizarC.Location = new System.Drawing.Point(26, 258);
             this.btnActualizarC.Margin = new System.Windows.Forms.Padding(2);
             this.btnActualizarC.Name = "btnActualizarC";
             this.btnActualizarC.Size = new System.Drawing.Size(133, 47);
@@ -202,7 +202,7 @@
             this.btnRegresarInventario.BackColor = System.Drawing.Color.White;
             this.btnRegresarInventario.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnRegresarInventario.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnRegresarInventario.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnRegresarInventario.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnRegresarInventario.ForeColor = System.Drawing.Color.Black;
             this.btnRegresarInventario.Location = new System.Drawing.Point(31, 407);
             this.btnRegresarInventario.Margin = new System.Windows.Forms.Padding(2);
@@ -229,7 +229,7 @@
             // 
             this.btnAgregarPlato.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
             this.btnAgregarPlato.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnAgregarPlato.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnAgregarPlato.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAgregarPlato.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.btnAgregarPlato.Location = new System.Drawing.Point(801, 407);
             this.btnAgregarPlato.Margin = new System.Windows.Forms.Padding(2);

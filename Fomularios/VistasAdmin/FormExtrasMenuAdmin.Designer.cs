@@ -47,7 +47,7 @@
             this.btnRegresarMenu.BackColor = System.Drawing.Color.White;
             this.btnRegresarMenu.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnRegresarMenu.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnRegresarMenu.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.btnRegresarMenu.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnRegresarMenu.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.btnRegresarMenu.Location = new System.Drawing.Point(28, 401);
             this.btnRegresarMenu.Margin = new System.Windows.Forms.Padding(2);
@@ -144,7 +144,7 @@
             this.btnEliminarE.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(236)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
             this.btnEliminarE.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnEliminarE.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnEliminarE.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.btnEliminarE.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnEliminarE.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.btnEliminarE.Location = new System.Drawing.Point(553, 341);
             this.btnEliminarE.Margin = new System.Windows.Forms.Padding(2);
@@ -160,7 +160,7 @@
             this.btnActualizarB.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
             this.btnActualizarB.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnActualizarB.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnActualizarB.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.btnActualizarB.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnActualizarB.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.btnActualizarB.Location = new System.Drawing.Point(387, 341);
             this.btnActualizarB.Margin = new System.Windows.Forms.Padding(2);

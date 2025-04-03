@@ -58,6 +58,7 @@
             this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(236)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
             this.button1.Cursor = System.Windows.Forms.Cursors.Hand;
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button1.ForeColor = System.Drawing.SystemColors.Control;
             this.button1.Location = new System.Drawing.Point(528, 77);
             this.button1.Name = "button1";
@@ -138,6 +139,7 @@
             this.btnEditar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
             this.btnEditar.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnEditar.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnEditar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnEditar.ForeColor = System.Drawing.SystemColors.Control;
             this.btnEditar.Location = new System.Drawing.Point(412, 19);
             this.btnEditar.Name = "btnEditar";
@@ -152,6 +154,7 @@
             this.btnEliminar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(236)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
             this.btnEliminar.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnEliminar.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnEliminar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnEliminar.ForeColor = System.Drawing.SystemColors.Control;
             this.btnEliminar.Location = new System.Drawing.Point(554, 19);
             this.btnEliminar.Name = "btnEliminar";
@@ -166,6 +169,7 @@
             this.BtnAgregarU.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(207)))), ((int)(((byte)(111)))));
             this.BtnAgregarU.Cursor = System.Windows.Forms.Cursors.Hand;
             this.BtnAgregarU.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.BtnAgregarU.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BtnAgregarU.ForeColor = System.Drawing.SystemColors.Control;
             this.BtnAgregarU.Location = new System.Drawing.Point(279, 18);
             this.BtnAgregarU.Name = "BtnAgregarU";
@@ -260,6 +264,7 @@
             this.btnCerrar_Click.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(236)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
             this.btnCerrar_Click.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnCerrar_Click.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnCerrar_Click.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCerrar_Click.ForeColor = System.Drawing.SystemColors.Control;
             this.btnCerrar_Click.Location = new System.Drawing.Point(714, 15);
             this.btnCerrar_Click.Name = "btnCerrar_Click";

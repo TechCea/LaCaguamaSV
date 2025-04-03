@@ -104,6 +104,7 @@
             this.btnCrearOrden.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(207)))), ((int)(((byte)(111)))));
             this.btnCrearOrden.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnCrearOrden.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnCrearOrden.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCrearOrden.ForeColor = System.Drawing.Color.White;
             this.btnCrearOrden.Location = new System.Drawing.Point(62, 190);
             this.btnCrearOrden.Name = "btnCrearOrden";
@@ -118,6 +119,7 @@
             this.btnCancelar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(236)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
             this.btnCancelar.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnCancelar.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnCancelar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCancelar.ForeColor = System.Drawing.Color.White;
             this.btnCancelar.Location = new System.Drawing.Point(282, 190);
             this.btnCancelar.Name = "btnCancelar";

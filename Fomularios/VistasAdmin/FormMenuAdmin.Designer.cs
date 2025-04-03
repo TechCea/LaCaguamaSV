@@ -41,9 +41,11 @@
             // 
             this.btnBebidas.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
             this.btnBebidas.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnBebidas.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnBebidas.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnBebidas.ForeColor = System.Drawing.SystemColors.Control;
             this.btnBebidas.Location = new System.Drawing.Point(222, 136);
-            this.btnBebidas.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnBebidas.Margin = new System.Windows.Forms.Padding(2);
             this.btnBebidas.Name = "btnBebidas";
             this.btnBebidas.Size = new System.Drawing.Size(91, 56);
             this.btnBebidas.TabIndex = 0;
@@ -55,9 +57,11 @@
             // 
             this.btnExtras.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
             this.btnExtras.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnExtras.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnExtras.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnExtras.ForeColor = System.Drawing.SystemColors.Control;
             this.btnExtras.Location = new System.Drawing.Point(404, 136);
-            this.btnExtras.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnExtras.Margin = new System.Windows.Forms.Padding(2);
             this.btnExtras.Name = "btnExtras";
             this.btnExtras.Size = new System.Drawing.Size(82, 57);
             this.btnExtras.TabIndex = 1;
@@ -69,9 +73,11 @@
             // 
             this.btnComidas.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
             this.btnComidas.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnComidas.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnComidas.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnComidas.ForeColor = System.Drawing.SystemColors.Control;
             this.btnComidas.Location = new System.Drawing.Point(50, 136);
-            this.btnComidas.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnComidas.Margin = new System.Windows.Forms.Padding(2);
             this.btnComidas.Name = "btnComidas";
             this.btnComidas.Size = new System.Drawing.Size(88, 56);
             this.btnComidas.TabIndex = 2;
@@ -89,9 +95,9 @@
             this.gbDatosBebida.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gbDatosBebida.ForeColor = System.Drawing.SystemColors.Control;
             this.gbDatosBebida.Location = new System.Drawing.Point(25, 32);
-            this.gbDatosBebida.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.gbDatosBebida.Margin = new System.Windows.Forms.Padding(2);
             this.gbDatosBebida.Name = "gbDatosBebida";
-            this.gbDatosBebida.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.gbDatosBebida.Padding = new System.Windows.Forms.Padding(2);
             this.gbDatosBebida.Size = new System.Drawing.Size(533, 288);
             this.gbDatosBebida.TabIndex = 7;
             this.gbDatosBebida.TabStop = false;
@@ -133,7 +139,7 @@
             this.ClientSize = new System.Drawing.Size(600, 366);
             this.Controls.Add(this.btnCerrar_Click);
             this.Controls.Add(this.gbDatosBebida);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "FormMenuAdmin";
             this.Text = "FormMenuAdmin";
             this.Load += new System.EventHandler(this.FormMenuAdmin_Load);
