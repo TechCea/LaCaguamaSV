@@ -1754,7 +1754,7 @@ public DataTable ObtenerBebidas()
 
 
 
-        public bool AgregarExtraConInventario(string nombre, decimal precio, int cantidad, int idProveedor)
+        public bool AgregarExtraConInventario(string nombre, decimal precio, decimal cantidad, int idProveedor)
         {
             using (MySqlConnection conn = new MySqlConnection(cadenaConexion))
             {
@@ -1763,7 +1763,7 @@ public DataTable ObtenerBebidas()
 
                 try
                 {
-                    // 1. Insertar en inventario
+                    // 1. Insertar en inventario (cantidad como decimal)
                     string queryInventario = @"
                 INSERT INTO inventario 
                 (nombreProducto, cantidad, id_proveedor) 
@@ -1771,9 +1771,11 @@ public DataTable ObtenerBebidas()
                 SELECT LAST_INSERT_ID();";
 
                     MySqlCommand cmdInventario = new MySqlCommand(queryInventario, conn, transaction);
-                    cmdInventario.Parameters.AddWithValue("@nombre", nombre);
-                    cmdInventario.Parameters.AddWithValue("@cantidad", cantidad);
-                    cmdInventario.Parameters.AddWithValue("@idProveedor", idProveedor);
+
+                    // Especificar explícitamente el tipo de parámetro para decimal
+                    cmdInventario.Parameters.Add("@nombre", MySqlDbType.VarChar).Value = nombre;
+                    cmdInventario.Parameters.Add("@cantidad", MySqlDbType.Decimal).Value = cantidad;
+                    cmdInventario.Parameters.Add("@idProveedor", MySqlDbType.Int32).Value = idProveedor;
 
                     int idInventario = Convert.ToInt32(cmdInventario.ExecuteScalar());
 
@@ -1784,22 +1786,25 @@ public DataTable ObtenerBebidas()
                 VALUES (@precio, @idInventario)";
 
                     MySqlCommand cmdExtra = new MySqlCommand(queryExtra, conn, transaction);
-                    cmdExtra.Parameters.AddWithValue("@precio", precio);
-                    cmdExtra.Parameters.AddWithValue("@idInventario", idInventario);
+                    cmdExtra.Parameters.Add("@precio", MySqlDbType.Decimal).Value = precio;
+                    cmdExtra.Parameters.Add("@idInventario", MySqlDbType.Int32).Value = idInventario;
                     cmdExtra.ExecuteNonQuery();
 
                     transaction.Commit();
                     return true;
                 }
-                catch
+                catch (Exception ex)
                 {
                     transaction.Rollback();
-                    throw;
+                    MessageBox.Show($"Error al agregar extra: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
                 }
             }
         }
 
-        public bool ActualizarExtraConInventario(int idExtra, int idInventario, string nombre, decimal precio, int cantidad, int idProveedor)
+
+        public bool ActualizarExtraConInventario(int idExtra, int idInventario, string nombre,
+                                       decimal precio, decimal cantidad, int idProveedor)
         {
             using (MySqlConnection conn = new MySqlConnection(cadenaConexion))
             {
@@ -1808,7 +1813,7 @@ public DataTable ObtenerBebidas()
 
                 try
                 {
-                    // 1. Actualizar inventario
+                    // 1. Actualizar inventario (nota que cantidad es decimal)
                     string queryInventario = @"
                 UPDATE inventario SET 
                     nombreProducto = @nombre,
@@ -1817,10 +1822,10 @@ public DataTable ObtenerBebidas()
                 WHERE id_inventario = @idInventario";
 
                     MySqlCommand cmdInventario = new MySqlCommand(queryInventario, conn, transaction);
-                    cmdInventario.Parameters.AddWithValue("@nombre", nombre);
-                    cmdInventario.Parameters.AddWithValue("@cantidad", cantidad);
-                    cmdInventario.Parameters.AddWithValue("@idProveedor", idProveedor);
-                    cmdInventario.Parameters.AddWithValue("@idInventario", idInventario);
+                    cmdInventario.Parameters.Add("@nombre", MySqlDbType.VarChar).Value = nombre;
+                    cmdInventario.Parameters.Add("@cantidad", MySqlDbType.Decimal).Value = cantidad;
+                    cmdInventario.Parameters.Add("@idProveedor", MySqlDbType.Int32).Value = idProveedor;
+                    cmdInventario.Parameters.Add("@idInventario", MySqlDbType.Int32).Value = idInventario;
                     cmdInventario.ExecuteNonQuery();
 
                     // 2. Actualizar extras
@@ -1830,17 +1835,18 @@ public DataTable ObtenerBebidas()
                 WHERE id_extra = @idExtra";
 
                     MySqlCommand cmdExtra = new MySqlCommand(queryExtra, conn, transaction);
-                    cmdExtra.Parameters.AddWithValue("@precio", precio);
-                    cmdExtra.Parameters.AddWithValue("@idExtra", idExtra);
+                    cmdExtra.Parameters.Add("@precio", MySqlDbType.Decimal).Value = precio;
+                    cmdExtra.Parameters.Add("@idExtra", MySqlDbType.Int32).Value = idExtra;
                     cmdExtra.ExecuteNonQuery();
 
                     transaction.Commit();
                     return true;
                 }
-                catch
+                catch (Exception ex)
                 {
                     transaction.Rollback();
-                    throw;
+                    MessageBox.Show($"Error al actualizar: {ex.Message}");
+                    return false;
                 }
             }
         }
