@@ -43,117 +43,140 @@
             // 
             // btnGestionUsuarios
             // 
-            this.btnGestionUsuarios.Location = new System.Drawing.Point(772, 91);
-            this.btnGestionUsuarios.Margin = new System.Windows.Forms.Padding(4);
+            this.btnGestionUsuarios.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
+            this.btnGestionUsuarios.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnGestionUsuarios.ForeColor = System.Drawing.SystemColors.Control;
+            this.btnGestionUsuarios.Location = new System.Drawing.Point(601, 87);
             this.btnGestionUsuarios.Name = "btnGestionUsuarios";
-            this.btnGestionUsuarios.Size = new System.Drawing.Size(223, 76);
+            this.btnGestionUsuarios.Size = new System.Drawing.Size(167, 62);
             this.btnGestionUsuarios.TabIndex = 2;
             this.btnGestionUsuarios.Text = "Administrar Usuarios";
-            this.btnGestionUsuarios.UseVisualStyleBackColor = true;
+            this.btnGestionUsuarios.UseVisualStyleBackColor = false;
             this.btnGestionUsuarios.Click += new System.EventHandler(this.btnGestionUsuarios_Click);
             // 
             // btnCerrarSesion
             // 
-            this.btnCerrarSesion.Location = new System.Drawing.Point(875, 569);
-            this.btnCerrarSesion.Margin = new System.Windows.Forms.Padding(4);
+            this.btnCerrarSesion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(236)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
+            this.btnCerrarSesion.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCerrarSesion.ForeColor = System.Drawing.SystemColors.Control;
+            this.btnCerrarSesion.Location = new System.Drawing.Point(644, 462);
             this.btnCerrarSesion.Name = "btnCerrarSesion";
-            this.btnCerrarSesion.Size = new System.Drawing.Size(100, 28);
+            this.btnCerrarSesion.Size = new System.Drawing.Size(84, 38);
             this.btnCerrarSesion.TabIndex = 3;
             this.btnCerrarSesion.Text = "Cerrar";
-            this.btnCerrarSesion.UseVisualStyleBackColor = true;
+            this.btnCerrarSesion.UseVisualStyleBackColor = false;
             this.btnCerrarSesion.Click += new System.EventHandler(this.btnCerrarSesion_Click);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(605, 15);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.BackColor = System.Drawing.Color.Transparent;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.SystemColors.Control;
+            this.label1.Location = new System.Drawing.Point(178, 10);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(116, 16);
+            this.label1.Size = new System.Drawing.Size(181, 24);
             this.label1.TabIndex = 4;
             this.label1.Text = "Bienvenido Admin";
             // 
             // btnMenu
             // 
-            this.btnMenu.Location = new System.Drawing.Point(772, 172);
-            this.btnMenu.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
+            this.btnMenu.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnMenu.ForeColor = System.Drawing.SystemColors.Control;
+            this.btnMenu.Location = new System.Drawing.Point(601, 153);
+            this.btnMenu.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnMenu.Name = "btnMenu";
-            this.btnMenu.Size = new System.Drawing.Size(223, 64);
+            this.btnMenu.Size = new System.Drawing.Size(167, 52);
             this.btnMenu.TabIndex = 5;
             this.btnMenu.Text = "Gestionar Menú";
-            this.btnMenu.UseVisualStyleBackColor = true;
+            this.btnMenu.UseVisualStyleBackColor = false;
             this.btnMenu.Click += new System.EventHandler(this.btnMenu_Click);
             // 
             // Ordenes
             // 
-            this.Ordenes.Location = new System.Drawing.Point(772, 15);
-            this.Ordenes.Margin = new System.Windows.Forms.Padding(4);
+            this.Ordenes.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
+            this.Ordenes.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Ordenes.ForeColor = System.Drawing.SystemColors.Control;
+            this.Ordenes.Location = new System.Drawing.Point(601, 26);
             this.Ordenes.Name = "Ordenes";
-            this.Ordenes.Size = new System.Drawing.Size(149, 68);
+            this.Ordenes.Size = new System.Drawing.Size(167, 55);
             this.Ordenes.TabIndex = 6;
             this.Ordenes.Text = "Ordenes";
-            this.Ordenes.UseVisualStyleBackColor = true;
+            this.Ordenes.UseVisualStyleBackColor = false;
             this.Ordenes.Click += new System.EventHandler(this.Ordenes_Click);
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(772, 242);
-            this.button1.Margin = new System.Windows.Forms.Padding(4);
+            this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
+            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button1.ForeColor = System.Drawing.SystemColors.Control;
+            this.button1.Location = new System.Drawing.Point(601, 210);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(203, 82);
+            this.button1.Size = new System.Drawing.Size(167, 67);
             this.button1.TabIndex = 7;
             this.button1.Text = "Funciones";
-            this.button1.UseVisualStyleBackColor = true;
+            this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // dataGridViewOrdenesAdmin
             // 
+            this.dataGridViewOrdenesAdmin.BackgroundColor = System.Drawing.SystemColors.ControlDarkDark;
             this.dataGridViewOrdenesAdmin.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewOrdenesAdmin.Location = new System.Drawing.Point(16, 46);
-            this.dataGridViewOrdenesAdmin.Margin = new System.Windows.Forms.Padding(4);
+            this.dataGridViewOrdenesAdmin.Location = new System.Drawing.Point(12, 37);
             this.dataGridViewOrdenesAdmin.Name = "dataGridViewOrdenesAdmin";
             this.dataGridViewOrdenesAdmin.RowHeadersWidth = 51;
-            this.dataGridViewOrdenesAdmin.Size = new System.Drawing.Size(737, 551);
+            this.dataGridViewOrdenesAdmin.Size = new System.Drawing.Size(553, 448);
             this.dataGridViewOrdenesAdmin.TabIndex = 8;
             this.dataGridViewOrdenesAdmin.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewOrdenesAdmin_CellContentClick);
             // 
             // btnCrearOrden
             // 
-            this.btnCrearOrden.Location = new System.Drawing.Point(772, 332);
-            this.btnCrearOrden.Margin = new System.Windows.Forms.Padding(4);
+            this.btnCrearOrden.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
+            this.btnCrearOrden.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCrearOrden.ForeColor = System.Drawing.SystemColors.Control;
+            this.btnCrearOrden.Location = new System.Drawing.Point(601, 283);
             this.btnCrearOrden.Name = "btnCrearOrden";
-            this.btnCrearOrden.Size = new System.Drawing.Size(203, 64);
+            this.btnCrearOrden.Size = new System.Drawing.Size(167, 52);
             this.btnCrearOrden.TabIndex = 9;
             this.btnCrearOrden.Text = "Crear Orden";
-            this.btnCrearOrden.UseVisualStyleBackColor = true;
+            this.btnCrearOrden.UseVisualStyleBackColor = false;
             this.btnCrearOrden.Click += new System.EventHandler(this.btnCrearOrden_Click);
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(772, 403);
+            this.button2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
+            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button2.ForeColor = System.Drawing.SystemColors.Control;
+            this.button2.Location = new System.Drawing.Point(601, 340);
+            this.button2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(203, 69);
+            this.button2.Size = new System.Drawing.Size(167, 56);
             this.button2.TabIndex = 10;
             this.button2.Text = "Gestionar mesas";
-            this.button2.UseVisualStyleBackColor = true;
+            this.button2.UseVisualStyleBackColor = false;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // btnInventario
             // 
-            this.btnInventario.Location = new System.Drawing.Point(772, 478);
+            this.btnInventario.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
+            this.btnInventario.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnInventario.ForeColor = System.Drawing.SystemColors.Control;
+            this.btnInventario.Location = new System.Drawing.Point(601, 401);
+            this.btnInventario.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnInventario.Name = "btnInventario";
-            this.btnInventario.Size = new System.Drawing.Size(203, 69);
+            this.btnInventario.Size = new System.Drawing.Size(167, 56);
             this.btnInventario.TabIndex = 11;
             this.btnInventario.Text = "Gestionar inventario";
-            this.btnInventario.UseVisualStyleBackColor = true;
+            this.btnInventario.UseVisualStyleBackColor = false;
             this.btnInventario.Click += new System.EventHandler(this.btnInventario_Click);
             // 
             // FormAdmin
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.Rectangle_52;
-            this.ClientSize = new System.Drawing.Size(1071, 630);
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.ClientSize = new System.Drawing.Size(803, 512);
             this.Controls.Add(this.btnInventario);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.btnCrearOrden);
@@ -164,7 +187,6 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnCerrarSesion);
             this.Controls.Add(this.btnGestionUsuarios);
-            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FormAdmin";
             this.Text = "FormAdmin";
             this.Load += new System.EventHandler(this.FormAdmin_Load);

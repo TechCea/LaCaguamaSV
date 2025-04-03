@@ -51,27 +51,34 @@
             // 
             // btnImprimir
             // 
-            this.btnImprimir.Location = new System.Drawing.Point(636, 285);
+            this.btnImprimir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
+            this.btnImprimir.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnImprimir.ForeColor = System.Drawing.SystemColors.Control;
+            this.btnImprimir.Location = new System.Drawing.Point(636, 263);
             this.btnImprimir.Name = "btnImprimir";
-            this.btnImprimir.Size = new System.Drawing.Size(75, 23);
+            this.btnImprimir.Size = new System.Drawing.Size(97, 46);
             this.btnImprimir.TabIndex = 0;
             this.btnImprimir.Text = "Imprimir";
-            this.btnImprimir.UseVisualStyleBackColor = true;
+            this.btnImprimir.UseVisualStyleBackColor = false;
             this.btnImprimir.Click += new System.EventHandler(this.btnImprimir_Click);
             // 
             // btnCerrar
             // 
-            this.btnCerrar.Location = new System.Drawing.Point(532, 285);
+            this.btnCerrar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(236)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
+            this.btnCerrar.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCerrar.ForeColor = System.Drawing.Color.White;
+            this.btnCerrar.Location = new System.Drawing.Point(532, 263);
             this.btnCerrar.Name = "btnCerrar";
-            this.btnCerrar.Size = new System.Drawing.Size(75, 23);
+            this.btnCerrar.Size = new System.Drawing.Size(98, 45);
             this.btnCerrar.TabIndex = 1;
             this.btnCerrar.Text = "Cerrar";
-            this.btnCerrar.UseVisualStyleBackColor = true;
+            this.btnCerrar.UseVisualStyleBackColor = false;
             this.btnCerrar.Click += new System.EventHandler(this.btnCerrar_Click);
             // 
             // lblNumeroFactura
             // 
             this.lblNumeroFactura.AutoSize = true;
+            this.lblNumeroFactura.ForeColor = System.Drawing.SystemColors.Control;
             this.lblNumeroFactura.Location = new System.Drawing.Point(527, 22);
             this.lblNumeroFactura.Name = "lblNumeroFactura";
             this.lblNumeroFactura.Size = new System.Drawing.Size(80, 13);
@@ -81,6 +88,7 @@
             // lblFecha
             // 
             this.lblFecha.AutoSize = true;
+            this.lblFecha.ForeColor = System.Drawing.SystemColors.Control;
             this.lblFecha.Location = new System.Drawing.Point(107, 9);
             this.lblFecha.Name = "lblFecha";
             this.lblFecha.Size = new System.Drawing.Size(37, 13);
@@ -102,6 +110,7 @@
             // lblCliente
             // 
             this.lblCliente.AutoSize = true;
+            this.lblCliente.ForeColor = System.Drawing.SystemColors.Control;
             this.lblCliente.Location = new System.Drawing.Point(8, 9);
             this.lblCliente.Name = "lblCliente";
             this.lblCliente.Size = new System.Drawing.Size(39, 13);
@@ -111,6 +120,7 @@
             // lblHora
             // 
             this.lblHora.AutoSize = true;
+            this.lblHora.ForeColor = System.Drawing.SystemColors.Control;
             this.lblHora.Location = new System.Drawing.Point(192, 9);
             this.lblHora.Name = "lblHora";
             this.lblHora.Size = new System.Drawing.Size(30, 13);
@@ -120,6 +130,7 @@
             // lblMesa
             // 
             this.lblMesa.AutoSize = true;
+            this.lblMesa.ForeColor = System.Drawing.SystemColors.Control;
             this.lblMesa.Location = new System.Drawing.Point(272, 9);
             this.lblMesa.Name = "lblMesa";
             this.lblMesa.Size = new System.Drawing.Size(33, 13);
@@ -129,6 +140,7 @@
             // lblAtendidoPor
             // 
             this.lblAtendidoPor.AutoSize = true;
+            this.lblAtendidoPor.ForeColor = System.Drawing.SystemColors.Control;
             this.lblAtendidoPor.Location = new System.Drawing.Point(357, 9);
             this.lblAtendidoPor.Name = "lblAtendidoPor";
             this.lblAtendidoPor.Size = new System.Drawing.Size(65, 13);
@@ -137,6 +149,7 @@
             // 
             // dgvDetalle
             // 
+            this.dgvDetalle.BackgroundColor = System.Drawing.SystemColors.ControlDarkDark;
             this.dgvDetalle.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvDetalle.Location = new System.Drawing.Point(13, 53);
             this.dgvDetalle.Name = "dgvDetalle";
@@ -147,6 +160,7 @@
             // lblSubtotal
             // 
             this.lblSubtotal.AutoSize = true;
+            this.lblSubtotal.ForeColor = System.Drawing.SystemColors.Control;
             this.lblSubtotal.Location = new System.Drawing.Point(535, 154);
             this.lblSubtotal.Name = "lblSubtotal";
             this.lblSubtotal.Size = new System.Drawing.Size(46, 13);
@@ -156,6 +170,7 @@
             // lblTotal
             // 
             this.lblTotal.AutoSize = true;
+            this.lblTotal.ForeColor = System.Drawing.SystemColors.Control;
             this.lblTotal.Location = new System.Drawing.Point(535, 190);
             this.lblTotal.Name = "lblTotal";
             this.lblTotal.Size = new System.Drawing.Size(31, 13);
@@ -165,6 +180,7 @@
             // lblDescuento
             // 
             this.lblDescuento.AutoSize = true;
+            this.lblDescuento.ForeColor = System.Drawing.SystemColors.Control;
             this.lblDescuento.Location = new System.Drawing.Point(535, 120);
             this.lblDescuento.Name = "lblDescuento";
             this.lblDescuento.Size = new System.Drawing.Size(59, 13);
@@ -174,6 +190,7 @@
             // lblTipoPago
             // 
             this.lblTipoPago.AutoSize = true;
+            this.lblTipoPago.ForeColor = System.Drawing.SystemColors.Control;
             this.lblTipoPago.Location = new System.Drawing.Point(535, 92);
             this.lblTipoPago.Name = "lblTipoPago";
             this.lblTipoPago.Size = new System.Drawing.Size(53, 13);
@@ -194,6 +211,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
+            this.label2.ForeColor = System.Drawing.SystemColors.Control;
             this.label2.Location = new System.Drawing.Point(529, 66);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(115, 13);
@@ -204,6 +222,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
+            this.label3.ForeColor = System.Drawing.SystemColors.Control;
             this.label3.Location = new System.Drawing.Point(527, 206);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(115, 13);
@@ -215,6 +234,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);

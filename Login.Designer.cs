@@ -132,7 +132,7 @@
             // 
             // btnCerrar_Click
             // 
-            this.btnCerrar_Click.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
+            this.btnCerrar_Click.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(236)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
             this.btnCerrar_Click.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnCerrar_Click.Location = new System.Drawing.Point(759, -2);
             this.btnCerrar_Click.Name = "btnCerrar_Click";
