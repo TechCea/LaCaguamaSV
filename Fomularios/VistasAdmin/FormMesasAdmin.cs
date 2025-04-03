@@ -193,14 +193,14 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             CambiarEstadoMesa(2); // ID 2 = Ocupada
         }
 
-        private void btnvolver_Click(object sender, EventArgs e)
-        {
-            // Cerrar el formulario actual de mesas
-            this.Close();
+        //private void btnvolver_Click(object sender, EventArgs e)
+        //{
+        //    // Cerrar el formulario actual de mesas
+        //    this.Close();
 
-            // Crear una nueva instancia de FormAdmin y mostrarla
-            FormAdmin formAdmin = new FormAdmin();
-            formAdmin.Show();
-        }
+        //    // Crear una nueva instancia de FormAdmin y mostrarla
+        //    FormAdmin formAdmin = new FormAdmin();
+        //    formAdmin.Show();
+        //}
     }
 }

@@ -15,6 +15,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             CargarCategoriasComida();
             CargarComidas();
             cbCategoriaC.SelectedIndexChanged += cbCategoriaC_SelectedIndexChanged;
+            dgvComidas.CellClick += dgvComidas_CellClick;
 
         }
 
@@ -61,6 +62,23 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void dgvComidas_CellClick(object sender, DataGridViewCellEventArgs e)
         {
+
+            if (e.RowIndex >= 0) // Evitar clic en encabezado
+            {
+                // Seleccionar la fila
+                dgvComidas.Rows[e.RowIndex].Selected = true;
+
+                // Obtener la fila seleccionada
+                DataGridViewRow row = dgvComidas.Rows[e.RowIndex];
+
+                // Extraer ID y nombre del plato
+                int idPlato = Convert.ToInt32(row.Cells["ID Plato"].Value);
+                string nombrePlato = row.Cells["Nombre Plato"].Value.ToString();
+
+                // Abrir el formulario de receta con los datos seleccionados
+                FormRecetaPlato formReceta = new FormRecetaPlato(idPlato, nombrePlato);
+                formReceta.ShowDialog();
+            }
 
         }
 

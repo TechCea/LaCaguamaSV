@@ -1877,7 +1877,171 @@ public DataTable ObtenerBebidas()
             }
         }
 
-        
+        //CODIGO DE RECETAS POR CADA PLATO
+
+        //Ingredientes de cada plato
+        public DataTable ObtenerIngredientesPorPlato(int idPlato)
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    string query = "SELECT i.nombreProducto, r.cantidad_necesaria " +
+                                   "FROM recetas r " +
+                                   "JOIN inventario i ON r.id_inventario = i.id_inventario " +
+                                   "WHERE r.id_plato = @idPlato";
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@idPlato", idPlato);
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al obtener ingredientes: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return dt;
+        }
+
+        //Eliminar ingrediente de la receta
+        public bool EliminarIngredienteDeReceta(int idPlato, string nombreIngrediente)
+        {
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+
+                    // Obtener el ID del ingrediente desde la tabla inventario
+                    string queryIdInventario = "SELECT id_inventario FROM inventario WHERE nombreProducto = @nombreIngrediente";
+                    int idInventario;
+
+                    using (MySqlCommand cmd = new MySqlCommand(queryIdInventario, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@nombreIngrediente", nombreIngrediente);
+                        object result = cmd.ExecuteScalar();
+                        if (result == null)
+                        {
+                            MessageBox.Show("El ingrediente no existe en la base de datos.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return false;
+                        }
+                        idInventario = Convert.ToInt32(result);
+                    }
+
+                    // Eliminar el ingrediente de la receta
+                    string queryEliminar = "DELETE FROM recetas WHERE id_plato = @idPlato AND id_inventario = @idInventario";
+
+                    using (MySqlCommand cmd = new MySqlCommand(queryEliminar, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@idPlato", idPlato);
+                        cmd.Parameters.AddWithValue("@idInventario", idInventario);
+                        int filasAfectadas = cmd.ExecuteNonQuery();
+
+                        return filasAfectadas > 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al eliminar ingrediente: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+        }
+
+        //Obtener todos los elementos del inventario:
+        public DataTable ObtenerInventario()
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    string query = "SELECT id_inventario AS 'ID', nombreProducto AS 'Nombre Producto', " +
+                                   "cantidad AS 'Cantidad Disponible' FROM inventario";
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al obtener inventario: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return dt;
+        }
+
+        //Agregar ingrediente a la receta 
+        public bool AgregarIngredienteAReceta(int idPlato, int idInventario, decimal cantidad)
+        {
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    string query = "INSERT INTO recetas (id_plato, id_inventario, cantidad_necesaria) " +
+                                   "VALUES (@idPlato, @idInventario, @cantidad)";
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@idPlato", idPlato);
+                        cmd.Parameters.AddWithValue("@idInventario", idInventario);
+                        cmd.Parameters.AddWithValue("@cantidad", cantidad);
+
+                        int filasAfectadas = cmd.ExecuteNonQuery();
+                        return filasAfectadas > 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al agregar ingrediente: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+        }
+
+        //Editar cantidad de ingredientes ya agregados
+        public bool EditarCantidadIngrediente(int idPlato, string nombreIngrediente, decimal nuevaCantidad)
+        {
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    string query = "UPDATE recetas " +
+                                   "SET cantidad_necesaria = @nuevaCantidad " +
+                                   "WHERE id_plato = @idPlato AND id_inventario = (SELECT id_inventario FROM inventario WHERE nombreProducto = @nombreIngrediente)";
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@nuevaCantidad", nuevaCantidad);
+                        cmd.Parameters.AddWithValue("@idPlato", idPlato);
+                        cmd.Parameters.AddWithValue("@nombreIngrediente", nombreIngrediente);
+
+                        return cmd.ExecuteNonQuery() > 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al actualizar la cantidad: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+        }
+
+
 
     }
 }

@@ -79,8 +79,8 @@ namespace LaCaguamaSV.Fomularios.VistasUsuario
 
         private void btnMesas_Click(object sender, EventArgs e)
         {
-            FormMesasUsuario formmesasU = new FormMesasUsuario();
-            formmesasU.ShowDialog();
+            FormMesasAdmin formMesas = new FormMesasAdmin();
+            formMesas.Show();
         }
 
         private void btnCerrarSesion_Click(object sender, EventArgs e)
