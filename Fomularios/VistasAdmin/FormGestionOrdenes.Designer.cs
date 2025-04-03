@@ -50,13 +50,13 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.button12 = new System.Windows.Forms.Button();
             this.btnCargarExtras = new System.Windows.Forms.Button();
             this.btnCargarPlatos = new System.Windows.Forms.Button();
             this.btnCargarBebidas = new System.Windows.Forms.Button();
             this.dataGridViewMenu = new System.Windows.Forms.DataGridView();
             this.flowLayoutPanelPedidos = new System.Windows.Forms.FlowLayoutPanel();
             this.btnPrecuenta = new System.Windows.Forms.Button();
+            this.btnPagos = new System.Windows.Forms.Button();
             this.panel5.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -280,21 +280,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             this.label1.TabIndex = 0;
             this.label1.Text = "label1";
             // 
-            // button12
-            // 
-            this.button12.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.button12.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.button12.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.button12.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button12.ForeColor = System.Drawing.Color.White;
-            this.button12.Location = new System.Drawing.Point(548, 46);
-            this.button12.Name = "button12";
-            this.button12.Size = new System.Drawing.Size(102, 42);
-            this.button12.TabIndex = 30;
-            this.button12.Text = "PAGAR";
-            this.button12.UseVisualStyleBackColor = false;
-            this.button12.Click += new System.EventHandler(this.button12_Click);
-            // 
             // btnCargarExtras
             // 
             this.btnCargarExtras.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
@@ -344,7 +329,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             // 
             this.dataGridViewMenu.BackgroundColor = System.Drawing.SystemColors.ControlDarkDark;
             this.dataGridViewMenu.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewMenu.Location = new System.Drawing.Point(224, 104);
+            this.dataGridViewMenu.Location = new System.Drawing.Point(224, 95);
             this.dataGridViewMenu.MultiSelect = false;
             this.dataGridViewMenu.Name = "dataGridViewMenu";
             this.dataGridViewMenu.ReadOnly = true;
@@ -372,13 +357,28 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             this.btnPrecuenta.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnPrecuenta.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnPrecuenta.ForeColor = System.Drawing.Color.White;
-            this.btnPrecuenta.Location = new System.Drawing.Point(656, 47);
+            this.btnPrecuenta.Location = new System.Drawing.Point(548, 47);
             this.btnPrecuenta.Name = "btnPrecuenta";
             this.btnPrecuenta.Size = new System.Drawing.Size(109, 42);
             this.btnPrecuenta.TabIndex = 34;
             this.btnPrecuenta.Text = "PRECUENTA";
             this.btnPrecuenta.UseVisualStyleBackColor = false;
             this.btnPrecuenta.Click += new System.EventHandler(this.btnPrecuenta_Click);
+            // 
+            // btnPagos
+            // 
+            this.btnPagos.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.btnPagos.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnPagos.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnPagos.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnPagos.ForeColor = System.Drawing.Color.White;
+            this.btnPagos.Location = new System.Drawing.Point(663, 47);
+            this.btnPagos.Name = "btnPagos";
+            this.btnPagos.Size = new System.Drawing.Size(102, 42);
+            this.btnPagos.TabIndex = 35;
+            this.btnPagos.Text = "PAGAR";
+            this.btnPagos.UseVisualStyleBackColor = false;
+            this.btnPagos.Click += new System.EventHandler(this.btnPagos_Click);
             // 
             // FormGestionOrdenes
             // 
@@ -388,11 +388,11 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.fondo;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.btnPagos);
             this.Controls.Add(this.btnPrecuenta);
             this.Controls.Add(this.flowLayoutPanelPedidos);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.dataGridViewMenu);
-            this.Controls.Add(this.button12);
             this.Controls.Add(this.btnCargarExtras);
             this.Controls.Add(this.btnCargarPlatos);
             this.Controls.Add(this.btnCargarBebidas);
@@ -442,7 +442,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button button12;
         private System.Windows.Forms.Button btnCargarExtras;
         private System.Windows.Forms.Button btnCargarPlatos;
         private System.Windows.Forms.Button btnCargarBebidas;
@@ -451,5 +450,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         private System.Windows.Forms.ComboBox comboBoxMesas;
         private System.Windows.Forms.Button btnPrecuenta;
         private System.Windows.Forms.Button btnCerrar_Click;
+        private System.Windows.Forms.Button btnPagos;
     }
 }

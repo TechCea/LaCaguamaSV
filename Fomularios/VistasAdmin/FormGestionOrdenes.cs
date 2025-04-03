@@ -703,11 +703,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             precuentaForm.ShowDialog();
         }
 
-        private void button12_Click(object sender, EventArgs e)
-        {
-
-        }
-
         public class RoundedControl
         {
             public static void ApplyRoundedCorners(Control control, int radius)
@@ -734,6 +729,130 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             this.Close();
         }
+
+        private void btnPagos_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Verificaciones más robustas
+                if (string.IsNullOrEmpty(lblIdOrden.Text) || !int.TryParse(lblIdOrden.Text, out int ordenId))
+                {
+                    MessageBox.Show("La orden no es válida", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                if (pedidos.Count == 0)
+                {
+                    MessageBox.Show("La orden no tiene productos agregados", "Error",
+                                  MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Verificar inventario con manejo de errores
+                try
+                {
+                    if (!VerificarInventarioSuficiente())
+                    {
+                        return;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error al verificar inventario: {ex.Message}", "Error",
+                                  MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                // Crear formulario de pago con parámetros validados
+                using (var formPago = new FormAdminPagos(
+                    ordenId,
+                    lblNombreCliente.Text,
+                    totalOrden,
+                    idMesaActual,
+                    SesionUsuario.IdUsuario))
+                {
+                    var result = formPago.ShowDialog();
+
+                    if (result == DialogResult.OK)
+                    {
+                        // Actualizar estado local si el pago fue exitoso
+                        DialogResult = DialogResult.OK;
+                        Close();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error inesperado: {ex.Message}", "Error",
+                              MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private bool VerificarInventarioSuficiente()
+        {
+            try
+            {
+                using (MySqlConnection conexion = new Conexion().EstablecerConexion())
+                {
+                    // Desactivar ONLY_FULL_GROUP_BY para esta sesión
+                    using (MySqlCommand setModeCmd = new MySqlCommand("SET SESSION sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''))", conexion))
+                    {
+                        setModeCmd.ExecuteNonQuery();
+                    }
+
+                    string query = @"
+            SELECT 
+                i.nombreProducto,
+                i.cantidad AS stock_actual,
+                CASE
+                    WHEN p.id_plato IS NOT NULL THEN SUM(r.cantidad_necesaria * p.Cantidad)
+                    WHEN p.id_bebida IS NOT NULL THEN SUM(p.Cantidad)
+                    WHEN p.id_extra IS NOT NULL THEN SUM(p.Cantidad)
+                END AS cantidad_necesaria
+            FROM pedidos p
+            LEFT JOIN platos pl ON p.id_plato = pl.id_plato
+            LEFT JOIN recetas r ON pl.id_plato = r.id_plato
+            LEFT JOIN bebidas b ON p.id_bebida = b.id_bebida
+            LEFT JOIN extras e ON p.id_extra = e.id_extra
+            LEFT JOIN inventario i ON 
+                (r.id_inventario = i.id_inventario OR 
+                 b.id_inventario = i.id_inventario OR 
+                 e.id_inventario = i.id_inventario)
+            WHERE p.id_orden = @idOrden
+            GROUP BY i.nombreProducto, i.cantidad
+            HAVING i.cantidad < cantidad_necesaria";
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@idOrden", Convert.ToInt32(lblIdOrden.Text));
+                        DataTable dt = new DataTable();
+                        MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                        da.Fill(dt);
+
+                        if (dt.Rows.Count > 0)
+                        {
+                            StringBuilder mensaje = new StringBuilder();
+                            mensaje.AppendLine("No hay suficiente inventario para:");
+                            foreach (DataRow row in dt.Rows)
+                            {
+                                mensaje.AppendLine($"- {row["nombreProducto"]} (Stock: {row["stock_actual"]}, Necesario: {row["cantidad_necesaria"]})");
+                            }
+                            MessageBox.Show(mensaje.ToString(), "Inventario Insuficiente",
+                                           MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return false;
+                        }
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al verificar inventario: {ex.Message}", "Error",
+                               MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+        }
+
     }
 
 }

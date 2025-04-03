@@ -181,6 +181,12 @@
     <Compile Include="Fomularios\VistasAdmin\FormAdminIngredientesInv.Designer.cs">
       <DependentUpon>FormAdminIngredientesInv.cs</DependentUpon>
     </Compile>
+    <Compile Include="Fomularios\VistasAdmin\FormAdminPagos.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Fomularios\VistasAdmin\FormAdminPagos.Designer.cs">
+      <DependentUpon>FormAdminPagos.cs</DependentUpon>
+    </Compile>
     <Compile Include="Fomularios\VistasAdmin\FormAdminPrecuenta.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -332,6 +338,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Fomularios\VistasAdmin\FormAdminIngredientesInv.resx">
       <DependentUpon>FormAdminIngredientesInv.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fomularios\VistasAdmin\FormAdminPagos.resx">
+      <DependentUpon>FormAdminPagos.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fomularios\VistasAdmin\FormAdminPrecuenta.resx">
       <DependentUpon>FormAdminPrecuenta.cs</DependentUpon>
