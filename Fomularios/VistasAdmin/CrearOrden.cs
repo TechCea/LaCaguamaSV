@@ -40,9 +40,10 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
             // Agregar evento para mover el formulario
             this.MouseDown += new MouseEventHandler(CrearOrden_MouseDown);
+            RoundedControl.ApplyRoundedCorners(panel1, 15);   // Redondear un Panel
 
-         
 
+           
 
         }
 
@@ -181,6 +182,11 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 ReleaseCapture();
                 SendMessage(Handle, WM_NCLBUTTONDOWN, HTCAPTION, 0);
             }
+        }
+
+        private void CrearOrden_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

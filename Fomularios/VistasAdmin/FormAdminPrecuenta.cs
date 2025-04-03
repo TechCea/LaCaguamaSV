@@ -43,6 +43,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
             // Aplicar esquinas redondeadas a controles específicos
             RoundedControl.ApplyRoundedCorners(dgvDetalle, 15);   // Redondear un Panel
+            RoundedControl.ApplyRoundedCorners(panel2, 15);   // Redondear un Panel
 
          
             this.MaximizeBox = false;

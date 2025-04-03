@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -14,10 +16,33 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 {
     public partial class FormGestionOrdenes : Form
     {
+        [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
+        private static extern IntPtr CreateRoundRectRgn(
+      int nLeftRect, int nTopRect, int nRightRect, int nBottomRect,
+      int nWidthEllipse, int nHeightEllipse);
+
+        [DllImport("user32.dll")]
+        private static extern void ReleaseCapture();
+
+        [DllImport("user32.dll")]
+        private static extern void SendMessage(IntPtr hWnd, int msg, int wParam, int lParam);
+
+        private const int WM_NCLBUTTONDOWN = 0xA1;
+        private const int HTCAPTION = 0x2;
+
         private int idMesaActual; // Almacenar el ID de la mesa actual
         public FormGestionOrdenes(int idOrden, string nombreCliente, decimal total, decimal descuento, string fechaOrden, string numeroMesa, string tipoPago, string nombreUsuario, string estadoOrden)
         {
             InitializeComponent();
+            this.FormBorderStyle = FormBorderStyle.None;
+            Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 20, 20));
+
+            // Agregar evento para mover el formulario
+            this.MouseDown += new MouseEventHandler(FormGestionOrdenes_MouseDown);
+
+            // Aplicar esquinas redondeadas a controles específicos
+            RoundedControl.ApplyRoundedCorners(dataGridViewMenu, 15);   // Redondear un Panel
+           
 
 
             CargarDatosOrden(idOrden, nombreCliente, total, descuento, fechaOrden, numeroMesa, tipoPago, nombreUsuario, estadoOrden);
@@ -681,6 +706,33 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         private void button12_Click(object sender, EventArgs e)
         {
 
+        }
+
+        public class RoundedControl
+        {
+            public static void ApplyRoundedCorners(Control control, int radius)
+            {
+                GraphicsPath path = new GraphicsPath();
+                path.AddArc(0, 0, radius, radius, 180, 90);
+                path.AddArc(control.Width - radius, 0, radius, radius, 270, 90);
+                path.AddArc(control.Width - radius, control.Height - radius, radius, radius, 0, 90);
+                path.AddArc(0, control.Height - radius, radius, radius, 90, 90);
+                path.CloseFigure();
+                control.Region = new Region(path);
+            }
+        }
+        private void FormGestionOrdenes_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                ReleaseCapture();
+                SendMessage(Handle, WM_NCLBUTTONDOWN, HTCAPTION, 0);
+            }
+        }
+
+        private void btnCerrar_Click_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 

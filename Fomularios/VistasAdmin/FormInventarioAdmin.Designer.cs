@@ -34,15 +34,18 @@
             this.button1 = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.btnCerrar_Click = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnComidas
             // 
-            this.btnComidas.BackColor = System.Drawing.Color.Yellow;
+            this.btnComidas.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
+            this.btnComidas.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnComidas.ForeColor = System.Drawing.SystemColors.Control;
             this.btnComidas.Location = new System.Drawing.Point(340, 74);
-            this.btnComidas.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnComidas.Margin = new System.Windows.Forms.Padding(2);
             this.btnComidas.Name = "btnComidas";
             this.btnComidas.Size = new System.Drawing.Size(133, 42);
             this.btnComidas.TabIndex = 5;
@@ -52,9 +55,11 @@
             // 
             // btnExtras
             // 
-            this.btnExtras.BackColor = System.Drawing.Color.Yellow;
+            this.btnExtras.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
+            this.btnExtras.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnExtras.ForeColor = System.Drawing.SystemColors.Control;
             this.btnExtras.Location = new System.Drawing.Point(201, 74);
-            this.btnExtras.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnExtras.Margin = new System.Windows.Forms.Padding(2);
             this.btnExtras.Name = "btnExtras";
             this.btnExtras.Size = new System.Drawing.Size(109, 43);
             this.btnExtras.TabIndex = 4;
@@ -64,9 +69,11 @@
             // 
             // btnBebidas
             // 
-            this.btnBebidas.BackColor = System.Drawing.Color.Yellow;
+            this.btnBebidas.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
+            this.btnBebidas.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnBebidas.ForeColor = System.Drawing.SystemColors.Control;
             this.btnBebidas.Location = new System.Drawing.Point(44, 74);
-            this.btnBebidas.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnBebidas.Margin = new System.Windows.Forms.Padding(2);
             this.btnBebidas.Name = "btnBebidas";
             this.btnBebidas.Size = new System.Drawing.Size(119, 42);
             this.btnBebidas.TabIndex = 3;
@@ -76,9 +83,11 @@
             // 
             // button1
             // 
-            this.button1.BackColor = System.Drawing.Color.Yellow;
+            this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
+            this.button1.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.button1.ForeColor = System.Drawing.SystemColors.Control;
             this.button1.Location = new System.Drawing.Point(54, 33);
-            this.button1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button1.Margin = new System.Windows.Forms.Padding(2);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(166, 42);
             this.button1.TabIndex = 6;
@@ -88,13 +97,14 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.groupBox1.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.groupBox1.Controls.Add(this.button1);
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.groupBox1.ForeColor = System.Drawing.SystemColors.Control;
             this.groupBox1.Location = new System.Drawing.Point(38, 29);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(2);
             this.groupBox1.Size = new System.Drawing.Size(516, 102);
             this.groupBox1.TabIndex = 7;
             this.groupBox1.TabStop = false;
@@ -102,31 +112,48 @@
             // 
             // groupBox2
             // 
-            this.groupBox2.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.groupBox2.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.groupBox2.Controls.Add(this.btnExtras);
             this.groupBox2.Controls.Add(this.btnBebidas);
             this.groupBox2.Controls.Add(this.btnComidas);
             this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.groupBox2.ForeColor = System.Drawing.SystemColors.Control;
             this.groupBox2.Location = new System.Drawing.Point(38, 145);
-            this.groupBox2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox2.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox2.Padding = new System.Windows.Forms.Padding(2);
             this.groupBox2.Size = new System.Drawing.Size(516, 186);
             this.groupBox2.TabIndex = 8;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Inventario";
+            // 
+            // btnCerrar_Click
+            // 
+            this.btnCerrar_Click.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(236)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
+            this.btnCerrar_Click.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnCerrar_Click.Location = new System.Drawing.Point(545, 12);
+            this.btnCerrar_Click.Name = "btnCerrar_Click";
+            this.btnCerrar_Click.Size = new System.Drawing.Size(43, 23);
+            this.btnCerrar_Click.TabIndex = 9;
+            this.btnCerrar_Click.Text = "X";
+            this.btnCerrar_Click.UseVisualStyleBackColor = false;
+            this.btnCerrar_Click.Click += new System.EventHandler(this.btnCerrar_Click_Click);
             // 
             // FormInventarioAdmin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.fondo;
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(600, 366);
+            this.Controls.Add(this.btnCerrar_Click);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "FormInventarioAdmin";
             this.Text = "FormInventarioAdmin";
+            this.Load += new System.EventHandler(this.FormInventarioAdmin_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -141,5 +168,6 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.Button btnCerrar_Click;
     }
 }

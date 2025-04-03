@@ -130,4 +130,7 @@
   <data name="3560614-seamless-doodle-pattern-with-beer-lobsters-and-sausages-vector-black-and-white-illustration-with-beer-theme-icons-vetor" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\3560614-seamless-doodle-pattern-with-beer-lobsters-and-sausages-vector-black-and-white-illustration-with-beer-theme-icons-vetor.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="fondo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\fondo.PNG;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

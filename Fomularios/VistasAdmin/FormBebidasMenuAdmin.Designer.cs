@@ -50,7 +50,7 @@
             this.dgvBebidas.BackgroundColor = System.Drawing.Color.Gray;
             this.dgvBebidas.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvBebidas.Location = new System.Drawing.Point(48, 54);
-            this.dgvBebidas.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.dgvBebidas.Margin = new System.Windows.Forms.Padding(2);
             this.dgvBebidas.Name = "dgvBebidas";
             this.dgvBebidas.RowHeadersWidth = 51;
             this.dgvBebidas.RowTemplate.Height = 24;
@@ -60,9 +60,10 @@
             // 
             // cbCategoria
             // 
+            this.cbCategoria.Cursor = System.Windows.Forms.Cursors.Hand;
             this.cbCategoria.FormattingEnabled = true;
             this.cbCategoria.Location = new System.Drawing.Point(345, 11);
-            this.cbCategoria.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cbCategoria.Margin = new System.Windows.Forms.Padding(2);
             this.cbCategoria.Name = "cbCategoria";
             this.cbCategoria.Size = new System.Drawing.Size(139, 21);
             this.cbCategoria.TabIndex = 1;
@@ -70,11 +71,12 @@
             // 
             // btnRegresarMenu
             // 
-            this.btnRegresarMenu.BackColor = System.Drawing.Color.Black;
+            this.btnRegresarMenu.BackColor = System.Drawing.Color.White;
+            this.btnRegresarMenu.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnRegresarMenu.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.btnRegresarMenu.ForeColor = System.Drawing.SystemColors.HighlightText;
-            this.btnRegresarMenu.Location = new System.Drawing.Point(48, 423);
-            this.btnRegresarMenu.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnRegresarMenu.ForeColor = System.Drawing.SystemColors.Desktop;
+            this.btnRegresarMenu.Location = new System.Drawing.Point(48, 419);
+            this.btnRegresarMenu.Margin = new System.Windows.Forms.Padding(2);
             this.btnRegresarMenu.Name = "btnRegresarMenu";
             this.btnRegresarMenu.Size = new System.Drawing.Size(118, 49);
             this.btnRegresarMenu.TabIndex = 2;
@@ -95,9 +97,9 @@
             this.gbDatosBebida.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.gbDatosBebida.ForeColor = System.Drawing.Color.White;
             this.gbDatosBebida.Location = new System.Drawing.Point(517, 54);
-            this.gbDatosBebida.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.gbDatosBebida.Margin = new System.Windows.Forms.Padding(2);
             this.gbDatosBebida.Name = "gbDatosBebida";
-            this.gbDatosBebida.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.gbDatosBebida.Padding = new System.Windows.Forms.Padding(2);
             this.gbDatosBebida.Size = new System.Drawing.Size(329, 284);
             this.gbDatosBebida.TabIndex = 3;
             this.gbDatosBebida.TabStop = false;
@@ -117,9 +119,10 @@
             // 
             // cbCategoriaB
             // 
+            this.cbCategoriaB.Cursor = System.Windows.Forms.Cursors.Hand;
             this.cbCategoriaB.FormattingEnabled = true;
             this.cbCategoriaB.Location = new System.Drawing.Point(131, 145);
-            this.cbCategoriaB.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cbCategoriaB.Margin = new System.Windows.Forms.Padding(2);
             this.cbCategoriaB.Name = "cbCategoriaB";
             this.cbCategoriaB.Size = new System.Drawing.Size(170, 24);
             this.cbCategoriaB.TabIndex = 5;
@@ -128,7 +131,7 @@
             // txtPrecioU
             // 
             this.txtPrecioU.Location = new System.Drawing.Point(131, 193);
-            this.txtPrecioU.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtPrecioU.Margin = new System.Windows.Forms.Padding(2);
             this.txtPrecioU.Name = "txtPrecioU";
             this.txtPrecioU.Size = new System.Drawing.Size(171, 23);
             this.txtPrecioU.TabIndex = 4;
@@ -158,7 +161,7 @@
             // txtNombreB
             // 
             this.txtNombreB.Location = new System.Drawing.Point(131, 90);
-            this.txtNombreB.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtNombreB.Margin = new System.Windows.Forms.Padding(2);
             this.txtNombreB.Name = "txtNombreB";
             this.txtNombreB.Size = new System.Drawing.Size(171, 23);
             this.txtNombreB.TabIndex = 1;
@@ -177,10 +180,11 @@
             // btnEliminarB
             // 
             this.btnEliminarB.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(236)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
+            this.btnEliminarB.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnEliminarB.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.btnEliminarB.ForeColor = System.Drawing.SystemColors.HighlightText;
             this.btnEliminarB.Location = new System.Drawing.Point(701, 353);
-            this.btnEliminarB.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnEliminarB.Margin = new System.Windows.Forms.Padding(2);
             this.btnEliminarB.Name = "btnEliminarB";
             this.btnEliminarB.Size = new System.Drawing.Size(118, 49);
             this.btnEliminarB.TabIndex = 7;
@@ -191,10 +195,11 @@
             // btnActualizarB
             // 
             this.btnActualizarB.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
+            this.btnActualizarB.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnActualizarB.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.btnActualizarB.ForeColor = System.Drawing.SystemColors.HighlightText;
             this.btnActualizarB.Location = new System.Drawing.Point(542, 353);
-            this.btnActualizarB.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnActualizarB.Margin = new System.Windows.Forms.Padding(2);
             this.btnActualizarB.Name = "btnActualizarB";
             this.btnActualizarB.Size = new System.Drawing.Size(118, 49);
             this.btnActualizarB.TabIndex = 6;
@@ -207,6 +212,8 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.fondo;
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(875, 505);
             this.Controls.Add(this.gbDatosBebida);
             this.Controls.Add(this.btnEliminarB);
@@ -214,7 +221,7 @@
             this.Controls.Add(this.btnActualizarB);
             this.Controls.Add(this.cbCategoria);
             this.Controls.Add(this.dgvBebidas);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "FormBebidasMenuAdmin";
             this.Text = "FormBebidasMenuAdmin";
             this.Load += new System.EventHandler(this.FormBebidasMenuAdmin_Load);

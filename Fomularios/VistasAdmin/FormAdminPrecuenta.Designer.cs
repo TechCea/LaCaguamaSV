@@ -45,16 +45,19 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.panel2 = new System.Windows.Forms.Panel();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDetalle)).BeginInit();
+            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnImprimir
             // 
             this.btnImprimir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
+            this.btnImprimir.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnImprimir.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnImprimir.ForeColor = System.Drawing.SystemColors.Control;
-            this.btnImprimir.Location = new System.Drawing.Point(538, 262);
+            this.btnImprimir.Location = new System.Drawing.Point(532, 367);
             this.btnImprimir.Name = "btnImprimir";
             this.btnImprimir.Size = new System.Drawing.Size(97, 46);
             this.btnImprimir.TabIndex = 0;
@@ -65,9 +68,10 @@
             // btnCerrar
             // 
             this.btnCerrar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(236)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
+            this.btnCerrar.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnCerrar.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCerrar.ForeColor = System.Drawing.Color.White;
-            this.btnCerrar.Location = new System.Drawing.Point(663, 262);
+            this.btnCerrar.Location = new System.Drawing.Point(657, 367);
             this.btnCerrar.Name = "btnCerrar";
             this.btnCerrar.Size = new System.Drawing.Size(98, 45);
             this.btnCerrar.TabIndex = 1;
@@ -79,7 +83,7 @@
             // 
             this.lblNumeroFactura.AutoSize = true;
             this.lblNumeroFactura.ForeColor = System.Drawing.SystemColors.Control;
-            this.lblNumeroFactura.Location = new System.Drawing.Point(527, 22);
+            this.lblNumeroFactura.Location = new System.Drawing.Point(18, 12);
             this.lblNumeroFactura.Name = "lblNumeroFactura";
             this.lblNumeroFactura.Size = new System.Drawing.Size(80, 13);
             this.lblNumeroFactura.TabIndex = 2;
@@ -161,7 +165,7 @@
             // 
             this.lblSubtotal.AutoSize = true;
             this.lblSubtotal.ForeColor = System.Drawing.SystemColors.Control;
-            this.lblSubtotal.Location = new System.Drawing.Point(535, 154);
+            this.lblSubtotal.Location = new System.Drawing.Point(22, 118);
             this.lblSubtotal.Name = "lblSubtotal";
             this.lblSubtotal.Size = new System.Drawing.Size(46, 13);
             this.lblSubtotal.TabIndex = 6;
@@ -171,7 +175,7 @@
             // 
             this.lblTotal.AutoSize = true;
             this.lblTotal.ForeColor = System.Drawing.SystemColors.Control;
-            this.lblTotal.Location = new System.Drawing.Point(535, 190);
+            this.lblTotal.Location = new System.Drawing.Point(22, 146);
             this.lblTotal.Name = "lblTotal";
             this.lblTotal.Size = new System.Drawing.Size(31, 13);
             this.lblTotal.TabIndex = 6;
@@ -181,7 +185,7 @@
             // 
             this.lblDescuento.AutoSize = true;
             this.lblDescuento.ForeColor = System.Drawing.SystemColors.Control;
-            this.lblDescuento.Location = new System.Drawing.Point(535, 120);
+            this.lblDescuento.Location = new System.Drawing.Point(22, 90);
             this.lblDescuento.Name = "lblDescuento";
             this.lblDescuento.Size = new System.Drawing.Size(59, 13);
             this.lblDescuento.TabIndex = 6;
@@ -191,7 +195,7 @@
             // 
             this.lblTipoPago.AutoSize = true;
             this.lblTipoPago.ForeColor = System.Drawing.SystemColors.Control;
-            this.lblTipoPago.Location = new System.Drawing.Point(535, 92);
+            this.lblTipoPago.Location = new System.Drawing.Point(21, 63);
             this.lblTipoPago.Name = "lblTipoPago";
             this.lblTipoPago.Size = new System.Drawing.Size(53, 13);
             this.lblTipoPago.TabIndex = 6;
@@ -212,7 +216,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.ForeColor = System.Drawing.SystemColors.Control;
-            this.label2.Location = new System.Drawing.Point(529, 66);
+            this.label2.Location = new System.Drawing.Point(21, 36);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(115, 13);
             this.label2.TabIndex = 7;
@@ -223,29 +227,40 @@
             // 
             this.label3.AutoSize = true;
             this.label3.ForeColor = System.Drawing.SystemColors.Control;
-            this.label3.Location = new System.Drawing.Point(527, 206);
+            this.label3.Location = new System.Drawing.Point(22, 174);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(115, 13);
             this.label3.TabIndex = 7;
             this.label3.Text = "_ _ _ _ _ _ _ _ _ _ _ _ ";
             this.label3.Click += new System.EventHandler(this.label1_Click);
             // 
+            // panel2
+            // 
+            this.panel2.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.panel2.Controls.Add(this.lblNumeroFactura);
+            this.panel2.Controls.Add(this.label3);
+            this.panel2.Controls.Add(this.label2);
+            this.panel2.Controls.Add(this.lblTipoPago);
+            this.panel2.Controls.Add(this.lblTotal);
+            this.panel2.Controls.Add(this.lblDescuento);
+            this.panel2.Controls.Add(this.lblSubtotal);
+            this.panel2.Location = new System.Drawing.Point(555, 53);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(200, 255);
+            this.panel2.TabIndex = 8;
+            // 
             // FormAdminPrecuenta
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.fondo;
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label2);
+            this.Controls.Add(this.panel2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.lblTipoPago);
-            this.Controls.Add(this.lblTotal);
-            this.Controls.Add(this.lblDescuento);
-            this.Controls.Add(this.lblSubtotal);
             this.Controls.Add(this.dgvDetalle);
             this.Controls.Add(this.panel1);
-            this.Controls.Add(this.lblNumeroFactura);
             this.Controls.Add(this.btnCerrar);
             this.Controls.Add(this.btnImprimir);
             this.Name = "FormAdminPrecuenta";
@@ -254,6 +269,8 @@
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDetalle)).EndInit();
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -278,5 +295,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Panel panel2;
     }
 }

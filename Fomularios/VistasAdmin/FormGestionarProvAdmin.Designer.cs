@@ -47,7 +47,7 @@
             // 
             // gbDatosExtras
             // 
-            this.gbDatosExtras.BackColor = System.Drawing.Color.Gray;
+            this.gbDatosExtras.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.gbDatosExtras.Controls.Add(this.txtDirecion);
             this.gbDatosExtras.Controls.Add(this.label1);
             this.gbDatosExtras.Controls.Add(this.txtContacto);
@@ -140,10 +140,11 @@
             // 
             // btnRegresar
             // 
-            this.btnRegresar.BackColor = System.Drawing.Color.Black;
+            this.btnRegresar.BackColor = System.Drawing.Color.White;
+            this.btnRegresar.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnRegresar.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.btnRegresar.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btnRegresar.Location = new System.Drawing.Point(29, 371);
+            this.btnRegresar.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.btnRegresar.Location = new System.Drawing.Point(40, 373);
             this.btnRegresar.Margin = new System.Windows.Forms.Padding(2);
             this.btnRegresar.Name = "btnRegresar";
             this.btnRegresar.Size = new System.Drawing.Size(106, 38);
@@ -154,7 +155,7 @@
             // 
             // dgvProveedor
             // 
-            this.dgvProveedor.BackgroundColor = System.Drawing.Color.Gray;
+            this.dgvProveedor.BackgroundColor = System.Drawing.SystemColors.ControlDarkDark;
             this.dgvProveedor.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvProveedor.Location = new System.Drawing.Point(29, 15);
             this.dgvProveedor.Margin = new System.Windows.Forms.Padding(2);
@@ -167,6 +168,7 @@
             // btnEliminarE
             // 
             this.btnEliminarE.BackColor = System.Drawing.Color.Brown;
+            this.btnEliminarE.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnEliminarE.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.btnEliminarE.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.btnEliminarE.Location = new System.Drawing.Point(796, 306);
@@ -181,6 +183,7 @@
             // btnActualizarP
             // 
             this.btnActualizarP.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
+            this.btnActualizarP.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnActualizarP.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.btnActualizarP.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.btnActualizarP.Location = new System.Drawing.Point(663, 306);
@@ -195,6 +198,7 @@
             // btnAgregarP
             // 
             this.btnAgregarP.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(207)))), ((int)(((byte)(111)))));
+            this.btnAgregarP.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnAgregarP.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.btnAgregarP.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.btnAgregarP.Location = new System.Drawing.Point(530, 306);
@@ -211,7 +215,9 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.ClientSize = new System.Drawing.Size(942, 450);
+            this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.fondo;
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.ClientSize = new System.Drawing.Size(956, 474);
             this.Controls.Add(this.btnAgregarP);
             this.Controls.Add(this.gbDatosExtras);
             this.Controls.Add(this.btnRegresar);

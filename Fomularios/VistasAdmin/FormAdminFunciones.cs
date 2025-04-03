@@ -123,8 +123,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void button9_Click(object sender, EventArgs e)
         {
-            FormAdmin formAdmin = new FormAdmin();
-            formAdmin.ShowDialog();
+            this.Close();
         }
 
         private void txtMontoContado_TextChanged(object sender, EventArgs e)
