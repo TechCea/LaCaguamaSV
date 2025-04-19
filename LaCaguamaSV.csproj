@@ -156,6 +156,7 @@
     <Compile Include="Configuracion\Conexion.cs" />
     <Compile Include="Configuracion\OrdenesD.cs" />
     <Compile Include="Configuracion\OrdenesService.cs" />
+    <Compile Include="Configuracion\PromocionesD.cs" />
     <Compile Include="Configuracion\SesionUsuario.cs" />
     <Compile Include="Fomularios\VistasAdmin\CrearOrden.cs">
       <SubType>Form</SubType>
@@ -222,6 +223,12 @@
     </Compile>
     <Compile Include="Fomularios\VistasAdmin\FormGestionOrdenes.Designer.cs">
       <DependentUpon>FormGestionOrdenes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Fomularios\VistasAdmin\FormGestionPromociones.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Fomularios\VistasAdmin\FormGestionPromociones.Designer.cs">
+      <DependentUpon>FormGestionPromociones.cs</DependentUpon>
     </Compile>
     <Compile Include="Fomularios\VistasAdmin\FormHistorialPagosAdmin.cs">
       <SubType>Form</SubType>
@@ -365,6 +372,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Fomularios\VistasAdmin\FormGestionOrdenes.resx">
       <DependentUpon>FormGestionOrdenes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fomularios\VistasAdmin\FormGestionPromociones.resx">
+      <DependentUpon>FormGestionPromociones.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fomularios\VistasAdmin\FormHistorialPagosAdmin.resx">
       <DependentUpon>FormHistorialPagosAdmin.cs</DependentUpon>
