@@ -37,23 +37,11 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
             // Tamaño fijo
             this.FormBorderStyle = FormBorderStyle.FixedSingle; // Evita redimensionar
-            this.MaximizeBox = false; // Deshabilita el botón de maximizar
-            this.MinimizeBox = false; // Deshabilita el botón de minimizar
+            
             this.Size = new Size(800, 600); // Establece un tamaño fijo
 
             // Posición fija (centrada en la pantalla)
             this.StartPosition = FormStartPosition.CenterScreen;
-
-            this.FormBorderStyle = FormBorderStyle.None;
-            Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 20, 20));
-
-            // Agregar evento para mover el formulario
-            this.MouseDown += new MouseEventHandler(FormGestionOrdenes_MouseDown);
-
-            // Aplicar esquinas redondeadas a controles específicos
-            RoundedControl.ApplyRoundedCorners(dataGridViewMenu, 15);   // Redondear un Panel
-
-
 
             CargarDatosOrden(idOrden, nombreCliente, total, descuento, fechaOrden, numeroMesa, tipoPago, nombreUsuario, estadoOrden);
             CargarPedidosDesdeBD(); // Cargar pedidos existentes al iniciar

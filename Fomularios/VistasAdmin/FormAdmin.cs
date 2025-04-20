@@ -389,12 +389,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             }
         }
 
-        private void buttonPromociones_Click(object sender, EventArgs e)
-        {
-            FormGestionPromociones formpromociones = new FormGestionPromociones();
-            formpromociones.ShowDialog();
-        }
-
         private void buttonPromociones_Click_1(object sender, EventArgs e)
         {
             FormGestionPromociones formpromociones = new FormGestionPromociones();
