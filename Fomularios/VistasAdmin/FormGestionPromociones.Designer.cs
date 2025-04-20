@@ -45,6 +45,11 @@
             this.panelItems = new System.Windows.Forms.Panel();
             this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPromociones)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMenu)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numPrecio)).BeginInit();
@@ -71,7 +76,7 @@
             // 
             // txtNombre
             // 
-            this.txtNombre.Location = new System.Drawing.Point(13, 13);
+            this.txtNombre.Location = new System.Drawing.Point(12, 28);
             this.txtNombre.Name = "txtNombre";
             this.txtNombre.Size = new System.Drawing.Size(100, 20);
             this.txtNombre.TabIndex = 3;
@@ -79,7 +84,7 @@
             // 
             // txtDescripcion
             // 
-            this.txtDescripcion.Location = new System.Drawing.Point(120, 13);
+            this.txtDescripcion.Location = new System.Drawing.Point(118, 28);
             this.txtDescripcion.Name = "txtDescripcion";
             this.txtDescripcion.Size = new System.Drawing.Size(100, 20);
             this.txtDescripcion.TabIndex = 4;
@@ -88,7 +93,7 @@
             // numPrecio
             // 
             this.numPrecio.Hexadecimal = true;
-            this.numPrecio.Location = new System.Drawing.Point(227, 12);
+            this.numPrecio.Location = new System.Drawing.Point(224, 28);
             this.numPrecio.Name = "numPrecio";
             this.numPrecio.Size = new System.Drawing.Size(120, 20);
             this.numPrecio.TabIndex = 5;
@@ -96,7 +101,7 @@
             // 
             // dateInicio
             // 
-            this.dateInicio.Location = new System.Drawing.Point(354, 12);
+            this.dateInicio.Location = new System.Drawing.Point(354, 28);
             this.dateInicio.Name = "dateInicio";
             this.dateInicio.Size = new System.Drawing.Size(200, 20);
             this.dateInicio.TabIndex = 6;
@@ -104,7 +109,7 @@
             // 
             // dateFin
             // 
-            this.dateFin.Location = new System.Drawing.Point(354, 58);
+            this.dateFin.Location = new System.Drawing.Point(354, 90);
             this.dateFin.Name = "dateFin";
             this.dateFin.Size = new System.Drawing.Size(200, 20);
             this.dateFin.TabIndex = 7;
@@ -113,7 +118,7 @@
             // checkSinFin
             // 
             this.checkSinFin.AutoSize = true;
-            this.checkSinFin.Location = new System.Drawing.Point(581, 12);
+            this.checkSinFin.Location = new System.Drawing.Point(582, 33);
             this.checkSinFin.Name = "checkSinFin";
             this.checkSinFin.Size = new System.Drawing.Size(150, 17);
             this.checkSinFin.TabIndex = 8;
@@ -124,7 +129,7 @@
             // checkActiva
             // 
             this.checkActiva.AutoSize = true;
-            this.checkActiva.Location = new System.Drawing.Point(581, 44);
+            this.checkActiva.Location = new System.Drawing.Point(582, 65);
             this.checkActiva.Name = "checkActiva";
             this.checkActiva.Size = new System.Drawing.Size(56, 17);
             this.checkActiva.TabIndex = 9;
@@ -183,11 +188,61 @@
             // 
             this.errorProvider.ContainerControl = this;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 12);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(77, 13);
+            this.label1.TabIndex = 16;
+            this.label1.Text = "Nombre Promo";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(118, 11);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(63, 13);
+            this.label2.TabIndex = 17;
+            this.label2.Text = "Descripcion";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(224, 11);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(85, 13);
+            this.label3.TabIndex = 18;
+            this.label3.Text = "Precio de Promo";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(354, 9);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(80, 13);
+            this.label4.TabIndex = 19;
+            this.label4.Text = "Fecha de Inicio";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(354, 71);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(69, 13);
+            this.label5.TabIndex = 20;
+            this.label5.Text = "Fecha de Fin";
+            // 
             // FormGestionPromociones
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.panelItems);
             this.Controls.Add(this.btnGuardarPromocion);
             this.Controls.Add(this.btnExtras);
@@ -231,5 +286,10 @@
         private System.Windows.Forms.Panel panelItems;
         private System.Windows.Forms.ErrorProvider errorProvider;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label5;
     }
 }
