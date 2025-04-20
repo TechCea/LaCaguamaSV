@@ -49,7 +49,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             ActualizarTotal(); // Sincronizar el total
         }
 
-        private List<(int idPedido, string nombre, decimal precio, string tipo)> pedidos = new List<(int, string, decimal, string)>();
+        private List<(int idPedido, string nombre, decimal precio, string tipo, int cantidad)> pedidos = new List<(int, string, decimal, string, int)>();
         private decimal totalOrden = 0;
 
 
@@ -351,7 +351,26 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
                 if (tipoActual == "PROMOCION")
                 {
-                    resultado = OrdenesD.AgregarPromocionAOrden(Convert.ToInt32(lblIdOrden.Text), idItem, cantidad);
+                    string mensajeInventario;
+                    resultado = OrdenesD.AgregarPromocionAOrden(Convert.ToInt32(lblIdOrden.Text), idItem, cantidad, out mensajeInventario);
+
+                    if (!string.IsNullOrEmpty(mensajeInventario))
+                    {
+                        DialogResult result = MessageBox.Show(
+                            $"Advertencia de inventario para la promoción:\n\n{mensajeInventario}\n\n" +
+                            "¿Desea continuar con el pedido de todas formas?",
+                            "Inventario Bajo", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+                        if (result == DialogResult.Yes)
+                        {
+                            // Forzar la inserción ignorando las advertencias
+                            resultado = OrdenesD.AgregarPromocionAOrdenForzado(Convert.ToInt32(lblIdOrden.Text), idItem, cantidad);
+                        }
+                        else
+                        {
+                            resultado = false;
+                        }
+                    }
                 }
                 else
                 {
@@ -409,49 +428,126 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             {
                 try
                 {
-                    string query = @"INSERT INTO pedidos 
-                           (id_orden, id_estadoP, id_plato, id_bebida, id_extra, id_promocion, Cantidad) 
-                           VALUES (@idOrden, 1, @idPlato, @idBebida, @idExtra, @idPromocion, @cantidad)";
+                    // Primero verificar si ya existe un pedido igual en esta orden
+                    string queryVerificar = @"SELECT id_pedido, Cantidad 
+                            FROM pedidos 
+                            WHERE id_orden = @idOrden AND 
+                                  ((id_plato = @idPlato AND @tipoItem = 'PLATO') OR
+                                   (id_bebida = @idBebida AND @tipoItem = 'BEBIDA') OR
+                                   (id_extra = @idExtra AND @tipoItem = 'EXTRA') OR
+                                   (id_promocion = @idPromocion AND @tipoItem = 'PROMOCION'))";
 
-                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    int idPedidoExistente = -1;
+                    int cantidadExistente = 0;
+
+                    using (MySqlCommand cmdVerificar = new MySqlCommand(queryVerificar, conexion))
                     {
-                        cmd.Parameters.AddWithValue("@idOrden", Convert.ToInt32(lblIdOrden.Text));
-                        cmd.Parameters.AddWithValue("@cantidad", cantidad);
+                        cmdVerificar.Parameters.AddWithValue("@idOrden", Convert.ToInt32(lblIdOrden.Text));
 
                         // Configurar parámetros según el tipo de ítem
                         switch (tipoItem.ToUpper())
                         {
                             case "PLATO":
-                                cmd.Parameters.AddWithValue("@idPlato", idItem);
-                                cmd.Parameters.AddWithValue("@idBebida", DBNull.Value);
-                                cmd.Parameters.AddWithValue("@idExtra", DBNull.Value);
-                                cmd.Parameters.AddWithValue("@idPromocion", DBNull.Value);
+                                cmdVerificar.Parameters.AddWithValue("@idPlato", idItem);
+                                cmdVerificar.Parameters.AddWithValue("@idBebida", DBNull.Value);
+                                cmdVerificar.Parameters.AddWithValue("@idExtra", DBNull.Value);
+                                cmdVerificar.Parameters.AddWithValue("@idPromocion", DBNull.Value);
                                 break;
                             case "BEBIDA":
-                                cmd.Parameters.AddWithValue("@idPlato", DBNull.Value);
-                                cmd.Parameters.AddWithValue("@idBebida", idItem);
-                                cmd.Parameters.AddWithValue("@idExtra", DBNull.Value);
-                                cmd.Parameters.AddWithValue("@idPromocion", DBNull.Value);
+                                cmdVerificar.Parameters.AddWithValue("@idPlato", DBNull.Value);
+                                cmdVerificar.Parameters.AddWithValue("@idBebida", idItem);
+                                cmdVerificar.Parameters.AddWithValue("@idExtra", DBNull.Value);
+                                cmdVerificar.Parameters.AddWithValue("@idPromocion", DBNull.Value);
                                 break;
                             case "EXTRA":
-                                cmd.Parameters.AddWithValue("@idPlato", DBNull.Value);
-                                cmd.Parameters.AddWithValue("@idBebida", DBNull.Value);
-                                cmd.Parameters.AddWithValue("@idExtra", idItem);
-                                cmd.Parameters.AddWithValue("@idPromocion", DBNull.Value);
+                                cmdVerificar.Parameters.AddWithValue("@idPlato", DBNull.Value);
+                                cmdVerificar.Parameters.AddWithValue("@idBebida", DBNull.Value);
+                                cmdVerificar.Parameters.AddWithValue("@idExtra", idItem);
+                                cmdVerificar.Parameters.AddWithValue("@idPromocion", DBNull.Value);
                                 break;
                             case "PROMOCION":
-                                cmd.Parameters.AddWithValue("@idPlato", DBNull.Value);
-                                cmd.Parameters.AddWithValue("@idBebida", DBNull.Value);
-                                cmd.Parameters.AddWithValue("@idExtra", DBNull.Value);
-                                cmd.Parameters.AddWithValue("@idPromocion", idItem);
+                                cmdVerificar.Parameters.AddWithValue("@idPlato", DBNull.Value);
+                                cmdVerificar.Parameters.AddWithValue("@idBebida", DBNull.Value);
+                                cmdVerificar.Parameters.AddWithValue("@idExtra", DBNull.Value);
+                                cmdVerificar.Parameters.AddWithValue("@idPromocion", idItem);
                                 break;
-                            default:
-                                MessageBox.Show("Tipo de ítem no reconocido", "Error",
-                                              MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                return false;
                         }
+                        cmdVerificar.Parameters.AddWithValue("@tipoItem", tipoItem.ToUpper());
 
-                        resultadoDB = cmd.ExecuteNonQuery() > 0;
+                        using (MySqlDataReader reader = cmdVerificar.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                idPedidoExistente = reader.GetInt32("id_pedido");
+                                cantidadExistente = reader.GetInt32("Cantidad");
+                            }
+                        }
+                    }
+
+                    // Si ya existe, actualizar la cantidad
+                    if (idPedidoExistente > 0)
+                    {
+                        string queryActualizar = @"UPDATE pedidos 
+                                  SET Cantidad = Cantidad + @cantidad 
+                                  WHERE id_pedido = @idPedido";
+
+                        using (MySqlCommand cmdActualizar = new MySqlCommand(queryActualizar, conexion))
+                        {
+                            cmdActualizar.Parameters.AddWithValue("@idPedido", idPedidoExistente);
+                            cmdActualizar.Parameters.AddWithValue("@cantidad", cantidad);
+                            resultadoDB = cmdActualizar.ExecuteNonQuery() > 0;
+                        }
+                    }
+                    else
+                    {
+                        // Si no existe, insertar nuevo pedido
+                        string queryInsertar = @"INSERT INTO pedidos 
+                           (id_orden, id_estadoP, id_plato, id_bebida, id_extra, id_promocion, Cantidad) 
+                           VALUES (@idOrden, 1, @idPlato, @idBebida, @idExtra, @idPromocion, @cantidad)";
+
+                        using (MySqlCommand cmdInsertar = new MySqlCommand(queryInsertar, conexion))
+                        {
+                            cmdInsertar.Parameters.AddWithValue("@idOrden", Convert.ToInt32(lblIdOrden.Text));
+                            cmdInsertar.Parameters.AddWithValue("@cantidad", cantidad);
+
+                            // Configurar parámetros según el tipo de ítem
+                            switch (tipoItem.ToUpper())
+                            {
+                                case "PLATO":
+                                    cmdInsertar.Parameters.AddWithValue("@idPlato", idItem);
+                                    cmdInsertar.Parameters.AddWithValue("@idBebida", DBNull.Value);
+                                    cmdInsertar.Parameters.AddWithValue("@idExtra", DBNull.Value);
+                                    cmdInsertar.Parameters.AddWithValue("@idPromocion", DBNull.Value);
+                                    break;
+                                case "BEBIDA":
+                                    cmdInsertar.Parameters.AddWithValue("@idPlato", DBNull.Value);
+                                    cmdInsertar.Parameters.AddWithValue("@idBebida", idItem);
+                                    cmdInsertar.Parameters.AddWithValue("@idExtra", DBNull.Value);
+                                    cmdInsertar.Parameters.AddWithValue("@idPromocion", DBNull.Value);
+                                    break;
+                                case "EXTRA":
+                                    cmdInsertar.Parameters.AddWithValue("@idPlato", DBNull.Value);
+                                    cmdInsertar.Parameters.AddWithValue("@idBebida", DBNull.Value);
+                                    cmdInsertar.Parameters.AddWithValue("@idExtra", idItem);
+                                    cmdInsertar.Parameters.AddWithValue("@idPromocion", DBNull.Value);
+                                    break;
+                                case "PROMOCION":
+                                    cmdInsertar.Parameters.AddWithValue("@idPlato", DBNull.Value);
+                                    cmdInsertar.Parameters.AddWithValue("@idBebida", DBNull.Value);
+                                    cmdInsertar.Parameters.AddWithValue("@idExtra", DBNull.Value);
+                                    cmdInsertar.Parameters.AddWithValue("@idPromocion", idItem);
+                                    break;
+                            }
+
+                            resultadoDB = cmdInsertar.ExecuteNonQuery() > 0;
+                        }
+                    }
+
+                    // Si se insertó correctamente en la BD, actualizar la interfaz
+                    if (resultadoDB)
+                    {
+                        CargarPedidosDesdeBD();
+                        ActualizarTotal();
                     }
                 }
                 catch (Exception ex)
@@ -460,23 +556,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                                   MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return false;
                 }
-            }
-
-            // Si se insertó correctamente en la BD, agregar a la lista local
-            if (resultadoDB)
-            {
-                // Obtener el ID del pedido recién insertado
-                int idPedido = ObtenerUltimoIdPedido();
-
-                // Agregar a la lista local con el tipo correcto
-                for (int i = 0; i < cantidad; i++)
-                {
-                    pedidos.Add((idPedido, nombreItem, precioItem, tipoItem));
-                }
-
-                // Actualizar la interfaz
-                MostrarPedidosEnPanel();
-                ActualizarTotal();
             }
 
             return resultadoDB;
@@ -568,51 +647,31 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             }
         }
 
-        private int ObtenerUltimoIdPedido()
-        {
-            using (MySqlConnection conexion = new Conexion().EstablecerConexion())
-            {
-                string query = "SELECT LAST_INSERT_ID()";
-                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
-                {
-                    object result = cmd.ExecuteScalar();
-                    return result != null ? Convert.ToInt32(result) : -1;
-                }
-            }
-        }
-
         private void MostrarPedidosEnPanel()
         {
             flowLayoutPanelPedidos.Controls.Clear();
 
+            // Agrupar por id_pedido para evitar duplicados
             var pedidosAgrupados = pedidos
-                .GroupBy(p => (p.idPedido, p.nombre, p.precio, p.tipo))
-                .Select(g => new {
-                    IdPedido = g.Key.idPedido,
-                    Nombre = g.Key.nombre,
-                    Precio = g.Key.precio,
-                    Tipo = g.Key.tipo,
-                    Cantidad = g.Count()
-                })
-                .OrderBy(x => x.Tipo)  // Ordenar primero por tipo
-                .ThenBy(x => x.Nombre); // Luego por nombre
+                .GroupBy(p => p.idPedido)
+                .Select(g => g.First()); // Tomar el primer elemento de cada grupo
 
-            foreach (var grupo in pedidosAgrupados)
+            foreach (var pedido in pedidosAgrupados)
             {
                 Panel panelPedido = new Panel
                 {
                     BorderStyle = BorderStyle.FixedSingle,
-                    BackColor = GetColorPorTipo(grupo.Tipo), // Usar el tipo para el color
+                    BackColor = GetColorPorTipo(pedido.tipo),
                     Margin = new Padding(5),
                     Padding = new Padding(5),
                     Width = flowLayoutPanelPedidos.Width - 25,
                     Height = 40,
-                    Tag = grupo.IdPedido
+                    Tag = pedido.idPedido
                 };
 
                 Label lblPedido = new Label
                 {
-                    Text = $"{grupo.Nombre} - {grupo.Precio:C} x{grupo.Cantidad}",
+                    Text = $"{pedido.nombre} - {pedido.precio:C} x{pedido.cantidad}",
                     ForeColor = Color.White,
                     Dock = DockStyle.Fill,
                     TextAlign = ContentAlignment.MiddleLeft,
@@ -627,13 +686,13 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                     FlatStyle = FlatStyle.Flat,
                     Width = 30,
                     Dock = DockStyle.Right,
-                    Tag = grupo.IdPedido
+                    Tag = pedido.idPedido
                 };
 
                 // Eventos
-                lblPedido.Click += (s, e) => MostrarConfirmacionEliminacion(grupo.IdPedido, grupo.Nombre, grupo.Cantidad);
-                btnEliminar.Click += (s, e) => MostrarConfirmacionEliminacion(grupo.IdPedido, grupo.Nombre, grupo.Cantidad);
-                panelPedido.Click += (s, e) => MostrarConfirmacionEliminacion(grupo.IdPedido, grupo.Nombre, grupo.Cantidad);
+                lblPedido.Click += (s, e) => MostrarConfirmacionEliminacion(pedido.idPedido, pedido.nombre, pedido.cantidad);
+                btnEliminar.Click += (s, e) => MostrarConfirmacionEliminacion(pedido.idPedido, pedido.nombre, pedido.cantidad);
+                panelPedido.Click += (s, e) => MostrarConfirmacionEliminacion(pedido.idPedido, pedido.nombre, pedido.cantidad);
 
                 panelPedido.Controls.Add(lblPedido);
                 panelPedido.Controls.Add(btnEliminar);
@@ -782,31 +841,31 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             using (MySqlConnection conexion = new Conexion().EstablecerConexion())
             {
                 string query = @"
-        SELECT 
-            p.id_pedido,
-            COALESCE(
-                pl.nombrePlato,
-                (SELECT i.nombreProducto FROM bebidas b JOIN inventario i ON b.id_inventario = i.id_inventario WHERE b.id_bebida = p.id_bebida),
-                (SELECT i.nombreProducto FROM extras e JOIN inventario i ON e.id_inventario = i.id_inventario WHERE e.id_extra = p.id_extra),
-                (SELECT pr.nombre FROM promociones pr WHERE pr.id_promocion = p.id_promocion)
-            ) AS nombre,
-            COALESCE(
-                pl.precioUnitario,
-                (SELECT b.precioUnitario FROM bebidas b WHERE b.id_bebida = p.id_bebida),
-                (SELECT e.precioUnitario FROM extras e WHERE e.id_extra = p.id_extra),
-                (SELECT pr.precio_especial FROM promociones pr WHERE pr.id_promocion = p.id_promocion)
-            ) AS precio,
-            p.Cantidad,
-            CASE
-                WHEN p.id_plato IS NOT NULL THEN 'PLATO'
-                WHEN p.id_bebida IS NOT NULL THEN 'BEBIDA'
-                WHEN p.id_extra IS NOT NULL THEN 'EXTRA'
-                WHEN p.id_promocion IS NOT NULL THEN 'PROMOCION'
-                ELSE 'DESCONOCIDO'
-            END AS tipo
-        FROM pedidos p
-        LEFT JOIN platos pl ON p.id_plato = pl.id_plato
-        WHERE p.id_orden = @idOrden";
+                                SELECT 
+                                    p.id_pedido,
+                                    COALESCE(
+                                        pl.nombrePlato,
+                                        (SELECT i.nombreProducto FROM bebidas b JOIN inventario i ON b.id_inventario = i.id_inventario WHERE b.id_bebida = p.id_bebida),
+                                        (SELECT i.nombreProducto FROM extras e JOIN inventario i ON e.id_inventario = i.id_inventario WHERE e.id_extra = p.id_extra),
+                                        (SELECT pr.nombre FROM promociones pr WHERE pr.id_promocion = p.id_promocion)
+                                    ) AS nombre,
+                                    COALESCE(
+                                        pl.precioUnitario,
+                                        (SELECT b.precioUnitario FROM bebidas b WHERE b.id_bebida = p.id_bebida),
+                                        (SELECT e.precioUnitario FROM extras e WHERE e.id_extra = p.id_extra),
+                                        (SELECT pr.precio_especial FROM promociones pr WHERE pr.id_promocion = p.id_promocion)
+                                    ) AS precio,
+                                    p.Cantidad,
+                                    CASE
+                                        WHEN p.id_plato IS NOT NULL THEN 'PLATO'
+                                        WHEN p.id_bebida IS NOT NULL THEN 'BEBIDA'
+                                        WHEN p.id_extra IS NOT NULL THEN 'EXTRA'
+                                        WHEN p.id_promocion IS NOT NULL THEN 'PROMOCION'
+                                        ELSE 'DESCONOCIDO'
+                                    END AS tipo
+                                FROM pedidos p
+                                LEFT JOIN platos pl ON p.id_plato = pl.id_plato
+                                WHERE p.id_orden = @idOrden";
 
                 using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                 {
@@ -822,11 +881,8 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                             decimal precio = Convert.ToDecimal(reader["precio"]);
                             int cantidad = Convert.ToInt32(reader["Cantidad"]);
 
-                            // Agregar a la lista con el tipo incluido
-                            for (int i = 0; i < cantidad; i++)
-                            {
-                                pedidos.Add((idPedido, nombre, precio, tipo));
-                            }
+                            // Agregar a la lista con la cantidad correcta
+                            pedidos.Add((idPedido, nombre, precio, tipo, cantidad));
                         }
                     }
                 }
