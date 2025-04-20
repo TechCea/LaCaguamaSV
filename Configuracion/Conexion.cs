@@ -14,10 +14,10 @@ namespace LaCaguamaSV.Configuracion
     {
         private MySqlConnection conectar = null;
         private static string usuario = "root";
-        private static string contrasenia = "root";
+        private static string contrasenia = "slenderman";
         private static string bd = "lacaguamabd";
         private static string ip = "localhost";
-        private static string puerto = "3307"; // o 3307 si eres javier 
+        private static string puerto = "3306"; // o 3307 si eres javier 
 
         string cadenaConexion = $"Server={ip};Port={puerto};Database={bd};User Id={usuario};Password={contrasenia};";
 
@@ -908,6 +908,59 @@ public DataTable ObtenerBebidas()
             }
         }
 
+        // estados de caja 
+        public int ObtenerEstadoCajaActual()
+        {
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    string query = @"SELECT id_estado_caja 
+                             FROM caja 
+                             WHERE DATE(fecha) = CURDATE() 
+                             ORDER BY fecha DESC 
+                             LIMIT 1";
+                    MySqlCommand comando = new MySqlCommand(query, conexion);
+                    object resultado = comando.ExecuteScalar();
+                    return resultado != null ? Convert.ToInt32(resultado) : 1; // 1 = No inicializada
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al obtener estado de la caja: " + ex.Message);
+                return 1;
+            }
+        }
+
+        public int ObtenerEstadoCorteActual()
+        {
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    string query = @"SELECT id_estado_corte 
+                             FROM corte_de_caja 
+                             WHERE DATE(fecha) = CURDATE() 
+                             ORDER BY fecha DESC 
+                             LIMIT 1";
+                    MySqlCommand comando = new MySqlCommand(query, conexion);
+                    object resultado = comando.ExecuteScalar();
+                    return resultado != null ? Convert.ToInt32(resultado) : 1; // 1 = No inicializado
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al obtener estado del corte: " + ex.Message);
+                return 1;
+            }
+        }
+
+
+
+
+
 
         // caja incial
         public decimal ObtenerCajaInicial(DateTime fecha)
@@ -1047,28 +1100,20 @@ public DataTable ObtenerBebidas()
 
         }
 
-        public bool RegistrarCorteDeCaja(decimal cantidad, int idUsuario, int idEstadoCorte)
+        public bool RegistrarCorteDeCaja(decimal montoContado, int idUsuario, int idEstadoCorte)
         {
             try
             {
-                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                using (MySqlConnection conn = new MySqlConnection(cadenaConexion))
                 {
-                    conexion.Open();
-                    string query = "INSERT INTO corte_de_caja (cantidad, fecha, id_estado_corte, id_usuario) " +
-                                   "VALUES (@cantidad, NOW(), @idEstadoCorte, @idUsuario)";
+                    conn.Open();
+                    string query = "INSERT INTO corte_de_caja (cantidad, fecha, id_usuario, id_estado_corte) VALUES (@monto, NOW(), @usuario, @estado)";
+                    MySqlCommand cmd = new MySqlCommand(query, conn);
+                    cmd.Parameters.AddWithValue("@monto", montoContado);
+                    cmd.Parameters.AddWithValue("@usuario", idUsuario);
+                    cmd.Parameters.AddWithValue("@estado", idEstadoCorte);
 
-                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
-                    {
-                        cmd.Parameters.AddWithValue("@cantidad", cantidad);
-                        cmd.Parameters.AddWithValue("@idUsuario", idUsuario);
-                        cmd.Parameters.AddWithValue("@idEstadoCorte", idEstadoCorte);
-
-                        // Mensaje de depuración
-                        MessageBox.Show($"Registrando corte: Cantidad={cantidad}, UsuarioID={idUsuario}, Estado={idEstadoCorte}");
-
-                        int filasAfectadas = cmd.ExecuteNonQuery();
-                        return filasAfectadas > 0;
-                    }
+                    return cmd.ExecuteNonQuery() > 0;
                 }
             }
             catch (Exception ex)
@@ -1077,6 +1122,7 @@ public DataTable ObtenerBebidas()
                 return false;
             }
         }
+
 
         public bool CorteDeCajaRealizadoHoy()
         {
@@ -1137,6 +1183,53 @@ public DataTable ObtenerBebidas()
             return total;
         }
 
+        // Iniciar Caja
+        public bool RegistrarCajaInicial(decimal monto, int idUsuario, int idEstadoCaja)
+        {
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(cadenaConexion))
+                {
+                    conn.Open();
+                    string query = "INSERT INTO caja (cantidad, fecha, id_usuario, id_estado_caja) VALUES (@monto, NOW(), @usuario, @estado)";
+                    MySqlCommand cmd = new MySqlCommand(query, conn);
+                    cmd.Parameters.AddWithValue("@monto", monto);
+                    cmd.Parameters.AddWithValue("@usuario", idUsuario);
+                    cmd.Parameters.AddWithValue("@estado", idEstadoCaja);
+
+                    return cmd.ExecuteNonQuery() > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al registrar la caja inicial: " + ex.Message);
+                return false;
+            }
+        }
+        public bool CajaInicialYaEstablecida()
+        {
+            
+            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+            {
+                string query = "SELECT COUNT(*) FROM caja WHERE DATE(fecha) = CURDATE()";
+                using (MySqlCommand comando = new MySqlCommand(query, conexion))
+                {
+                    try
+                    {
+                        conexion.Open();
+                        int count = Convert.ToInt32(comando.ExecuteScalar());
+                        return count > 0;
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Error: " + ex.Message);
+                        return false;
+                    }
+                }
+            }
+        }
+
+
         // 🔹 Nueva función para actualizar el estado de la mesa
         public bool ActualizarEstadoMesa(int idMesa, int nuevoEstado)
         {
@@ -1168,56 +1261,6 @@ public DataTable ObtenerBebidas()
                 }
             }
             return actualizado;
-        }
-        // Iniciar Caja
-        public bool RegistrarCajaInicial(decimal cantidad, int idUsuario)
-        {
-            try
-            {
-                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
-                {
-                    conexion.Open();
-                    string query = "INSERT INTO caja (cantidad, fecha, id_usuario) VALUES (@cantidad, NOW(), @idUsuario)";
-                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
-                    {
-                        cmd.Parameters.AddWithValue("@cantidad", cantidad);
-                        cmd.Parameters.AddWithValue("@idUsuario", idUsuario);
-
-                        // Mensaje de depuración
-                        MessageBox.Show($"Registrando caja inicial: Cantidad={cantidad}, UsuarioID={idUsuario}");
-
-                        int filasAfectadas = cmd.ExecuteNonQuery();
-                        return filasAfectadas > 0;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al registrar caja inicial: " + ex.Message);
-                return false;
-            }
-        }
-        public bool CajaInicialYaEstablecida()
-        {
-            
-            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
-            {
-                string query = "SELECT COUNT(*) FROM caja WHERE DATE(fecha) = CURDATE()";
-                using (MySqlCommand comando = new MySqlCommand(query, conexion))
-                {
-                    try
-                    {
-                        conexion.Open();
-                        int count = Convert.ToInt32(comando.ExecuteScalar());
-                        return count > 0;
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine("Error: " + ex.Message);
-                        return false;
-                    }
-                }
-            }
         }
 
 
