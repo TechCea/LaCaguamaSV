@@ -916,22 +916,21 @@ public DataTable ObtenerBebidas()
                 using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
                 {
                     conexion.Open();
-                    string query = @"SELECT id_estado_caja 
-                             FROM caja 
-                             WHERE DATE(fecha) = CURDATE() 
-                             ORDER BY fecha DESC 
-                             LIMIT 1";
-                    MySqlCommand comando = new MySqlCommand(query, conexion);
-                    object resultado = comando.ExecuteScalar();
-                    return resultado != null ? Convert.ToInt32(resultado) : 1; // 1 = No inicializada
+                    string consulta = "SELECT id_estado_caja FROM estado_caja ORDER BY id_estado_caja DESC LIMIT 1";
+                    using (MySqlCommand cmd = new MySqlCommand(consulta, conexion))
+                    {
+                        object resultado = cmd.ExecuteScalar();
+                        return resultado != null ? Convert.ToInt32(resultado) : 1;
+                    }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al obtener estado de la caja: " + ex.Message);
+                MessageBox.Show("Error al obtener el estado de caja:\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return 1;
             }
         }
+
 
         public int ObtenerEstadoCorteActual()
         {
@@ -940,22 +939,22 @@ public DataTable ObtenerBebidas()
                 using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
                 {
                     conexion.Open();
-                    string query = @"SELECT id_estado_corte 
-                             FROM corte_de_caja 
-                             WHERE DATE(fecha) = CURDATE() 
-                             ORDER BY fecha DESC 
-                             LIMIT 1";
-                    MySqlCommand comando = new MySqlCommand(query, conexion);
-                    object resultado = comando.ExecuteScalar();
-                    return resultado != null ? Convert.ToInt32(resultado) : 1; // 1 = No inicializado
+                    string consulta = "SELECT id_estado_corte FROM estado_corte ORDER BY id_estado_corte DESC LIMIT 1";
+                    using (MySqlCommand cmd = new MySqlCommand(consulta, conexion))
+                    {
+                        object resultado = cmd.ExecuteScalar();
+                        return resultado != null ? Convert.ToInt32(resultado) : 1;
+                    }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al obtener estado del corte: " + ex.Message);
+                MessageBox.Show("Error al obtener el estado del corte:\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return 1;
             }
         }
+
+
 
 
 
@@ -1102,26 +1101,43 @@ public DataTable ObtenerBebidas()
 
         public bool RegistrarCorteDeCaja(decimal montoContado, int idUsuario, int idEstadoCorte)
         {
-            try
+            using (MySqlConnection conexionBD = new MySqlConnection(cadenaConexion))
             {
-                using (MySqlConnection conn = new MySqlConnection(cadenaConexion))
-                {
-                    conn.Open();
-                    string query = "INSERT INTO corte_de_caja (cantidad, fecha, id_usuario, id_estado_corte) VALUES (@monto, NOW(), @usuario, @estado)";
-                    MySqlCommand cmd = new MySqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@monto", montoContado);
-                    cmd.Parameters.AddWithValue("@usuario", idUsuario);
-                    cmd.Parameters.AddWithValue("@estado", idEstadoCorte);
+                conexionBD.Open();
 
-                    return cmd.ExecuteNonQuery() > 0;
+                using (MySqlTransaction transaccion = conexionBD.BeginTransaction())
+                {
+                    try
+                    {
+                        string insertarCorte = @"INSERT INTO corte_de_caja (monto_contado, fecha, id_usuario, id_estado_corte)
+                                         VALUES (@montoContado, NOW(), @idUsuario, @idEstadoCorte);";
+
+                        MySqlCommand cmdCorte = new MySqlCommand(insertarCorte, conexionBD, transaccion);
+                        cmdCorte.Parameters.AddWithValue("@montoContado", montoContado);
+                        cmdCorte.Parameters.AddWithValue("@idUsuario", idUsuario);
+                        cmdCorte.Parameters.AddWithValue("@idEstadoCorte", idEstadoCorte);
+                        cmdCorte.ExecuteNonQuery();
+
+                        string insertarEstado = @"INSERT INTO estado_corte (id_estado_corte, nombreEstadoCorte) 
+                                          VALUES (2, 'Inicializada')
+                                          ON DUPLICATE KEY UPDATE nombreEstadoCorte = 'Inicializada';";
+
+                        MySqlCommand cmdEstado = new MySqlCommand(insertarEstado, conexionBD, transaccion);
+                        cmdEstado.ExecuteNonQuery();
+
+                        transaccion.Commit();
+                        return true;
+                    }
+                    catch
+                    {
+                        transaccion.Rollback();
+                        return false;
+                    }
                 }
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al registrar el corte de caja: " + ex.Message);
-                return false;
-            }
         }
+
+
 
 
         public bool CorteDeCajaRealizadoHoy()
@@ -1184,28 +1200,44 @@ public DataTable ObtenerBebidas()
         }
 
         // Iniciar Caja
-        public bool RegistrarCajaInicial(decimal monto, int idUsuario, int idEstadoCaja)
+        public bool RegistrarCajaInicial(decimal cantidad, int idUsuario)
         {
-            try
+            using (MySqlConnection conexionBD = new MySqlConnection(cadenaConexion))
             {
-                using (MySqlConnection conn = new MySqlConnection(cadenaConexion))
-                {
-                    conn.Open();
-                    string query = "INSERT INTO caja (cantidad, fecha, id_usuario, id_estado_caja) VALUES (@monto, NOW(), @usuario, @estado)";
-                    MySqlCommand cmd = new MySqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@monto", monto);
-                    cmd.Parameters.AddWithValue("@usuario", idUsuario);
-                    cmd.Parameters.AddWithValue("@estado", idEstadoCaja);
+                conexionBD.Open();
 
-                    return cmd.ExecuteNonQuery() > 0;
+                using (MySqlTransaction transaccion = conexionBD.BeginTransaction())
+                {
+                    try
+                    {
+                        string insertarCaja = @"INSERT INTO caja (cantidad, fecha, id_usuario, id_estado_caja) 
+                                        VALUES (@cantidad, NOW(), @idUsuario, 2);";
+
+                        MySqlCommand cmdCaja = new MySqlCommand(insertarCaja, conexionBD, transaccion);
+                        cmdCaja.Parameters.AddWithValue("@cantidad", cantidad);
+                        cmdCaja.Parameters.AddWithValue("@idUsuario", idUsuario);
+                        cmdCaja.ExecuteNonQuery();
+
+                        string insertarEstado = @"INSERT INTO estado_caja (id_estado_caja, nombreEstadoCaja) 
+                                          VALUES (2, 'Inicializada')
+                                          ON DUPLICATE KEY UPDATE nombreEstadoCaja = 'Inicializada';";
+
+                        MySqlCommand cmdEstado = new MySqlCommand(insertarEstado, conexionBD, transaccion);
+                        cmdEstado.ExecuteNonQuery();
+
+                        transaccion.Commit();
+                        return true;
+                    }
+                    catch
+                    {
+                        transaccion.Rollback();
+                        return false;
+                    }
                 }
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al registrar la caja inicial: " + ex.Message);
-                return false;
-            }
         }
+
+
         public bool CajaInicialYaEstablecida()
         {
             

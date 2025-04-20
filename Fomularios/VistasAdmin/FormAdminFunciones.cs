@@ -28,6 +28,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             panelResultadoCorte.Visible = false; // Ocultamos el panel de resultado
 
             VerificarEstadoCaja();
+
         }
 
         private void label5_Click(object sender, EventArgs e)
@@ -244,24 +245,27 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         }
         private void VerificarEstadoCaja()
         {
-            if (conexion.CajaInicialYaEstablecida())
-            {
-                btnCajaInicial.Enabled = false;
-                Corte_Caja.Enabled = true;
-            }
-            else
+            int estadoCaja = conexion.ObtenerEstadoCajaActual();
+            int estadoCorte = conexion.ObtenerEstadoCorteActual();
+
+            if (estadoCaja == 1) // No inicializada
             {
                 btnCajaInicial.Enabled = true;
                 Corte_Caja.Enabled = false;
             }
-
-            // Si ya se hizo un corte hoy, deshabilitar el botón de corte de caja
-            if (conexion.CorteDeCajaRealizadoHoy())
+            else if (estadoCaja == 2 && estadoCorte == 1) // Caja inicializada pero aún no se hizo corte
             {
-                btnCajaInicial.Enabled = true;  // Se permite iniciar nueva caja
-                Corte_Caja.Enabled = false;     // No se puede hacer otro corte en el mismo día
+                btnCajaInicial.Enabled = false;
+                Corte_Caja.Enabled = true;
+            }
+            else if (estadoCaja == 2 && estadoCorte == 2) // Corte ya hecho
+            {
+                btnCajaInicial.Enabled = true;   // Se puede hacer nueva caja
+                Corte_Caja.Enabled = false;      // Hasta nueva caja no se puede cortar
             }
         }
+
+
 
         private void panelCaja_Paint(object sender, PaintEventArgs e)
         {
@@ -272,5 +276,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
 
         }
+
+
     }
 }
