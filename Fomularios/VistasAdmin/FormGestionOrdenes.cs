@@ -34,6 +34,16 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         public FormGestionOrdenes(int idOrden, string nombreCliente, decimal total, decimal descuento, string fechaOrden, string numeroMesa, string tipoPago, string nombreUsuario, string estadoOrden)
         {
             InitializeComponent();
+
+            // Tamaño fijo
+            this.FormBorderStyle = FormBorderStyle.FixedSingle; // Evita redimensionar
+            this.MaximizeBox = false; // Deshabilita el botón de maximizar
+            this.MinimizeBox = false; // Deshabilita el botón de minimizar
+            this.Size = new Size(800, 600); // Establece un tamaño fijo
+
+            // Posición fija (centrada en la pantalla)
+            this.StartPosition = FormStartPosition.CenterScreen;
+
             this.FormBorderStyle = FormBorderStyle.None;
             Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 20, 20));
 

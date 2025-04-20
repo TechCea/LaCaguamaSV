@@ -176,6 +176,12 @@
     <Compile Include="Fomularios\VistasAdmin\FormAdminFunciones.Designer.cs">
       <DependentUpon>FormAdminFunciones.cs</DependentUpon>
     </Compile>
+    <Compile Include="Fomularios\VistasAdmin\FormAdminGastos.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Fomularios\VistasAdmin\FormAdminGastos.Designer.cs">
+      <DependentUpon>FormAdminGastos.cs</DependentUpon>
+    </Compile>
     <Compile Include="Fomularios\VistasAdmin\FormAdminIngredientesInv.cs">
       <SubType>Form</SubType>
     </Compile>
