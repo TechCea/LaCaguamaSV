@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using LaCaguamaSV.Configuracion;
 using MySql.Data.MySqlClient;
 
+
 namespace LaCaguamaSV.Fomularios.VistasAdmin
 {
     public partial class FormGestionOrdenes : Form
@@ -38,7 +39,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             // Tamaño fijo
             this.FormBorderStyle = FormBorderStyle.FixedSingle; // Evita redimensionar
             
-            this.Size = new Size(800, 600); // Establece un tamaño fijo
+            this.Size = new Size(1000, 600); // Establece un tamaño fijo
 
             // Posición fija (centrada en la pantalla)
             this.StartPosition = FormStartPosition.CenterScreen;
@@ -48,7 +49,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             ActualizarTotal(); // Sincronizar el total
         }
 
-        private List<(int idPedido, string nombre, decimal precio)> pedidos = new List<(int, string, decimal)>();
+        private List<(int idPedido, string nombre, decimal precio, string tipo)> pedidos = new List<(int, string, decimal, string)>();
         private decimal totalOrden = 0;
 
 
@@ -58,19 +59,22 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         private void CargarBebidas()
         {
             dataGridViewMenu.DataSource = OrdenesD.ObtenerBebidas();
-            tipoItemActual = "bebida";
+            dataGridViewMenu.Tag = "BEBIDA"; // Usar mayúsculas para consistencia
+            tipoItemActual = "BEBIDA";
         }
 
         private void CargarPlatos()
         {
             dataGridViewMenu.DataSource = OrdenesD.ObtenerPlatos();
-            tipoItemActual = "plato";
+            dataGridViewMenu.Tag = "PLATO";
+            tipoItemActual = "PLATO";
         }
 
         private void CargarExtras()
         {
             dataGridViewMenu.DataSource = OrdenesD.ObtenerExtras();
-            tipoItemActual = "extra";
+            dataGridViewMenu.Tag = "EXTRA";
+            tipoItemActual = "EXTRA";
         }
 
 
@@ -248,124 +252,150 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             CargarExtras();
         }
 
-        private void dataGridViewMenu_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void dataGridViewMenu_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0)
+            if (e.RowIndex < 0) return;
+
+            DataGridViewRow row = dataGridViewMenu.Rows[e.RowIndex];
+            string tipoActual = dataGridViewMenu.Tag?.ToString() ?? tipoItemActual ?? "";
+
+            if (!new[] { "PLATO", "BEBIDA", "EXTRA", "PROMOCION" }.Contains(tipoActual))
             {
-                DataGridViewRow row = dataGridViewMenu.Rows[e.RowIndex];
+                MessageBox.Show("Tipo de ítem no reconocido");
+                return;
+            }
 
-                int idItem = Convert.ToInt32(row.Cells["ID"].Value);
-                string nombre = row.Cells["nombre"].Value.ToString();
-                decimal precio = Convert.ToDecimal(row.Cells["precioUnitario"].Value);
+            int idItem = Convert.ToInt32(row.Cells["ID"].Value);
+            string nombre = row.Cells["nombre"].Value.ToString();
+            decimal precio = Convert.ToDecimal(row.Cells["precioUnitario"].Value);
 
-                using (var inputDialog = new Form())
+            // Mostrar formulario de cantidad (el mismo que antes)
+            var cantidadForm = new Form()
+            {
+                Text = $"Agregar {nombre}",
+                FormBorderStyle = FormBorderStyle.FixedDialog,
+                StartPosition = FormStartPosition.CenterParent,
+                Size = new Size(350, 200),
+                BackColor = Color.FromArgb(40, 40, 40),
+                ForeColor = Color.White
+            };
+
+            // Panel principal
+            var panel = new Panel() { Dock = DockStyle.Fill, Padding = new Padding(20) };
+
+            // Etiqueta
+            var lbl = new Label()
+            {
+                Text = $"Cantidad de {nombre}:",
+                Dock = DockStyle.Top,
+                TextAlign = ContentAlignment.MiddleLeft,
+                Font = new Font("Arial", 10, FontStyle.Bold)
+            };
+
+            // Selector de cantidad
+            var numCantidad = new NumericUpDown()
+            {
+                Minimum = 1,
+                Maximum = 100,
+                Value = 1,
+                Dock = DockStyle.Top,
+                Font = new Font("Arial", 12),
+                BackColor = Color.FromArgb(60, 60, 60),
+                ForeColor = Color.White
+            };
+
+            // Panel de botones
+            var panelBotones = new Panel()
+            {
+                Dock = DockStyle.Bottom,
+                Height = 50,
+                Padding = new Padding(5)
+            };
+
+            // Botón Aceptar
+            var btnAceptar = new Button()
+            {
+                Text = "Agregar",
+                DialogResult = DialogResult.OK,
+                Width = 100,
+                Dock = DockStyle.Right,
+                BackColor = Color.FromArgb(70, 130, 180),
+                FlatStyle = FlatStyle.Flat
+            };
+
+            // Botón Cancelar
+            var btnCancelar = new Button()
+            {
+                Text = "Cancelar",
+                DialogResult = DialogResult.Cancel,
+                Width = 100,
+                Dock = DockStyle.Right,
+                BackColor = Color.FromArgb(220, 80, 80),
+                FlatStyle = FlatStyle.Flat,
+                Margin = new Padding(0, 0, 10, 0)
+            };
+
+            // Agregar controles
+            panelBotones.Controls.AddRange(new[] { btnAceptar, btnCancelar });
+            panel.Controls.AddRange(new Control[] { lbl, numCantidad, panelBotones });
+            cantidadForm.Controls.Add(panel);
+
+            // Configurar botones
+            cantidadForm.AcceptButton = btnAceptar;
+            cantidadForm.CancelButton = btnCancelar;
+
+            if (cantidadForm.ShowDialog(this) == DialogResult.OK)
+            {
+                int cantidad = (int)numCantidad.Value;
+                bool resultado = false;
+
+                if (tipoActual == "PROMOCION")
                 {
-                    inputDialog.Text = $"Seleccionar cantidad para {nombre}";
-                    inputDialog.FormBorderStyle = FormBorderStyle.FixedDialog;
-                    inputDialog.MaximizeBox = false;
-                    inputDialog.MinimizeBox = false;
-                    inputDialog.StartPosition = FormStartPosition.CenterParent;
-                    inputDialog.Size = new Size(300, 150);
+                    resultado = OrdenesD.AgregarPromocionAOrden(Convert.ToInt32(lblIdOrden.Text), idItem, cantidad);
+                }
+                else
+                {
+                    resultado = AgregarPedido(idItem, cantidad, tipoActual);
+                }
 
-                    Label lblCantidad = new Label()
-                    {
-                        Text = "Ingrese la cantidad:",
-                        Dock = DockStyle.Top,
-                        TextAlign = ContentAlignment.MiddleCenter,
-                        Padding = new Padding(10)
-                    };
-
-                    NumericUpDown numericUpDown = new NumericUpDown()
-                    {
-                        Minimum = 1,
-                        Maximum = 100,
-                        Value = 1,
-                        Dock = DockStyle.Top,
-                        TextAlign = HorizontalAlignment.Center,
-                        Font = new Font("Arial", 12, FontStyle.Bold)
-                    };
-
-                    Button okButton = new Button()
-                    {
-                        Text = "Aceptar",
-                        DialogResult = DialogResult.OK,
-                        Dock = DockStyle.Bottom,
-                        BackColor = Color.LightGreen,
-                        Font = new Font("Arial", 10, FontStyle.Bold)
-                    };
-
-                    inputDialog.Controls.Add(numericUpDown);
-                    inputDialog.Controls.Add(lblCantidad);
-                    inputDialog.Controls.Add(okButton);
-                    inputDialog.AcceptButton = okButton;
-
-                    if (inputDialog.ShowDialog() == DialogResult.OK)
-                    {
-                        int cantidad = (int)numericUpDown.Value;
-                        bool agregado = AgregarPedido(idItem, cantidad);
-
-                        if (agregado)
-                        {
-                            for (int i = 0; i < cantidad; i++)
-                            {
-                                pedidos.Add((-1, nombre, precio));
-                            }
-                            MostrarPedidosEnPanel();
-                            ActualizarTotal();
-                        }
-                    }
+                if (resultado)
+                {
+                    CargarPedidosDesdeBD();
+                    ActualizarTotal();
                 }
             }
         }
 
-        private bool AgregarPedido(int idItem, int cantidad)
+
+        private bool AgregarPedido(int idItem, int cantidad, string tipoItem)
         {
-            // Verificar inventario antes de agregar
-            string mensajeInventario = "";
-
-            // Versión compatible con C# 7.3
-            if (tipoItemActual == "plato")
+            // Validar parámetros
+            if (idItem <= 0 || cantidad <= 0 || string.IsNullOrEmpty(tipoItem))
             {
-                mensajeInventario = OrdenesD.VerificarInventarioPlato(idItem);
-            }
-            else if (tipoItemActual == "bebida")
-            {
-                mensajeInventario = OrdenesD.VerificarInventarioBebida(idItem);
-            }
-            else if (tipoItemActual == "extra")
-            {
-                mensajeInventario = OrdenesD.VerificarInventarioExtra(idItem);
+                MessageBox.Show("Datos inválidos para agregar el pedido", "Error",
+                               MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
             }
 
-            // Mostrar advertencia si hay inventario bajo
+            // Obtener nombre y precio según el tipo de ítem
+            string nombreItem = ObtenerNombreItem(idItem, tipoItem);
+            decimal precioItem = ObtenerPrecioItem(idItem, tipoItem);
+
+            if (string.IsNullOrEmpty(nombreItem) || precioItem <= 0)
+            {
+                MessageBox.Show("No se pudo obtener la información del ítem", "Error",
+                               MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            // Verificar inventario (opcional)
+            string mensajeInventario = VerificarInventarioItem(idItem, tipoItem);
             if (!string.IsNullOrEmpty(mensajeInventario))
             {
-                string tipoItem;
-                if (tipoItemActual == "plato")
-                {
-                    tipoItem = "plato";
-                }
-                else if (tipoItemActual == "bebida")
-                {
-                    tipoItem = "bebida";
-                }
-                else if (tipoItemActual == "extra")
-                {
-                    tipoItem = "extra";
-                }
-                else
-                {
-                    tipoItem = "ítem";
-                }
-
                 DialogResult result = MessageBox.Show(
-                    $"⚠ Advertencia: Algunos ingredientes o productos tienen un inventario bajo:\n\n" +
-                    $"{mensajeInventario}\n\n" +
-                    "Para reponer stock, por favor contacte a un supervisor o administrador.\n\n" +
+                    $"Advertencia de inventario para {nombreItem}:\n\n{mensajeInventario}\n\n" +
                     "¿Desea continuar con el pedido de todas formas?",
-                    "Inventario Bajo",
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Warning);
+                    "Inventario Bajo", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
                 if (result != DialogResult.Yes)
                 {
@@ -373,37 +403,180 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 }
             }
 
-            // Resto del método permanece igual...
+            // Insertar en la base de datos
+            bool resultadoDB = false;
             using (MySqlConnection conexion = new Conexion().EstablecerConexion())
             {
                 try
                 {
-                    string query = "INSERT INTO pedidos (id_orden, id_estadoP, id_plato, id_bebida, id_extra, Cantidad) " +
-                                   "VALUES (@idOrden, 1, @idPlato, @idBebida, @idExtra, @Cantidad)";
+                    string query = @"INSERT INTO pedidos 
+                           (id_orden, id_estadoP, id_plato, id_bebida, id_extra, id_promocion, Cantidad) 
+                           VALUES (@idOrden, 1, @idPlato, @idBebida, @idExtra, @idPromocion, @cantidad)";
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                     {
                         cmd.Parameters.AddWithValue("@idOrden", Convert.ToInt32(lblIdOrden.Text));
-                        cmd.Parameters.AddWithValue("@Cantidad", cantidad);
+                        cmd.Parameters.AddWithValue("@cantidad", cantidad);
 
-                        cmd.Parameters.AddWithValue("@idPlato", tipoItemActual == "plato" ? idItem : (object)DBNull.Value);
-                        cmd.Parameters.AddWithValue("@idBebida", tipoItemActual == "bebida" ? idItem : (object)DBNull.Value);
-                        cmd.Parameters.AddWithValue("@idExtra", tipoItemActual == "extra" ? idItem : (object)DBNull.Value);
-
-                        int result = cmd.ExecuteNonQuery();
-
-                        if (result > 0)
+                        // Configurar parámetros según el tipo de ítem
+                        switch (tipoItem.ToUpper())
                         {
-                            ActualizarTotal(); // Actualizar el total desde la BD
-                            return true;
+                            case "PLATO":
+                                cmd.Parameters.AddWithValue("@idPlato", idItem);
+                                cmd.Parameters.AddWithValue("@idBebida", DBNull.Value);
+                                cmd.Parameters.AddWithValue("@idExtra", DBNull.Value);
+                                cmd.Parameters.AddWithValue("@idPromocion", DBNull.Value);
+                                break;
+                            case "BEBIDA":
+                                cmd.Parameters.AddWithValue("@idPlato", DBNull.Value);
+                                cmd.Parameters.AddWithValue("@idBebida", idItem);
+                                cmd.Parameters.AddWithValue("@idExtra", DBNull.Value);
+                                cmd.Parameters.AddWithValue("@idPromocion", DBNull.Value);
+                                break;
+                            case "EXTRA":
+                                cmd.Parameters.AddWithValue("@idPlato", DBNull.Value);
+                                cmd.Parameters.AddWithValue("@idBebida", DBNull.Value);
+                                cmd.Parameters.AddWithValue("@idExtra", idItem);
+                                cmd.Parameters.AddWithValue("@idPromocion", DBNull.Value);
+                                break;
+                            case "PROMOCION":
+                                cmd.Parameters.AddWithValue("@idPlato", DBNull.Value);
+                                cmd.Parameters.AddWithValue("@idBebida", DBNull.Value);
+                                cmd.Parameters.AddWithValue("@idExtra", DBNull.Value);
+                                cmd.Parameters.AddWithValue("@idPromocion", idItem);
+                                break;
+                            default:
+                                MessageBox.Show("Tipo de ítem no reconocido", "Error",
+                                              MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                return false;
                         }
-                        return false;
+
+                        resultadoDB = cmd.ExecuteNonQuery() > 0;
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error al agregar pedido: " + ex.Message);
+                    MessageBox.Show($"Error al agregar pedido a la base de datos: {ex.Message}", "Error",
+                                  MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return false;
+                }
+            }
+
+            // Si se insertó correctamente en la BD, agregar a la lista local
+            if (resultadoDB)
+            {
+                // Obtener el ID del pedido recién insertado
+                int idPedido = ObtenerUltimoIdPedido();
+
+                // Agregar a la lista local con el tipo correcto
+                for (int i = 0; i < cantidad; i++)
+                {
+                    pedidos.Add((idPedido, nombreItem, precioItem, tipoItem));
+                }
+
+                // Actualizar la interfaz
+                MostrarPedidosEnPanel();
+                ActualizarTotal();
+            }
+
+            return resultadoDB;
+        }
+
+
+        // Métodos auxiliares necesarios
+        private string ObtenerNombreItem(int idItem, string tipoItem)
+        {
+            using (MySqlConnection conexion = new Conexion().EstablecerConexion())
+            {
+                string query = "";
+                switch (tipoItem.ToUpper())
+                {
+                    case "PLATO":
+                        query = "SELECT nombrePlato FROM platos WHERE id_plato = @idItem";
+                        break;
+                    case "BEBIDA":
+                        query = @"SELECT i.nombreProducto FROM bebidas b 
+                         JOIN inventario i ON b.id_inventario = i.id_inventario
+                         WHERE b.id_bebida = @idItem";
+                        break;
+                    case "EXTRA":
+                        query = @"SELECT i.nombreProducto FROM extras e 
+                         JOIN inventario i ON e.id_inventario = i.id_inventario
+                         WHERE e.id_extra = @idItem";
+                        break;
+                    case "PROMOCION":
+                        query = "SELECT nombre FROM promociones WHERE id_promocion = @idItem";
+                        break;
+                    default:
+                        return "Ítem desconocido";
+                }
+
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@idItem", idItem);
+                    return cmd.ExecuteScalar()?.ToString() ?? "Ítem desconocido";
+                }
+            }
+        }
+
+        private decimal ObtenerPrecioItem(int idItem, string tipoItem)
+        {
+            using (MySqlConnection conexion = new Conexion().EstablecerConexion())
+            {
+                string query = "";
+                switch (tipoItem.ToUpper())
+                {
+                    case "PLATO":
+                        query = "SELECT precioUnitario FROM platos WHERE id_plato = @idItem";
+                        break;
+                    case "BEBIDA":
+                        query = "SELECT precioUnitario FROM bebidas WHERE id_bebida = @idItem";
+                        break;
+                    case "EXTRA":
+                        query = "SELECT precioUnitario FROM extras WHERE id_extra = @idItem";
+                        break;
+                    case "PROMOCION":
+                        query = "SELECT precio_especial FROM promociones WHERE id_promocion = @idItem";
+                        break;
+                    default:
+                        return 0;
+                }
+
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@idItem", idItem);
+                    object result = cmd.ExecuteScalar();
+                    return result != null ? Convert.ToDecimal(result) : 0;
+                }
+            }
+        }
+
+        private string VerificarInventarioItem(int idItem, string tipoItem)
+        {
+            switch (tipoItem.ToUpper())
+            {
+                case "PLATO":
+                    return OrdenesD.VerificarInventarioPlato(idItem);
+                case "BEBIDA":
+                    return OrdenesD.VerificarInventarioBebida(idItem);
+                case "EXTRA":
+                    return OrdenesD.VerificarInventarioExtra(idItem);
+                case "PROMOCION":
+                    return OrdenesD.VerificarInventarioPromocion(idItem);
+                default:
+                    return "Tipo de ítem no válido";
+            }
+        }
+
+        private int ObtenerUltimoIdPedido()
+        {
+            using (MySqlConnection conexion = new Conexion().EstablecerConexion())
+            {
+                string query = "SELECT LAST_INSERT_ID()";
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    object result = cmd.ExecuteScalar();
+                    return result != null ? Convert.ToInt32(result) : -1;
                 }
             }
         }
@@ -413,25 +586,28 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             flowLayoutPanelPedidos.Controls.Clear();
 
             var pedidosAgrupados = pedidos
-                .GroupBy(p => (p.idPedido, p.nombre, p.precio))
+                .GroupBy(p => (p.idPedido, p.nombre, p.precio, p.tipo))
                 .Select(g => new {
                     IdPedido = g.Key.idPedido,
                     Nombre = g.Key.nombre,
                     Precio = g.Key.precio,
+                    Tipo = g.Key.tipo,
                     Cantidad = g.Count()
                 })
-                .OrderBy(x => x.Nombre);
+                .OrderBy(x => x.Tipo)  // Ordenar primero por tipo
+                .ThenBy(x => x.Nombre); // Luego por nombre
 
             foreach (var grupo in pedidosAgrupados)
             {
                 Panel panelPedido = new Panel
                 {
                     BorderStyle = BorderStyle.FixedSingle,
-                    BackColor = Color.DarkGreen,
+                    BackColor = GetColorPorTipo(grupo.Tipo), // Usar el tipo para el color
                     Margin = new Padding(5),
                     Padding = new Padding(5),
                     Width = flowLayoutPanelPedidos.Width - 25,
-                    Height = 40
+                    Height = 40,
+                    Tag = grupo.IdPedido
                 };
 
                 Label lblPedido = new Label
@@ -440,27 +616,46 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                     ForeColor = Color.White,
                     Dock = DockStyle.Fill,
                     TextAlign = ContentAlignment.MiddleLeft,
-                    Cursor = Cursors.Hand
+                    Font = new Font("Arial", 9, FontStyle.Bold)
                 };
 
                 Button btnEliminar = new Button
                 {
                     Text = "X",
                     ForeColor = Color.White,
-                    BackColor = Color.Red,
+                    BackColor = Color.FromArgb(220, 80, 80),
                     FlatStyle = FlatStyle.Flat,
                     Width = 30,
                     Dock = DockStyle.Right,
-                    Cursor = Cursors.Hand,
                     Tag = grupo.IdPedido
                 };
 
-                lblPedido.Click += (sender, e) => MostrarConfirmacionEliminacion(grupo.IdPedido, grupo.Nombre, grupo.Cantidad);
-                btnEliminar.Click += (sender, e) => MostrarConfirmacionEliminacion(grupo.IdPedido, grupo.Nombre, grupo.Cantidad);
+                // Eventos
+                lblPedido.Click += (s, e) => MostrarConfirmacionEliminacion(grupo.IdPedido, grupo.Nombre, grupo.Cantidad);
+                btnEliminar.Click += (s, e) => MostrarConfirmacionEliminacion(grupo.IdPedido, grupo.Nombre, grupo.Cantidad);
+                panelPedido.Click += (s, e) => MostrarConfirmacionEliminacion(grupo.IdPedido, grupo.Nombre, grupo.Cantidad);
 
                 panelPedido.Controls.Add(lblPedido);
                 panelPedido.Controls.Add(btnEliminar);
                 flowLayoutPanelPedidos.Controls.Add(panelPedido);
+            }
+        }
+
+        private Color GetColorPorTipo(string tipo)
+        {
+            // Asignar colores según el tipo de ítem
+            switch (tipo?.ToUpper())
+            {
+                case "PLATO":
+                    return Color.FromArgb(70, 130, 180);  // Azul
+                case "BEBIDA":
+                    return Color.FromArgb(50, 205, 50);   // Verde
+                case "EXTRA":
+                    return Color.FromArgb(255, 165, 0);    // Naranja
+                case "PROMOCION":
+                    return Color.FromArgb(147, 112, 219); // Morado
+                default:
+                    return Color.DarkGray;                // Gris para tipos desconocidos
             }
         }
 
@@ -484,78 +679,97 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 {
                     try
                     {
+                        // Primero obtener información del pedido para actualizar inventario si es necesario
+                        var infoPedido = ObtenerInfoPedido(idPedido, conexion, transaction);
+
+                        // Eliminar el pedido
                         string queryDelete = "DELETE FROM pedidos WHERE id_pedido = @idPedido";
                         using (MySqlCommand cmdDelete = new MySqlCommand(queryDelete, conexion, transaction))
                         {
                             cmdDelete.Parameters.AddWithValue("@idPedido", idPedido);
-                            cmdDelete.ExecuteNonQuery();
+                            int affectedRows = cmdDelete.ExecuteNonQuery();
+
+                            if (affectedRows == 0)
+                            {
+                                transaction.Rollback();
+                                MessageBox.Show("No se encontró el pedido a eliminar");
+                                return;
+                            }
                         }
+
                         transaction.Commit();
                     }
                     catch (Exception ex)
                     {
                         transaction.Rollback();
                         MessageBox.Show("Error al eliminar el pedido: " + ex.Message);
-                        throw;
                     }
                 }
             }
         }
+
+        private (int? idPlato, int? idBebida, int? idExtra, int? idPromocion, int cantidad) ObtenerInfoPedido(int idPedido, MySqlConnection conexion, MySqlTransaction transaction)
+        {
+            string query = @"SELECT id_plato, id_bebida, id_extra, id_promocion, Cantidad 
+                    FROM pedidos 
+                    WHERE id_pedido = @idPedido";
+
+            using (MySqlCommand cmd = new MySqlCommand(query, conexion, transaction))
+            {
+                cmd.Parameters.AddWithValue("@idPedido", idPedido);
+
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        int? idPlato = reader.IsDBNull(0) ? (int?)null : reader.GetInt32(0);
+                        int? idBebida = reader.IsDBNull(1) ? (int?)null : reader.GetInt32(1);
+                        int? idExtra = reader.IsDBNull(2) ? (int?)null : reader.GetInt32(2);
+                        int? idPromocion = reader.IsDBNull(3) ? (int?)null : reader.GetInt32(3);
+                        int cantidad = reader.GetInt32(4);
+
+                        return (idPlato, idBebida, idExtra, idPromocion, cantidad);
+                    }
+                }
+            }
+
+            return (null, null, null, null, 0);
+        }
+
+
         private void ActualizarTotal()
         {
             using (MySqlConnection conexion = new Conexion().EstablecerConexion())
             {
-                try
+                string query = @"
+        SELECT 
+            IFNULL(SUM(
+                CASE 
+                    WHEN p.id_plato IS NOT NULL THEN (SELECT pl.precioUnitario FROM platos pl WHERE pl.id_plato = p.id_plato) * p.Cantidad
+                    WHEN p.id_bebida IS NOT NULL THEN (SELECT b.precioUnitario FROM bebidas b WHERE b.id_bebida = p.id_bebida) * p.Cantidad
+                    WHEN p.id_extra IS NOT NULL THEN (SELECT e.precioUnitario FROM extras e WHERE e.id_extra = p.id_extra) * p.Cantidad
+                    WHEN p.id_promocion IS NOT NULL THEN (SELECT pr.precio_especial FROM promociones pr WHERE pr.id_promocion = p.id_promocion) * p.Cantidad
+                    ELSE 0
+                END
+            ), 0) AS Total
+        FROM pedidos p
+        WHERE p.id_orden = @idOrden";
+
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                 {
-                    string queryTotal = @"
-                    SELECT 
-                        IFNULL(SUM(
-                            CASE 
-                                WHEN p.id_plato IS NOT NULL THEN (SELECT pl.precioUnitario FROM platos pl WHERE pl.id_plato = p.id_plato) * p.Cantidad
-                                WHEN p.id_bebida IS NOT NULL THEN (SELECT b.precioUnitario FROM bebidas b WHERE b.id_bebida = p.id_bebida) * p.Cantidad
-                                WHEN p.id_extra IS NOT NULL THEN (SELECT e.precioUnitario FROM extras e WHERE e.id_extra = p.id_extra) * p.Cantidad
-                                ELSE 0
-                            END
-                        ), 0) AS Total
-                    FROM pedidos p
-                    WHERE p.id_orden = @idOrden";
+                    cmd.Parameters.AddWithValue("@idOrden", Convert.ToInt32(lblIdOrden.Text));
+                    object result = cmd.ExecuteScalar();
 
-                    decimal nuevoTotal = 0;
+                    decimal total = result != DBNull.Value ? Convert.ToDecimal(result) : 0;
+                    lblTotal.Text = total.ToString("C");
 
-                    using (MySqlCommand cmdTotal = new MySqlCommand(queryTotal, conexion))
+                    // Actualizar el total en la base de datos
+                    string updateQuery = "UPDATE ordenes SET total = @total WHERE id_orden = @idOrden";
+                    using (MySqlCommand updateCmd = new MySqlCommand(updateQuery, conexion))
                     {
-                        cmdTotal.Parameters.AddWithValue("@idOrden", Convert.ToInt32(lblIdOrden.Text));
-                        object result = cmdTotal.ExecuteScalar();
-                        if (result != DBNull.Value)
-                        {
-                            nuevoTotal = Convert.ToDecimal(result);
-                        }
-                    }
-
-                    string queryUpdate = "UPDATE ordenes SET total = @total WHERE id_orden = @idOrden";
-                    using (MySqlCommand cmdUpdate = new MySqlCommand(queryUpdate, conexion))
-                    {
-                        cmdUpdate.Parameters.AddWithValue("@total", nuevoTotal);
-                        cmdUpdate.Parameters.AddWithValue("@idOrden", Convert.ToInt32(lblIdOrden.Text));
-                        cmdUpdate.ExecuteNonQuery();
-                    }
-
-                    totalOrden = nuevoTotal;
-                    lblTotal.Text = totalOrden.ToString("C");
-                    CargarPedidosDesdeBD();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error al actualizar el total: " + ex.Message);
-                }
-
-                // Notificar al FormAdmin para actualizar
-                foreach (Form form in Application.OpenForms)
-                {
-                    if (form is FormAdmin)
-                    {
-                        ((FormAdmin)form).RefrescarOrdenes();
-                        break;
+                        updateCmd.Parameters.AddWithValue("@total", total);
+                        updateCmd.Parameters.AddWithValue("@idOrden", Convert.ToInt32(lblIdOrden.Text));
+                        updateCmd.ExecuteNonQuery();
                     }
                 }
             }
@@ -568,22 +782,31 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             using (MySqlConnection conexion = new Conexion().EstablecerConexion())
             {
                 string query = @"
-            SELECT 
-                p.id_pedido,
-                COALESCE(
-                    pl.nombrePlato,
-                    (SELECT i.nombreProducto FROM bebidas b JOIN inventario i ON b.id_inventario = i.id_inventario WHERE b.id_bebida = p.id_bebida),
-                    (SELECT i.nombreProducto FROM extras e JOIN inventario i ON e.id_inventario = i.id_inventario WHERE e.id_extra = p.id_extra)
-                ) AS nombre,
-                COALESCE(
-                    pl.precioUnitario,
-                    (SELECT b.precioUnitario FROM bebidas b WHERE b.id_bebida = p.id_bebida),
-                    (SELECT e.precioUnitario FROM extras e WHERE e.id_extra = p.id_extra)
-                ) AS precio,
-                p.Cantidad
-            FROM pedidos p
-            LEFT JOIN platos pl ON p.id_plato = pl.id_plato
-            WHERE p.id_orden = @idOrden";
+        SELECT 
+            p.id_pedido,
+            COALESCE(
+                pl.nombrePlato,
+                (SELECT i.nombreProducto FROM bebidas b JOIN inventario i ON b.id_inventario = i.id_inventario WHERE b.id_bebida = p.id_bebida),
+                (SELECT i.nombreProducto FROM extras e JOIN inventario i ON e.id_inventario = i.id_inventario WHERE e.id_extra = p.id_extra),
+                (SELECT pr.nombre FROM promociones pr WHERE pr.id_promocion = p.id_promocion)
+            ) AS nombre,
+            COALESCE(
+                pl.precioUnitario,
+                (SELECT b.precioUnitario FROM bebidas b WHERE b.id_bebida = p.id_bebida),
+                (SELECT e.precioUnitario FROM extras e WHERE e.id_extra = p.id_extra),
+                (SELECT pr.precio_especial FROM promociones pr WHERE pr.id_promocion = p.id_promocion)
+            ) AS precio,
+            p.Cantidad,
+            CASE
+                WHEN p.id_plato IS NOT NULL THEN 'PLATO'
+                WHEN p.id_bebida IS NOT NULL THEN 'BEBIDA'
+                WHEN p.id_extra IS NOT NULL THEN 'EXTRA'
+                WHEN p.id_promocion IS NOT NULL THEN 'PROMOCION'
+                ELSE 'DESCONOCIDO'
+            END AS tipo
+        FROM pedidos p
+        LEFT JOIN platos pl ON p.id_plato = pl.id_plato
+        WHERE p.id_orden = @idOrden";
 
                 using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                 {
@@ -593,14 +816,16 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                     {
                         while (reader.Read())
                         {
-                            int idPedido = reader.GetInt32("id_pedido");
-                            string nombre = reader.GetString("nombre");
-                            decimal precio = reader.GetDecimal("precio");
-                            int cantidad = reader.GetInt32("Cantidad");
+                            string tipo = reader["tipo"].ToString();
+                            int idPedido = Convert.ToInt32(reader["id_pedido"]);
+                            string nombre = reader["nombre"].ToString();
+                            decimal precio = Convert.ToDecimal(reader["precio"]);
+                            int cantidad = Convert.ToInt32(reader["Cantidad"]);
 
+                            // Agregar a la lista con el tipo incluido
                             for (int i = 0; i < cantidad; i++)
                             {
-                                pedidos.Add((idPedido, nombre, precio));
+                                pedidos.Add((idPedido, nombre, precio, tipo));
                             }
                         }
                     }
@@ -864,6 +1089,25 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 MessageBox.Show($"Error al verificar inventario: {ex.Message}", "Error",
                                MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
+            }
+        }
+
+        private void btnPromociones_Click(object sender, EventArgs e)
+        {
+            CargarPromociones();
+        }
+
+        private void CargarPromociones()
+        {
+            try
+            {
+                dataGridViewMenu.DataSource = OrdenesD.ObtenerPromocionesActivas();
+                dataGridViewMenu.Tag = "PROMOCION"; // Establecer el tipo actual
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al cargar promociones: {ex.Message}", "Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

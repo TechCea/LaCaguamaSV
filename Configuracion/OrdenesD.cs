@@ -296,17 +296,21 @@ namespace LaCaguamaSV.Configuracion
             }
         }
 
-        // Agrega estos métodos en tu clase OrdenesD
         public static string VerificarInventarioPlato(int idPlato)
         {
             StringBuilder mensaje = new StringBuilder();
             using (MySqlConnection conexion = new Conexion().EstablecerConexion())
             {
                 string query = @"
-            SELECT i.nombreProducto, i.cantidad, r.cantidad_necesaria 
-            FROM recetas r
-            JOIN inventario i ON r.id_inventario = i.id_inventario
-            WHERE r.id_plato = @idPlato AND i.cantidad < 10";
+        SELECT 
+            i.nombreProducto, 
+            i.cantidad AS stock_actual, 
+            r.cantidad_necesaria,
+            (i.cantidad - r.cantidad_necesaria) AS diferencia
+        FROM recetas r
+        JOIN inventario i ON r.id_inventario = i.id_inventario
+        WHERE r.id_plato = @idPlato
+        AND i.cantidad < r.cantidad_necesaria";
 
                 using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                 {
@@ -316,9 +320,11 @@ namespace LaCaguamaSV.Configuracion
                         while (reader.Read())
                         {
                             string ingrediente = reader.GetString("nombreProducto");
-                            decimal cantidad = reader.GetDecimal("cantidad");
+                            decimal stock = reader.GetDecimal("stock_actual");
                             decimal necesaria = reader.GetDecimal("cantidad_necesaria");
-                            mensaje.AppendLine($"- {ingrediente} (Stock: {cantidad}, Necesario: {necesaria})");
+                            decimal diferencia = reader.GetDecimal("diferencia");
+
+                            mensaje.AppendLine($"- {ingrediente} (Stock: {stock}, Necesario: {necesaria}, Faltante: {Math.Abs(diferencia)})");
                         }
                     }
                 }
@@ -332,10 +338,13 @@ namespace LaCaguamaSV.Configuracion
             using (MySqlConnection conexion = new Conexion().EstablecerConexion())
             {
                 string query = @"
-            SELECT i.nombreProducto, i.cantidad 
-            FROM bebidas b
-            JOIN inventario i ON b.id_inventario = i.id_inventario
-            WHERE b.id_bebida = @idBebida AND i.cantidad < 10";
+        SELECT 
+            i.nombreProducto, 
+            i.cantidad AS stock_actual
+        FROM bebidas b
+        JOIN inventario i ON b.id_inventario = i.id_inventario
+        WHERE b.id_bebida = @idBebida
+        AND i.cantidad < 10"; // Umbral bajo de stock
 
                 using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                 {
@@ -345,8 +354,8 @@ namespace LaCaguamaSV.Configuracion
                         while (reader.Read())
                         {
                             string bebida = reader.GetString("nombreProducto");
-                            decimal cantidad = reader.GetDecimal("cantidad");
-                            mensaje.AppendLine($"- {bebida} (Stock: {cantidad})");
+                            decimal stock = reader.GetDecimal("stock_actual");
+                            mensaje.AppendLine($"- {bebida} (Stock bajo: {stock})");
                         }
                     }
                 }
@@ -360,10 +369,13 @@ namespace LaCaguamaSV.Configuracion
             using (MySqlConnection conexion = new Conexion().EstablecerConexion())
             {
                 string query = @"
-            SELECT i.nombreProducto, i.cantidad 
-            FROM extras e
-            JOIN inventario i ON e.id_inventario = i.id_inventario
-            WHERE e.id_extra = @idExtra AND i.cantidad < 10";
+        SELECT 
+            i.nombreProducto, 
+            i.cantidad AS stock_actual
+        FROM extras e
+        JOIN inventario i ON e.id_inventario = i.id_inventario
+        WHERE e.id_extra = @idExtra
+        AND i.cantidad < 10"; // Umbral bajo de stock
 
                 using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                 {
@@ -373,13 +385,110 @@ namespace LaCaguamaSV.Configuracion
                         while (reader.Read())
                         {
                             string extra = reader.GetString("nombreProducto");
-                            decimal cantidad = reader.GetDecimal("cantidad");
-                            mensaje.AppendLine($"- {extra} (Stock: {cantidad})");
+                            decimal stock = reader.GetDecimal("stock_actual");
+                            mensaje.AppendLine($"- {extra} (Stock bajo: {stock})");
                         }
                     }
                 }
             }
             return mensaje.ToString();
         }
+
+        public static string VerificarInventarioPromocion(int idPromocion)
+        {
+            StringBuilder mensaje = new StringBuilder();
+            using (MySqlConnection conexion = new Conexion().EstablecerConexion())
+            {
+                // Consulta mejorada que verifica todos los componentes
+                string query = @"
+        SELECT 
+            i.id_inventario,
+            i.nombreProducto,
+            i.cantidad AS stock_actual,
+            SUM(
+                CASE 
+                    WHEN pi.tipo_item = 'PLATO' THEN 
+                        (SELECT SUM(r.cantidad_necesaria) 
+                         FROM recetas r 
+                         WHERE r.id_plato = pi.id_item)
+                    WHEN pi.tipo_item IN ('BEBIDA', 'EXTRA') THEN 1
+                    ELSE 0
+                END
+            ) AS cantidad_necesaria
+        FROM promocion_items pi
+        LEFT JOIN platos p ON pi.tipo_item = 'PLATO' AND pi.id_item = p.id_plato
+        LEFT JOIN bebidas b ON pi.tipo_item = 'BEBIDA' AND pi.id_item = b.id_bebida
+        LEFT JOIN extras e ON pi.tipo_item = 'EXTRA' AND pi.id_item = e.id_extra
+        LEFT JOIN inventario i ON 
+            (b.id_inventario = i.id_inventario OR 
+             e.id_inventario = i.id_inventario OR
+             (p.id_plato IS NOT NULL AND 
+              EXISTS (SELECT 1 FROM recetas r WHERE r.id_plato = p.id_plato AND r.id_inventario = i.id_inventario)))
+        WHERE pi.id_promocion = @idPromocion
+        GROUP BY i.id_inventario, i.nombreProducto, i.cantidad
+        HAVING i.cantidad < cantidad_necesaria OR i.cantidad < 10"; // Umbral de stock bajo
+
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@idPromocion", idPromocion);
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            string producto = reader.GetString("nombreProducto");
+                            decimal stock = reader.GetDecimal("stock_actual");
+                            decimal necesaria = reader.GetDecimal("cantidad_necesaria");
+
+                            mensaje.AppendLine($"- {producto} (Stock: {stock}, Necesario: {necesaria})");
+                        }
+                    }
+                }
+            }
+            return mensaje.ToString();
+        }
+
+        public static DataTable ObtenerPromocionesActivas()
+        {
+            DataTable dt = new DataTable();
+            using (MySqlConnection conexion = new Conexion().EstablecerConexion())
+            {
+                string query = @"
+        SELECT 
+            p.id_promocion AS ID,
+            p.nombre AS nombre,
+            p.precio_especial AS precioUnitario,
+            'PROMOCION' AS Tipo
+        FROM promociones p
+        WHERE p.activa = TRUE 
+        AND (p.fecha_fin IS NULL OR p.fecha_fin >= CURDATE())
+        AND p.fecha_inicio <= CURDATE()";
+
+                MySqlCommand cmd = new MySqlCommand(query, conexion);
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                da.Fill(dt);
+            }
+            return dt;
+        }
+
+        public static bool AgregarPromocionAOrden(int idOrden, int idPromocion, int cantidad)
+        {
+            using (MySqlConnection conexion = new Conexion().EstablecerConexion())
+            {
+                string query = "INSERT INTO pedidos (id_orden, id_estadoP, id_promocion, Cantidad) " +
+                              "VALUES (@idOrden, 1, @idPromocion, @cantidad)";
+
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@idOrden", idOrden);
+                    cmd.Parameters.AddWithValue("@idPromocion", idPromocion);
+                    cmd.Parameters.AddWithValue("@cantidad", cantidad);
+
+                    return cmd.ExecuteNonQuery() > 0;
+                }
+            }
+        }
+
+       
+
     }
 }

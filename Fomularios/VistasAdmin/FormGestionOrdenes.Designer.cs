@@ -57,6 +57,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             this.flowLayoutPanelPedidos = new System.Windows.Forms.FlowLayoutPanel();
             this.btnPrecuenta = new System.Windows.Forms.Button();
             this.btnPagos = new System.Windows.Forms.Button();
+            this.btnPromociones = new System.Windows.Forms.Button();
             this.panel5.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -154,7 +155,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             this.panel5.Controls.Add(this.lblNombreUsuario);
             this.panel5.Controls.Add(this.lblEstadoOrden);
             this.panel5.Controls.Add(this.lblFechaOrden);
-            this.panel5.Location = new System.Drawing.Point(208, -1);
+            this.panel5.Location = new System.Drawing.Point(370, 0);
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(590, 33);
             this.panel5.TabIndex = 11;
@@ -212,7 +213,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             this.panel3.Controls.Add(this.lblNombreCliente);
             this.panel3.Location = new System.Drawing.Point(1, 0);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(207, 22);
+            this.panel3.Size = new System.Drawing.Size(363, 22);
             this.panel3.TabIndex = 10;
             // 
             // label4
@@ -237,7 +238,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             this.panel1.Controls.Add(this.lblTotal);
             this.panel1.Location = new System.Drawing.Point(1, 275);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(207, 173);
+            this.panel1.Size = new System.Drawing.Size(363, 173);
             this.panel1.TabIndex = 12;
             // 
             // label7
@@ -287,7 +288,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             this.btnCargarExtras.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnCargarExtras.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCargarExtras.ForeColor = System.Drawing.Color.White;
-            this.btnCargarExtras.Location = new System.Drawing.Point(332, 47);
+            this.btnCargarExtras.Location = new System.Drawing.Point(478, 47);
             this.btnCargarExtras.Name = "btnCargarExtras";
             this.btnCargarExtras.Size = new System.Drawing.Size(102, 42);
             this.btnCargarExtras.TabIndex = 23;
@@ -302,7 +303,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             this.btnCargarPlatos.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnCargarPlatos.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCargarPlatos.ForeColor = System.Drawing.Color.White;
-            this.btnCargarPlatos.Location = new System.Drawing.Point(440, 47);
+            this.btnCargarPlatos.Location = new System.Drawing.Point(586, 47);
             this.btnCargarPlatos.Name = "btnCargarPlatos";
             this.btnCargarPlatos.Size = new System.Drawing.Size(102, 41);
             this.btnCargarPlatos.TabIndex = 22;
@@ -317,7 +318,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             this.btnCargarBebidas.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnCargarBebidas.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCargarBebidas.ForeColor = System.Drawing.Color.White;
-            this.btnCargarBebidas.Location = new System.Drawing.Point(224, 46);
+            this.btnCargarBebidas.Location = new System.Drawing.Point(370, 46);
             this.btnCargarBebidas.Name = "btnCargarBebidas";
             this.btnCargarBebidas.Size = new System.Drawing.Size(102, 42);
             this.btnCargarBebidas.TabIndex = 21;
@@ -329,14 +330,14 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             // 
             this.dataGridViewMenu.BackgroundColor = System.Drawing.SystemColors.ControlDarkDark;
             this.dataGridViewMenu.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewMenu.Location = new System.Drawing.Point(224, 95);
+            this.dataGridViewMenu.Location = new System.Drawing.Point(370, 95);
             this.dataGridViewMenu.MultiSelect = false;
             this.dataGridViewMenu.Name = "dataGridViewMenu";
             this.dataGridViewMenu.ReadOnly = true;
             this.dataGridViewMenu.RowHeadersWidth = 51;
             this.dataGridViewMenu.Size = new System.Drawing.Size(541, 305);
             this.dataGridViewMenu.TabIndex = 32;
-            this.dataGridViewMenu.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewMenu_CellClick);
+            this.dataGridViewMenu.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewMenu_CellDoubleClick);
             // 
             // flowLayoutPanelPedidos
             // 
@@ -345,7 +346,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             this.flowLayoutPanelPedidos.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowLayoutPanelPedidos.Location = new System.Drawing.Point(1, 21);
             this.flowLayoutPanelPedidos.Name = "flowLayoutPanelPedidos";
-            this.flowLayoutPanelPedidos.Size = new System.Drawing.Size(207, 257);
+            this.flowLayoutPanelPedidos.Size = new System.Drawing.Size(363, 257);
             this.flowLayoutPanelPedidos.TabIndex = 33;
             this.flowLayoutPanelPedidos.WrapContents = false;
             this.flowLayoutPanelPedidos.Paint += new System.Windows.Forms.PaintEventHandler(this.flowLayoutPanelPedidos_Paint);
@@ -357,7 +358,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             this.btnPrecuenta.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnPrecuenta.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnPrecuenta.ForeColor = System.Drawing.Color.White;
-            this.btnPrecuenta.Location = new System.Drawing.Point(548, 47);
+            this.btnPrecuenta.Location = new System.Drawing.Point(771, 406);
             this.btnPrecuenta.Name = "btnPrecuenta";
             this.btnPrecuenta.Size = new System.Drawing.Size(109, 42);
             this.btnPrecuenta.TabIndex = 34;
@@ -372,13 +373,28 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             this.btnPagos.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnPagos.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnPagos.ForeColor = System.Drawing.Color.White;
-            this.btnPagos.Location = new System.Drawing.Point(663, 47);
+            this.btnPagos.Location = new System.Drawing.Point(809, 47);
             this.btnPagos.Name = "btnPagos";
             this.btnPagos.Size = new System.Drawing.Size(102, 42);
             this.btnPagos.TabIndex = 35;
             this.btnPagos.Text = "PAGAR";
             this.btnPagos.UseVisualStyleBackColor = false;
             this.btnPagos.Click += new System.EventHandler(this.btnPagos_Click);
+            // 
+            // btnPromociones
+            // 
+            this.btnPromociones.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
+            this.btnPromociones.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnPromociones.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnPromociones.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnPromociones.ForeColor = System.Drawing.Color.White;
+            this.btnPromociones.Location = new System.Drawing.Point(694, 47);
+            this.btnPromociones.Name = "btnPromociones";
+            this.btnPromociones.Size = new System.Drawing.Size(109, 41);
+            this.btnPromociones.TabIndex = 36;
+            this.btnPromociones.Text = "PROMOS";
+            this.btnPromociones.UseVisualStyleBackColor = false;
+            this.btnPromociones.Click += new System.EventHandler(this.btnPromociones_Click);
             // 
             // FormGestionOrdenes
             // 
@@ -387,7 +403,8 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.fondo;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(960, 450);
+            this.Controls.Add(this.btnPromociones);
             this.Controls.Add(this.btnPagos);
             this.Controls.Add(this.btnPrecuenta);
             this.Controls.Add(this.flowLayoutPanelPedidos);
@@ -451,5 +468,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         private System.Windows.Forms.Button btnPrecuenta;
         private System.Windows.Forms.Button btnCerrar_Click;
         private System.Windows.Forms.Button btnPagos;
+        private System.Windows.Forms.Button btnPromociones;
     }
 }
