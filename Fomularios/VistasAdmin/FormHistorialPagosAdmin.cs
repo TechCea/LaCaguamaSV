@@ -137,28 +137,37 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                         }
                     }
 
-                    // Obtener detalles de los pedidos
                     string queryPedidos = @"
-                    SELECT 
-                        COALESCE(
-                            pl.nombrePlato,
-                            (SELECT i.nombreProducto FROM bebidas b JOIN inventario i ON b.id_inventario = i.id_inventario WHERE b.id_bebida = p.id_bebida),
-                            (SELECT i.nombreProducto FROM extras e JOIN inventario i ON e.id_inventario = i.id_inventario WHERE e.id_extra = p.id_extra)
-                        ) AS producto,
-                        p.Cantidad,
-                        COALESCE(
-                            pl.precioUnitario,
-                            (SELECT b.precioUnitario FROM bebidas b WHERE b.id_bebida = p.id_bebida),
-                            (SELECT e.precioUnitario FROM extras e WHERE e.id_extra = p.id_extra)
-                        ) AS precio_unitario,
-                        (p.Cantidad * COALESCE(
-                            pl.precioUnitario,
-                            (SELECT b.precioUnitario FROM bebidas b WHERE b.id_bebida = p.id_bebida),
-                            (SELECT e.precioUnitario FROM extras e WHERE e.id_extra = p.id_extra)
-                        )) AS subtotal
-                    FROM pedidos p
-                    LEFT JOIN platos pl ON p.id_plato = pl.id_plato
-                    WHERE p.id_orden = @idOrden";
+                                    SELECT 
+                                        COALESCE(
+                                            pl.nombrePlato,
+                                            (SELECT i.nombreProducto FROM bebidas b JOIN inventario i ON b.id_inventario = i.id_inventario WHERE b.id_bebida = p.id_bebida),
+                                            (SELECT i.nombreProducto FROM extras e JOIN inventario i ON e.id_inventario = i.id_inventario WHERE e.id_extra = p.id_extra),
+                                            (SELECT pr.nombre FROM promociones pr WHERE pr.id_promocion = p.id_promocion)
+                                        ) AS producto,
+                                        p.Cantidad,
+                                        COALESCE(
+                                            pl.precioUnitario,
+                                            (SELECT b.precioUnitario FROM bebidas b WHERE b.id_bebida = p.id_bebida),
+                                            (SELECT e.precioUnitario FROM extras e WHERE e.id_extra = p.id_extra),
+                                            (SELECT pr.precio_especial FROM promociones pr WHERE pr.id_promocion = p.id_promocion)
+                                        ) AS precio_unitario,
+                                        (p.Cantidad * COALESCE(
+                                            pl.precioUnitario,
+                                            (SELECT b.precioUnitario FROM bebidas b WHERE b.id_bebida = p.id_bebida),
+                                            (SELECT e.precioUnitario FROM extras e WHERE e.id_extra = p.id_extra),
+                                            (SELECT pr.precio_especial FROM promociones pr WHERE pr.id_promocion = p.id_promocion)
+                                        )) AS subtotal,
+                                        CASE
+                                            WHEN p.id_promocion IS NOT NULL THEN 1
+                                            ELSE 0
+                                        END AS es_promocion,
+                                        p.id_promocion
+                                    FROM pedidos p
+                                    LEFT JOIN platos pl ON p.id_plato = pl.id_plato
+                                    LEFT JOIN promociones pr ON p.id_promocion = pr.id_promocion
+                                    WHERE p.id_orden = @idOrden
+                                    ORDER BY es_promocion DESC, producto ASC";
 
                     StringBuilder detallePedidos = new StringBuilder();
                     decimal totalCalculado = 0;
@@ -175,9 +184,17 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                                 int cantidad = Convert.ToInt32(reader["Cantidad"]);
                                 decimal precioUnitario = Convert.ToDecimal(reader["precio_unitario"]);
                                 decimal subtotal = Convert.ToDecimal(reader["subtotal"]);
+                                bool esPromocion = Convert.ToInt32(reader["es_promocion"]) == 1;
+                                int? idPromocion = reader["id_promocion"] as int?;
 
                                 detallePedidos.AppendLine($"{producto} x{cantidad} - {precioUnitario.ToString("C")} = {subtotal.ToString("C")}");
                                 totalCalculado += subtotal;
+
+                                // Si es promoción, agregar sus items
+                                if (esPromocion && idPromocion.HasValue)
+                                {
+                                    detallePedidos.AppendLine(ObtenerItemsPromocion(idPromocion.Value, cantidad));
+                                }
                             }
                         }
                     }
@@ -281,6 +298,153 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 MessageBox.Show($"Error al generar factura: {ex.Message}", "Error",
                               MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+
+        private Dictionary<string, int> ObtenerCantidadesItemsPromocion(int idPromocion, int cantidadPromo)
+        {
+            var cantidades = new Dictionary<string, int>();
+
+            using (MySqlConnection conexion = new Conexion().EstablecerConexion())
+            {
+                string query = @"
+        SELECT 
+            CASE
+                WHEN pi.tipo_item = 'PLATO' THEN (SELECT nombrePlato FROM platos WHERE id_plato = pi.id_item)
+                WHEN pi.tipo_item = 'BEBIDA' THEN (SELECT i.nombreProducto FROM bebidas b JOIN inventario i ON b.id_inventario = i.id_inventario WHERE b.id_bebida = pi.id_item)
+                WHEN pi.tipo_item = 'EXTRA' THEN (SELECT i.nombreProducto FROM extras e JOIN inventario i ON e.id_inventario = i.id_inventario WHERE e.id_extra = pi.id_item)
+            END AS nombre_item,
+            pi.cantidad AS cantidad_en_promo
+        FROM promocion_items pi
+        WHERE pi.id_promocion = @idPromocion";
+
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@idPromocion", idPromocion);
+
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            string nombreItem = reader["nombre_item"].ToString();
+                            int cantidadEnPromo = Convert.ToInt32(reader["cantidad_en_promo"]);
+                            int cantidadTotal = cantidadEnPromo * cantidadPromo;
+
+                            if (cantidades.ContainsKey(nombreItem))
+                            {
+                                cantidades[nombreItem] += cantidadTotal;
+                            }
+                            else
+                            {
+                                cantidades[nombreItem] = cantidadTotal;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return cantidades;
+        }
+
+        private string ObtenerResumenPromociones(int idOrden)
+        {
+            StringBuilder resumen = new StringBuilder();
+
+            using (MySqlConnection conexion = new Conexion().EstablecerConexion())
+            {
+                string query = @"
+        SELECT 
+            pr.nombre,
+            p.Cantidad,
+            pr.precio_especial
+        FROM pedidos p
+        JOIN promociones pr ON p.id_promocion = pr.id_promocion
+        WHERE p.id_orden = @idOrden";
+
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@idOrden", idOrden);
+
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            resumen.AppendLine("PROMOCIONES INCLUIDAS:");
+                            resumen.AppendLine("----------------------");
+
+                            while (reader.Read())
+                            {
+                                string nombre = reader["nombre"].ToString();
+                                int cantidad = Convert.ToInt32(reader["Cantidad"]);
+                                decimal precio = Convert.ToDecimal(reader["precio_especial"]);
+
+                                resumen.AppendLine($"{nombre} x{cantidad} - {precio.ToString("C")}");
+                            }
+                            resumen.AppendLine();
+                        }
+                    }
+                }
+            }
+
+            return resumen.ToString();
+        }
+
+        private string ObtenerItemsPromocion(int idPromocion, int cantidadPromo, bool formatoFactura = false)
+        {
+            StringBuilder items = new StringBuilder();
+
+            if (formatoFactura)
+            {
+                items.AppendLine("   ┌───────────────────────────────");
+                items.AppendLine("   │ Items incluidos en la promoción:");
+            }
+
+            using (MySqlConnection conexion = new Conexion().EstablecerConexion())
+            {
+                string query = @"
+        SELECT 
+            pi.tipo_item,
+            CASE
+                WHEN pi.tipo_item = 'PLATO' THEN (SELECT nombrePlato FROM platos WHERE id_plato = pi.id_item)
+                WHEN pi.tipo_item = 'BEBIDA' THEN (SELECT i.nombreProducto FROM bebidas b JOIN inventario i ON b.id_inventario = i.id_inventario WHERE b.id_bebida = pi.id_item)
+                WHEN pi.tipo_item = 'EXTRA' THEN (SELECT i.nombreProducto FROM extras e JOIN inventario i ON e.id_inventario = i.id_inventario WHERE e.id_extra = pi.id_item)
+            END AS nombre_item,
+            pi.cantidad AS cantidad_en_promo
+        FROM promocion_items pi
+        WHERE pi.id_promocion = @idPromocion";
+
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@idPromocion", idPromocion);
+
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            string tipoItem = reader["tipo_item"].ToString();
+                            string nombreItem = reader["nombre_item"].ToString();
+                            int cantidadEnPromo = Convert.ToInt32(reader["cantidad_en_promo"]);
+                            int cantidadTotal = cantidadEnPromo * cantidadPromo;
+
+                            if (formatoFactura)
+                            {
+                                items.AppendLine($"   ├─ {nombreItem} ({tipoItem}) x{cantidadTotal}");
+                            }
+                            else
+                            {
+                                items.AppendLine($"   - {nombreItem} ({tipoItem}) x{cantidadTotal}");
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (formatoFactura)
+            {
+                items.AppendLine("   └───────────────────────────────");
+            }
+
+            return items.ToString();
         }
 
         private void FormHistorialPagosAdmin_Load(object sender, EventArgs e)

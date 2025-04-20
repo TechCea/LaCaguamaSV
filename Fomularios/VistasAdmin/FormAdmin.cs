@@ -164,23 +164,25 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             {
                 using (MySqlConnection conexion = new Conexion().EstablecerConexion())
                 {
-                    // Obtener información de la orden (incluyendo usuario creador)
+                    // Obtener información básica de la orden
                     string queryOrden = @"
-                SELECT 
-                    o.nombreCliente, 
-                    o.total, 
-                    DATE_FORMAT(o.fecha_orden, '%Y-%m-%d %H:%i') AS fecha_orden,
-                    m.nombreMesa AS mesa,
-                    tp.nombrePago AS metodo_pago,
-                    u.nombre AS usuario_creador
-                FROM ordenes o
-                JOIN mesas m ON o.id_mesa = m.id_mesa
-                JOIN tipoPago tp ON o.tipo_pago = tp.id_pago
-                JOIN usuarios u ON o.id_usuario = u.id_usuario
-                WHERE o.id_orden = @idOrden";
+            SELECT 
+                o.nombreCliente, 
+                o.total, 
+                o.descuento,
+                DATE_FORMAT(o.fecha_orden, '%Y-%m-%d %H:%i') AS fecha_orden,
+                m.nombreMesa AS mesa,
+                tp.nombrePago AS metodo_pago,
+                u.nombre AS usuario_creador
+            FROM ordenes o
+            JOIN mesas m ON o.id_mesa = m.id_mesa
+            JOIN tipoPago tp ON o.tipo_pago = tp.id_pago
+            JOIN usuarios u ON o.id_usuario = u.id_usuario
+            WHERE o.id_orden = @idOrden";
 
                     string cliente = "";
                     decimal total = 0;
+                    decimal descuento = 0;
                     string fechaOrden = "";
                     string mesa = "";
                     string metodoPago = "";
@@ -196,6 +198,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                             {
                                 cliente = reader["nombreCliente"].ToString();
                                 total = Convert.ToDecimal(reader["total"]);
+                                descuento = Convert.ToDecimal(reader["descuento"]);
                                 fechaOrden = reader["fecha_orden"].ToString();
                                 mesa = reader["mesa"].ToString();
                                 metodoPago = reader["metodo_pago"].ToString();
@@ -204,31 +207,76 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                         }
                     }
 
-                    // Obtener detalles de la orden (igual que antes)
-                    string detalle = ObtenerDetalleOrden(idOrden);
+                    // Obtener detalles de la orden con promociones
+                    StringBuilder detalle = new StringBuilder();
+                    decimal totalCalculado = 0;
 
-                    // Generar comprobante
-                    StringBuilder comprobante = new StringBuilder();
-                    comprobante.AppendLine("FACTURA / COMPROBANTE DE PAGO");
-                    comprobante.AppendLine("-----------------------------");
-                    comprobante.AppendLine($"Orden: #{idOrden}");
-                    comprobante.AppendLine($"Cliente: {cliente}");
-                    comprobante.AppendLine($"Fecha: {fechaOrden}");
-                    comprobante.AppendLine($"Atendido por: {usuarioCreador}"); // Usamos usuario creador
-                    comprobante.AppendLine();
-                    comprobante.AppendLine("Detalle de la orden:");
-                    comprobante.AppendLine(detalle);
-                    comprobante.AppendLine();
-                    comprobante.AppendLine($"Total: {total.ToString("C")}");
-                    comprobante.AppendLine($"Método de pago: {metodoPago}");
+                    string queryDetalle = @"
+            SELECT 
+                COALESCE(
+                    pl.nombrePlato,
+                    (SELECT i.nombreProducto FROM bebidas b JOIN inventario i ON b.id_inventario = i.id_inventario WHERE b.id_bebida = p.id_bebida),
+                    (SELECT i.nombreProducto FROM extras e JOIN inventario i ON e.id_inventario = i.id_inventario WHERE e.id_extra = p.id_extra),
+                    (SELECT pr.nombre FROM promociones pr WHERE pr.id_promocion = p.id_promocion)
+                ) AS Producto,
+                p.Cantidad,
+                COALESCE(
+                    pl.precioUnitario,
+                    (SELECT b.precioUnitario FROM bebidas b WHERE b.id_bebida = p.id_bebida),
+                    (SELECT e.precioUnitario FROM extras e WHERE e.id_extra = p.id_extra),
+                    (SELECT pr.precio_especial FROM promociones pr WHERE pr.id_promocion = p.id_promocion)
+                ) AS PrecioUnitario,
+                (p.Cantidad * COALESCE(
+                    pl.precioUnitario,
+                    (SELECT b.precioUnitario FROM bebidas b WHERE b.id_bebida = p.id_bebida),
+                    (SELECT e.precioUnitario FROM extras e WHERE e.id_extra = p.id_extra),
+                    (SELECT pr.precio_especial FROM promociones pr WHERE pr.id_promocion = p.id_promocion)
+                )) AS Subtotal,
+                CASE
+                    WHEN p.id_promocion IS NOT NULL THEN 1
+                    ELSE 0
+                END AS EsPromocion,
+                p.id_promocion
+            FROM pedidos p
+            LEFT JOIN platos pl ON p.id_plato = pl.id_plato
+            LEFT JOIN promociones pr ON p.id_promocion = pr.id_promocion
+            WHERE p.id_orden = @idOrden
+            ORDER BY EsPromocion DESC, Producto ASC";
+
+                    using (MySqlCommand cmd = new MySqlCommand(queryDetalle, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@idOrden", idOrden);
+
+                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                string producto = reader["Producto"].ToString();
+                                int cantidad = Convert.ToInt32(reader["Cantidad"]);
+                                decimal precioUnitario = Convert.ToDecimal(reader["PrecioUnitario"]);
+                                decimal subtotal = Convert.ToDecimal(reader["Subtotal"]);
+                                bool esPromocion = Convert.ToInt32(reader["EsPromocion"]) == 1;
+                                int? idPromocion = reader["id_promocion"] as int?;
+
+                                detalle.AppendLine($"{producto} x{cantidad} - {precioUnitario.ToString("C")} = {subtotal.ToString("C")}");
+                                totalCalculado += subtotal;
+
+                                // Si es promoción, agregar sus items
+                                if (esPromocion && idPromocion.HasValue)
+                                {
+                                    detalle.AppendLine(ObtenerItemsPromocion(idPromocion.Value, cantidad));
+                                }
+                            }
+                        }
+                    }
+
+                    // Obtener información de pago en efectivo si existe
+                    decimal recibido = 0;
+                    decimal cambio = 0;
 
                     if (metodoPago == "Efectivo")
                     {
-                        // Obtener información de pago en efectivo si existe
-                        string queryPago = @"
-                    SELECT recibido, cambio 
-                    FROM pagos 
-                    WHERE id_orden = @idOrden";
+                        string queryPago = "SELECT recibido, cambio FROM pagos WHERE id_orden = @idOrden";
 
                         using (MySqlCommand cmd = new MySqlCommand(queryPago, conexion))
                         {
@@ -238,74 +286,83 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                             {
                                 if (reader.Read())
                                 {
-                                    decimal recibido = reader.GetDecimal("recibido");
-                                    decimal cambio = reader.GetDecimal("cambio");
-                                    comprobante.AppendLine($"Recibido: {recibido.ToString("C")}");
-                                    comprobante.AppendLine($"Cambio: {cambio.ToString("C")}");
+                                    recibido = reader.GetDecimal("recibido");
+                                    cambio = reader.GetDecimal("cambio");
                                 }
                             }
                         }
                     }
 
-                    comprobante.AppendLine();
-                    comprobante.AppendLine("¡Gracias por su visita!");
+                    // Generar comprobante con mejor formato
+                    StringBuilder factura = new StringBuilder();
+                    factura.AppendLine("╔══════════════════════════════════╗");
+                    factura.AppendLine("║      LA CAGUAMA RESTAURANTE      ║");
+                    factura.AppendLine("╚══════════════════════════════════╝");
+                    factura.AppendLine($"ORDEN: #{idOrden}".PadRight(37));
+                    factura.AppendLine($"FECHA: {fechaOrden}".PadRight(37));
+                    factura.AppendLine($"MESA: {mesa}".PadRight(37));
+                    factura.AppendLine($"CLIENTE: {cliente}".PadRight(37));
+                    factura.AppendLine($"ATENDIDO POR: {usuarioCreador}".PadRight(37));
+                    factura.AppendLine("──────────────────────────────────");
+                    factura.AppendLine("            DETALLE DE ORDEN       ");
+                    factura.AppendLine("──────────────────────────────────");
+                    factura.AppendLine(detalle.ToString());
+                    factura.AppendLine("──────────────────────────────────");
+                    factura.AppendLine($"SUBTOTAL: {totalCalculado.ToString("C").PadLeft(20)}");
 
-                    MessageBox.Show(comprobante.ToString(), "Comprobante de Pago",
-                                  MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    if (descuento > 0)
+                    {
+                        factura.AppendLine($"DESCUENTO: -{descuento.ToString("C").PadLeft(18)}");
+                    }
+
+                    factura.AppendLine($"TOTAL: {total.ToString("C").PadLeft(25)}");
+                    factura.AppendLine("──────────────────────────────────");
+                    factura.AppendLine($"MÉTODO DE PAGO: {metodoPago}");
+
+                    if (metodoPago == "Efectivo")
+                    {
+                        factura.AppendLine($"RECIBIDO: {recibido.ToString("C").PadLeft(22)}");
+                        factura.AppendLine($"CAMBIO: {cambio.ToString("C").PadLeft(24)}");
+                    }
+
+                    factura.AppendLine("══════════════════════════════════");
+                    factura.AppendLine("   ¡GRACIAS POR SU PREFERENCIA!   ");
+                    factura.AppendLine("══════════════════════════════════");
+
+                    // Mostrar en un formulario con scroll para mejor visualización
+                    using (var formFactura = new Form()
+                    {
+                        Width = 500,
+                        Height = 600,
+                        Text = $"Factura Orden #{idOrden}",
+                        StartPosition = FormStartPosition.CenterParent,
+                        FormBorderStyle = FormBorderStyle.FixedDialog,
+                        MaximizeBox = false
+                    })
+                    {
+                        var textBox = new TextBox()
+                        {
+                            Multiline = true,
+                            Dock = DockStyle.Fill,
+                            ReadOnly = true,
+                            ScrollBars = ScrollBars.Vertical,
+                            Text = factura.ToString(),
+                            Font = new Font("Consolas", 10),
+                            BackColor = Color.White
+                        };
+
+                        formFactura.Controls.Add(textBox);
+                        formFactura.ShowDialog();
+                    }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al generar comprobante: {ex.Message}", "Error",
-                               MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error al generar factura: {ex.Message}", "Error",
+                              MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-
-        private string ObtenerDetalleOrden(int idOrden)
-        {
-            StringBuilder detalle = new StringBuilder();
-
-            using (MySqlConnection conexion = new Conexion().EstablecerConexion())
-            {
-                string query = @"
-            SELECT 
-                COALESCE(
-                    pl.nombrePlato,
-                    (SELECT i.nombreProducto FROM bebidas b JOIN inventario i ON b.id_inventario = i.id_inventario WHERE b.id_bebida = p.id_bebida),
-                    (SELECT i.nombreProducto FROM extras e JOIN inventario i ON e.id_inventario = i.id_inventario WHERE e.id_extra = p.id_extra)
-                ) AS Producto,
-                p.Cantidad,
-                COALESCE(
-                    pl.precioUnitario,
-                    (SELECT b.precioUnitario FROM bebidas b WHERE b.id_bebida = p.id_bebida),
-                    (SELECT e.precioUnitario FROM extras e WHERE e.id_extra = p.id_extra)
-                ) AS PrecioUnitario,
-                (p.Cantidad * COALESCE(
-                    pl.precioUnitario,
-                    (SELECT b.precioUnitario FROM bebidas b WHERE b.id_bebida = p.id_bebida),
-                    (SELECT e.precioUnitario FROM extras e WHERE e.id_extra = p.id_extra)
-                )) AS Subtotal
-            FROM pedidos p
-            LEFT JOIN platos pl ON p.id_plato = pl.id_plato
-            WHERE p.id_orden = @idOrden";
-
-                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
-                {
-                    cmd.Parameters.AddWithValue("@idOrden", idOrden);
-
-                    using (MySqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            detalle.AppendLine($"{reader["Producto"]} x{reader["Cantidad"]} - {Convert.ToDecimal(reader["Subtotal"]).ToString("C")}");
-                        }
-                    }
-                }
-            }
-
-            return detalle.ToString();
-        }
 
         private void AbrirGestionOrden(DataGridViewRow row)
         {
@@ -394,5 +451,50 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             FormGestionPromociones formpromociones = new FormGestionPromociones();
             formpromociones.ShowDialog();
         }
+
+        private string ObtenerItemsPromocion(int idPromocion, int cantidadPromo)
+        {
+            StringBuilder items = new StringBuilder();
+            items.AppendLine("   ┌───────────────────────────────");
+            items.AppendLine("   │ Items incluidos en la promoción:");
+
+            using (MySqlConnection conexion = new Conexion().EstablecerConexion())
+            {
+                string query = @"
+        SELECT 
+            pi.tipo_item,
+            CASE
+                WHEN pi.tipo_item = 'PLATO' THEN (SELECT nombrePlato FROM platos WHERE id_plato = pi.id_item)
+                WHEN pi.tipo_item = 'BEBIDA' THEN (SELECT i.nombreProducto FROM bebidas b JOIN inventario i ON b.id_inventario = i.id_inventario WHERE b.id_bebida = pi.id_item)
+                WHEN pi.tipo_item = 'EXTRA' THEN (SELECT i.nombreProducto FROM extras e JOIN inventario i ON e.id_inventario = i.id_inventario WHERE e.id_extra = pi.id_item)
+            END AS nombre_item,
+            pi.cantidad AS cantidad_en_promo
+        FROM promocion_items pi
+        WHERE pi.id_promocion = @idPromocion";
+
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@idPromocion", idPromocion);
+
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            string tipoItem = reader["tipo_item"].ToString();
+                            string nombreItem = reader["nombre_item"].ToString();
+                            int cantidadEnPromo = Convert.ToInt32(reader["cantidad_en_promo"]);
+                            int cantidadTotal = cantidadEnPromo * cantidadPromo;
+
+                            items.AppendLine($"   ├─ {nombreItem} ({tipoItem}) x{cantidadTotal}");
+                        }
+                    }
+                }
+            }
+
+            items.AppendLine("   └───────────────────────────────");
+            return items.ToString();
+        }
+
+
     }
 }
