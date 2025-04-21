@@ -252,6 +252,7 @@
             this.Controls.Add(this.dgvInventarioE);
             this.Name = "FormInventarioExtrasAdmin";
             this.Text = "FormInventarioExtrasAdmin";
+            this.Load += new System.EventHandler(this.FormInventarioExtrasAdmin_Load);
             this.gbDatosExtras.ResumeLayout(false);
             this.gbDatosExtras.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvInventarioE)).EndInit();

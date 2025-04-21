@@ -17,19 +17,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 {
     public partial class FormGestionOrdenes : Form
     {
-        [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
-        private static extern IntPtr CreateRoundRectRgn(
-      int nLeftRect, int nTopRect, int nRightRect, int nBottomRect,
-      int nWidthEllipse, int nHeightEllipse);
-
-        [DllImport("user32.dll")]
-        private static extern void ReleaseCapture();
-
-        [DllImport("user32.dll")]
-        private static extern void SendMessage(IntPtr hWnd, int msg, int wParam, int lParam);
-
-        private const int WM_NCLBUTTONDOWN = 0xA1;
-        private const int HTCAPTION = 0x2;
+     
 
         private int idMesaActual; // Almacenar el ID de la mesa actual
         public FormGestionOrdenes(int idOrden, string nombreCliente, decimal total, decimal descuento, string fechaOrden, string numeroMesa, string tipoPago, string nombreUsuario, string estadoOrden)
@@ -986,22 +974,12 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             public static void ApplyRoundedCorners(Control control, int radius)
             {
-                GraphicsPath path = new GraphicsPath();
-                path.AddArc(0, 0, radius, radius, 180, 90);
-                path.AddArc(control.Width - radius, 0, radius, radius, 270, 90);
-                path.AddArc(control.Width - radius, control.Height - radius, radius, radius, 0, 90);
-                path.AddArc(0, control.Height - radius, radius, radius, 90, 90);
-                path.CloseFigure();
-                control.Region = new Region(path);
+             
             }
         }
         private void FormGestionOrdenes_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
-            {
-                ReleaseCapture();
-                SendMessage(Handle, WM_NCLBUTTONDOWN, HTCAPTION, 0);
-            }
+           
         }
 
         private void btnCerrar_Click_Click(object sender, EventArgs e)

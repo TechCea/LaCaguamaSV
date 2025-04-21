@@ -16,31 +16,14 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 {
     public partial class CrearOrden: Form
     {
-        [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
-        private static extern IntPtr CreateRoundRectRgn(
-       int nLeftRect, int nTopRect, int nRightRect, int nBottomRect,
-       int nWidthEllipse, int nHeightEllipse);
-
-        [DllImport("user32.dll")]
-        private static extern void ReleaseCapture();
-
-        [DllImport("user32.dll")]
-        private static extern void SendMessage(IntPtr hWnd, int msg, int wParam, int lParam);
-
-        private const int WM_NCLBUTTONDOWN = 0xA1;
-        private const int HTCAPTION = 0x2;
-
         public CrearOrden()
         {
             InitializeComponent();
             CargarTipoPago();
             CargarMesas();
-            this.FormBorderStyle = FormBorderStyle.None;
-            Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 20, 20));
+           
 
-            // Agregar evento para mover el formulario
-            this.MouseDown += new MouseEventHandler(CrearOrden_MouseDown);
-            RoundedControl.ApplyRoundedCorners(panel1, 15);   // Redondear un Panel
+    
 
 
            
@@ -148,40 +131,16 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void btnMaximizar_Click_Click(object sender, EventArgs e)
         {
-            if (this.WindowState == FormWindowState.Maximized)
-            {
-                this.WindowState = FormWindowState.Normal;
-            }
-            else
-            {
-                this.WindowState = FormWindowState.Maximized;
-            }
         }
 
         private void btnMinimizar_Click_Click(object sender, EventArgs e)
         {
-            this.WindowState = FormWindowState.Minimized;
+           
         }
-        public class RoundedControl
-        {
-            public static void ApplyRoundedCorners(Control control, int radius)
-            {
-                GraphicsPath path = new GraphicsPath();
-                path.AddArc(0, 0, radius, radius, 180, 90);
-                path.AddArc(control.Width - radius, 0, radius, radius, 270, 90);
-                path.AddArc(control.Width - radius, control.Height - radius, radius, radius, 0, 90);
-                path.AddArc(0, control.Height - radius, radius, radius, 90, 90);
-                path.CloseFigure();
-                control.Region = new Region(path);
-            }
-        }
+       
         private void CrearOrden_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
-            {
-                ReleaseCapture();
-                SendMessage(Handle, WM_NCLBUTTONDOWN, HTCAPTION, 0);
-            }
+            
         }
 
         private void CrearOrden_Load(object sender, EventArgs e)

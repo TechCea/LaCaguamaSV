@@ -17,22 +17,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 {
     public partial class FormBebidasMenuAdmin : Form
     {
-        [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
-        private static extern IntPtr CreateRoundRectRgn(
-        int nLeftRect, int nTopRect, int nRightRect, int nBottomRect,
-        int nWidthEllipse, int nHeightEllipse);
-
-        [DllImport("user32.dll")]
-        private static extern void ReleaseCapture();
-
-        [DllImport("user32.dll")]
-        private static extern void SendMessage(IntPtr hWnd, int msg, int wParam, int lParam);
-
-        private const int WM_NCLBUTTONDOWN = 0xA1;
-        private const int HTCAPTION = 0x2;
-
-
-
+      
         Conexion conexion = new Conexion();
 
         public FormBebidasMenuAdmin()
@@ -44,18 +29,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 MessageBox.Show("Acceso denegado. No tienes permisos de administrador.", "Acceso Restringido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            this.FormBorderStyle = FormBorderStyle.None;
-            Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 20, 20));
-
-            // Agregar evento para mover el formulario
-            this.MouseDown += new MouseEventHandler(FormBebidasMenuAdmin_MouseDown);
-
-            // Aplicar esquinas redondeadas a controles específicos
-            RoundedControl.ApplyRoundedCorners(dgvBebidas, 15);   // Redondear un Panel
-            RoundedControl.ApplyRoundedCorners(gbDatosBebida, 15);   // Redondear un Panel
-
-
-
+           
             CargarCategorias();
             CargarBebidas();
             CargarCategoriasBebidas(); // Cargar categorías en cbCategoriaB
@@ -268,22 +242,12 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             public static void ApplyRoundedCorners(Control control, int radius)
             {
-                GraphicsPath path = new GraphicsPath();
-                path.AddArc(0, 0, radius, radius, 180, 90);
-                path.AddArc(control.Width - radius, 0, radius, radius, 270, 90);
-                path.AddArc(control.Width - radius, control.Height - radius, radius, radius, 0, 90);
-                path.AddArc(0, control.Height - radius, radius, radius, 90, 90);
-                path.CloseFigure();
-                control.Region = new Region(path);
+               
             }
         }
         private void FormBebidasMenuAdmin_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
-            {
-                ReleaseCapture();
-                SendMessage(Handle, WM_NCLBUTTONDOWN, HTCAPTION, 0);
-            }
+            
         }
     }
 }

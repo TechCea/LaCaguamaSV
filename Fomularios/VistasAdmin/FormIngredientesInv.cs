@@ -17,20 +17,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
     public partial class FormIngredientesInv : Form
     {
 
-        [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
-        private static extern IntPtr CreateRoundRectRgn(
-     int nLeftRect, int nTopRect, int nRightRect, int nBottomRect,
-     int nWidthEllipse, int nHeightEllipse);
-
-        [DllImport("user32.dll")]
-        private static extern void ReleaseCapture();
-
-        [DllImport("user32.dll")]
-        private static extern void SendMessage(IntPtr hWnd, int msg, int wParam, int lParam);
-
-        private const int WM_NCLBUTTONDOWN = 0xA1;
-        private const int HTCAPTION = 0x2;
-
 
         private Conexion conexion = new Conexion();
         private int idIngredienteSeleccionado = -1;
@@ -46,16 +32,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 return;
             }
 
-            this.FormBorderStyle = FormBorderStyle.None;
-            Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 20, 20));
-
-            // Agregar evento para mover el formulario
-            this.MouseDown += new MouseEventHandler(FormIngredientesInv_MouseDown);
-
-            // Aplicar esquinas redondeadas a controles específicos
-            RoundedControl.ApplyRoundedCorners(dgvIngredientes, 15);   // Redondear un Panel
-            RoundedControl.ApplyRoundedCorners(gbDatosIngrediente, 15);   // Redondear un Panel
-
+           
 
 
             CargarIngredientes();
@@ -73,28 +50,9 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             DataTable dt = conexion.ObtenerIngredientes();
             dgvIngredientes.DataSource = conexion.ObtenerIngredientes();
         }
-
-
-        public class RoundedControl
-        {
-            public static void ApplyRoundedCorners(Control control, int radius)
-            {
-                GraphicsPath path = new GraphicsPath();
-                path.AddArc(0, 0, radius, radius, 180, 90);
-                path.AddArc(control.Width - radius, 0, radius, radius, 270, 90);
-                path.AddArc(control.Width - radius, control.Height - radius, radius, radius, 0, 90);
-                path.AddArc(0, control.Height - radius, radius, radius, 90, 90);
-                path.CloseFigure();
-                control.Region = new Region(path);
-            }
-        }
         private void FormIngredientesInv_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
-            {
-                ReleaseCapture();
-                SendMessage(Handle, WM_NCLBUTTONDOWN, HTCAPTION, 0);
-            }
+           
         }
 
         private void CargarProveedores()
