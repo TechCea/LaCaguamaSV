@@ -18,17 +18,20 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         Conexion conexion = new Conexion();
 
         private decimal dineroContado;
+        private int idCajaActual;
+
 
         public FormAdminFunciones(int usuarioId)
         {
             InitializeComponent();
-            panelConfirmacion.Visible = false; // Ocultar la ventana de confirmación al inicio
-            this.Controls.Add(panelIngresoMonto);
-            panelIngresoMonto.Visible = false; // Lo ocultamos al inicio
-            panelResultadoCorte.Visible = false; // Ocultamos el panel de resultado
+            panelConfirmacion.Visible = false;
+            panelIngresoMonto.Visible = false;
+            panelResultadoCorte.Visible = false;
+
+            // Verificar si hay una caja activa hoy
+            idCajaActual = conexion.ObtenerIdCajaActiva();
 
             VerificarEstadoCaja();
-
         }
 
         private void label5_Click(object sender, EventArgs e)
@@ -62,46 +65,56 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void btnConfirmarMonto_Click(object sender, EventArgs e)
         {
-            if (decimal.TryParse(txtMontoContado.Text, out decimal montoContado))
+            try
             {
-                DateTime fechaActual = DateTime.Now;
-                decimal cajaInicial = conexion.ObtenerCajaInicial(fechaActual);
-                decimal totalEfectivo = ObtenerTotalEfectivo(fechaActual);
-                decimal totalGastos = ObtenerTotalGastos(fechaActual);
-                decimal totalGenerado = conexion.ObtenerTotalGenerado(fechaActual);
-                decimal totalEsperado = cajaInicial + totalGenerado - totalGastos;
-
-                // Guardar en la tabla corte_de_caja
-                int idEstadoCorte = 1; // Asegúrate de que este ID existe en la tabla estado_corte
-                if (conexion.RegistrarCorteDeCaja(montoContado, SesionUsuario.IdUsuario, idEstadoCorte))
+                if (decimal.TryParse(txtMontoContado.Text, out decimal montoContado))
                 {
-                    MessageBox.Show("Corte de caja registrado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    DateTime fechaActual = DateTime.Now;
+                    decimal cajaInicial = conexion.ObtenerCajaInicialPorId(idCajaActual);
+                    decimal totalEfectivo = conexion.ObtenerTotalEfectivoPorCaja(idCajaActual);
+                    decimal totalGastos = conexion.ObtenerTotalGastosPorCaja(idCajaActual);
+                    decimal totalGenerado = conexion.ObtenerTotalGeneradoPorCaja(idCajaActual);
+                    decimal totalEsperado = cajaInicial + totalGenerado - totalGastos;
 
-                    // Deshabilitar botón de corte y habilitar el de caja inicial
-                    btnCajaInicial.Enabled = true;
-                    Corte_Caja.Enabled = false;
+                    int idEstadoCorte = 1; // Asumiendo que 1 = Corte registrado
+
+                    if (conexion.RegistrarCorteDeCaja(montoContado, SesionUsuario.IdUsuario, idEstadoCorte))
+                    {
+                        // Actualizar los estados después de registrar exitosamente el corte
+                        conexion.ActualizarEstadoCaja(1);   // 1 = No inicializada (o como desees manejarlo después del corte)
+                        conexion.ActualizarEstadoCorte(2);  // 2 = Corte realizado
+
+                        MessageBox.Show("Corte de caja registrado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        btnCajaInicial.Enabled = true;
+                        Corte_Caja.Enabled = false;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Error al registrar el corte de caja.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+
+                    string mensaje = $"Corte de caja confirmado.\n" +
+                                      $"Monto contado: ${montoContado}\n" +
+                                      $"Caja inicial: ${cajaInicial}\n" +
+                                      $"Total generado: ${totalGenerado}\n" +
+                                      $"Gastos: ${totalGastos}\n" +
+                                      $"Total esperado: ${totalEsperado.ToString("0.00")}\n";
+
+                    labelResultado.Text = mensaje;
+                    panelResultadoCorte.Visible = true;
+                    panelIngresoMonto.Visible = false;
                 }
                 else
                 {
-                    MessageBox.Show("Error al registrar el corte de caja.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Ingrese un monto válido.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-
-                // Mostrar el resumen del corte
-                string mensaje = $"Corte de caja confirmado.\n" +
-                                 $"Monto contado: ${montoContado}\n" +
-                                 $"Caja inicial: ${cajaInicial}\n" +
-                                 $"Total generado: ${totalGenerado}\n" +
-                                 $"Gastos: ${totalGastos}\n" +
-                                 $"Total esperado: ${totalEsperado}\n";
-
-                labelResultado.Text = mensaje;
-                panelResultadoCorte.Visible = true;
-                panelIngresoMonto.Visible = false;
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Ingrese un monto válido.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Ocurrió un error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
 
         }
 
