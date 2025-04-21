@@ -71,19 +71,15 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 {
                     DateTime fechaActual = DateTime.Now;
                     decimal cajaInicial = conexion.ObtenerCajaInicialPorId(idCajaActual);
-                    decimal totalEfectivo = conexion.ObtenerTotalEfectivoPorCaja(idCajaActual);
-                    decimal totalGastos = conexion.ObtenerTotalGastosPorCaja(idCajaActual);
                     decimal totalGenerado = conexion.ObtenerTotalGeneradoPorCaja(idCajaActual);
+                    decimal totalGastos = conexion.ObtenerTotalGastosPorCaja(idCajaActual);
                     decimal totalEsperado = cajaInicial + totalGenerado - totalGastos;
 
-                    int idEstadoCorte = 1; // Asumiendo que 1 = Corte registrado
+                    int idEstadoCorte = 1; // Corte registrado
 
                     if (conexion.RegistrarCorteDeCaja(montoContado, SesionUsuario.IdUsuario, idEstadoCorte))
                     {
-                        // Actualizar los estados después de registrar exitosamente el corte
-                        conexion.ActualizarEstadoCaja(1);   // 1 = No inicializada (o como desees manejarlo después del corte)
-                        conexion.ActualizarEstadoCorte(2);  // 2 = Corte realizado
-
+                        // Actualizar el estado después de registrar el corte
                         MessageBox.Show("Corte de caja registrado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                         btnCajaInicial.Enabled = true;
@@ -114,22 +110,20 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             {
                 MessageBox.Show($"Ocurrió un error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-
         }
 
         private decimal ObtenerTotalEfectivo(DateTime fecha)
         {
-            return conexion.ObtenerTotalEfectivo(fecha);
+            return conexion.ObtenerTotalGeneradoPorCaja(idCajaActual);
         }
 
         private decimal ObtenerTotalGastos(DateTime fecha)
         {
-            return conexion.ObtenerTotalGastos(fecha);
+            return conexion.ObtenerCajaInicialPorId(idCajaActual);
         }
         private decimal ObtenerCajaInicial()
         {
-            return conexion.ObtenerCajaInicial(DateTime.Now);
+            return conexion.ObtenerTotalGastosPorCaja(idCajaActual);
         }
 
         private void btnCancelarMonto_Click(object sender, EventArgs e)
@@ -140,7 +134,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         }
         private decimal ObtenerTotalGeneradoEfectivo()
         {
-            return conexion.ObtenerTotalGeneradoEfectivo(DateTime.Now);
+            return conexion.ObtenerTotalGeneradoPorCaja(idCajaActual); // ya tienes idCajaActual arriba
         }
 
 
@@ -259,7 +253,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         private void VerificarEstadoCaja()
         {
             int estadoCaja = conexion.ObtenerEstadoCajaActual();
-            int estadoCorte = conexion.ObtenerEstadoCorteActual();
+            int estadoCorte = 2; // 2 = Inicializado (activo)
 
             if (estadoCaja == 1) // No inicializada
             {
