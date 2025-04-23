@@ -46,6 +46,8 @@
             this.btnEditarGasto = new System.Windows.Forms.Button();
             this.btnEliminarGasto = new System.Windows.Forms.Button();
             this.btnRegresar = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.txtUtilidad = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvGastos)).BeginInit();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -109,6 +111,8 @@
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.SystemColors.GrayText;
+            this.panel2.Controls.Add(this.txtUtilidad);
+            this.panel2.Controls.Add(this.label2);
             this.panel2.Controls.Add(this.label8);
             this.panel2.Controls.Add(this.txtDescripcion);
             this.panel2.Controls.Add(this.txtCantidad);
@@ -191,11 +195,12 @@
             this.label5.BackColor = System.Drawing.Color.Transparent;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label5.Location = new System.Drawing.Point(13, 117);
+            this.label5.Location = new System.Drawing.Point(13, 113);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(108, 16);
+            this.label5.Size = new System.Drawing.Size(121, 16);
             this.label5.TabIndex = 14;
-            this.label5.Text = "Total Gastado";
+            this.label5.Text = "Total de Gastos";
+            this.label5.Click += new System.EventHandler(this.label5_Click);
             // 
             // txtEfectivoRecolectado
             // 
@@ -277,6 +282,28 @@
             this.btnRegresar.UseVisualStyleBackColor = false;
             this.btnRegresar.Click += new System.EventHandler(this.btnRegresar_Click);
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.BackColor = System.Drawing.Color.Transparent;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ForeColor = System.Drawing.SystemColors.ButtonFace;
+            this.label2.Location = new System.Drawing.Point(13, 148);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(48, 16);
+            this.label2.TabIndex = 20;
+            this.label2.Text = "Total ";
+            // 
+            // txtUtilidad
+            // 
+            this.txtUtilidad.Location = new System.Drawing.Point(178, 147);
+            this.txtUtilidad.Multiline = true;
+            this.txtUtilidad.Name = "txtUtilidad";
+            this.txtUtilidad.ReadOnly = true;
+            this.txtUtilidad.Size = new System.Drawing.Size(76, 24);
+            this.txtUtilidad.TabIndex = 21;
+            this.txtUtilidad.Text = "$0.00";
+            // 
             // FormAdminGastos
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -319,5 +346,7 @@
         private System.Windows.Forms.Button btnEditarGasto;
         private System.Windows.Forms.Button btnEliminarGasto;
         private System.Windows.Forms.Button btnRegresar;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox txtUtilidad;
     }
 }

@@ -25,6 +25,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
            
             idCaja = conexion.ObtenerCajaActiva(idUsuario);  // Obtenemos la caja más reciente activa
             InitializeComponent();
+
         }
 
 
@@ -58,13 +59,56 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             CargarGastosDelDia();
             CargarResumenDelDia();
+        
         }
 
         private void CargarGastosDelDia()
         {
-            dgvGastos.DataSource = conexion.ObtenerGastosDelDia();
-        }
+            DataTable dt = conexion.ObtenerGastosDelDia();
+            dgvGastos.DataSource = dt;
 
+            // Formato
+            dgvGastos.Columns["cantidad"].DefaultCellStyle.Format = "C2";
+            dgvGastos.Columns["descripcion"].HeaderText = "Descripción";
+            dgvGastos.Columns["fecha"].DefaultCellStyle.Format = "g";
+
+            // Agregar botones solo si no existen ya
+            if (!dgvGastos.Columns.Contains("Editar"))
+            {
+                DataGridViewButtonColumn editarBtn = new DataGridViewButtonColumn
+                {
+                    Name = "Editar",
+                    HeaderText = "",
+                    Text = "Editar",
+                    UseColumnTextForButtonValue = true
+                };
+                dgvGastos.Columns.Add(editarBtn);
+            }
+
+            if (!dgvGastos.Columns.Contains("Eliminar"))
+            {
+                DataGridViewButtonColumn eliminarBtn = new DataGridViewButtonColumn
+                {
+                    Name = "Eliminar",
+                    HeaderText = "",
+                    Text = "Eliminar",
+                    UseColumnTextForButtonValue = true
+                };
+                dgvGastos.Columns.Add(eliminarBtn);
+            }
+        }
+        private void MostrarTotales()
+        {
+            decimal fondoInicial = conexion.ObtenerFondoInicial(idUsuario);
+            decimal efectivoRecolectado = conexion.ObtenerEfectivoRecolectado();
+            decimal totalGastos = conexion.ObtenerTotalGastosDelDia();
+            decimal utilidad = efectivoRecolectado - totalGastos;
+
+            txtFondoInicial.Text = fondoInicial.ToString("C2");
+            txtEfectivoRecolectado.Text = efectivoRecolectado.ToString("C2");
+            txtTotalGastos.Text = totalGastos.ToString("C2");
+            txtUtilidad.Text = utilidad.ToString("C2");
+        }
 
 
 
@@ -124,6 +168,28 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void dgvGastos_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
+            if (e.RowIndex >= 0)
+            {
+                var idGasto = Convert.ToInt32(dgvGastos.Rows[e.RowIndex].Cells["id_gasto"].Value);
+
+                if (dgvGastos.Columns[e.ColumnIndex].Name == "Eliminar")
+                {
+                    DialogResult result = MessageBox.Show("¿Deseas eliminar este gasto?", "Confirmar", MessageBoxButtons.YesNo);
+                    if (result == DialogResult.Yes)
+                    {
+                        conexion.EliminarGasto(idGasto);
+                        CargarGastosDelDia();
+                        MostrarTotales();
+                    }
+                }
+
+                if (dgvGastos.Columns[e.ColumnIndex].Name == "Editar")
+                {
+                    
+                    txtCantidad.Text = dgvGastos.Rows[e.RowIndex].Cells["cantidad"].Value.ToString();
+                    txtDescripcion.Text = dgvGastos.Rows[e.RowIndex].Cells["descripcion"].Value.ToString();
+                }
+            }
 
         }
 
@@ -131,31 +197,36 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         // Evento para agregar un nuevo gasto
         private void btnAgregarGasto_Click(object sender, EventArgs e)
         {
-            // 1. Obtener datos desde los TextBox
-            decimal cantidad = Convert.ToDecimal(txtCantidad.Text);
-            string descripcion = txtDescripcion.Text;
-
-            // 2. Obtener la última caja inicializada
-            int idCaja = conexion.ObtenerUltimaCaja();
-
-            // 3. Validar existencia de caja
-            if (idCaja == -1)
+            // Validar campos vacíos
+            if (string.IsNullOrWhiteSpace(txtCantidad.Text) || string.IsNullOrWhiteSpace(txtDescripcion.Text))
             {
-                MessageBox.Show("⚠️ No hay una caja inicializada. Por favor, regístrala primero.");
+                MessageBox.Show("Por favor, completa todos los campos.");
                 return;
             }
 
-            // 4. Insertar gasto
+            // Validar que la cantidad sea numérica y positiva
+            if (!decimal.TryParse(txtCantidad.Text, out decimal cantidad) || cantidad <= 0)
+            {
+                MessageBox.Show("Ingresa una cantidad válida y mayor a 0.");
+                return;
+            }
+
+            string descripcion = txtDescripcion.Text.Trim();
+            int idCaja = conexion.ObtenerUltimaCaja();
+
+            if (idCaja == -1)
+            {
+                MessageBox.Show("⚠️ No hay una caja inicializada.");
+                return;
+            }
+
             conexion.InsertarGasto(cantidad, descripcion, idCaja);
-
-            // 5. Recargar gastos del día en el DataGridView
             CargarGastosDelDia();
+            MostrarTotales();
 
-            // 6. Limpiar campos si quieres
             txtCantidad.Clear();
             txtDescripcion.Clear();
             txtCantidad.Focus();
-
 
         }
 
@@ -182,6 +253,9 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         }
 
+        private void label5_Click(object sender, EventArgs e)
+        {
 
+        }
     }
 }

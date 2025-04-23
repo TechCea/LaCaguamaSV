@@ -2039,18 +2039,50 @@ public DataTable ObtenerBebidas()
         public decimal ObtenerFondoInicial(int idUsuario)
         {
             decimal fondo = 0;
-            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+
+            using (MySqlConnection conexionDB = new MySqlConnection(cadenaConexion))
             {
-                string query = "SELECT cantidad FROM caja WHERE DATE(fecha) = CURDATE() AND id_usuario = @idUsuario ORDER BY fecha DESC LIMIT 1";
-                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                try
                 {
-                    cmd.Parameters.AddWithValue("@idUsuario", idUsuario);
-                    conexion.Open();
-                    var result = cmd.ExecuteScalar();
-                    if (result != null) fondo = Convert.ToDecimal(result);
+                    conexionDB.Open();
+                    string query = "SELECT cantidad FROM caja WHERE id_usuario = @idUsuario ORDER BY id_caja DESC LIMIT 1";
+                    MySqlCommand comando = new MySqlCommand(query, conexionDB);
+                    comando.Parameters.AddWithValue("@idUsuario", idUsuario);
+
+                    object resultado = comando.ExecuteScalar();
+                    if (resultado != null && resultado != DBNull.Value)
+                    {
+                        fondo = Convert.ToDecimal(resultado);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al obtener el fondo inicial: " + ex.Message);
                 }
             }
+
             return fondo;
+        }
+
+        public decimal ObtenerTotalGastosDelDia()
+        {
+            decimal total = 0;
+
+            using (MySqlConnection conexionDB = new MySqlConnection(cadenaConexion))
+            {
+                string query = "SELECT SUM(cantidad) FROM gastos WHERE DATE(fecha) = CURDATE()";
+
+                MySqlCommand comando = new MySqlCommand(query, conexionDB);
+                conexionDB.Open();
+
+                object resultado = comando.ExecuteScalar();
+                if (resultado != null && resultado != DBNull.Value)
+                {
+                    total = Convert.ToDecimal(resultado);
+                }
+            }
+
+            return total;
         }
 
         // Método para obtener el efectivo recolectado
