@@ -74,31 +74,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             dgvGastos.Columns["cantidad"].DefaultCellStyle.Format = "C2";
             dgvGastos.Columns["descripcion"].HeaderText = "Descripción";
             dgvGastos.Columns["fecha"].DefaultCellStyle.Format = "g";
-
-            // Agregar botones solo si no existen ya
-            if (!dgvGastos.Columns.Contains("Editar"))
-            {
-                DataGridViewButtonColumn editarBtn = new DataGridViewButtonColumn
-                {
-                    Name = "Editar",
-                    HeaderText = "",
-                    Text = "Editar",
-                    UseColumnTextForButtonValue = true
-                };
-                dgvGastos.Columns.Add(editarBtn);
-            }
-
-            if (!dgvGastos.Columns.Contains("Eliminar"))
-            {
-                DataGridViewButtonColumn eliminarBtn = new DataGridViewButtonColumn
-                {
-                    Name = "Eliminar",
-                    HeaderText = "",
-                    Text = "Eliminar",
-                    UseColumnTextForButtonValue = true
-                };
-                dgvGastos.Columns.Add(eliminarBtn);
-            }
         }
         private void MostrarTotales()
         {
