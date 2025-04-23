@@ -355,6 +355,9 @@
     <EmbeddedResource Include="Fomularios\VistasAdmin\FormAdminFunciones.resx">
       <DependentUpon>FormAdminFunciones.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Fomularios\VistasAdmin\FormAdminGastos.resx">
+      <DependentUpon>FormAdminGastos.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Fomularios\VistasAdmin\FormAdminIngredientesInv.resx">
       <DependentUpon>FormAdminIngredientesInv.cs</DependentUpon>
     </EmbeddedResource>

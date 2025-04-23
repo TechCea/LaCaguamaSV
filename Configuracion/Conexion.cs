@@ -2033,11 +2033,187 @@ public DataTable ObtenerBebidas()
             }
         }
 
-        
+        // -------------------- Gastos --------------------
 
+        // Método para obtener el fondo inicial de la caja
+        public decimal ObtenerFondoInicial(int idUsuario)
+        {
+            decimal fondo = 0;
+            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+            {
+                string query = "SELECT cantidad FROM caja WHERE DATE(fecha) = CURDATE() AND id_usuario = @idUsuario ORDER BY fecha DESC LIMIT 1";
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@idUsuario", idUsuario);
+                    conexion.Open();
+                    var result = cmd.ExecuteScalar();
+                    if (result != null) fondo = Convert.ToDecimal(result);
+                }
+            }
+            return fondo;
+        }
+
+        // Método para obtener el efectivo recolectado
+        public decimal ObtenerEfectivoRecolectado()
+        {
+            decimal total = 0;
+            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+            {
+                string query = "SELECT SUM(total - descuento) AS efectivo FROM ordenes WHERE DATE(fecha_orden) = CURDATE() AND tipo_pago = 1 AND id_estadoO = 2";
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    conexion.Open();
+                    var result = cmd.ExecuteScalar();
+                    if (result != null) total = Convert.ToDecimal(result);
+                }
+            }
+            return total;
+        }
+
+        // Método para obtener el total de gastos del día
+        public decimal ObtenerTotalGastosDelDia(int idCaja)
+        {
+            decimal total = 0;
+            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+            {
+                string query = "SELECT SUM(cantidad) FROM gastos WHERE DATE(fecha) = CURDATE() AND id_caja = @idCaja";
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@idCaja", idCaja);
+                    conexion.Open();
+                    var result = cmd.ExecuteScalar();
+                    if (result != null) total = Convert.ToDecimal(result);
+                }
+            }
+            return total;
+        }
+
+        // Método para obtener los gastos del día
+        public DataTable ObtenerGastosDelDia(int idCaja)
+        {
+            DataTable tabla = new DataTable();
+
+            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+            {
+                string query = "SELECT id_gasto, cantidad, descripcion, fecha FROM gastos WHERE DATE(fecha) = CURDATE() ORDER BY fecha DESC";
+
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    conexion.Open();
+                    MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                    adapter.Fill(tabla);
+                }
+            }
+
+            return tabla;
+        }
+
+        // Método para obtener la caja activa más reciente del día
+        public int ObtenerCajaActiva(int idUsuario)
+        {
+            int idCaja = 0;
+            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+            {
+                string query = "SELECT id_caja FROM caja WHERE DATE(fecha) = CURDATE() AND id_usuario = @idUsuario ORDER BY fecha DESC LIMIT 1";
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@idUsuario", idUsuario);
+                    conexion.Open();
+                    var result = cmd.ExecuteScalar();
+                    if (result != null) idCaja = Convert.ToInt32(result);
+                }
+            }
+            return idCaja;
+        }
+
+
+
+        // Insertar un gasto
+        public void InsertarGasto(decimal cantidad, string descripcion, int idCaja)
+        {
+            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+            {
+                string query = "INSERT INTO gastos (cantidad, descripcion, fecha, id_caja) VALUES (@cantidad, @descripcion, NOW(), @idCaja)";
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@cantidad", cantidad);
+                    cmd.Parameters.AddWithValue("@descripcion", descripcion);
+                    cmd.Parameters.AddWithValue("@idCaja", idCaja);
+                    conexion.Open();
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        // Eliminar un gasto por ID
+        public void EliminarGasto(int idGasto)
+        {
+            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+            {
+                string query = "DELETE FROM gastos WHERE id_gasto = @idGasto";
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@idGasto", idGasto);
+                    conexion.Open();
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public int ObtenerUltimaCaja()
+        {
+            int idCaja = -1;
+
+            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+            {
+                string query = @"
+            SELECT id_caja 
+            FROM caja 
+            WHERE id_estado_caja = 2 
+            ORDER BY fecha DESC 
+            LIMIT 1";
+
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    conexion.Open();
+                    object result = cmd.ExecuteScalar();
+
+                    if (result != null && result != DBNull.Value)
+                    {
+                        idCaja = Convert.ToInt32(result);
+                    }
+                }
+            }
+
+            return idCaja;
+        }
+
+        public DataTable ObtenerGastosDelDia()
+        {
+            DataTable tabla = new DataTable();
+
+            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+            {
+                string query = "SELECT id_gasto, cantidad, descripcion, fecha FROM gastos WHERE DATE(fecha) = CURDATE() ORDER BY fecha DESC";
+
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    conexion.Open();
+                    MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                    adapter.Fill(tabla);
+                }
+            }
+
+            return tabla;
+        }
 
     }
+
+
+
+
 }
+
 
 
 
