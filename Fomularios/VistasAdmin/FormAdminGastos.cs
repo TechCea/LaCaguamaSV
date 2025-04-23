@@ -19,6 +19,9 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         Conexion conexion = new Conexion();
         private int idUsuario = 1;  // Este valor debe ser tomado del usuario logueado
         private int idCaja;
+        private int idGastoSeleccionado = -1;
+
+
 
         public FormAdminGastos()
         {
@@ -110,6 +113,14 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             txtUtilidad.Text = utilidad.ToString("C2");
         }
 
+        private void LimpiarCampos()
+        {
+            txtCantidad.Clear();
+            txtDescripcion.Clear();
+            idGastoSeleccionado = -1;
+        }
+
+
 
 
 
@@ -170,25 +181,11 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             if (e.RowIndex >= 0)
             {
-                var idGasto = Convert.ToInt32(dgvGastos.Rows[e.RowIndex].Cells["id_gasto"].Value);
+                DataGridViewRow fila = dgvGastos.Rows[e.RowIndex];
 
-                if (dgvGastos.Columns[e.ColumnIndex].Name == "Eliminar")
-                {
-                    DialogResult result = MessageBox.Show("¿Deseas eliminar este gasto?", "Confirmar", MessageBoxButtons.YesNo);
-                    if (result == DialogResult.Yes)
-                    {
-                        conexion.EliminarGasto(idGasto);
-                        CargarGastosDelDia();
-                        MostrarTotales();
-                    }
-                }
-
-                if (dgvGastos.Columns[e.ColumnIndex].Name == "Editar")
-                {
-                    
-                    txtCantidad.Text = dgvGastos.Rows[e.RowIndex].Cells["cantidad"].Value.ToString();
-                    txtDescripcion.Text = dgvGastos.Rows[e.RowIndex].Cells["descripcion"].Value.ToString();
-                }
+                idGastoSeleccionado = Convert.ToInt32(fila.Cells["id_gasto"].Value);
+                txtCantidad.Text = fila.Cells["cantidad"].Value.ToString();
+                txtDescripcion.Text = fila.Cells["descripcion"].Value.ToString();
             }
 
         }
@@ -232,18 +229,60 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void btnEditarGasto_Click(object sender, EventArgs e)
         {
+            if (idGastoSeleccionado != -1)
+            {
+                decimal cantidad;
+                if (!decimal.TryParse(txtCantidad.Text, out cantidad))
+                {
+                    MessageBox.Show("Cantidad no válida.");
+                    return;
+                }
+
+                string descripcion = txtDescripcion.Text;
+
+                bool actualizado = conexion.ActualizarGasto(idGastoSeleccionado, cantidad, descripcion);
+                if (actualizado)
+                {
+                    MessageBox.Show("Gasto actualizado correctamente.");
+                    CargarGastosDelDia(); // refrescar el DataGridView
+                    LimpiarCampos();
+                }
+                else
+                {
+                    MessageBox.Show("Error al actualizar el gasto.");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Selecciona un gasto para editar.");
+            }
 
         }
 
         // Evento para eliminar un gasto seleccionado
         private void btnEliminarGasto_Click(object sender, EventArgs e)
         {
-
-            if (dgvGastos.SelectedRows.Count > 0)
+            if (idGastoSeleccionado != -1)
             {
-                int idGasto = Convert.ToInt32(dgvGastos.SelectedRows[0].Cells["id_gasto"].Value);
-                conexion.EliminarGasto(idGasto);
-                CargarResumenDelDia();
+                var confirm = MessageBox.Show("¿Seguro que quieres eliminar este gasto?", "Confirmar", MessageBoxButtons.YesNo);
+                if (confirm == DialogResult.Yes)
+                {
+                    bool eliminado = conexion.EliminarGasto(idGastoSeleccionado);
+                    if (eliminado)
+                    {
+                        MessageBox.Show("Gasto eliminado.");
+                        CargarGastosDelDia(); // refrescar la tabla
+                        LimpiarCampos();
+                    }
+                    else
+                    {
+                        MessageBox.Show("No se pudo eliminar el gasto.");
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Selecciona un gasto para eliminar.");
             }
         }
 

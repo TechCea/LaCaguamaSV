@@ -2178,16 +2178,24 @@ public DataTable ObtenerBebidas()
         }
 
         // Eliminar un gasto por ID
-        public void EliminarGasto(int idGasto)
+        public bool EliminarGasto(int idGasto)
         {
-            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+            using (MySqlConnection conexionDB = new MySqlConnection(cadenaConexion))
             {
-                string query = "DELETE FROM gastos WHERE id_gasto = @idGasto";
-                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                try
                 {
-                    cmd.Parameters.AddWithValue("@idGasto", idGasto);
-                    conexion.Open();
-                    cmd.ExecuteNonQuery();
+                    conexionDB.Open();
+                    string query = "DELETE FROM gastos WHERE id_gasto = @idGasto";
+                    MySqlCommand comando = new MySqlCommand(query, conexionDB);
+                    comando.Parameters.AddWithValue("@idGasto", idGasto);
+
+                    int filasAfectadas = comando.ExecuteNonQuery();
+                    return filasAfectadas > 0;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al eliminar gasto: " + ex.Message);
+                    return false;
                 }
             }
         }
@@ -2239,6 +2247,30 @@ public DataTable ObtenerBebidas()
             return tabla;
         }
 
+        public bool ActualizarGasto(int idGasto, decimal cantidad, string descripcion)
+        {
+            using (MySqlConnection conexionDB = new MySqlConnection(cadenaConexion))
+            {
+                try
+                {
+                    conexionDB.Open();
+                    string query = "UPDATE gastos SET cantidad = @cantidad, descripcion = @descripcion WHERE id_gasto = @idGasto";
+                    MySqlCommand comando = new MySqlCommand(query, conexionDB);
+                    comando.Parameters.AddWithValue("@cantidad", cantidad);
+                    comando.Parameters.AddWithValue("@descripcion", descripcion);
+                    comando.Parameters.AddWithValue("@idGasto", idGasto);
+
+                    return comando.ExecuteNonQuery() > 0;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al actualizar gasto: " + ex.Message);
+                    return false;
+                }
+            }
+        }
+
+      
     }
 
 
