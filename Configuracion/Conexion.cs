@@ -2086,20 +2086,32 @@ public DataTable ObtenerBebidas()
         }
 
         // Método para obtener el efectivo recolectado
-        public decimal ObtenerEfectivoRecolectado()
+        public decimal ObtenerEfectivoRecolectado(int idCaja)
         {
-            decimal total = 0;
+            decimal efectivo = 0;
+
             using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
             {
-                string query = "SELECT SUM(total - descuento) AS efectivo FROM ordenes WHERE DATE(fecha_orden) = CURDATE() AND tipo_pago = 1 AND id_estadoO = 2";
-                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
-                {
-                    conexion.Open();
-                    var result = cmd.ExecuteScalar();
-                    if (result != null) total = Convert.ToDecimal(result);
-                }
+                conexion.Open();
+                string query = @"SELECT SUM(total - descuento) 
+                         FROM ordenes 
+                         WHERE tipo_pago = 1 
+                         AND id_estadoO = 2 
+                         AND DATE(fecha_orden) = (
+                             SELECT DATE(fecha) 
+                             FROM caja 
+                             WHERE id_caja = @idCaja 
+                             LIMIT 1
+                         )";
+
+                MySqlCommand cmd = new MySqlCommand(query, conexion);
+                cmd.Parameters.AddWithValue("@idCaja", idCaja);
+
+                object resultado = cmd.ExecuteScalar();
+                efectivo = resultado != DBNull.Value ? Convert.ToDecimal(resultado) : 0;
             }
-            return total;
+
+            return efectivo;
         }
 
         // Método para obtener el total de gastos del día
@@ -2178,24 +2190,16 @@ public DataTable ObtenerBebidas()
         }
 
         // Eliminar un gasto por ID
-        public bool EliminarGasto(int idGasto)
+        public void EliminarGasto(int idGasto)
         {
-            using (MySqlConnection conexionDB = new MySqlConnection(cadenaConexion))
+            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
             {
-                try
+                string query = "DELETE FROM gastos WHERE id_gasto = @idGasto";
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                 {
-                    conexionDB.Open();
-                    string query = "DELETE FROM gastos WHERE id_gasto = @idGasto";
-                    MySqlCommand comando = new MySqlCommand(query, conexionDB);
-                    comando.Parameters.AddWithValue("@idGasto", idGasto);
-
-                    int filasAfectadas = comando.ExecuteNonQuery();
-                    return filasAfectadas > 0;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error al eliminar gasto: " + ex.Message);
-                    return false;
+                    cmd.Parameters.AddWithValue("@idGasto", idGasto);
+                    conexion.Open();
+                    cmd.ExecuteNonQuery();
                 }
             }
         }

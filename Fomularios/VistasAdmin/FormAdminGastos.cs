@@ -41,7 +41,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 txtFondoInicial.Text = conexion.ObtenerFondoInicial(idUsuario).ToString("C");
 
                 // Mostrar efectivo recolectado
-                txtEfectivoRecolectado.Text = conexion.ObtenerEfectivoRecolectado().ToString("C");
+                txtEfectivoRecolectado.Text = conexion.ObtenerEfectivoRecolectado(idCaja).ToString("C");
 
                 // Mostrar total de gastos
                 txtTotalGastos.Text = conexion.ObtenerTotalGastosDelDia(idCaja).ToString("C");
@@ -74,11 +74,12 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             dgvGastos.Columns["cantidad"].DefaultCellStyle.Format = "C2";
             dgvGastos.Columns["descripcion"].HeaderText = "Descripción";
             dgvGastos.Columns["fecha"].DefaultCellStyle.Format = "g";
+
         }
         private void MostrarTotales()
         {
             decimal fondoInicial = conexion.ObtenerFondoInicial(idUsuario);
-            decimal efectivoRecolectado = conexion.ObtenerEfectivoRecolectado();
+            decimal efectivoRecolectado = conexion.ObtenerEfectivoRecolectado(idCaja);
             decimal totalGastos = conexion.ObtenerTotalGastosDelDia();
             decimal utilidad = efectivoRecolectado - totalGastos;
 
@@ -87,14 +88,39 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             txtTotalGastos.Text = totalGastos.ToString("C2");
             txtUtilidad.Text = utilidad.ToString("C2");
         }
-
         private void LimpiarCampos()
         {
-            txtCantidad.Clear();
-            txtDescripcion.Clear();
-            idGastoSeleccionado = -1;
+            try
+            {
+                // Limpiar los campos de texto
+                txtCantidad.Clear();
+                txtDescripcion.Clear();
+                idGastoSeleccionado = -1; // Restablecer el ID del gasto seleccionado
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al limpiar campos: " + ex.Message);
+            }
         }
+        private void ActualizarResumen()
+        {
+            if (idCaja > 0)
+            {
+                decimal fondoInicial = conexion.ObtenerFondoInicial(idUsuario);
+                decimal efectivoRecolectado = conexion.ObtenerEfectivoRecolectado(idCaja);  // Pasa idCaja
+                decimal totalGastos = conexion.ObtenerTotalGastosDelDia(idCaja);
+                decimal utilidad = efectivoRecolectado - totalGastos;
 
+                txtFondoInicial.Text = fondoInicial.ToString("C2");
+                txtEfectivoRecolectado.Text = efectivoRecolectado.ToString("C2");
+                txtTotalGastos.Text = totalGastos.ToString("C2");
+                txtUtilidad.Text = utilidad.ToString("C2");
+            }
+            else
+            {
+                MessageBox.Show("No hay una caja activa para mostrar los totales.");
+            }
+        }
 
 
 
@@ -237,27 +263,12 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         // Evento para eliminar un gasto seleccionado
         private void btnEliminarGasto_Click(object sender, EventArgs e)
         {
-            if (idGastoSeleccionado != -1)
+
+            if (dgvGastos.SelectedRows.Count > 0)
             {
-                var confirm = MessageBox.Show("¿Seguro que quieres eliminar este gasto?", "Confirmar", MessageBoxButtons.YesNo);
-                if (confirm == DialogResult.Yes)
-                {
-                    bool eliminado = conexion.EliminarGasto(idGastoSeleccionado);
-                    if (eliminado)
-                    {
-                        MessageBox.Show("Gasto eliminado.");
-                        CargarGastosDelDia(); // refrescar la tabla
-                        LimpiarCampos();
-                    }
-                    else
-                    {
-                        MessageBox.Show("No se pudo eliminar el gasto.");
-                    }
-                }
-            }
-            else
-            {
-                MessageBox.Show("Selecciona un gasto para eliminar.");
+                int idGasto = Convert.ToInt32(dgvGastos.SelectedRows[0].Cells["id_gasto"].Value);
+                conexion.EliminarGasto(idGasto);
+                CargarResumenDelDia();
             }
         }
 
@@ -270,6 +281,12 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         private void label5_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnMostrarGastos_Click(object sender, EventArgs e)
+        {
+            CargarGastosDelDia();      // Actualiza el DataGridView
+            ActualizarResumen();       // Actualiza los totales en los TextBox
         }
     }
 }

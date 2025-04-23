@@ -48,6 +48,7 @@
             this.btnRegresar = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.txtUtilidad = new System.Windows.Forms.TextBox();
+            this.btnMostrarGastos = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvGastos)).BeginInit();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -304,6 +305,21 @@
             this.txtUtilidad.TabIndex = 21;
             this.txtUtilidad.Text = "$0.00";
             // 
+            // btnMostrarGastos
+            // 
+            this.btnMostrarGastos.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
+            this.btnMostrarGastos.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnMostrarGastos.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnMostrarGastos.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnMostrarGastos.ForeColor = System.Drawing.SystemColors.Control;
+            this.btnMostrarGastos.Location = new System.Drawing.Point(340, 371);
+            this.btnMostrarGastos.Name = "btnMostrarGastos";
+            this.btnMostrarGastos.Size = new System.Drawing.Size(89, 48);
+            this.btnMostrarGastos.TabIndex = 22;
+            this.btnMostrarGastos.Text = "Mostrar";
+            this.btnMostrarGastos.UseVisualStyleBackColor = false;
+            this.btnMostrarGastos.Click += new System.EventHandler(this.btnMostrarGastos_Click);
+            // 
             // FormAdminGastos
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -311,6 +327,7 @@
             this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.fondo;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.btnMostrarGastos);
             this.Controls.Add(this.btnRegresar);
             this.Controls.Add(this.btnEliminarGasto);
             this.Controls.Add(this.btnEditarGasto);
@@ -348,5 +365,6 @@
         private System.Windows.Forms.Button btnRegresar;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtUtilidad;
+        private System.Windows.Forms.Button btnMostrarGastos;
     }
 }
