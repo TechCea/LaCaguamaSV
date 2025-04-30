@@ -1768,271 +1768,6 @@ public DataTable ObtenerBebidas()
             }
         }
 
-        // -------------------- ESTADOS --------------------
-        public void ActualizarEstadoCaja(int idCaja, int estado)
-        {
-            string query = "UPDATE caja SET id_estado_caja = @estado WHERE id_caja = @idCaja";
-            EjecutarConsulta(query, new MySqlParameter("@estado", estado), new MySqlParameter("@idCaja", idCaja));
-        }
-
-        public void ActualizarEstadoCorte(int idCorte, int estado)
-        {
-            string query = "UPDATE corte_de_caja SET id_estado_corte = @estado WHERE id_corte = @idCorte";
-            EjecutarConsulta(query, new MySqlParameter("@estado", estado), new MySqlParameter("@idCorte", idCorte));
-        }
-
-        private void EjecutarConsulta(string query, params MySqlParameter[] parametros)
-        {
-            try
-            {
-                using (var conexion = new MySqlConnection(cadenaConexion))
-                using (var comando = new MySqlCommand(query, conexion))
-                {
-                    conexion.Open();
-                    comando.Parameters.AddRange(parametros);
-                    comando.ExecuteNonQuery();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error al ejecutar la consulta: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-
-        public bool RegistrarCajaInicial(decimal cantidad, int idUsuario)
-        {
-            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
-            {
-                conexion.Open();
-
-                // Comenzamos la transacción para manejar ambas operaciones de manera atómica
-                using (MySqlTransaction transaction = conexion.BeginTransaction())
-                {
-                    try
-                    {
-                        // Paso 1: Insertar en la tabla 'caja'
-                        string queryCaja = "INSERT INTO caja (cantidad, fecha, id_usuario, id_estado_caja) VALUES (@cantidad, @fecha, @idUsuario, 2)";
-                        MySqlCommand cmdCaja = new MySqlCommand(queryCaja, conexion, transaction);
-                        cmdCaja.Parameters.AddWithValue("@cantidad", cantidad);
-                        cmdCaja.Parameters.AddWithValue("@fecha", DateTime.Now);
-                        cmdCaja.Parameters.AddWithValue("@idUsuario", idUsuario);
-
-                        int rowsAffectedCaja = cmdCaja.ExecuteNonQuery();
-
-                        if (rowsAffectedCaja <= 0)
-                        {
-                            throw new Exception("Error al registrar la caja inicial.");
-                        }
-
-                        // Obtener el último ID de la caja insertada (esto es necesario para el siguiente paso)
-                        string queryUltimaCaja = "SELECT LAST_INSERT_ID()";
-                        MySqlCommand cmdUltimaCaja = new MySqlCommand(queryUltimaCaja, conexion, transaction);
-                        int idCaja = Convert.ToInt32(cmdUltimaCaja.ExecuteScalar());
-
-                        // Commit de la transacción si todo salió bien
-                        transaction.Commit();
-                        return true;
-                    }
-                    catch (Exception)
-                    {
-                        // Si ocurre algún error, hacemos rollback de la transacción
-                        transaction.Rollback();
-                        return false;
-                    }
-                }
-            }
-        }
-
-
-        public bool RegistrarCorteDeCaja(decimal cantidad, int idUsuario, int idEstadoCorte)
-        {
-            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
-            {
-                conexion.Open();
-
-                // Comenzamos la transacción
-                using (MySqlTransaction transaction = conexion.BeginTransaction())
-                {
-                    try
-                    {
-                        // Paso 1: Registrar el corte de caja en la tabla 'corte_de_caja'
-                        string queryCorte = "INSERT INTO corte_de_caja (cantidad, fecha, id_estado_corte, id_usuario) VALUES (@cantidad, @fecha, @idEstadoCorte, @idUsuario)";
-                        MySqlCommand cmdCorte = new MySqlCommand(queryCorte, conexion, transaction);
-                        cmdCorte.Parameters.AddWithValue("@cantidad", cantidad);  // Usando 'cantidad' como parámetro
-                        cmdCorte.Parameters.AddWithValue("@fecha", DateTime.Now);  // Fecha del corte
-                        cmdCorte.Parameters.AddWithValue("@idEstadoCorte", idEstadoCorte);  // Estado del corte
-                        cmdCorte.Parameters.AddWithValue("@idUsuario", idUsuario);    // ID del usuario que realiza el corte
-
-                        int rowsAffectedCorte = cmdCorte.ExecuteNonQuery();
-
-                        if (rowsAffectedCorte <= 0)
-                        {
-                            throw new Exception("Error al registrar el corte de caja.");
-                        }
-
-                        // Commit de la transacción si todo salió bien
-                        transaction.Commit();
-                        return true;
-                    }
-                    catch (Exception ex)
-                    {
-                        // Si ocurre algún error, hacemos rollback de la transacción
-                        transaction.Rollback();
-                        MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return false;
-                    }
-                }
-            }
-        }
-
-        public int ObtenerIdCajaActiva()
-        {
-            try
-            {
-                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
-                {
-                    conexion.Open();
-                    string query = "SELECT id_caja FROM caja WHERE id_estado_caja = 2 AND fecha = CURDATE() LIMIT 1";
-                    MySqlCommand cmd = new MySqlCommand(query, conexion);
-
-                    object result = cmd.ExecuteScalar();
-                    return (result != null && result != DBNull.Value) ? Convert.ToInt32(result) : 0;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al obtener la caja activa: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return 0;
-            }
-        }
-
-        public int ObtenerIdCorteDeCajaActivo()
-        {
-            try
-            {
-                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
-                {
-                    conexion.Open();
-                    string query = "SELECT id_corte FROM corte_de_caja WHERE id_estado_corte = 2 AND fecha = CURDATE() LIMIT 1";
-                    MySqlCommand cmd = new MySqlCommand(query, conexion);
-
-                    object result = cmd.ExecuteScalar();
-                    return (result != null && result != DBNull.Value) ? Convert.ToInt32(result) : 0;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al obtener el corte de caja activo: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return 0;
-            }
-        }
-
-
-        private decimal ObtenerEscalarDecimal(string query, params MySqlParameter[] parametros)
-        {
-            using (var conexion = new MySqlConnection(cadenaConexion))
-            using (var comando = new MySqlCommand(query, conexion))
-            {
-                if (parametros != null)
-                    comando.Parameters.AddRange(parametros);
-
-                conexion.Open();
-                object resultado = comando.ExecuteScalar();
-                return (resultado != null && resultado != DBNull.Value) ? Convert.ToDecimal(resultado) : 0;
-            }
-        }
-
-
-        public int ObtenerEstadoCajaActual()
-        {
-            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
-            {
-                conexion.Open();
-                string query = "SELECT id_estado_caja FROM caja WHERE id_estado_caja != 1 LIMIT 1";  // Buscar la caja activa
-                MySqlCommand comando = new MySqlCommand(query, conexion);
-                object resultado = comando.ExecuteScalar();
-                return resultado != null ? Convert.ToInt32(resultado) : 1;  // Si no hay caja activa, retorna estado 1 (No inicializada)
-            }
-        }
-
-        public decimal ObtenerCajaInicialPorId(int idCaja)
-        {
-            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
-            {
-                conexion.Open();
-                string query = "SELECT cantidad FROM caja WHERE id_caja = @idCaja";
-                MySqlCommand comando = new MySqlCommand(query, conexion);
-                comando.Parameters.AddWithValue("@idCaja", idCaja);
-                object resultado = comando.ExecuteScalar();
-                return resultado != null ? Convert.ToDecimal(resultado) : 0;
-            }
-        }
-
-        public decimal ObtenerTotalGeneradoPorCaja(int idCaja)
-        {
-            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
-            {
-                conexion.Open();
-                string query = "SELECT SUM(total) FROM ordenes WHERE id_caja = @idCaja";
-                MySqlCommand comando = new MySqlCommand(query, conexion);
-                comando.Parameters.AddWithValue("@idCaja", idCaja);
-                object resultado = comando.ExecuteScalar();
-                return resultado != null ? Convert.ToDecimal(resultado) : 0;
-            }
-        }
-
-        public decimal ObtenerTotalGastosPorCaja(int idCaja)
-        {
-            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
-            {
-                conexion.Open();
-                string query = "SELECT SUM(cantidad) FROM gastos WHERE id_caja = @idCaja";
-                MySqlCommand comando = new MySqlCommand(query, conexion);
-                comando.Parameters.AddWithValue("@idCaja", idCaja);
-                object resultado = comando.ExecuteScalar();
-                return resultado != null ? Convert.ToDecimal(resultado) : 0;
-            }
-        }
-
-        public bool RegistrarCorteDeCajaNuevo(decimal montoContado, int idUsuario, int idEstadoCorte)
-        {
-            try
-            {
-                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
-                {
-                    conexion.Open();
-                    string query = "INSERT INTO corte_de_caja (cantidad, fecha, id_estado_corte, id_usuario) VALUES (@montoContado, @fecha, @idEstadoCorte, @idUsuario)";
-
-                    MySqlCommand comando = new MySqlCommand(query, conexion);
-                    comando.Parameters.AddWithValue("@montoContado", montoContado);
-                    comando.Parameters.AddWithValue("@fecha", DateTime.Now);  // Fecha actual
-                    comando.Parameters.AddWithValue("@idEstadoCorte", idEstadoCorte);
-                    comando.Parameters.AddWithValue("@idUsuario", idUsuario);
-
-                    return comando.ExecuteNonQuery() > 0;  // Retorna true si el corte de caja se registró con éxito
-                }
-            }
-            catch (Exception ex)
-            {
-                // Manejo de errores
-                Console.WriteLine("Error al registrar el corte de caja: " + ex.Message);
-                return false;
-            }
-        }
-
-        public bool CajaInicialYaEstablecida()
-        {
-            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
-            {
-                conexion.Open();
-                string query = "SELECT COUNT(*) FROM caja WHERE id_estado_caja = 2 AND fecha = CURDATE()";  // Verifica si ya se estableció la caja hoy
-                MySqlCommand comando = new MySqlCommand(query, conexion);
-                object resultado = comando.ExecuteScalar();
-                return Convert.ToInt32(resultado) > 0;
-            }
-        }
-
         // -------------------- Gastos --------------------
 
         // Método para obtener el fondo inicial de la caja
@@ -2274,7 +2009,100 @@ public DataTable ObtenerBebidas()
             }
         }
 
-      
+
+        // -------------------- CAJA Inicial --------------------
+
+
+        public void InsertarCajaInicial(decimal cantidad, int idUsuario)
+        {
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    string query = "INSERT INTO caja (cantidad, fecha, id_usuario, id_estado_caja) " +
+                                   "VALUES (@cantidad, NOW(), @idUsuario, 2)";  // Estado '2' = 'Inicializada'
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@cantidad", cantidad);
+                        cmd.Parameters.AddWithValue("@idUsuario", idUsuario);
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al insertar la caja inicial: " + ex.Message);
+            }
+        }
+
+        public bool RegistrarInicioCaja(decimal cantidad, int idUsuario)
+        {
+            bool resultado = false;
+
+            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+            {
+                try
+                {
+                    conexion.Open();
+
+                    string consulta = @"INSERT INTO caja (cantidad, fecha, id_usuario, id_estado_caja)
+                                    VALUES (@cantidad, NOW(), @id_usuario, 2);"; // 2 = Iniciada
+
+                    using (MySqlCommand cmd = new MySqlCommand(consulta, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@cantidad", cantidad);
+                        cmd.Parameters.AddWithValue("@id_usuario", idUsuario);
+
+                        int filasAfectadas = cmd.ExecuteNonQuery();
+                        resultado = filasAfectadas > 0;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al registrar la caja: " + ex.Message);
+                }
+            }
+
+            return resultado;
+        }
+
+        public bool HayCajaAbiertaHoy(int idUsuario)
+        {
+            bool existe = false;
+
+            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+            {
+                try
+                {
+                    conexion.Open();
+
+                    string consulta = @"SELECT COUNT(*) FROM caja 
+                                WHERE id_usuario = @id_usuario 
+                                  AND DATE(fecha) = CURDATE()
+                                  AND id_estado_caja = 2"; // 2 = Iniciada
+
+                    using (MySqlCommand cmd = new MySqlCommand(consulta, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@id_usuario", idUsuario);
+                        int cantidad = Convert.ToInt32(cmd.ExecuteScalar());
+
+                        existe = cantidad > 0;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al verificar estado de caja: " + ex.Message);
+                }
+            }
+
+            return existe;
+        }
+
+
+
+
     }
 
 

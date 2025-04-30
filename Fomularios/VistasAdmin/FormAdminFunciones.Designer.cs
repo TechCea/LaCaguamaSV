@@ -261,7 +261,7 @@
             this.panelIngresoMonto.Controls.Add(this.btnConfirmarMonto);
             this.panelIngresoMonto.Controls.Add(this.txtMontoContado);
             this.panelIngresoMonto.Controls.Add(this.Label6);
-            this.panelIngresoMonto.Location = new System.Drawing.Point(300, 53);
+            this.panelIngresoMonto.Location = new System.Drawing.Point(360, 551);
             this.panelIngresoMonto.Name = "panelIngresoMonto";
             this.panelIngresoMonto.Size = new System.Drawing.Size(422, 267);
             this.panelIngresoMonto.TabIndex = 13;
