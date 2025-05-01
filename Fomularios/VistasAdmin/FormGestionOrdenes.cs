@@ -27,7 +27,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             // Tamaño fijo
             this.FormBorderStyle = FormBorderStyle.FixedSingle; // Evita redimensionar
             
-            this.Size = new Size(1000, 600); // Establece un tamaño fijo
+            this.Size = new Size(1000, 500); // Establece un tamaño fijo
 
             // Posición fija (centrada en la pantalla)
             this.StartPosition = FormStartPosition.CenterScreen;
