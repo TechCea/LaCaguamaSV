@@ -14,10 +14,10 @@ namespace LaCaguamaSV.Configuracion
     {
         private MySqlConnection conectar = null;
         private static string usuario = "root";
-        private static string contrasenia = "root";
+        private static string contrasenia = "180294";
         private static string bd = "lacaguamabd";
         private static string ip = "localhost";
-        private static string puerto = "3307"; // o 3307 si eres javier 
+        private static string puerto = "3306"; // 3306 o 3307 si eres javier 
 
         string cadenaConexion = $"Server={ip};Port={puerto};Database={bd};User Id={usuario};Password={contrasenia};";
 
@@ -1056,9 +1056,13 @@ public DataTable ObtenerBebidas()
                                    "i.cantidad AS 'Cantidad', " +
                                    "b.precioUnitario AS 'Precio', " +
                                    "i.id_proveedor AS 'ID_Proveedor', " +
-                                   "b.id_categoria AS 'ID_Categoria' " +
+                                   "b.id_categoria AS 'ID_Categoria', " +
+                                   "d.id_disponibilidad AS 'ID_Disponibilidad', " + 
+                                   "d.nombreDis AS 'Disponibilidad' " +             
                                    "FROM inventario i " +
-                                   "JOIN bebidas b ON i.id_inventario = b.id_inventario";
+                                   "JOIN bebidas b ON i.id_inventario = b.id_inventario " +
+                                   "JOIN disponibilidad d ON i.id_disponibilidad = d.id_disponibilidad"; 
+
                     using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                     {
                         MySqlDataAdapter da = new MySqlDataAdapter(cmd);
@@ -1074,22 +1078,24 @@ public DataTable ObtenerBebidas()
         }
 
         // Función para agregar una bebida al inventario
-        public bool AgregarInventarioBebida(string nombre, decimal cantidad, decimal precio, int idProveedor, int idCategoria)
+        public bool AgregarInventarioBebida(string nombre, decimal cantidad, decimal precio, int idProveedor, int idCategoria, int idDisponibilidad)
         {
             try
             {
                 using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
                 {
                     conexion.Open();
-                    // Inserción en inventario
-                    string queryInventario = "INSERT INTO inventario (nombreProducto, cantidad, id_proveedor) " +
-                                             "VALUES (@nombre, @cantidad, @idProveedor); SELECT LAST_INSERT_ID();";
+                    // Inserción en inventario con unidad y disponibilidad
+                    string queryInventario = "INSERT INTO inventario (nombreProducto, cantidad, id_proveedor, id_unidad, id_disponibilidad) " +
+                                             "VALUES (@nombre, @cantidad, @idProveedor, @idUnidad, @idDisponibilidad); SELECT LAST_INSERT_ID();";
                     int idInventario;
                     using (MySqlCommand cmd = new MySqlCommand(queryInventario, conexion))
                     {
                         cmd.Parameters.AddWithValue("@nombre", nombre);
                         cmd.Parameters.AddWithValue("@cantidad", cantidad);
                         cmd.Parameters.AddWithValue("@idProveedor", idProveedor);
+                        cmd.Parameters.AddWithValue("@idUnidad", 5); // Siempre 5 porque es "unidad"
+                        cmd.Parameters.AddWithValue("@idDisponibilidad", idDisponibilidad);
                         idInventario = Convert.ToInt32(cmd.ExecuteScalar());
                     }
                     // Inserción en bebidas
@@ -1112,26 +1118,27 @@ public DataTable ObtenerBebidas()
             }
         }
 
+
         // Función para actualizar el inventario de una bebida
-        public bool ActualizarInventarioBebida(int idInventario, string nombre, decimal cantidad, decimal precio, int idProveedor, int idCategoria)
+        public bool ActualizarInventarioBebida(int idInventario, string nombre, decimal cantidad, decimal precio, int idProveedor, int idCategoria, int idDisponibilidad)
         {
             try
             {
                 using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
                 {
                     conexion.Open();
-                    // Actualización en inventario
-                    string queryInventario = "UPDATE inventario SET nombreProducto = @nombre, cantidad = @cantidad, id_proveedor = @idProveedor " +
+                    string queryInventario = "UPDATE inventario SET nombreProducto = @nombre, cantidad = @cantidad, id_proveedor = @idProveedor, id_disponibilidad = @idDisponibilidad " +
                                              "WHERE id_inventario = @idInventario";
                     using (MySqlCommand cmd = new MySqlCommand(queryInventario, conexion))
                     {
                         cmd.Parameters.AddWithValue("@nombre", nombre);
                         cmd.Parameters.AddWithValue("@cantidad", cantidad);
                         cmd.Parameters.AddWithValue("@idProveedor", idProveedor);
+                        cmd.Parameters.AddWithValue("@idDisponibilidad", idDisponibilidad); 
                         cmd.Parameters.AddWithValue("@idInventario", idInventario);
                         cmd.ExecuteNonQuery();
                     }
-                    // Actualización en bebidas
+                    // Actualización en bebidas (esto sigue igual)
                     string queryBebidas = "UPDATE bebidas SET precioUnitario = @precio, id_categoria = @idCategoria " +
                                           "WHERE id_inventario = @idInventario";
                     using (MySqlCommand cmd = new MySqlCommand(queryBebidas, conexion))
@@ -1151,37 +1158,6 @@ public DataTable ObtenerBebidas()
             }
         }
 
-        // Función para eliminar el inventario de una bebida
-        public bool EliminarInventarioBebida(int idInventario)
-        {
-            try
-            {
-                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
-                {
-                    conexion.Open();
-                    // Primero, eliminamos de la tabla bebidas
-                    string queryBebidas = "DELETE FROM bebidas WHERE id_inventario = @idInventario";
-                    using (MySqlCommand cmd = new MySqlCommand(queryBebidas, conexion))
-                    {
-                        cmd.Parameters.AddWithValue("@idInventario", idInventario);
-                        cmd.ExecuteNonQuery();
-                    }
-                    // Luego, eliminamos de la tabla inventario
-                    string queryInventario = "DELETE FROM inventario WHERE id_inventario = @idInventario";
-                    using (MySqlCommand cmd = new MySqlCommand(queryInventario, conexion))
-                    {
-                        cmd.Parameters.AddWithValue("@idInventario", idInventario);
-                        cmd.ExecuteNonQuery();
-                    }
-                }
-                return true;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al eliminar inventario de bebida: " + ex.Message);
-                return false;
-            }
-        }
 
         //CODIGO DE TODO LO DE INVENTARIO:
         // Funciones para los ingredientes de inventario
@@ -1431,10 +1407,7 @@ public DataTable ObtenerBebidas()
             return resultado;
         }
 
-
-
-        
-
+        //CODIGO DE EXTRAS
 
         public DataTable ObtenerExtrasCompletos()
         {
@@ -1470,9 +1443,6 @@ public DataTable ObtenerBebidas()
                 return new DataTable(); // Retorna tabla vacía para evitar null
             }
         }
-
-
-
 
 
         public bool AgregarExtraConInventario(string nombre, decimal precio, decimal cantidad, int idProveedor)
@@ -2100,7 +2070,32 @@ public DataTable ObtenerBebidas()
             return existe;
         }
 
+        //Codigo modificacion de disponibilidad
+        public DataTable ObtenerDisponibilidad()
+        {
+            string query = "SELECT id_disponibilidad, nombreDis FROM disponibilidad";
 
+            DataTable dt = new DataTable();
+            using (MySqlConnection conn = new MySqlConnection(cadenaConexion))
+            {
+                try
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand(query, conn);
+                    MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                    adapter.Fill(dt);
+
+                    // Diagnóstico opcional
+                    Console.WriteLine($"Columnas obtenidas: {string.Join(", ", dt.Columns.Cast<DataColumn>().Select(c => c.ColumnName))}");
+                    Console.WriteLine($"Registros obtenidos: {dt.Rows.Count}");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error al obtener disponibilidad: {ex.Message}");
+                }
+            }
+            return dt;
+        }
 
 
     }

@@ -25,12 +25,12 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 return;
             }
 
-          
-            // Cargar datos al iniciar
-            CargarInventarioBebidas();
             CargarProveedores();
             CargarCategorias();
+            CargarDisponibilidad();
             dgvInventarioB.SelectionChanged += dgvInventarioB_SelectionChanged;
+            this.Load += FormInventarioBebidasAdmin_Load;
+            dgvInventarioB.DataBindingComplete += dgvInventarioB_DataBindingComplete;
         }
   
         private void FormInventarioBebidasAdmin_MouseDown(object sender, MouseEventArgs e)
@@ -39,15 +39,12 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         }
 
 
-
-
-
-
         // Carga el inventario de bebidas en el DataGridView
         private void CargarInventarioBebidas()
         {
             dgvInventarioB.DataSource = conexion.ObtenerInventarioBebidas();
             dgvInventarioB.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            AplicarColoresDisponibilidad();
         }
 
         // Carga la lista de proveedores en el ComboBox (cbxProveedor)
@@ -138,6 +135,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                     // Asignar los ComboBox (Proveedor y Categoría) usando los valores:\n
                     cbxProveedor.SelectedValue = row["ID_Proveedor"]; // Asegúrate de que la columna se llame así en la consulta\n
                     cbxCategoria.SelectedValue = row["ID_Categoria"];   // Asegúrate de que la consulta lo retorne con ese alias\n
+                    cbc_disponibilidad.SelectedValue = row["ID_Disponibilidad"];
                 }
             }
         }
@@ -167,8 +165,9 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             }
             int idProveedor = Convert.ToInt32(cbxProveedor.SelectedValue);
             int idCategoria = Convert.ToInt32(cbxCategoria.SelectedValue);
+            int idDisponibilidad = Convert.ToInt32(cbc_disponibilidad.SelectedValue); // 🚨 << ESTA ES LA NUEVA LINEA
 
-            if (conexion.AgregarInventarioBebida(nombre, cantidad, precio, idProveedor, idCategoria))
+            if (conexion.AgregarInventarioBebida(nombre, cantidad, precio, idProveedor, idCategoria, idDisponibilidad))
             {
                 MessageBox.Show("Bebida agregada correctamente al inventario.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 CargarInventarioBebidas();
@@ -178,6 +177,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             {
                 MessageBox.Show("Error al agregar la bebida al inventario.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
         }
 
         // Actualizar el registro seleccionado
@@ -203,8 +203,9 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             }
             int idProveedor = Convert.ToInt32(cbxProveedor.SelectedValue);
             int idCategoria = Convert.ToInt32(cbxCategoria.SelectedValue);
+            int idDisponibilidad = Convert.ToInt32(cbc_disponibilidad.SelectedValue); 
 
-            if (conexion.ActualizarInventarioBebida(idInventario, nombre, cantidad, precio, idProveedor, idCategoria))
+            if (conexion.ActualizarInventarioBebida(idInventario, nombre, cantidad, precio, idProveedor, idCategoria, idDisponibilidad))
             {
                 MessageBox.Show("Inventario actualizado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 CargarInventarioBebidas();
@@ -216,31 +217,68 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             }
         }
 
-        // Eliminar el registro seleccionado
-        private void btnEliminar_Click(object sender, EventArgs e)
+        private void CargarDisponibilidad()
         {
-            if (dgvInventarioB.SelectedRows.Count == 0)
+            try
             {
-                MessageBox.Show("Seleccione un registro de inventario para eliminar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-            int idInventario = Convert.ToInt32(dgvInventarioB.SelectedRows[0].Cells["ID"].Value);
-            DialogResult dr = MessageBox.Show("¿Está seguro de eliminar este registro?", "Confirmar eliminación", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-            if (dr == DialogResult.Yes)
-            {
-                if (conexion.EliminarInventarioBebida(idInventario))
+                DataTable disponibilidad = conexion.ObtenerDisponibilidad(); // ¡Esta es la función nueva que creamos antes!
+
+                if (disponibilidad == null)
                 {
-                    MessageBox.Show("Registro eliminado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    CargarInventarioBebidas();
-                    LimpiarCampos();
+                    MessageBox.Show("La consulta devolvió null", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
                 }
-                else
+
+                if (disponibilidad.Rows.Count == 0)
                 {
-                    MessageBox.Show("Error al eliminar el registro.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("No hay registros de disponibilidad.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+
+                cbc_disponibilidad.BeginUpdate();
+                cbc_disponibilidad.DataSource = null;
+
+                DataView vistaDisponibilidad = new DataView(disponibilidad);
+                cbc_disponibilidad.DataSource = vistaDisponibilidad;
+                cbc_disponibilidad.DisplayMember = "nombreDis";
+                cbc_disponibilidad.ValueMember = "id_disponibilidad";
+
+                cbc_disponibilidad.EndUpdate();
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error crítico al cargar disponibilidad: {ex.Message}\n\nStack Trace:\n{ex.StackTrace}",
+                                "Error",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
+            }
+        }
+
+        private void AplicarColoresDisponibilidad()
+        {
+            foreach (DataGridViewRow row in dgvInventarioB.Rows)
+            {
+                // Supongamos que la columna "Disponibilidad" está en la columna 5 (índice 4)
+                // O mejor, si tenés el nombre de la columna, lo usás por nombre
+                var celdaDisponibilidad = row.Cells["Disponibilidad"].Value?.ToString();
+
+                if (celdaDisponibilidad != null)
+                {
+                    if (celdaDisponibilidad.Equals("Disponible", StringComparison.OrdinalIgnoreCase))
+                    {
+                        // Verde: disponible
+                        row.DefaultCellStyle.ForeColor = Color.Green;
+                    }
+                    else
+                    {
+                        // Rojo: no disponible
+                        row.DefaultCellStyle.ForeColor = Color.Red;
+                    }
                 }
             }
         }
-        //
+
         // Regresar al menú
         private void btnRegresar_Click(object sender, EventArgs e)
         {
@@ -248,6 +286,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             FormInventarioAdmin forminventario = new FormInventarioAdmin();
             forminventario.ShowDialog();
         }
+
 
         // Los demás eventos de cambio de texto se dejan vacíos si no se requiere funcionalidad adicional
         private void txtNombre_TextChanged(object sender, EventArgs e) { }
@@ -259,7 +298,13 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void FormInventarioBebidasAdmin_Load(object sender, EventArgs e)
         {
+            CargarInventarioBebidas();
 
+        }
+
+        private void dgvInventarioB_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            AplicarColoresDisponibilidad();
         }
     }
 }
