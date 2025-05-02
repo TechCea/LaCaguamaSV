@@ -157,30 +157,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             }
         }
 
-        private void btnEliminarC_Click(object sender, EventArgs e)
-        {
-            if (idPlatoSeleccionado == -1)
-            {
-                MessageBox.Show("Selecciona un plato para eliminar");
-                return;
-            }
-
-            DialogResult confirmacion = MessageBox.Show("¿Estás seguro de eliminar este plato?", "Confirmar", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-            if (confirmacion == DialogResult.Yes)
-            {
-                if (conexion.EliminarPlato(idPlatoSeleccionado))
-                {
-                    MessageBox.Show("Plato eliminado");
-                    CargarComidas();
-                    LimpiarCampos();
-                }
-                else
-                {
-                    MessageBox.Show("Error al eliminar");
-                }
-            }
-        }
-
         private void LimpiarCampos()
         {
             idPlatoSeleccionado = -1;

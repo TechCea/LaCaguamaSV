@@ -40,7 +40,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void CargarBebidas()
         {
-            dgvBebidas.DataSource = conexion.ObtenerBebidas();
+            dgvBebidas.DataSource = conexion.ObtenerBebidasDisponibles();
         }        
         
         private void limpiar()
@@ -157,37 +157,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 MessageBox.Show("Seleccione una bebida para actualizar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
-
-        private void btnEliminarB_Click(object sender, EventArgs e)
-        {
-            if (dgvBebidas.SelectedRows.Count > 0)
-            {
-                // Obtener el ID de la bebida seleccionada
-                int idBebida = Convert.ToInt32(dgvBebidas.SelectedRows[0].Cells["ID Bebida"].Value);
-
-                // Confirmación antes de eliminar
-                DialogResult resultado = MessageBox.Show("¿Está seguro de que desea eliminar esta bebida?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-
-                if (resultado == DialogResult.Yes)
-                {
-                    if (conexion.EliminarBebida(idBebida))
-                    {
-                        MessageBox.Show("Bebida eliminada correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        CargarBebidas(); // Recargar la tabla después de eliminar
-                        limpiar();
-                    }
-                    else
-                    {
-                        MessageBox.Show("No se pudo eliminar la bebida.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-            }
-            else
-            {
-                MessageBox.Show("Seleccione una bebida para eliminar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-        }
-
 
 
         private void cbCategoriaB_SelectedIndexChanged(object sender, EventArgs e)

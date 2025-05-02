@@ -64,10 +64,8 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             try
             {
-                // 1. Obtener datos
                 DataTable categorias = conexion.ObtenerCategorias();
 
-                // 2. Verificación exhaustiva
                 if (categorias == null)
                 {
                     MessageBox.Show("La consulta devolvió null", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -80,7 +78,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                     return;
                 }
 
-                // 3. Diagnóstico detallado (puedes eliminar esto después)
                 string infoColumnas = "Columnas en el DataTable:\n";
                 foreach (DataColumn col in categorias.Columns)
                 {
@@ -94,7 +91,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 }
                 Console.WriteLine(infoColumnas + infoDatos);
 
-                // 4. Configuración del ComboBox (versión reforzada)
                 cbxCategoria.BeginUpdate(); // Para evitar parpadeos
                 cbxCategoria.DataSource = null; // Limpiar primero
 
@@ -106,7 +102,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
                 cbxCategoria.EndUpdate();
 
-                // 5. Verificación final
                 if (cbxCategoria.Items.Count == 0)
                 {
                     MessageBox.Show("El ComboBox se configuró pero no contiene items", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -132,10 +127,11 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                     txtNombre.Text = row["Nombre"].ToString();
                     txtCantida.Text = row["Cantidad"].ToString();
                     txtPrecio.Text = row["Precio"].ToString();
-                    // Asignar los ComboBox (Proveedor y Categoría) usando los valores:\n
-                    cbxProveedor.SelectedValue = row["ID_Proveedor"]; // Asegúrate de que la columna se llame así en la consulta\n
-                    cbxCategoria.SelectedValue = row["ID_Categoria"];   // Asegúrate de que la consulta lo retorne con ese alias\n
+                    cbxProveedor.SelectedValue = row["ID_Proveedor"]; 
+                    cbxCategoria.SelectedValue = row["ID_Categoria"];   
                     cbc_disponibilidad.SelectedValue = row["ID_Disponibilidad"];
+
+                    btnAgregar.Enabled = false;
                 }
             }
         }
@@ -146,7 +142,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             txtNombre.Clear();
             txtCantida.Clear();
             txtPrecio.Clear();
-            // Opcional: restablecer la selección de los ComboBox si lo deseas
         }
 
         // Agregar un nuevo registro de inventario de bebida
@@ -165,7 +160,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             }
             int idProveedor = Convert.ToInt32(cbxProveedor.SelectedValue);
             int idCategoria = Convert.ToInt32(cbxCategoria.SelectedValue);
-            int idDisponibilidad = Convert.ToInt32(cbc_disponibilidad.SelectedValue); // 🚨 << ESTA ES LA NUEVA LINEA
+            int idDisponibilidad = Convert.ToInt32(cbc_disponibilidad.SelectedValue); 
 
             if (conexion.AgregarInventarioBebida(nombre, cantidad, precio, idProveedor, idCategoria, idDisponibilidad))
             {
@@ -221,7 +216,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             try
             {
-                DataTable disponibilidad = conexion.ObtenerDisponibilidad(); // ¡Esta es la función nueva que creamos antes!
+                DataTable disponibilidad = conexion.ObtenerDisponibilidad(); 
 
                 if (disponibilidad == null)
                 {
@@ -259,24 +254,25 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             foreach (DataGridViewRow row in dgvInventarioB.Rows)
             {
-                // Supongamos que la columna "Disponibilidad" está en la columna 5 (índice 4)
-                // O mejor, si tenés el nombre de la columna, lo usás por nombre
                 var celdaDisponibilidad = row.Cells["Disponibilidad"].Value?.ToString();
 
                 if (celdaDisponibilidad != null)
                 {
                     if (celdaDisponibilidad.Equals("Disponible", StringComparison.OrdinalIgnoreCase))
                     {
-                        // Verde: disponible
                         row.DefaultCellStyle.ForeColor = Color.Green;
                     }
                     else
                     {
-                        // Rojo: no disponible
                         row.DefaultCellStyle.ForeColor = Color.Red;
                     }
                 }
             }
+        }
+
+        private void btnLimpiar_Click(object sender, EventArgs e)
+        {
+            LimpiarCampos();
         }
 
         // Regresar al menú
@@ -305,6 +301,23 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         private void dgvInventarioB_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
             AplicarColoresDisponibilidad();
+            btnAgregar.Enabled = true;
+        }
+
+        private void btn_limpiar_Click(object sender, EventArgs e)
+        {
+
+            txtNombre.Clear();
+            txtCantida.Clear();
+            txtPrecio.Clear();
+
+            cbxProveedor.SelectedIndex = -1;
+            cbxCategoria.SelectedIndex = -1;
+            cbc_disponibilidad.SelectedIndex = -1;
+
+            btnAgregar.Enabled = true;
+
+            dgvInventarioB.ClearSelection();
         }
     }
 }

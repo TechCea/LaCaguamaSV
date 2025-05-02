@@ -333,8 +333,8 @@ namespace LaCaguamaSV.Configuracion
         }
 
 
-//Funcion para obtener las bebidas
-public DataTable ObtenerBebidas()
+        //Funcion para obtener las bebidas
+        public DataTable ObtenerBebidasDisponibles()
         {
             DataTable dt = new DataTable();
             try
@@ -343,12 +343,13 @@ public DataTable ObtenerBebidas()
                 {
                     conexion.Open();
                     string query = "SELECT b.id_bebida AS 'ID Bebida', " +
-                                   "i.nombreProducto AS 'Nombre Bebida', " + // Se ajusta al nuevo nombre del campo
+                                   "i.nombreProducto AS 'Nombre Bebida', " +
                                    "c.tipo AS 'Categoría', " +
                                    "b.precioUnitario AS 'Precio Unitario' " +
                                    "FROM bebidas b " +
                                    "JOIN inventario i ON b.id_inventario = i.id_inventario " +
-                                   "JOIN categorias c ON b.id_categoria = c.id_categoria";
+                                   "JOIN categorias c ON b.id_categoria = c.id_categoria " +
+                                   "WHERE i.id_disponibilidad = 1";
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                     using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
@@ -359,10 +360,11 @@ public DataTable ObtenerBebidas()
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al obtener bebidas: " + ex.Message);
+                MessageBox.Show("Error al obtener bebidas disponibles: " + ex.Message);
             }
             return dt;
         }
+
 
 
         //Filtro para las categorias de bebidas
@@ -400,67 +402,6 @@ public DataTable ObtenerBebidas()
             return dt;
         }
 
-        public bool EliminarBebida(int idBebida)
-        {
-            try
-            {
-                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
-                {
-                    conexion.Open();
-                    using (MySqlTransaction transaccion = conexion.BeginTransaction()) // Se usa transacción para evitar inconsistencias
-                    {
-                        try
-                        {
-                            // Obtener el ID del inventario asociado a la bebida antes de eliminarla
-                            string obtenerInventarioQuery = "SELECT id_inventario FROM bebidas WHERE id_bebida = @idBebida";
-                            int idInventario = -1;
-
-                            using (MySqlCommand cmdObtener = new MySqlCommand(obtenerInventarioQuery, conexion, transaccion))
-                            {
-                                cmdObtener.Parameters.AddWithValue("@idBebida", idBebida);
-                                var result = cmdObtener.ExecuteScalar();
-                                if (result != null)
-                                {
-                                    idInventario = Convert.ToInt32(result);
-                                }
-                            }
-
-                            // Primero, eliminar la bebida de la tabla bebidas
-                            string eliminarBebidaQuery = "DELETE FROM bebidas WHERE id_bebida = @idBebida";
-                            using (MySqlCommand cmdEliminarBebida = new MySqlCommand(eliminarBebidaQuery, conexion, transaccion))
-                            {
-                                cmdEliminarBebida.Parameters.AddWithValue("@idBebida", idBebida);
-                                cmdEliminarBebida.ExecuteNonQuery();
-                            }
-
-                            // Luego, eliminar el registro del inventario si existe
-                            if (idInventario != -1)
-                            {
-                                string eliminarInventarioQuery = "DELETE FROM inventario WHERE id_inventario = @idInventario";
-                                using (MySqlCommand cmdEliminarInventario = new MySqlCommand(eliminarInventarioQuery, conexion, transaccion))
-                                {
-                                    cmdEliminarInventario.Parameters.AddWithValue("@idInventario", idInventario);
-                                    cmdEliminarInventario.ExecuteNonQuery();
-                                }
-                            }
-
-                            transaccion.Commit(); // Confirmar la transacción
-                            return true;
-                        }
-                        catch (Exception)
-                        {
-                            transaccion.Rollback(); // Deshacer cambios si hay un error
-                            throw;
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al eliminar la bebida: " + ex.Message);
-                return false;
-            }
-        }
 
         //Actualizar nombre de bebidas (en inventario), precio y categoria en la tabla bebidas
         public bool ActualizarBebida(int idBebida, string nuevoNombre, string nuevaCategoria, decimal nuevoPrecio)
@@ -713,40 +654,6 @@ public DataTable ObtenerBebidas()
             }
         }
 
-        //Función para eliminar comidas
-        public bool EliminarPlato(int idPlato)
-        {
-            try
-            {
-                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
-                {
-                    conexion.Open();
-
-                    // Eliminamos el plato de la tabla platos
-                    string queryPlato = "DELETE FROM platos WHERE id_plato = @idPlato";
-                    using (MySqlCommand cmdPlato = new MySqlCommand(queryPlato, conexion))
-                    {
-                        cmdPlato.Parameters.AddWithValue("@idPlato", idPlato);
-                        int rowsAffected = cmdPlato.ExecuteNonQuery();
-
-                        if (rowsAffected > 0)
-                        {
-                            return true; // Plato eliminado correctamente
-                        }
-                        else
-                        {
-                            MessageBox.Show("El plato no existe o ya fue eliminado.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                            return false;
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al eliminar el plato: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
-        }
 
         //Función para obtener extras
         public DataTable ObtenerExtras()
@@ -757,10 +664,11 @@ public DataTable ObtenerBebidas()
                 using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
                 {
                     conexion.Open();
-                    // La consulta ahora toma el nombre de extra desde la tabla 'inventario' y el precio desde 'extras'
                     string query = "SELECT e.id_extra AS 'ID', i.nombreProducto AS 'Nombre', e.precioUnitario AS 'Precio Unitario' " +
                                    "FROM extras e " +
-                                   "JOIN inventario i ON e.id_inventario = i.id_inventario";
+                                   "JOIN inventario i ON e.id_inventario = i.id_inventario " +
+                                   "JOIN disponibilidad d ON i.id_disponibilidad = d.id_disponibilidad " +
+                                   "WHERE d.nombreDis = 'Disponible'";
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                     {
@@ -776,78 +684,7 @@ public DataTable ObtenerBebidas()
             return dt;
         }
 
-        //Función para elimiminar extra
-        public bool EliminarExtra(int idExtra)
-        {
-            try
-            {
-                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
-                {
-                    conexion.Open();
 
-                    // Primero, obtenemos el id_inventario relacionado con el extra
-                    string obtenerInventarioQuery = "SELECT id_inventario FROM extras WHERE id_extra = @idExtra";
-                    int idInventario = 0;
-
-                    using (MySqlCommand cmd = new MySqlCommand(obtenerInventarioQuery, conexion))
-                    {
-                        cmd.Parameters.AddWithValue("@idExtra", idExtra);
-                        var result = cmd.ExecuteScalar();
-
-                        if (result != null)
-                        {
-                            idInventario = Convert.ToInt32(result);
-                        }
-                        else
-                        {
-                            MessageBox.Show("No se encontró el extra con el ID proporcionado.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            return false;
-                        }
-                    }
-
-                    // Eliminamos el extra de la tabla extras
-                    string eliminarExtraQuery = "DELETE FROM extras WHERE id_extra = @idExtra";
-
-                    using (MySqlCommand cmd = new MySqlCommand(eliminarExtraQuery, conexion))
-                    {
-                        cmd.Parameters.AddWithValue("@idExtra", idExtra);
-                        int filasAfectadas = cmd.ExecuteNonQuery();
-
-                        if (filasAfectadas > 0)
-                        {
-                            // Verificamos si hay más registros en extras que utilicen el mismo id_inventario
-                            string verificarExtrasQuery = "SELECT COUNT(*) FROM extras WHERE id_inventario = @idInventario";
-                            using (MySqlCommand cmdVerificar = new MySqlCommand(verificarExtrasQuery, conexion))
-                            {
-                                cmdVerificar.Parameters.AddWithValue("@idInventario", idInventario);
-                                int count = Convert.ToInt32(cmdVerificar.ExecuteScalar());
-
-                                // Si no hay más registros en extras con este id_inventario, podemos eliminar el inventario
-                                if (count == 0)
-                                {
-                                    string eliminarInventarioQuery = "DELETE FROM inventario WHERE id_inventario = @idInventario";
-                                    using (MySqlCommand cmdInventario = new MySqlCommand(eliminarInventarioQuery, conexion))
-                                    {
-                                        cmdInventario.Parameters.AddWithValue("@idInventario", idInventario);
-                                        cmdInventario.ExecuteNonQuery();
-                                    }
-                                }
-                            }
-                            return true;
-                        }
-                        else
-                        {
-                            return false;
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al eliminar el extra: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
-        }
 
         //Actualizar datos del extra
         public bool ActualizarExtra(int idExtra, string nuevoNombre, decimal nuevoPrecio)
@@ -1414,21 +1251,24 @@ public DataTable ObtenerBebidas()
             try
             {
                 string query = @"SELECT 
-                        e.id_extra AS ID, 
-                        i.nombreProducto AS Nombre, 
-                        e.precioUnitario AS Precio, 
-                        i.cantidad AS Cantidad, 
-                        p.nombreProv AS Proveedor,
-                        i.id_proveedor AS ID_Proveedor, 
-                        e.id_inventario AS ID_Inventario 
-                        FROM extras e 
-                        INNER JOIN inventario i ON e.id_inventario = i.id_inventario 
-                        INNER JOIN proveedores p ON i.id_proveedor = p.id_proveedor";
+                    e.id_extra AS ID, 
+                    i.nombreProducto AS Nombre, 
+                    e.precioUnitario AS Precio, 
+                    i.cantidad AS Cantidad, 
+                    p.nombreProv AS Proveedor,
+                    i.id_proveedor AS ID_Proveedor, 
+                    e.id_inventario AS ID_Inventario,
+                    i.id_disponibilidad AS ID_Disponibilidad,  -- Traemos el ID de disponibilidad
+                    d.nombreDis AS Disponibilidad  -- Y el nombre para mostrarlo
+                FROM extras e 
+                INNER JOIN inventario i ON e.id_inventario = i.id_inventario 
+                INNER JOIN proveedores p ON i.id_proveedor = p.id_proveedor
+                INNER JOIN disponibilidad d ON i.id_disponibilidad = d.id_disponibilidad";
 
                 DataTable result = EjecutarConsulta(query);
 
                 // Verificación básica de columnas
-                string[] requiredColumns = { "ID", "Nombre", "Precio", "Cantidad", "Proveedor", "ID_Proveedor", "ID_Inventario" };
+                string[] requiredColumns = { "ID", "Nombre", "Precio", "Cantidad", "Proveedor", "ID_Proveedor", "ID_Inventario", "Disponibilidad" };
                 foreach (var col in requiredColumns)
                 {
                     if (!result.Columns.Contains(col))
@@ -1445,7 +1285,8 @@ public DataTable ObtenerBebidas()
         }
 
 
-        public bool AgregarExtraConInventario(string nombre, decimal precio, decimal cantidad, int idProveedor)
+
+        public bool AgregarExtraConInventario(string nombre, decimal precio, decimal cantidad, int idProveedor, int idDisponibilidad)
         {
             using (MySqlConnection conn = new MySqlConnection(cadenaConexion))
             {
@@ -1454,27 +1295,27 @@ public DataTable ObtenerBebidas()
 
                 try
                 {
-                    // 1. Insertar en inventario (cantidad como decimal)
+                    // 1. Insertar en inventario (ahora con id_disponibilidad)
                     string queryInventario = @"
-                INSERT INTO inventario 
-                (nombreProducto, cantidad, id_proveedor) 
-                VALUES (@nombre, @cantidad, @idProveedor);
-                SELECT LAST_INSERT_ID();";
+                        INSERT INTO inventario 
+                        (nombreProducto, cantidad, id_proveedor, id_disponibilidad) 
+                        VALUES (@nombre, @cantidad, @idProveedor, @idDisponibilidad);
+                        SELECT LAST_INSERT_ID();";
 
                     MySqlCommand cmdInventario = new MySqlCommand(queryInventario, conn, transaction);
 
-                    // Especificar explícitamente el tipo de parámetro para decimal
                     cmdInventario.Parameters.Add("@nombre", MySqlDbType.VarChar).Value = nombre;
                     cmdInventario.Parameters.Add("@cantidad", MySqlDbType.Decimal).Value = cantidad;
                     cmdInventario.Parameters.Add("@idProveedor", MySqlDbType.Int32).Value = idProveedor;
+                    cmdInventario.Parameters.Add("@idDisponibilidad", MySqlDbType.Int32).Value = idDisponibilidad;
 
                     int idInventario = Convert.ToInt32(cmdInventario.ExecuteScalar());
 
                     // 2. Insertar en extras
                     string queryExtra = @"
-                INSERT INTO extras 
-                (precioUnitario, id_inventario) 
-                VALUES (@precio, @idInventario)";
+                        INSERT INTO extras 
+                        (precioUnitario, id_inventario) 
+                        VALUES (@precio, @idInventario)";
 
                     MySqlCommand cmdExtra = new MySqlCommand(queryExtra, conn, transaction);
                     cmdExtra.Parameters.Add("@precio", MySqlDbType.Decimal).Value = precio;
@@ -1494,8 +1335,9 @@ public DataTable ObtenerBebidas()
         }
 
 
+
         public bool ActualizarExtraConInventario(int idExtra, int idInventario, string nombre,
-                                       decimal precio, decimal cantidad, int idProveedor)
+                                       decimal precio, decimal cantidad, int idProveedor, int idDisponibilidad)
         {
             using (MySqlConnection conn = new MySqlConnection(cadenaConexion))
             {
@@ -1504,18 +1346,20 @@ public DataTable ObtenerBebidas()
 
                 try
                 {
-                    // 1. Actualizar inventario (nota que cantidad es decimal)
+                    // 1. Actualizar inventario (ahora también id_disponibilidad)
                     string queryInventario = @"
                 UPDATE inventario SET 
                     nombreProducto = @nombre,
                     cantidad = @cantidad,
-                    id_proveedor = @idProveedor
+                    id_proveedor = @idProveedor,
+                    id_disponibilidad = @idDisponibilidad
                 WHERE id_inventario = @idInventario";
 
                     MySqlCommand cmdInventario = new MySqlCommand(queryInventario, conn, transaction);
                     cmdInventario.Parameters.Add("@nombre", MySqlDbType.VarChar).Value = nombre;
                     cmdInventario.Parameters.Add("@cantidad", MySqlDbType.Decimal).Value = cantidad;
                     cmdInventario.Parameters.Add("@idProveedor", MySqlDbType.Int32).Value = idProveedor;
+                    cmdInventario.Parameters.Add("@idDisponibilidad", MySqlDbType.Int32).Value = idDisponibilidad;
                     cmdInventario.Parameters.Add("@idInventario", MySqlDbType.Int32).Value = idInventario;
                     cmdInventario.ExecuteNonQuery();
 
@@ -1542,40 +1386,7 @@ public DataTable ObtenerBebidas()
             }
         }
 
-        public bool EliminarExtraConInventario(int idExtra, int idInventario)
-        {
-            using (MySqlConnection conn = new MySqlConnection(cadenaConexion))
-            {
-                conn.Open();
-                MySqlTransaction transaction = conn.BeginTransaction();
-
-                try
-                {
-                    // 1. Eliminar de extras
-                    string queryExtra = "DELETE FROM extras WHERE id_extra = @idExtra";
-                    MySqlCommand cmdExtra = new MySqlCommand(queryExtra, conn, transaction);
-                    cmdExtra.Parameters.AddWithValue("@idExtra", idExtra);
-                    cmdExtra.ExecuteNonQuery();
-
-                    // 2. Eliminar de inventario
-                    string queryInventario = "DELETE FROM inventario WHERE id_inventario = @idInventario";
-                    MySqlCommand cmdInventario = new MySqlCommand(queryInventario, conn, transaction);
-                    cmdInventario.Parameters.AddWithValue("@idInventario", idInventario);
-                    cmdInventario.ExecuteNonQuery();
-
-                    transaction.Commit();
-                    return true;
-                }
-                catch
-                {
-                    transaction.Rollback();
-                    throw;
-                }
-            }
-        }
-
         //CODIGO DE RECETAS POR CADA PLATO
-
         //Ingredientes de cada plato
         public DataTable ObtenerIngredientesPorPlato(int idPlato)
         {

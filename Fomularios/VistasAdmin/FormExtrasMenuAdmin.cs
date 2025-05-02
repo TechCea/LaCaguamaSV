@@ -50,37 +50,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             txtPrecioUE.Clear();
         }
 
-        private void btnEliminarE_Click(object sender, EventArgs e)
-        {
-            if (dgvExtras.SelectedRows.Count > 0) // Verifica si hay una fila seleccionada
-            {
-                int idExtra = Convert.ToInt32(dgvExtras.SelectedRows[0].Cells["ID"].Value); // Obtiene el ID del extra seleccionado
-
-                DialogResult result = MessageBox.Show("¿Estás seguro de que deseas eliminar este extra?",
-                                                      "Confirmar eliminación", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-
-                if (result == DialogResult.Yes) // Si el usuario confirma
-                {
-                    Conexion conexion = new Conexion();
-                    if (conexion.EliminarExtra(idExtra))
-                    {
-                        MessageBox.Show("Extra eliminado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        CargarExtras(); // Recarga los datos del DataGridView
-                        limpiar();
-                    }
-                    else
-                    {
-                        MessageBox.Show("No se pudo eliminar el extra.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-            }
-            else
-            {
-                MessageBox.Show("Por favor, seleccione un extra para eliminar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-        }
-
-
         private void dgvExtras_SelectionChanged(object sender, EventArgs e)
         {
             if (dgvExtras.SelectedRows.Count > 0)

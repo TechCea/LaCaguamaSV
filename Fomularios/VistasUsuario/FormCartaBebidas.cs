@@ -19,7 +19,7 @@ namespace LaCaguamaSV.Fomularios.VistasUsuario
 
         private void CargarBebidas()
         {
-            dgvCartaB.DataSource = conexion.ObtenerBebidas();
+            dgvCartaB.DataSource = conexion.ObtenerBebidasDisponibles();
             dgvCartaB.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
         }
 

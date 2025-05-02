@@ -46,6 +46,7 @@
             this.btnRegresar = new System.Windows.Forms.Button();
             this.btnAgregar = new System.Windows.Forms.Button();
             this.btnActualizar = new System.Windows.Forms.Button();
+            this.btn_limpiar = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvInventarioB)).BeginInit();
             this.gbDatosExtras.SuspendLayout();
             this.SuspendLayout();
@@ -65,6 +66,7 @@
             // gbDatosExtras
             // 
             this.gbDatosExtras.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.gbDatosExtras.Controls.Add(this.btn_limpiar);
             this.gbDatosExtras.Controls.Add(this.cbc_disponibilidad);
             this.gbDatosExtras.Controls.Add(this.label5);
             this.gbDatosExtras.Controls.Add(this.cbxCategoria);
@@ -266,6 +268,21 @@
             this.btnActualizar.UseVisualStyleBackColor = false;
             this.btnActualizar.Click += new System.EventHandler(this.btnActualizar_Click);
             // 
+            // btn_limpiar
+            // 
+            this.btn_limpiar.BackColor = System.Drawing.Color.Snow;
+            this.btn_limpiar.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btn_limpiar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_limpiar.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.btn_limpiar.Location = new System.Drawing.Point(309, 388);
+            this.btn_limpiar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btn_limpiar.Name = "btn_limpiar";
+            this.btn_limpiar.Size = new System.Drawing.Size(177, 47);
+            this.btn_limpiar.TabIndex = 17;
+            this.btn_limpiar.Text = "Limpiar datos";
+            this.btn_limpiar.UseVisualStyleBackColor = false;
+            this.btn_limpiar.Click += new System.EventHandler(this.btn_limpiar_Click);
+            // 
             // FormInventarioBebidasAdmin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -308,5 +325,6 @@
         private System.Windows.Forms.Button btnActualizar;
         private System.Windows.Forms.ComboBox cbc_disponibilidad;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Button btn_limpiar;
     }
 }

@@ -33,6 +33,8 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             // Cargar datos al iniciar
             CargarDatosIniciales();
             dgvInventarioE.SelectionChanged += dgvInventarioE_SelectionChanged;
+            btnLimpiar.Click += btnLimpiar_Click;
+            dgvInventarioE.DataBindingComplete += dgvInventarioExtras_DataBindingComplete;
         }
 
        
@@ -59,19 +61,11 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                     return;
                 }
 
-                // Configuración del ComboBox
+                // Configuración del ComboBox Proveedor
                 cbxProveedor.BeginUpdate();
                 cbxProveedor.DataSource = null;
                 cbxProveedor.Items.Clear();
 
-                // Verificar nombres de columnas
-                string columnasDisponibles = "Columnas disponibles:\n";
-                foreach (DataColumn col in proveedores.Columns)
-                {
-                    columnasDisponibles += $"- {col.ColumnName}\n";
-                }
-
-                // Usar nombres de columnas exactos (ajusta según tu base de datos)
                 string displayMember = proveedores.Columns.Contains("Nombre") ? "Nombre" : "nombreProv";
                 string valueMember = proveedores.Columns.Contains("ID") ? "ID" : "id_proveedor";
 
@@ -80,10 +74,13 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 cbxProveedor.ValueMember = valueMember;
                 cbxProveedor.EndUpdate();
 
+                CargarDisponibilidad();
+
                 // Configurar DataGridView
                 dgvInventarioE.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
                 dgvInventarioE.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
                 dgvInventarioE.MultiSelect = false;
+                AplicarColoresDisponibilidad();
             }
             catch (Exception ex)
             {
@@ -98,6 +95,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 try
                 {
                     DataRowView row = dgvInventarioE.SelectedRows[0].DataBoundItem as DataRowView;
+                    btnAgregar.Enabled = false;
                     if (row != null)
                     {
                         // Cargar datos en los TextBox
@@ -109,11 +107,32 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                         if (row["ID_Proveedor"] != null && row["ID_Proveedor"] != DBNull.Value)
                         {
                             cbxProveedor.SelectedValue = Convert.ToInt32(row["ID_Proveedor"]);
+
                         }
                         else
                         {
                             cbxProveedor.SelectedIndex = -1;
                         }
+
+                        if (row["ID_Proveedor"] != null && row["ID_Proveedor"] != DBNull.Value)
+                        {
+                            cbxProveedor.SelectedValue = Convert.ToInt32(row["ID_Proveedor"]);
+                        }
+                        else
+                        {
+                            cbxProveedor.SelectedIndex = -1;
+                        }
+
+                        if (row["ID_Disponibilidad"] != null && row["ID_Disponibilidad"] != DBNull.Value)
+                        {
+                            cbxDisponibilidad.SelectedValue = Convert.ToInt32(row["ID_Disponibilidad"]);
+                        }
+                        else
+                        {
+                            cbxDisponibilidad.SelectedIndex = -1;
+                        }
+
+
 
                         // Guardar IDs para operaciones
                         idExtraSeleccionado = row["ID"] != DBNull.Value ? Convert.ToInt32(row["ID"]) : -1;
@@ -129,6 +148,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void btnAgregar_Click(object sender, EventArgs e)
         {
+            btnAgregar.Enabled = false;
             try
             {
                 // Validaciones
@@ -159,7 +179,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 int idProveedor = Convert.ToInt32(cbxProveedor.SelectedValue);
 
                 // Agregar nuevo extra
-                if (conexion.AgregarExtraConInventario(txtNombre.Text, precio, cantidad, idProveedor))
+                if (conexion.AgregarExtraConInventario(txtNombre.Text, precio, cantidad, idProveedor, Convert.ToInt32(cbxDisponibilidad.SelectedValue)))
                 {
                     MessageBox.Show("Extra agregado correctamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     LimpiarCampos();
@@ -209,14 +229,14 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
                 int idProveedor = Convert.ToInt32(cbxProveedor.SelectedValue);
 
-                // Actualizar extra
                 if (conexion.ActualizarExtraConInventario(
                     idExtraSeleccionado,
                     idInventarioSeleccionado,
                     txtNombre.Text,
                     precio,
                     cantidad,
-                    idProveedor))
+                    idProveedor,
+                    Convert.ToInt32(cbxDisponibilidad.SelectedValue)))
                 {
                     MessageBox.Show("Extra actualizado correctamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     CargarDatosIniciales();
@@ -228,31 +248,72 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             }
         }
 
-        private void btnEliminar_Click(object sender, EventArgs e)
+        private void CargarDisponibilidad()
         {
-            if (idExtraSeleccionado <= 0 || idInventarioSeleccionado <= 0)
+            try
             {
-                MessageBox.Show("Seleccione un registro para eliminar", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+                DataTable disponibilidad = conexion.ObtenerDisponibilidad(); // Este método ya debería existir en tu clase Conexion
 
-            if (MessageBox.Show("¿Está seguro de eliminar este extra?", "Confirmar",
-                MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-            {
-                try
+                if (disponibilidad == null)
                 {
-                    if (conexion.EliminarExtraConInventario(idExtraSeleccionado, idInventarioSeleccionado))
+                    MessageBox.Show("La consulta de disponibilidad devolvió null", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                if (disponibilidad.Rows.Count == 0)
+                {
+                    MessageBox.Show("No hay registros de disponibilidad.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+
+                cbxDisponibilidad.BeginUpdate();
+                cbxDisponibilidad.DataSource = null;
+
+                // Configurar DataSource
+                DataView vistaDisponibilidad = new DataView(disponibilidad);
+                cbxDisponibilidad.DataSource = vistaDisponibilidad;
+                cbxDisponibilidad.DisplayMember = "nombreDis"; // Ajusta si tu columna se llama diferente
+                cbxDisponibilidad.ValueMember = "id_disponibilidad";
+
+                cbxDisponibilidad.EndUpdate();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al cargar disponibilidad: {ex.Message}\n\nStack Trace:\n{ex.StackTrace}",
+                                "Error",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
+            }
+        }
+
+        private void AplicarColoresDisponibilidad()
+        {
+            foreach (DataGridViewRow row in dgvInventarioE.Rows) // Asegúrate de usar el nombre correcto de tu DataGridView
+            {
+                var celdaDisponibilidad = row.Cells["Disponibilidad"].Value?.ToString();
+
+                if (celdaDisponibilidad != null)
+                {
+                    if (celdaDisponibilidad.Equals("Disponible", StringComparison.OrdinalIgnoreCase))
                     {
-                        MessageBox.Show("Extra eliminado correctamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        LimpiarCampos();
-                        CargarDatosIniciales();
+                        row.DefaultCellStyle.ForeColor = Color.Green;
+                    }
+                    else
+                    {
+                        row.DefaultCellStyle.ForeColor = Color.Red;
                     }
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Error al eliminar: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
             }
+        }
+
+        private void dgvInventarioExtras_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            AplicarColoresDisponibilidad();
+        }
+
+        private void btnLimpiar_Click(object sender, EventArgs e)
+        {
+            LimpiarCampos();
         }
 
         private void LimpiarCampos()
@@ -264,6 +325,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             idExtraSeleccionado = -1;
             idInventarioSeleccionado = -1;
             dgvInventarioE.ClearSelection();
+            btnAgregar.Enabled = true;
         }
 
         private void btnRegresar_Click(object sender, EventArgs e)
