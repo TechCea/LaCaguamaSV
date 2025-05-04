@@ -26,6 +26,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             panelConfirmacion.Visible = false;
             panelIngresoMonto.Visible = false;
             panelResultadoCorte.Visible = false;
+            decimal montoContado = 0;
             idUsuario = usuarioId;  // Guardamos el ID del usuario en la variable
 
 
@@ -55,7 +56,8 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private  void btnConfirmarCorte_Click(object sender, EventArgs e)
         {
-           
+            panelConfirmacion.Visible = false;
+            panelIngresoMonto.Visible = true;
         }
         
 
@@ -66,7 +68,39 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void btnConfirmarMonto_Click(object sender, EventArgs e)
         {
-            
+            if (!decimal.TryParse(txtMontoContado.Text, out decimal montoContado))
+            {
+                MessageBox.Show("Ingrese un monto válido.");
+                return;
+            }
+
+            Conexion conn = new Conexion();
+
+            // Obtener valores necesarios para el corte
+            decimal cajaInicial = conn.ObtenerCajaInicialDelDia(); // Método que te pasé
+            decimal totalGenerado = conn.ObtenerVentasEfectivoDelDia();
+            decimal gastos = conn.ObtenerGastosDelDiaCorteCaja(); // Renombrado para evitar conflicto
+            decimal totalEsperado = cajaInicial + totalGenerado - gastos;
+            decimal totalcajagenerada = cajaInicial + totalGenerado;
+
+            // Guardar el corte
+            conn.InsertarCorteCaja(montoContado, idUsuario); // Ya tienes el idUsuario en este form
+
+            // Mostrar resultados
+            StringBuilder resultado = new StringBuilder();
+            resultado.AppendLine($"Monto contado: ${montoContado:F2}");
+            resultado.AppendLine($"Caja inicial: ${cajaInicial:F2}");
+            resultado.AppendLine($"Total generado (ventas): ${totalGenerado:F2}");
+            resultado.AppendLine($"Gastos: ${gastos:F2}");
+            resultado.AppendLine($"Venta del turno: ${totalcajagenerada:F2}");
+            resultado.AppendLine($"Total esperado: ${totalEsperado:F2}");
+            resultado.AppendLine($"Diferencia: ${(montoContado - totalEsperado):F2}");
+
+            labelResultado.Text = resultado.ToString();
+
+            // Mostrar panel de resultado
+            panelIngresoMonto.Visible = false;
+            panelResultadoCorte.Visible = true;
         }
 
 
@@ -111,7 +145,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void btnImprimirRecibo_Click_Click(object sender, EventArgs e)
         {
-          
+            MessageBox.Show("Recibo enviado a impresora (simulado).");
         }
 
         private void btnCerrarPanel_Click_Click(object sender, EventArgs e)
