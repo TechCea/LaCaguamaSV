@@ -63,7 +63,7 @@
             this.btnCerrarSesion.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnCerrarSesion.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCerrarSesion.ForeColor = System.Drawing.SystemColors.Control;
-            this.btnCerrarSesion.Location = new System.Drawing.Point(951, 558);
+            this.btnCerrarSesion.Location = new System.Drawing.Point(896, 29);
             this.btnCerrarSesion.Name = "btnCerrarSesion";
             this.btnCerrarSesion.Size = new System.Drawing.Size(84, 38);
             this.btnCerrarSesion.TabIndex = 3;
@@ -109,7 +109,7 @@
             this.dataGridViewOrdenesAdmin.Location = new System.Drawing.Point(24, 176);
             this.dataGridViewOrdenesAdmin.Name = "dataGridViewOrdenesAdmin";
             this.dataGridViewOrdenesAdmin.RowHeadersWidth = 51;
-            this.dataGridViewOrdenesAdmin.Size = new System.Drawing.Size(921, 397);
+            this.dataGridViewOrdenesAdmin.Size = new System.Drawing.Size(956, 397);
             this.dataGridViewOrdenesAdmin.TabIndex = 8;
             this.dataGridViewOrdenesAdmin.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewOrdenesAdmin_CellContentClick);
             // 

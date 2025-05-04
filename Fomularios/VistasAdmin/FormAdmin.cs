@@ -24,6 +24,14 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             InitializeComponent();
             CargarOrdenes();
 
+            // Tamaño fijo
+            this.FormBorderStyle = FormBorderStyle.FixedSingle; // Evita redimensionar
+
+            this.Size = new Size(1040, 650); // Establece un tamaño fijo
+
+            // Posición fija (centrada en la pantalla)
+            this.StartPosition = FormStartPosition.CenterScreen;
+
             // Si el usuario no es administrador, cierra el formulario
             if (SesionUsuario.Rol != 1)
             {
@@ -54,8 +62,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 dataGridViewOrdenesAdmin.Columns["descuento"].DefaultCellStyle.Format = "C";
             }
 
-            // Autoajustar columnas
-            dataGridViewOrdenesAdmin.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
 
         }
 

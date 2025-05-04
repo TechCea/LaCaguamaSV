@@ -21,12 +21,18 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             InitializeComponent();
             CargarTipoPago();
             CargarMesas();
-           
 
-    
+            // Tamaño fijo
+            this.FormBorderStyle = FormBorderStyle.FixedSingle; // Evita redimensionar
+
+            this.Size = new Size(1000, 500); // Establece un tamaño fijo
+
+            // Posición fija (centrada en la pantalla)
+            this.StartPosition = FormStartPosition.CenterScreen;
 
 
-           
+
+
 
         }
 
