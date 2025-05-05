@@ -33,6 +33,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             // Cargar datos al iniciar
             CargarDatosIniciales();
             dgvInventarioE.SelectionChanged += dgvInventarioE_SelectionChanged;
+            dgvInventarioE.MultiSelect = false;
             btnLimpiar.Click += btnLimpiar_Click;
             dgvInventarioE.DataBindingComplete += dgvInventarioExtras_DataBindingComplete;
         }

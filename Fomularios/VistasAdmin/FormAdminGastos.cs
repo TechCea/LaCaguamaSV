@@ -24,13 +24,14 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         private int idGastoSeleccionado = -1;
 
 
-
         public FormAdminGastos()
         {
             try
             {
                 idCaja = conexion.ObtenerCajaActiva(idUsuario);  // Obtenemos la caja más reciente activa
                 InitializeComponent();
+                dgvGastos.MultiSelect = false;
+
             }
             catch (Exception ex)
             {

@@ -29,6 +29,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
             errorProvider1.BlinkStyle = ErrorBlinkStyle.NeverBlink; // Evita el parpadeo
             errorProvider1.ContainerControl = this;
+            dgvUsuarios.MultiSelect = false;
         }
 
         private void CargarUsuarios()

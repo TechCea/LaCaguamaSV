@@ -29,6 +29,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             CargarCategorias();
             CargarDisponibilidad();
             dgvInventarioB.SelectionChanged += dgvInventarioB_SelectionChanged;
+            dgvInventarioB.MultiSelect = false;
             this.Load += FormInventarioBebidasAdmin_Load;
             dgvInventarioB.DataBindingComplete += dgvInventarioB_DataBindingComplete;
         }

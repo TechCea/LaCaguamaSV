@@ -26,6 +26,8 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             this.idUsuarioCreador = idUsuarioCreador; // Usamos el usuario creador
             this.totalOrden = total;
             this.idMesa = idMesa;
+            dataGridViewDetalle.RowHeadersVisible = false;
+
 
             // Configurar controles
             lblNumeroOrden.Text = $"Orden #: {idOrden}";

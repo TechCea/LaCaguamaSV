@@ -35,6 +35,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             CargarDatosOrden(idOrden, nombreCliente, total, descuento, fechaOrden, numeroMesa, tipoPago, nombreUsuario, estadoOrden);
             CargarPedidosDesdeBD(); // Cargar pedidos existentes al iniciar
             ActualizarTotal(); // Sincronizar el total
+            dataGridViewMenu.MultiSelect = false;
         }
 
         private List<(int idPedido, string nombre, decimal precio, string tipo, int cantidad)> pedidos = new List<(int, string, decimal, string, int)>();

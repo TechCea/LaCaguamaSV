@@ -36,6 +36,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             cbCategoria.SelectedIndexChanged += CbCategoria_SelectedIndexChanged;
             dgvBebidas.SelectionChanged += dgvBebidas_SelectionChanged;
             dgvBebidas.CellClick += dgvBebidas_CellClick;
+            dgvBebidas.MultiSelect = false;
         }
 
         private void CargarBebidas()

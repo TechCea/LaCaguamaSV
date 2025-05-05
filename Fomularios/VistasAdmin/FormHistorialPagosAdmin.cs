@@ -27,6 +27,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
             CargarHistorialPagos();
             ConfigurarDataGridView();
+            dataGridViewHistorial.MultiSelect = false;
         }
 
         private void CargarHistorialPagos()

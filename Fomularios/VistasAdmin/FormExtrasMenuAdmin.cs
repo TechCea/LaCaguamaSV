@@ -37,6 +37,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             CargarExtras(); // Llamamos la función al iniciar el formulario
             dgvExtras.DataSource = conexion.ObtenerExtras();
             dgvExtras.SelectionChanged += dgvExtras_SelectionChanged;
+            dgvExtras.MultiSelect = false;
         }
 
         private void CargarExtras()

@@ -25,10 +25,9 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             }
             
 
-
-
             CargarProveedores();
             dgvProveedor.SelectionChanged += dgvProveedor_SelectionChanged;
+            dgvProveedor.MultiSelect = false;
         }
         public class RoundedControl
         {
