@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using LaCaguamaSV.Configuracion;
 using MySql.Data.MySqlClient;
+using Org.BouncyCastle.Asn1.Crmf;
 
 namespace LaCaguamaSV.Fomularios.VistasAdmin
 {
@@ -18,6 +19,11 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         private int idUsuarioCreador; // Cambiamos el nombre para claridad
         private decimal totalOrden;
         private int idMesa;
+        private bool descuentoAplicado = false;
+        private decimal montoDescuento = 0;
+        private string tipoDescuento = "";
+        private int idTipoDescuentoSeleccionado = 0;
+        private DataTable tiposDescuentoDisponibles;
 
         public FormAdminPagos(int idOrden, string nombreCliente, decimal total, int idMesa, int idUsuarioCreador)
         {
@@ -28,6 +34,12 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             this.idMesa = idMesa;
             dataGridViewDetalle.RowHeadersVisible = false;
 
+            // Tamaño fijo
+            this.FormBorderStyle = FormBorderStyle.FixedSingle; // Evita redimensionar
+
+            // Posición fija (centrada en la pantalla)
+            this.StartPosition = FormStartPosition.CenterScreen;
+
 
             // Configurar controles
             lblNumeroOrden.Text = $"Orden #: {idOrden}";
@@ -35,6 +47,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             lblTotalP.Text = total.ToString("C");
 
             CargarMetodosPago();
+            CargarTiposDescuento();
             CargarDetalleOrden();
             ActualizarCamposPago();
         }
@@ -123,6 +136,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             }
         }
 
+        // Modifica el método ActualizarCamposPago para manejar mejor el txtRecibido
         private void ActualizarCamposPago()
         {
             try
@@ -134,14 +148,28 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
                     if (panelEfectivo.Visible)
                     {
+                        // Solo sugerir monto si el campo está vacío
+                        if (string.IsNullOrEmpty(txtRecibido.Text))
+                        {
+                            decimal totalActual = CalcularTotalConDescuento();
+                            txtRecibido.Text = totalActual.ToString("0.00");
+                        }
                         txtRecibido.Focus();
-                        txtRecibido.Text = totalOrden.ToString("0.00"); // Sugerir el monto exacto
+                    }
+                    else
+                    {
+                        // Limpiar el campo si no es pago en efectivo
+                        txtRecibido.Text = "";
                     }
                 }
                 else
                 {
                     panelEfectivo.Visible = false;
+                    txtRecibido.Text = "";
                 }
+
+                // Actualizar el cambio
+                txtRecibido_TextChanged(txtRecibido, EventArgs.Empty);
             }
             catch (Exception ex)
             {
@@ -158,37 +186,63 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 {
                     try
                     {
-                        // 1. Registrar el pago (usamos idUsuarioCreador en lugar de idUsuario)
+                        // Calcular el total con descuento si aplica
+                        decimal totalConDescuento = totalOrden;
+                        if (descuentoAplicado)
+                        {
+                            bool esPorcentaje = tipoDescuento.Contains("%");
+                            if (esPorcentaje)
+                            {
+                                totalConDescuento = totalOrden * (1 - (montoDescuento / 100));
+                            }
+                            else
+                            {
+                                totalConDescuento = totalOrden - montoDescuento;
+                                if (totalConDescuento < 0) totalConDescuento = 0;
+                            }
+                        }
+
+                        // 1. Registrar el pago (actualizado para incluir tipo de descuento)
                         string queryPago = @"
                 INSERT INTO pagos 
-                    (id_orden, monto, recibido, cambio, id_usuario, id_tipo_pago) 
+                    (id_orden, monto, recibido, cambio, id_usuario, id_tipo_pago, 
+                     descuento, id_tipo_descuento) 
                 VALUES 
-                    (@idOrden, @total, @recibido, @cambio, @idUsuarioCreador, @tipoPago)";
+                    (@idOrden, @total, @recibido, @cambio, @idUsuarioCreador, @tipoPago, 
+                     @descuento, @idTipoDescuento)";
 
                         using (MySqlCommand cmd = new MySqlCommand(queryPago, conexion, transaction))
                         {
                             cmd.Parameters.AddWithValue("@idOrden", idOrden);
-                            cmd.Parameters.AddWithValue("@total", totalOrden);
-                            cmd.Parameters.AddWithValue("@recibido", metodoPago == 1 ? recibido : totalOrden);
+                            cmd.Parameters.AddWithValue("@total", totalConDescuento);
+                            cmd.Parameters.AddWithValue("@recibido", metodoPago == 1 ? recibido : totalConDescuento);
                             cmd.Parameters.AddWithValue("@cambio", cambio);
-                            cmd.Parameters.AddWithValue("@idUsuarioCreador", idUsuarioCreador); // Usamos el creador
+                            cmd.Parameters.AddWithValue("@idUsuarioCreador", idUsuarioCreador);
                             cmd.Parameters.AddWithValue("@tipoPago", metodoPago);
+                            cmd.Parameters.AddWithValue("@descuento", descuentoAplicado ? montoDescuento : 0);
+                            cmd.Parameters.AddWithValue("@idTipoDescuento", descuentoAplicado ? idTipoDescuentoSeleccionado : (object)DBNull.Value);
 
                             cmd.ExecuteNonQuery();
                         }
 
-                        // 2. Actualizar tipo de pago en la orden
+                        // 2. Actualizar la orden con el descuento
                         string queryUpdateOrden = @"
                 UPDATE ordenes 
-                SET tipo_pago = @tipoPago 
+                SET 
+                    tipo_pago = @tipoPago,
+                    total = @total,
+                    descuento = @descuento
                 WHERE id_orden = @idOrden";
 
                         using (MySqlCommand cmd = new MySqlCommand(queryUpdateOrden, conexion, transaction))
                         {
                             cmd.Parameters.AddWithValue("@tipoPago", metodoPago);
+                            cmd.Parameters.AddWithValue("@total", totalConDescuento);
+                            cmd.Parameters.AddWithValue("@descuento", descuentoAplicado ? montoDescuento : 0);
                             cmd.Parameters.AddWithValue("@idOrden", idOrden);
                             cmd.ExecuteNonQuery();
                         }
+
 
                         // 3. Actualizar estado de los pedidos a "Entregado" (id_estadoP = 2)
                         string queryPedidos = "UPDATE pedidos SET id_estadoP = 2 WHERE id_orden = @idOrden";
@@ -230,6 +284,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 }
             }
         }
+
         private void ActualizarInventario(MySqlConnection conexion, MySqlTransaction transaction)
         {
             try
@@ -452,7 +507,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         private void btnProcesarPago_Click_1(object sender, EventArgs e)
         {
             if (MessageBox.Show("¿Confirmar pago de la orden?", "Confirmar Pago",
-        MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+         MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 if (!VerificarStockDisponible())
                 {
@@ -463,6 +518,21 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                     int metodoPago = (int)comboMetodoPago.SelectedValue;
                     decimal recibido = 0;
                     decimal cambio = 0;
+                    decimal totalAPagar = totalOrden;
+
+                    // Calcular total con descuento si aplica (no depende del checkbox)
+                    if (descuentoAplicado)
+                    {
+                        if (tipoDescuento == "Porcentaje (%)")
+                        {
+                            totalAPagar = totalOrden * (1 - (montoDescuento / 100));
+                        }
+                        else
+                        {
+                            totalAPagar = totalOrden - montoDescuento;
+                            if (totalAPagar < 0) totalAPagar = 0;
+                        }
+                    }
 
                     if (metodoPago == 1) // Efectivo
                     {
@@ -472,7 +542,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                             return;
                         }
 
-                        cambio = recibido - totalOrden;
+                        cambio = recibido - totalAPagar;
                         if (cambio < 0)
                         {
                             MessageBox.Show("El monto recibido no cubre el total", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -486,8 +556,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                     if (exito)
                     {
                         MessageBox.Show("Pago procesado exitosamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                        // Cerrar el formulario y actualizar la orden principal
                         DialogResult = DialogResult.OK;
                         Close();
                     }
@@ -507,6 +575,21 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             try
             {
+                // Calcular total con descuento si aplica
+                decimal totalAPagar = totalOrden;
+                if (descuentoAplicado)
+                {
+                    if (tipoDescuento == "Porcentaje (%)")
+                    {
+                        totalAPagar = totalOrden * (1 - (montoDescuento / 100));
+                    }
+                    else
+                    {
+                        totalAPagar = totalOrden - montoDescuento;
+                        if (totalAPagar < 0) totalAPagar = 0;
+                    }
+                }
+
                 // Obtener detalles de promociones para esta orden
                 Dictionary<int, List<string>> promocionesConItems = ObtenerDetallesPromociones();
 
@@ -550,6 +633,15 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                             comprobante.AppendLine("   └───────────────────────────────");
                         }
                     }
+                }
+                comprobante.AppendLine("──────────────────────────────────");
+                comprobante.AppendLine($"SUBTOTAL: {totalOrden.ToString("C")}");
+
+                // Mostrar descuento si aplica
+                if (descuentoAplicado)
+                {
+                    string tipoDesc = tipoDescuento == "Porcentaje (%)" ? $"{montoDescuento}%" : "";
+                    comprobante.AppendLine($"DESCUENTO ({tipoDesc}): -{montoDescuento.ToString("C")}");
                 }
 
                 comprobante.AppendLine("──────────────────────────────────");
@@ -672,13 +764,14 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             if (decimal.TryParse(txtRecibido.Text, out decimal recibido))
             {
-                decimal cambio = recibido - totalOrden;
+                decimal totalAPagar = CalcularTotalConDescuento();
+                decimal cambio = recibido - totalAPagar;
                 if (cambio < 0) cambio = 0;
 
                 lblCambio.Text = cambio.ToString("C");
 
                 // Habilitar botón de pago solo si el monto es suficiente
-                btnProcesarPago.Enabled = (recibido >= totalOrden);
+                btnProcesarPago.Enabled = (recibido >= totalAPagar);
             }
             else
             {
@@ -740,6 +833,251 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         private void label4_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void chkAplicarDescuento_CheckedChanged(object sender, EventArgs e)
+        {
+
+            cmbTipoDescuento.Visible = chkAplicarDescuento.Checked;
+            txtMontoDescuento.Visible = chkAplicarDescuento.Checked;
+            btnAplicarDescuento.Visible = chkAplicarDescuento.Checked;
+            label5.Visible = chkAplicarDescuento.Checked; // Etiqueta "Tipo Descuento"
+            label6.Visible = chkAplicarDescuento.Checked; // Etiqueta "Monto"
+
+            if (!chkAplicarDescuento.Checked)
+            {
+                // Si se desmarca, quitamos el descuento pero mantenemos los valores por si se vuelve a activar
+                descuentoAplicado = false;
+                ActualizarTotalConDescuento();
+            }
+            else
+            {
+                // Si se marca, seleccionamos el primer tipo de descuento por defecto
+                if (cmbTipoDescuento.Items.Count > 0)
+                {
+                    cmbTipoDescuento.SelectedIndex = 0;
+                }
+                txtMontoDescuento.Focus();
+            }
+        }
+
+        private void txtMontoDescuento_TextChanged(object sender, EventArgs e)
+        {
+            // Validar el texto después de que cambia
+            if (sender is TextBox textBox)
+            {
+                // Eliminar caracteres no válidos manteniendo la lógica original
+                string newText = string.Empty;
+                bool hasDecimal = false;
+
+                foreach (char c in textBox.Text)
+                {
+                    if (char.IsDigit(c))
+                    {
+                        newText += c;
+                    }
+                    else if (c == '.' && !hasDecimal)
+                    {
+                        newText += c;
+                        hasDecimal = true;
+                    }
+                }
+
+                if (textBox.Text != newText)
+                {
+                    textBox.Text = newText;
+                    textBox.SelectionStart = textBox.Text.Length;
+                }
+            }
+
+        }
+
+        private void txtMontoDescuento_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Permitir solo números, punto decimal y tecla de retroceso
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
+            {
+                e.Handled = true;
+                return;
+            }
+
+            // Solo permitir un punto decimal
+            if (e.KeyChar == '.' && (sender as TextBox).Text.IndexOf('.') > -1)
+            {
+                e.Handled = true;
+                return;
+            }
+
+            // Validación adicional para porcentajes
+            if (cmbTipoDescuento.SelectedValue != null &&
+                tiposDescuentoDisponibles.Rows[cmbTipoDescuento.SelectedIndex]["es_porcentaje"].ToString() == "True")
+            {
+                // Si es porcentaje, validar que no sea mayor a 100
+                string currentText = (sender as TextBox).Text + e.KeyChar;
+                if (decimal.TryParse(currentText, out decimal valor) && valor > 100)
+                {
+                    e.Handled = true;
+                    MessageBox.Show("El descuento porcentual no puede ser mayor a 100%", "Advertencia",
+                                  MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
+        }
+
+        private void btnAplicarDescuento_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (cmbTipoDescuento.SelectedIndex == -1)
+                {
+                    MessageBox.Show("Seleccione un tipo de descuento", "Error",
+                                   MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                if (!decimal.TryParse(txtMontoDescuento.Text, out decimal monto) || monto <= 0)
+                {
+                    MessageBox.Show("Ingrese un monto válido mayor a cero", "Error",
+                                   MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                // Obtener el tipo de descuento seleccionado
+                DataRowView selectedRow = (DataRowView)cmbTipoDescuento.SelectedItem;
+                idTipoDescuentoSeleccionado = Convert.ToInt32(selectedRow["id_tipo_descuento"]);
+                tipoDescuento = selectedRow["nombre"].ToString();
+                bool esPorcentaje = Convert.ToBoolean(selectedRow["es_porcentaje"]);
+
+                // Validaciones específicas
+                if (esPorcentaje && monto > 100)
+                {
+                    MessageBox.Show("El descuento porcentual no puede ser mayor al 100%", "Error",
+                                   MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                // Aplicar el descuento
+                descuentoAplicado = true;
+                montoDescuento = monto;
+
+                // Actualizar la interfaz
+                ActualizarTotalConDescuento();
+
+                // Actualizar txtRecibido solo si es pago en efectivo y está visible
+                if (panelEfectivo.Visible)
+                {
+                    decimal totalActual = CalcularTotalConDescuento();
+                    txtRecibido.Text = totalActual.ToString("0.00");
+                }
+
+                MessageBox.Show("Descuento aplicado correctamente", "Éxito",
+                              MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al aplicar descuento: {ex.Message}", "Error",
+                               MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        private void ActualizarTotalConDescuento()
+        {
+            try
+            {
+                decimal nuevoTotal = totalOrden;
+
+                if (descuentoAplicado)
+                {
+                    bool esPorcentaje = tipoDescuento.Contains("%");
+                    if (esPorcentaje)
+                    {
+                        // Validar que el porcentaje esté entre 0 y 100
+                        if (montoDescuento > 100)
+                        {
+                            MessageBox.Show("El porcentaje de descuento no puede ser mayor a 100%", "Error",
+                                          MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+
+                        // Aplicar descuento porcentual
+                        decimal porcentajeDescuento = montoDescuento / 100;
+                        decimal descuento = totalOrden * porcentajeDescuento;
+                        nuevoTotal = totalOrden - descuento;
+                    }
+                    else
+                    {
+                        // Aplicar descuento fijo
+                        nuevoTotal = totalOrden - montoDescuento;
+
+                        // No permitir total negativo
+                        if (nuevoTotal < 0)
+                        {
+                            MessageBox.Show("El descuento no puede ser mayor que el total", "Error",
+                                          MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            nuevoTotal = 0;
+                        }
+                    }
+                }
+
+                // Actualizar el total mostrado
+                lblTotalP.Text = nuevoTotal.ToString("C");
+
+                // No actualizar automáticamente txtRecibido aquí
+                // El usuario lo llenará manualmente o se actualizará cuando cambie el método de pago
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al calcular el descuento: {ex.Message}", "Error",
+                               MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        private void CargarTiposDescuento()
+        {
+            try
+            {
+                using (MySqlConnection conexion = new Conexion().EstablecerConexion())
+                {
+                    string query = "SELECT id_tipo_descuento, nombre, es_porcentaje FROM tipo_descuento";
+                    MySqlCommand cmd = new MySqlCommand(query, conexion);
+                    MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+
+                    tiposDescuentoDisponibles = new DataTable();
+                    da.Fill(tiposDescuentoDisponibles);
+
+                    cmbTipoDescuento.DataSource = tiposDescuentoDisponibles;
+                    cmbTipoDescuento.DisplayMember = "nombre";
+                    cmbTipoDescuento.ValueMember = "id_tipo_descuento";
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al cargar tipos de descuento: {ex.Message}", "Error",
+                               MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        // Nuevo método para calcular el total con descuento
+        private decimal CalcularTotalConDescuento()
+        {
+            decimal totalConDescuento = totalOrden;
+
+            if (descuentoAplicado)
+            {
+                bool esPorcentaje = tipoDescuento.Contains("%");
+                if (esPorcentaje)
+                {
+                    totalConDescuento = totalOrden * (1 - (montoDescuento / 100));
+                }
+                else
+                {
+                    totalConDescuento = totalOrden - montoDescuento;
+                    if (totalConDescuento < 0) totalConDescuento = 0;
+                }
+            }
+
+            return totalConDescuento;
         }
     }
 }
