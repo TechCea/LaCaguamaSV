@@ -14,7 +14,7 @@ namespace LaCaguamaSV.Configuracion
     {
         private MySqlConnection conectar = null;
         private static string usuario = "root";
-        private static string contrasenia = "180294";
+        private static string contrasenia = "slenderman";
         private static string bd = "lacaguamabd";
         private static string ip = "localhost";
         private static string puerto = "3306"; // 3306 o 3307 si eres javier 
@@ -91,7 +91,7 @@ namespace LaCaguamaSV.Configuracion
         public DataTable ObtenerUsuarios()
         {
             DataTable dt = new DataTable();
-           
+
             try
             {
                 using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
@@ -894,11 +894,11 @@ namespace LaCaguamaSV.Configuracion
                                    "b.precioUnitario AS 'Precio', " +
                                    "i.id_proveedor AS 'ID_Proveedor', " +
                                    "b.id_categoria AS 'ID_Categoria', " +
-                                   "d.id_disponibilidad AS 'ID_Disponibilidad', " + 
-                                   "d.nombreDis AS 'Disponibilidad' " +             
+                                   "d.id_disponibilidad AS 'ID_Disponibilidad', " +
+                                   "d.nombreDis AS 'Disponibilidad' " +
                                    "FROM inventario i " +
                                    "JOIN bebidas b ON i.id_inventario = b.id_inventario " +
-                                   "JOIN disponibilidad d ON i.id_disponibilidad = d.id_disponibilidad"; 
+                                   "JOIN disponibilidad d ON i.id_disponibilidad = d.id_disponibilidad";
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                     {
@@ -971,7 +971,7 @@ namespace LaCaguamaSV.Configuracion
                         cmd.Parameters.AddWithValue("@nombre", nombre);
                         cmd.Parameters.AddWithValue("@cantidad", cantidad);
                         cmd.Parameters.AddWithValue("@idProveedor", idProveedor);
-                        cmd.Parameters.AddWithValue("@idDisponibilidad", idDisponibilidad); 
+                        cmd.Parameters.AddWithValue("@idDisponibilidad", idDisponibilidad);
                         cmd.Parameters.AddWithValue("@idInventario", idInventario);
                         cmd.ExecuteNonQuery();
                     }
@@ -1997,7 +1997,65 @@ namespace LaCaguamaSV.Configuracion
                 }
             }
         }
-  
+
+        // -------------------- CORTE Tarjetas --------------------
+
+        public decimal ObtenerTotalTarjetas(int idCaja)
+        {
+            decimal total = 0;
+
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+
+                    string query = @"SELECT SUM(total) FROM ordenes 
+                             WHERE tipo_pago = 2 AND id_estadoO = 2 AND DATE(fecha_orden) = CURDATE()";
+
+                    MySqlCommand cmd = new MySqlCommand(query, conexion);
+                    var resultado = cmd.ExecuteScalar();
+
+                    if (resultado != DBNull.Value)
+                        total = Convert.ToDecimal(resultado);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al obtener el total de tarjetas: " + ex.Message);
+            }
+
+            return total;
+        }
+
+        public string ObtenerNombreUsuario(int idUsuario)
+        {
+            string nombre = "";
+
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+
+                    string query = "SELECT nombre FROM usuarios WHERE id_usuario = @idUsuario";
+                    MySqlCommand cmd = new MySqlCommand(query, conexion);
+                    cmd.Parameters.AddWithValue("@idUsuario", idUsuario);
+
+                    var resultado = cmd.ExecuteScalar();
+                    if (resultado != null)
+                        nombre = resultado.ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al obtener nombre de usuario: " + ex.Message);
+            }
+
+            return nombre;
+        }
+
+
 
     }
 

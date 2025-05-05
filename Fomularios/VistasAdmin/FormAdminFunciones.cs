@@ -7,17 +7,19 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
 
 namespace LaCaguamaSV.Fomularios.VistasAdmin
 {
-    public partial class FormAdminFunciones: Form
+    public partial class FormAdminFunciones : Form
     {
         Conexion conexion = new Conexion();
         private int idUsuario;  // Variable que guarda el ID del usuario
-
+        private int idCaja;
+        public string nombreUsuarioActual;
 
 
         public FormAdminFunciones(int usuarioId)
@@ -41,25 +43,25 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             panelCaja.Visible = false;
 
-           
+
         }
 
-        
 
-      
+
+
 
         private void Corte_Caja_Click(object sender, EventArgs e)
         {
             panelConfirmacion.Visible = true; // Mostrar la ventana de confirmación
-          
+
         }
 
-        private  void btnConfirmarCorte_Click(object sender, EventArgs e)
+        private void btnConfirmarCorte_Click(object sender, EventArgs e)
         {
             panelConfirmacion.Visible = false;
             panelIngresoMonto.Visible = true;
         }
-        
+
 
         private void btnCancelarCorte_Click(object sender, EventArgs e)
         {
@@ -109,7 +111,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             panelResultadoCorte.Visible = false; // Ocultar el panel de resultados
         }
-        
+
 
 
 
@@ -130,7 +132,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void button3_Click(object sender, EventArgs e)
         {
-
+            Panerl_corteX.Visible = true;
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -160,7 +162,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void labelResultado_Click(object sender, EventArgs e)
         {
-           
+
         }
 
         private void label3_Click(object sender, EventArgs e)
@@ -204,7 +206,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
 
         }
-    
+
 
 
         private void panelCaja_Paint(object sender, PaintEventArgs e)
@@ -218,11 +220,67 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             FormAdminGastos formGastos = new FormAdminGastos();
             formGastos.ShowDialog();
         }
-       
-       
+
+        private void Panerl_corteX_Paint(object sender, PaintEventArgs e)
+        {
+           
+        }
+
+        private void btn_cancelartarjeta_Click(object sender, EventArgs e)
+        {
+            Panerl_corteX.Visible = false;
+        }
+
+        private void Btn_confirmartarjeta_Click(object sender, EventArgs e)
+        {
+            Conexion conn = new Conexion();
+
+            // Usa tus variables existentes
+            int idUsuario = this.idUsuario;
+            int idCaja = this.idCaja;
+
+            decimal totalTarjetas = conn.ObtenerTotalTarjetas(idCaja);
+            string nombreCajero = conn.ObtenerNombreUsuario(idUsuario);
+
+            StringBuilder resultado = new StringBuilder();
+            resultado.AppendLine($"Cajero: {nombreCajero}");
+            resultado.AppendLine($"Total en tarjetas: ${totalTarjetas:F2}");
+
+            Label_resultadoX.Text = resultado.ToString();
+
+            // Mostrar el panel con los resultados
+            Panel_vistaX.Visible = true;
+            Panerl_corteX.Visible = false;
+        }
+
+        private void btnImprimir_corteX_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Simulando impresión del corte de tarjeta...", "Imprimir", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void btn_cerrarXZ_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void panel_corte_general_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void Panel_vistaX_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void btncancelar_x_Click(object sender, EventArgs e)
+        {
+            Panel_vistaX.Visible = false;
+        }
 
 
 
 
+     
     }
 }

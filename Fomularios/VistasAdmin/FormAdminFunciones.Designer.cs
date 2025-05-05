@@ -59,21 +59,21 @@
             this.btnCajaInicial = new System.Windows.Forms.Button();
             this.Gastos = new System.Windows.Forms.Button();
             this.Panerl_corteX = new System.Windows.Forms.Panel();
-            this.label8 = new System.Windows.Forms.Label();
             this.btn_cancelartarjeta = new System.Windows.Forms.Button();
             this.Btn_confirmartarjeta = new System.Windows.Forms.Button();
+            this.label8 = new System.Windows.Forms.Label();
             this.Panel_vistaX = new System.Windows.Forms.Panel();
-            this.Label_resultadoX = new System.Windows.Forms.Label();
             this.btncancelar_x = new System.Windows.Forms.Button();
             this.btnImprimir_corteX = new System.Windows.Forms.Button();
+            this.Label_resultadoX = new System.Windows.Forms.Label();
             this.panel_cortegeneral = new System.Windows.Forms.Panel();
             this.btn_cancelargeneral = new System.Windows.Forms.Button();
             this.btn_okgeneral = new System.Windows.Forms.Button();
             this.label9 = new System.Windows.Forms.Label();
             this.panel_corte_general = new System.Windows.Forms.Panel();
-            this.label_general = new System.Windows.Forms.Label();
             this.btn_cerrarXZ = new System.Windows.Forms.Button();
             this.btn_cortegeneral = new System.Windows.Forms.Button();
+            this.label_general = new System.Windows.Forms.Label();
             this.panelConfirmacion.SuspendLayout();
             this.panelIngresoMonto.SuspendLayout();
             this.panelResultadoCorte.SuspendLayout();
@@ -495,17 +495,7 @@
             this.Panerl_corteX.Name = "Panerl_corteX";
             this.Panerl_corteX.Size = new System.Drawing.Size(408, 213);
             this.Panerl_corteX.TabIndex = 20;
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.label8.Location = new System.Drawing.Point(61, 20);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(297, 25);
-            this.label8.TabIndex = 4;
-            this.label8.Text = "Confirmar Corte de tarjetas";
+            this.Panerl_corteX.Paint += new System.Windows.Forms.PaintEventHandler(this.Panerl_corteX_Paint);
             // 
             // btn_cancelartarjeta
             // 
@@ -520,6 +510,7 @@
             this.btn_cancelartarjeta.TabIndex = 18;
             this.btn_cancelartarjeta.Text = "Cancelar";
             this.btn_cancelartarjeta.UseVisualStyleBackColor = false;
+            this.btn_cancelartarjeta.Click += new System.EventHandler(this.btn_cancelartarjeta_Click);
             // 
             // Btn_confirmartarjeta
             // 
@@ -534,6 +525,18 @@
             this.Btn_confirmartarjeta.TabIndex = 17;
             this.Btn_confirmartarjeta.Text = "OK";
             this.Btn_confirmartarjeta.UseVisualStyleBackColor = false;
+            this.Btn_confirmartarjeta.Click += new System.EventHandler(this.Btn_confirmartarjeta_Click);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.label8.Location = new System.Drawing.Point(61, 20);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(297, 25);
+            this.label8.TabIndex = 4;
+            this.label8.Text = "Confirmar Corte de tarjetas";
             // 
             // Panel_vistaX
             // 
@@ -545,19 +548,7 @@
             this.Panel_vistaX.Size = new System.Drawing.Size(371, 276);
             this.Panel_vistaX.TabIndex = 21;
             this.Panel_vistaX.Visible = false;
-            // 
-            // Label_resultadoX
-            // 
-            this.Label_resultadoX.AutoSize = true;
-            this.Label_resultadoX.BackColor = System.Drawing.Color.Transparent;
-            this.Label_resultadoX.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.Label_resultadoX.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label_resultadoX.ForeColor = System.Drawing.SystemColors.Control;
-            this.Label_resultadoX.Location = new System.Drawing.Point(34, 55);
-            this.Label_resultadoX.Name = "Label_resultadoX";
-            this.Label_resultadoX.Size = new System.Drawing.Size(289, 89);
-            this.Label_resultadoX.TabIndex = 3;
-            this.Label_resultadoX.Text = "Corte de tarjeta\r\nCajero:\r\nDinero generado: $0.00\r\n";
+            this.Panel_vistaX.Paint += new System.Windows.Forms.PaintEventHandler(this.Panel_vistaX_Paint);
             // 
             // btncancelar_x
             // 
@@ -572,6 +563,7 @@
             this.btncancelar_x.TabIndex = 4;
             this.btncancelar_x.Text = "Cerrar";
             this.btncancelar_x.UseVisualStyleBackColor = false;
+            this.btncancelar_x.Click += new System.EventHandler(this.btncancelar_x_Click);
             // 
             // btnImprimir_corteX
             // 
@@ -586,6 +578,20 @@
             this.btnImprimir_corteX.TabIndex = 3;
             this.btnImprimir_corteX.Text = "Imprimir Corte";
             this.btnImprimir_corteX.UseVisualStyleBackColor = false;
+            this.btnImprimir_corteX.Click += new System.EventHandler(this.btnImprimir_corteX_Click);
+            // 
+            // Label_resultadoX
+            // 
+            this.Label_resultadoX.AutoSize = true;
+            this.Label_resultadoX.BackColor = System.Drawing.Color.Transparent;
+            this.Label_resultadoX.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.Label_resultadoX.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label_resultadoX.ForeColor = System.Drawing.SystemColors.Control;
+            this.Label_resultadoX.Location = new System.Drawing.Point(34, 55);
+            this.Label_resultadoX.Name = "Label_resultadoX";
+            this.Label_resultadoX.Size = new System.Drawing.Size(289, 89);
+            this.Label_resultadoX.TabIndex = 3;
+            this.Label_resultadoX.Text = "Corte de tarjeta\r\nCajero:\r\nDinero generado: $0.00\r\n";
             // 
             // panel_cortegeneral
             // 
@@ -647,20 +653,7 @@
             this.panel_corte_general.Size = new System.Drawing.Size(339, 507);
             this.panel_corte_general.TabIndex = 23;
             this.panel_corte_general.Visible = false;
-            // 
-            // label_general
-            // 
-            this.label_general.AutoSize = true;
-            this.label_general.BackColor = System.Drawing.Color.Transparent;
-            this.label_general.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.label_general.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label_general.ForeColor = System.Drawing.SystemColors.Control;
-            this.label_general.Location = new System.Drawing.Point(30, 21);
-            this.label_general.Name = "label_general";
-            this.label_general.Size = new System.Drawing.Size(235, 350);
-            this.label_general.TabIndex = 5;
-            this.label_general.Text = "Corte General\r\n\r\nCaja inicial:\r\nVentas en tarjetas:\r\nVentas en efectivo:\r\nPromoci" +
-    "ones:\r\nGastos:\r\n\r\nTotal Generado: \r\nFecha: \r\nCajero:\r\n\r\n";
+            this.panel_corte_general.Paint += new System.Windows.Forms.PaintEventHandler(this.panel_corte_general_Paint);
             // 
             // btn_cerrarXZ
             // 
@@ -675,6 +668,7 @@
             this.btn_cerrarXZ.TabIndex = 6;
             this.btn_cerrarXZ.Text = "Cerrar";
             this.btn_cerrarXZ.UseVisualStyleBackColor = false;
+            this.btn_cerrarXZ.Click += new System.EventHandler(this.btn_cerrarXZ_Click);
             // 
             // btn_cortegeneral
             // 
@@ -689,6 +683,20 @@
             this.btn_cortegeneral.TabIndex = 5;
             this.btn_cortegeneral.Text = "Imprimir Corte";
             this.btn_cortegeneral.UseVisualStyleBackColor = false;
+            // 
+            // label_general
+            // 
+            this.label_general.AutoSize = true;
+            this.label_general.BackColor = System.Drawing.Color.Transparent;
+            this.label_general.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.label_general.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_general.ForeColor = System.Drawing.SystemColors.Control;
+            this.label_general.Location = new System.Drawing.Point(30, 21);
+            this.label_general.Name = "label_general";
+            this.label_general.Size = new System.Drawing.Size(235, 350);
+            this.label_general.TabIndex = 5;
+            this.label_general.Text = "Corte General\r\n\r\nCaja inicial:\r\nVentas en tarjetas:\r\nVentas en efectivo:\r\nPromoci" +
+    "ones:\r\nGastos:\r\n\r\nTotal Generado: \r\nFecha: \r\nCajero:\r\n\r\n";
             // 
             // FormAdminFunciones
             // 
