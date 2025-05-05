@@ -167,7 +167,13 @@ namespace LaCaguamaSV.Configuracion
             {
                 using (MySqlConnection conexion = new Conexion().EstablecerConexion())
                 {
-                    string query = "SELECT id_caja FROM caja WHERE id_estado_caja = 2 LIMIT 1"; // Estado 2 = Inicializada
+                    // Modificamos la consulta para obtener la caja más reciente que esté inicializada
+                    string query = @"SELECT id_caja 
+                      FROM caja 
+                      WHERE id_estado_caja = 2 
+                      ORDER BY fecha DESC 
+                      LIMIT 1"; // Estado 2 = Inicializada, ordenamos por fecha descendente
+
                     using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                     {
                         object result = cmd.ExecuteScalar();
