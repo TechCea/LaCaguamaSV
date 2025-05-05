@@ -5,6 +5,7 @@ using System.Text;
 using System.Data;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
+using System.Windows.Forms;
 
 namespace LaCaguamaSV.Configuracion
 {
@@ -88,61 +89,102 @@ namespace LaCaguamaSV.Configuracion
         public static int CrearOrdenVacia(string nombreCliente, int idMesa, int tipoPago)
         {
             int idOrden = -1;
-            int idUsuario = SesionUsuario.IdUsuario; // Obtenemos el ID del usuario de la sesión
+            int idUsuario = SesionUsuario.IdUsuario; // Obtener el ID del usuario actual
+            int idCaja = ObtenerIdCajaActiva(); // Necesitamos obtener la caja activa
 
-            using (MySqlConnection conexion = new Conexion().EstablecerConexion())
+            if (idCaja <= 0)
             {
-                try
+                MessageBox.Show("No hay una caja activa para registrar la orden", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return -1;
+            }
+
+            try
+            {
+                using (MySqlConnection conexion = new Conexion().EstablecerConexion())
                 {
-                    // Iniciar transacción
-                    using (MySqlTransaction transaction = conexion.BeginTransaction())
+                    string query = @"
+                INSERT INTO ordenes (
+                    nombreCliente, 
+                    total, 
+                    descuento, 
+                    fecha_orden, 
+                    id_mesa, 
+                    tipo_pago, 
+                    id_usuario, 
+                    id_estadoO,
+                    id_caja
+                ) 
+                VALUES (
+                    @nombreCliente, 
+                    0, 
+                    0, 
+                    NOW(), 
+                    @idMesa, 
+                    @tipoPago, 
+                    @idUsuario, 
+                    1, -- Estado 'Abierta'
+                    @idCaja
+                );
+                SELECT LAST_INSERT_ID();";
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                     {
-                        try
+                        cmd.Parameters.AddWithValue("@nombreCliente", nombreCliente);
+                        cmd.Parameters.AddWithValue("@idMesa", idMesa);
+                        cmd.Parameters.AddWithValue("@tipoPago", tipoPago);
+                        cmd.Parameters.AddWithValue("@idUsuario", idUsuario);
+                        cmd.Parameters.AddWithValue("@idCaja", idCaja);
+
+                        idOrden = Convert.ToInt32(cmd.ExecuteScalar());
+
+                        // Actualizar estado de la mesa a "Ocupado"
+                        if (idOrden > 0)
                         {
-                            // 1. Crear la orden vacía (estadoO = 1 "Abierta" por defecto)
-                            string queryOrden = @"INSERT INTO ordenes 
-                                    (nombreCliente, total, descuento, id_mesa, tipo_pago, id_usuario, id_estadoO) 
-                                    VALUES (@nombre, 0, 0, @idMesa, @tipoPago, @idUsuario, 1);
-                                    SELECT LAST_INSERT_ID();";
-
-                            using (MySqlCommand cmdOrden = new MySqlCommand(queryOrden, conexion, transaction))
-                            {
-                                cmdOrden.Parameters.AddWithValue("@nombre", nombreCliente);
-                                cmdOrden.Parameters.AddWithValue("@idMesa", idMesa);
-                                cmdOrden.Parameters.AddWithValue("@tipoPago", tipoPago);
-                                cmdOrden.Parameters.AddWithValue("@idUsuario", idUsuario);
-
-                                idOrden = Convert.ToInt32(cmdOrden.ExecuteScalar());
-                            }
-
-                            // 2. Actualizar estado de la mesa a "Ocupado" (id_estadoM = 2)
-                            string queryMesa = "UPDATE mesas SET id_estadoM = 2 WHERE id_mesa = @idMesa";
-                            using (MySqlCommand cmdMesa = new MySqlCommand(queryMesa, conexion, transaction))
+                            string updateMesa = "UPDATE mesas SET id_estadoM = 2 WHERE id_mesa = @idMesa";
+                            using (MySqlCommand cmdMesa = new MySqlCommand(updateMesa, conexion))
                             {
                                 cmdMesa.Parameters.AddWithValue("@idMesa", idMesa);
                                 cmdMesa.ExecuteNonQuery();
                             }
-
-                            // Commit de la transacción
-                            transaction.Commit();
-                        }
-                        catch (Exception ex)
-                        {
-                            // Rollback en caso de error
-                            transaction.Rollback();
-                            Console.WriteLine("Error al crear la orden vacía: " + ex.Message);
-                            return -1;
                         }
                     }
                 }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Error de conexión: " + ex.Message);
-                    return -1;
-                }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al crear la orden: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return -1;
+            }
+
             return idOrden;
         }
+
+
+        private static int ObtenerIdCajaActiva()
+        {
+            int idCaja = -1;
+            try
+            {
+                using (MySqlConnection conexion = new Conexion().EstablecerConexion())
+                {
+                    string query = "SELECT id_caja FROM caja WHERE id_estado_caja = 2 LIMIT 1"; // Estado 2 = Inicializada
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        object result = cmd.ExecuteScalar();
+                        if (result != null && result != DBNull.Value)
+                        {
+                            idCaja = Convert.ToInt32(result);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al obtener caja activa: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return idCaja;
+        }
+
         public static DataTable ObtenerBebidas()
         {
             DataTable dt = new DataTable();

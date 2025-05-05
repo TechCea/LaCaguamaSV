@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using LaCaguamaSV.Configuracion;
+using MySql.Data.MySqlClient;
 using static LaCaguamaSV.Login;
 
 namespace LaCaguamaSV.Fomularios.VistasAdmin
@@ -99,19 +100,22 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 int idMesa = Convert.ToInt32(cmbMesas.SelectedValue);
                 int tipoPago = Convert.ToInt32(cmbTipoPago.SelectedValue);
 
-                // Crear la orden vacía (total y descuento en 0, estado "Abierta" por defecto)
+                // Verificar si la mesa está disponible
+                if (!MesaDisponible(idMesa))
+                {
+                    MessageBox.Show("La mesa seleccionada no está disponible", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                // Crear la orden vacía
                 int idOrden = OrdenesD.CrearOrdenVacia(nombreCliente, idMesa, tipoPago);
 
                 if (idOrden > 0)
                 {
                     MessageBox.Show($"Orden #{idOrden} creada exitosamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    // Aquí podrías abrir el formulario para agregar pedidos a esta orden
-                    // Por ejemplo:
-                    // var formAgregarPedidos = new AgregarPedidosForm(idOrden);
-                    // formAgregarPedidos.ShowDialog();
-
                     // Cerrar este formulario
+                    this.DialogResult = DialogResult.OK;
                     this.Close();
                 }
                 else
@@ -124,6 +128,34 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 MessageBox.Show($"Error al crear la orden: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private bool MesaDisponible(int idMesa)
+        {
+            try
+            {
+                using (MySqlConnection conexion = new Conexion().EstablecerConexion())
+                {
+                    string query = "SELECT id_estadoM FROM mesas WHERE id_mesa = @idMesa";
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@idMesa", idMesa);
+                        object result = cmd.ExecuteScalar();
+
+                        if (result != null && result != DBNull.Value)
+                        {
+                            int estado = Convert.ToInt32(result);
+                            return estado == 1; // 1 = Disponible
+                        }
+                        return false;
+                    }
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
 
         private void btnCancelar_Click(object sender, EventArgs e)
         {
