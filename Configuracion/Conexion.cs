@@ -14,7 +14,7 @@ namespace LaCaguamaSV.Configuracion
     {
         private MySqlConnection conectar = null;
         private static string usuario = "root";
-        private static string contrasenia = "slenderman";
+        private static string contrasenia = "180294";
         private static string bd = "lacaguamabd";
         private static string ip = "localhost";
         private static string puerto = "3306"; // 3306 o 3307 si eres javier 
@@ -1007,12 +1007,14 @@ namespace LaCaguamaSV.Configuracion
                 {
                     conexion.Open();
                     string query = @"
-                            SELECT i.id_inventario AS 'ID', 
-                                   i.nombreProducto AS 'Nombre', 
-                                   i.cantidad AS 'Cantidad', 
-                                   p.nombreProv AS 'Proveedor'
+                            SELECT i.id_inventario AS 'ID',
+                                   i.nombreProducto AS 'Nombre',
+                                   i.cantidad AS 'Cantidad',
+                                   p.nombreProv AS 'Proveedor',
+                                   d.nombreDis AS 'Disponibilidad'
                             FROM inventario i
                             JOIN proveedores p ON i.id_proveedor = p.id_proveedor
+                            JOIN disponibilidad d ON i.id_disponibilidad = d.id_disponibilidad
                             WHERE NOT EXISTS (SELECT 1 FROM bebidas b WHERE b.id_inventario = i.id_inventario)";
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conexion))
@@ -1028,6 +1030,7 @@ namespace LaCaguamaSV.Configuracion
             }
             return dt;
         }
+
 
         //Filtrar ingrediente spor el  proveedor
         public DataTable FiltrarIngredientesPorProveedor(string nombreProveedor)
@@ -1092,21 +1095,22 @@ namespace LaCaguamaSV.Configuracion
         }
 
         //Agregar ingrediente nuevo
-        public bool AgregarIngrediente(string nombreProducto, decimal cantidad, int idProveedor)
+        public bool AgregarIngrediente(string nombreProducto, decimal cantidad, int idProveedor, int idDisponibilidad)
         {
             try
             {
                 using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
                 {
                     conexion.Open();
-                    string query = "INSERT INTO inventario (nombreProducto, cantidad, id_proveedor) " +
-                                   "VALUES (@nombreProducto, @cantidad, @idProveedor)";
+                    string query = "INSERT INTO inventario (nombreProducto, cantidad, id_proveedor, id_disponibilidad) " +
+                                   "VALUES (@nombreProducto, @cantidad, @idProveedor, @idDisponibilidad)";
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                     {
                         cmd.Parameters.AddWithValue("@nombreProducto", nombreProducto);
                         cmd.Parameters.AddWithValue("@cantidad", cantidad);
                         cmd.Parameters.AddWithValue("@idProveedor", idProveedor);
+                        cmd.Parameters.AddWithValue("@idDisponibilidad", idDisponibilidad);
 
                         int result = cmd.ExecuteNonQuery();
                         return result > 0; // Retorna true si se insertó correctamente
@@ -1120,47 +1124,23 @@ namespace LaCaguamaSV.Configuracion
             }
         }
 
-        //Eliminar ingrediente
-        public bool EliminarIngrediente(int idInventario)
-        {
-            try
-            {
-                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
-                {
-                    conexion.Open();
-                    string query = "DELETE FROM inventario WHERE id_inventario = @idInventario";
-
-                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
-                    {
-                        cmd.Parameters.AddWithValue("@idInventario", idInventario);
-
-                        int result = cmd.ExecuteNonQuery();
-                        return result > 0; // Retorna true si se eliminó correctamente
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al eliminar ingrediente: " + ex.Message);
-                return false;
-            }
-        }
-
         //Agregar un nuevo ingrediente
-        public bool EditarIngrediente(int idInventario, string nuevoNombre, decimal nuevaCantidad, int nuevoIdProveedor)
+        // Editar un ingrediente existente
+        public bool EditarIngrediente(int idInventario, string nuevoNombre, decimal nuevaCantidad, int nuevoIdProveedor, int nuevoIdDisponibilidad)
         {
             try
             {
                 using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
                 {
                     conexion.Open();
-                    string query = "UPDATE inventario SET nombreProducto = @nuevoNombre, cantidad = @nuevaCantidad, id_proveedor = @nuevoIdProveedor WHERE id_inventario = @idInventario";
+                    string query = "UPDATE inventario SET nombreProducto = @nuevoNombre, cantidad = @nuevaCantidad, id_proveedor = @nuevoIdProveedor, id_disponibilidad = @nuevoIdDisponibilidad WHERE id_inventario = @idInventario";
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                     {
                         cmd.Parameters.AddWithValue("@nuevoNombre", nuevoNombre);
                         cmd.Parameters.AddWithValue("@nuevaCantidad", nuevaCantidad);
                         cmd.Parameters.AddWithValue("@nuevoIdProveedor", nuevoIdProveedor);
+                        cmd.Parameters.AddWithValue("@nuevoIdDisponibilidad", nuevoIdDisponibilidad);
                         cmd.Parameters.AddWithValue("@idInventario", idInventario);
 
                         int result = cmd.ExecuteNonQuery();
@@ -1174,6 +1154,7 @@ namespace LaCaguamaSV.Configuracion
                 return false;
             }
         }
+
 
         //Agregar plato:
         public bool AgregarPlato(string nombrePlato, decimal precioUnitario, string descripcion, int idCategoria)
@@ -1956,6 +1937,7 @@ namespace LaCaguamaSV.Configuracion
             }
             return dt;
         }
+
         // -------------------- CORTE --------------------
 
         // OBTENER CAJA INICIAL DEL DÍA

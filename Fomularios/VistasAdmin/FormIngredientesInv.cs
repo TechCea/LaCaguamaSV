@@ -20,6 +20,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private Conexion conexion = new Conexion();
         private int idIngredienteSeleccionado = -1;
+        
 
         public FormIngredientesInv()
         {
@@ -32,16 +33,15 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 return;
             }
 
-           
-
 
             CargarIngredientes();
             CargarProveedores();
             CargarProveedoresCombo();
             cbFiltrarProv.SelectedIndexChanged += cbFiltrarProv_SelectedIndexChanged;
             dgvIngredientes.SelectionChanged += dgvIngredientes_SelectionChanged;
-            btnEliminar.Enabled = false;
             btnActualizarB.Enabled = false;
+            CargarDisponibilidadCombo();
+            dgvIngredientes.CellFormatting += dgvIngredientes_CellFormatting;
 
         }
 
@@ -99,11 +99,11 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
             if (proveedorSeleccionado == "Todos")
             {
-                dgvIngredientes.DataSource = conexion.ObtenerIngredientes(); // Mostrar todos
+                dgvIngredientes.DataSource = conexion.ObtenerIngredientes(); 
             }
             else
             {
-                dgvIngredientes.DataSource = conexion.FiltrarIngredientesPorProveedor(proveedorSeleccionado); // Filtrar por proveedor
+                dgvIngredientes.DataSource = conexion.FiltrarIngredientesPorProveedor(proveedorSeleccionado); 
             }
         }
 
@@ -112,36 +112,65 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             // Verifica si hay una fila seleccionada en el DataGridView
             if (dgvIngredientes.SelectedRows.Count > 0)
             {
-                // Obtener los valores del ingrediente seleccionado
                 idIngredienteSeleccionado = Convert.ToInt32(dgvIngredientes.SelectedRows[0].Cells["ID"].Value);
                 string nombreIngrediente = dgvIngredientes.SelectedRows[0].Cells["Nombre"].Value.ToString();
                 string cantidad = dgvIngredientes.SelectedRows[0].Cells["Cantidad"].Value.ToString();
                 string proveedor = dgvIngredientes.SelectedRows[0].Cells["Proveedor"].Value.ToString();
+                string disponibilidad = dgvIngredientes.SelectedRows[0].Cells["Disponibilidad"].Value.ToString();
 
-                // Mostrar los valores en los controles
+                cbc_disponibilidad.SelectedIndex = cbc_disponibilidad.FindStringExact(disponibilidad);
                 lblSeleccion.Text = $"Se ha seleccionado el ingrediente: {nombreIngrediente}";
                 txtNombreC.Text = nombreIngrediente;
                 txtCantidad.Text = cantidad;
                 cbProveedores.SelectedItem = proveedor;
 
-                // Habilitar botones de eliminar y actualizar
-                btnEliminar.Enabled = true;
                 btnActualizarB.Enabled = true;
+
+                btnAgregarIng.Enabled = false;
             }
             else
             {
-                // Si no hay selección, restablecer valores
                 lblSeleccion.Text = "Selecciona un ingrediente.";
                 txtNombreC.Clear();
                 txtCantidad.Clear();
-                cbProveedores.SelectedIndex = -1; // Deseleccionar cualquier opción
+                cbProveedores.SelectedIndex = -1;
 
-                // Deshabilitar botones de eliminar y actualizar
-                btnEliminar.Enabled = false;
                 btnActualizarB.Enabled = false;
+
+                // También aseguramos que se pueda volver a agregar si no hay nada seleccionado
+                btnAgregarIng.Enabled = true;
             }
         }
-        
+
+        private void dgvIngredientes_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            // Solo procesamos si la fila es válida (no encabezado, etc.)
+            if (e.RowIndex >= 0)
+            {
+                // Buscamos la columna de "Disponibilidad" por nombre (ajusta si tiene otro nombre)
+                var disponibilidadCell = dgvIngredientes.Rows[e.RowIndex].Cells["Disponibilidad"];
+
+                if (disponibilidadCell.Value != null)
+                {
+                    string disponibilidad = disponibilidadCell.Value.ToString().ToLower();
+
+                    Color colorTexto = Color.Black; // Por defecto
+
+                    if (disponibilidad == "disponible")
+                    {
+                        colorTexto = Color.Green;
+                    }
+                    else if (disponibilidad == "no disponible")
+                    {
+                        colorTexto = Color.Red;
+                    }
+
+                    // Aplicamos el color al texto de cada celda de la fila
+                    e.CellStyle.ForeColor = colorTexto;
+                }
+            }
+        }
+
 
         private int ObtenerIdProveedor(string nombreProveedor)
         {
@@ -177,6 +206,12 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 return;
             }
 
+            if (cbc_disponibilidad.SelectedValue == null)
+            {
+                MessageBox.Show("Por favor, selecciona una disponibilidad.");
+                return;
+            }
+
             // Obtener datos de los controles
             string nombreProducto = txtNombreC.Text;
             decimal cantidad;
@@ -199,8 +234,11 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 return;
             }
 
+            // Obtener el ID de disponibilidad
+            int idDisponibilidad = Convert.ToInt32(cbc_disponibilidad.SelectedValue);
+
             // Llamar a la función de agregar ingrediente
-            bool resultado = conexion.AgregarIngrediente(nombreProducto, cantidad, idProveedor);
+            bool resultado = conexion.AgregarIngrediente(nombreProducto, cantidad, idProveedor, idDisponibilidad);
 
             if (resultado)
             {
@@ -239,7 +277,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 return;
             }
 
-            // Obtener el ID del proveedor
             int nuevoIdProveedor = ObtenerIdProveedor(proveedorSeleccionado);
             if (nuevoIdProveedor == -1)
             {
@@ -247,13 +284,20 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 return;
             }
 
-            // Llamar a la función para actualizar el ingrediente
-            bool resultado = conexion.EditarIngrediente(idIngredienteSeleccionado, nuevoNombre, nuevaCantidad, nuevoIdProveedor);
+            if (cbc_disponibilidad.SelectedValue == null)
+            {
+                MessageBox.Show("Selecciona una disponibilidad.");
+                return;
+            }
+
+            int nuevoIdDisponibilidad = Convert.ToInt32(cbc_disponibilidad.SelectedValue);
+
+            bool resultado = conexion.EditarIngrediente(idIngredienteSeleccionado, nuevoNombre, nuevaCantidad, nuevoIdProveedor, nuevoIdDisponibilidad);
 
             if (resultado)
             {
                 MessageBox.Show("Ingrediente actualizado correctamente.");
-                dgvIngredientes.DataSource = conexion.ObtenerIngredientes(); // Recargar la tabla
+                dgvIngredientes.DataSource = conexion.ObtenerIngredientes(); 
             }
             else
             {
@@ -261,37 +305,18 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             }
         }
 
-        private void btnEliminar_Click(object sender, EventArgs e)
+        private void CargarDisponibilidadCombo()
         {
-            if (dgvIngredientes.SelectedRows.Count > 0)
-            {
-                // Obtener el ID del ingrediente seleccionado
-                int idIngrediente = Convert.ToInt32(dgvIngredientes.SelectedRows[0].Cells["ID"].Value);
+            DataTable dtDisponibilidad = conexion.ObtenerDisponibilidad();
 
-                // Confirmación antes de eliminar
-                DialogResult confirmacion = MessageBox.Show("¿Estás seguro de que deseas eliminar este ingrediente?", "Confirmar eliminación", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            // Limpiar cualquier ítem previo
+            cbc_disponibilidad.DataSource = null;
+            cbc_disponibilidad.Items.Clear();
 
-                if (confirmacion == DialogResult.Yes)
-                {
-                    // Llamar a la función para eliminar el ingrediente
-                    bool resultado = conexion.EliminarIngrediente(idIngrediente);
-
-                    if (resultado)
-                    {
-                        MessageBox.Show("Ingrediente eliminado correctamente.");
-                        // Recargar los ingredientes en el DataGridView después de eliminar
-                        CargarIngredientes();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Error al eliminar el ingrediente.");
-                    }
-                }
-            }
-            else
-            {
-                MessageBox.Show("Selecciona un ingrediente para eliminar.");
-            }
+            // Configurar DataSource
+            cbc_disponibilidad.DataSource = dtDisponibilidad;
+            cbc_disponibilidad.DisplayMember = "nombreDis"; // Lo que el usuario verá
+            cbc_disponibilidad.ValueMember = "id_disponibilidad"; // El valor real asociado
         }
 
         private void btncrearPlato_Click(object sender, EventArgs e)
@@ -311,6 +336,25 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             this.Hide();
             FormInventarioAdmin forminventario = new FormInventarioAdmin();
             forminventario.ShowDialog();
+        }
+
+        private void btn_limpiarcampos_Click(object sender, EventArgs e)
+        {
+            // Limpia los campos
+            txtNombreC.Clear();
+            txtCantidad.Clear();
+            cbProveedores.SelectedIndex = -1;
+            cbc_disponibilidad.SelectedIndex = -1;
+            lblSeleccion.Text = "Campos limpios. Listo para agregar un nuevo ingrediente.";
+
+            // Rehabilita el botón de agregar
+            btnAgregarIng.Enabled = true;
+
+            //Deshabilitar actualizar
+            btnActualizarB.Enabled = false;
+
+            // Reseteamos la variable por si acaso
+            idIngredienteSeleccionado = -1;
         }
     }
 }
