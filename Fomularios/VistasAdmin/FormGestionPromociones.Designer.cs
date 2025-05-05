@@ -33,7 +33,6 @@
             this.dataGridViewMenu = new System.Windows.Forms.DataGridView();
             this.txtNombre = new System.Windows.Forms.TextBox();
             this.txtDescripcion = new System.Windows.Forms.TextBox();
-            this.numPrecio = new System.Windows.Forms.NumericUpDown();
             this.dateInicio = new System.Windows.Forms.DateTimePicker();
             this.dateFin = new System.Windows.Forms.DateTimePicker();
             this.checkSinFin = new System.Windows.Forms.CheckBox();
@@ -50,9 +49,9 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
+            this.txtPrecio = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPromociones)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMenu)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numPrecio)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.SuspendLayout();
             // 
@@ -89,15 +88,6 @@
             this.txtDescripcion.Size = new System.Drawing.Size(100, 20);
             this.txtDescripcion.TabIndex = 4;
             this.txtDescripcion.TextChanged += new System.EventHandler(this.txtDescripcion_TextChanged);
-            // 
-            // numPrecio
-            // 
-            this.numPrecio.Hexadecimal = true;
-            this.numPrecio.Location = new System.Drawing.Point(224, 28);
-            this.numPrecio.Name = "numPrecio";
-            this.numPrecio.Size = new System.Drawing.Size(120, 20);
-            this.numPrecio.TabIndex = 5;
-            this.numPrecio.ValueChanged += new System.EventHandler(this.numPrecio_ValueChanged);
             // 
             // dateInicio
             // 
@@ -233,11 +223,20 @@
             this.label5.TabIndex = 20;
             this.label5.Text = "Fecha de Fin";
             // 
+            // txtPrecio
+            // 
+            this.txtPrecio.Location = new System.Drawing.Point(225, 28);
+            this.txtPrecio.Name = "txtPrecio";
+            this.txtPrecio.Size = new System.Drawing.Size(123, 20);
+            this.txtPrecio.TabIndex = 21;
+            this.txtPrecio.TextChanged += new System.EventHandler(this.txtPrecio_TextChanged);
+            // 
             // FormGestionPromociones
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.txtPrecio);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
@@ -252,7 +251,6 @@
             this.Controls.Add(this.checkSinFin);
             this.Controls.Add(this.dateFin);
             this.Controls.Add(this.dateInicio);
-            this.Controls.Add(this.numPrecio);
             this.Controls.Add(this.txtDescripcion);
             this.Controls.Add(this.txtNombre);
             this.Controls.Add(this.dataGridViewMenu);
@@ -262,7 +260,6 @@
             this.Load += new System.EventHandler(this.FormGestionPromociones_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPromociones)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMenu)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numPrecio)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -274,7 +271,6 @@
         private System.Windows.Forms.DataGridView dataGridViewMenu;
         private System.Windows.Forms.TextBox txtNombre;
         private System.Windows.Forms.TextBox txtDescripcion;
-        private System.Windows.Forms.NumericUpDown numPrecio;
         private System.Windows.Forms.DateTimePicker dateInicio;
         private System.Windows.Forms.DateTimePicker dateFin;
         private System.Windows.Forms.CheckBox checkSinFin;
@@ -291,5 +287,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox txtPrecio;
     }
 }

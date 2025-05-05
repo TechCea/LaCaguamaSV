@@ -31,6 +31,10 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
             dataGridViewMenu.CellDoubleClick += DataGridViewMenu_CellDoubleClick;
 
+            txtPrecio.Enter += txtPrecio_Enter;
+            txtPrecio.Leave += txtPrecio_Leave;
+            txtPrecio.KeyPress += txtPrecio_KeyPress;
+            txtPrecio.TextChanged += txtPrecio_TextChanged;
         }
         private void ConfigurarTablaItems()
         {
@@ -63,17 +67,22 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 }
             };
 
-            // Validación para el precio
-            numPrecio.Validating += (s, e) =>
+            // Validación para el precio (ahora en TextBox)
+            txtPrecio.Validating += (s, e) =>
             {
-                if (numPrecio.Value <= 0)
+                if (string.IsNullOrWhiteSpace(txtPrecio.Text))
                 {
-                    errorProvider.SetError(numPrecio, "El precio debe ser mayor a 0");
+                    errorProvider.SetError(txtPrecio, "El precio es requerido");
+                    e.Cancel = true;
+                }
+                else if (!decimal.TryParse(txtPrecio.Text, out decimal precio) || precio <= 0)
+                {
+                    errorProvider.SetError(txtPrecio, "El precio debe ser un número mayor a 0");
                     e.Cancel = true;
                 }
                 else
                 {
-                    errorProvider.SetError(numPrecio, "");
+                    errorProvider.SetError(txtPrecio, "");
                 }
             };
 
@@ -301,7 +310,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             txtNombre.Text = "";
             txtDescripcion.Text = "";
-            numPrecio.Value = 0;
+            txtPrecio.Text = "0.00"; // Valor por defecto
             dateInicio.Value = DateTime.Today;
             dateFin.Value = DateTime.Today.AddDays(7);
             checkSinFin.Checked = false;
@@ -452,7 +461,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                     DataRow row = promocion.Rows[0];
                     txtNombre.Text = row["nombre"].ToString();
                     txtDescripcion.Text = row["descripcion"]?.ToString() ?? "";
-                    numPrecio.Value = Convert.ToDecimal(row["precio_especial"]);
+                    txtPrecio.Text = Convert.ToDecimal(row["precio_especial"]).ToString("0.00");
                     dateInicio.Value = Convert.ToDateTime(row["fecha_inicio"]);
 
                     if (row["fecha_fin"] != DBNull.Value)
@@ -676,13 +685,20 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 return;
             }
 
+            if (!decimal.TryParse(txtPrecio.Text, out decimal precio))
+            {
+                MessageBox.Show("El precio debe ser un número válido", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             try
             {
                 bool resultado = PromocionesD.GuardarPromocionCompleta(
                     promocionSeleccionadaId,
                     txtNombre.Text,
                     txtDescripcion.Text,
-                    numPrecio.Value,
+                    precio,
                     dateInicio.Value,
                     checkSinFin.Checked ? null : (DateTime?)dateFin.Value,
                     checkActiva.Checked,
@@ -702,5 +718,74 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                                MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void txtPrecio_Enter(object sender, EventArgs e)
+        {
+            // Cuando entra al TextBox, limpia el valor si es 0.00
+            if (txtPrecio.Text == "0.00")
+            {
+                txtPrecio.Text = "";
+            }
+        }
+
+        private void txtPrecio_Leave(object sender, EventArgs e)
+        {
+            // Cuando sale del TextBox, formatea el valor
+            if (string.IsNullOrWhiteSpace(txtPrecio.Text))
+            {
+                txtPrecio.Text = "0.00";
+            }
+            else if (decimal.TryParse(txtPrecio.Text, out decimal precio))
+            {
+                // Asegura que el precio no sea negativo
+                if (precio < 0) precio = 0;
+                txtPrecio.Text = precio.ToString("0.00");
+            }
+            else
+            {
+                txtPrecio.Text = "0.00";
+            }
+        }
+        private void txtPrecio_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Solo permite números, punto decimal y teclas de control
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
+            {
+                e.Handled = true;
+            }
+
+            // Solo permite un punto decimal
+            if ((e.KeyChar == '.') && ((sender as TextBox).Text.IndexOf('.') > -1))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void txtPrecio_TextChanged(object sender, EventArgs e)
+        {
+            // Validación en tiempo real
+            if (!string.IsNullOrEmpty(txtPrecio.Text))
+            {
+                // Si el usuario escribe algo inválido, lo corrige
+                if (!decimal.TryParse(txtPrecio.Text, out _) && txtPrecio.Text != ".")
+                {
+                    // Mantiene solo los caracteres válidos
+                    string newText = new string(txtPrecio.Text.Where(c => char.IsDigit(c) || c == '.').ToArray());
+
+                    // Elimina puntos decimales adicionales
+                    if (newText.Count(c => c == '.') > 1)
+                    {
+                        int firstDot = newText.IndexOf('.');
+                        newText = newText.Substring(0, firstDot + 1) +
+                                 newText.Substring(firstDot + 1).Replace(".", "");
+                    }
+
+                    txtPrecio.Text = newText;
+                    txtPrecio.SelectionStart = txtPrecio.Text.Length;
+                }
+            }
+        }
+
+        
     }
 }
