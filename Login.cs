@@ -41,8 +41,10 @@ namespace LaCaguamaSV
             this.FormBorderStyle = FormBorderStyle.None;
             Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 20, 20));
 
-            // Agregar evento para mover el formulario
-            this.MouseDown += new MouseEventHandler(Login_MouseDown);
+
+            // Posición fija (centrada en la pantalla)
+            this.StartPosition = FormStartPosition.CenterScreen;
+
 
             // Aplicar esquinas redondeadas a controles específicos
             RoundedControl.ApplyRoundedCorners(panel1, 15);   // Redondear un Panel

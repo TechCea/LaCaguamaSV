@@ -21,6 +21,13 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             InitializeComponent();
             CargarMesasDesdeBD();
+
+            // Tamaño fijo
+            this.FormBorderStyle = FormBorderStyle.FixedSingle; // Evita redimensionar
+
+            // Posición fija (centrada en la pantalla)
+            this.StartPosition = FormStartPosition.CenterScreen;
+
         }
 
         private void CargarMesasDesdeBD()

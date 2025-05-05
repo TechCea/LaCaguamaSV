@@ -23,13 +23,20 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         public FormBebidasMenuAdmin()
         {
             InitializeComponent();
+
             // Si el usuario no es administrador, cierra el formulario
             if (SesionUsuario.Rol != 1)
             {
                 MessageBox.Show("Acceso denegado. No tienes permisos de administrador.", "Acceso Restringido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-           
+
+            // Tamaño fijo
+            this.FormBorderStyle = FormBorderStyle.FixedSingle; // Evita redimensionar
+
+            // Posición fija (centrada en la pantalla)
+            this.StartPosition = FormStartPosition.CenterScreen;
+
             CargarCategorias();
             CargarBebidas();
             CargarCategoriasBebidas(); // Cargar categorías en cbCategoriaB
