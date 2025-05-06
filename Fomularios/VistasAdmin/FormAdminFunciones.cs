@@ -201,7 +201,16 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void btnCajaInicial_Click(object sender, EventArgs e)
         {
-            panelCaja.Visible = true;
+            // Validar que el usuario haya hecho corte de su última caja
+            bool corteHecho = conexion.ExisteCorteParaUltimaCaja(this.idUsuario);
+
+            if (!corteHecho)
+            {
+                MessageBox.Show("Debe realizar el corte de caja antes de iniciar una nueva caja.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            panelCaja.Visible = true; // Mostrar panel solo si se permite iniciar caja
         }
 
         private void btnConfirmarCaja_Click(object sender, EventArgs e)

@@ -1938,6 +1938,46 @@ namespace LaCaguamaSV.Configuracion
             return dt;
         }
 
+
+        public bool ExisteCorteParaUltimaCaja(int idUsuario)
+        {
+            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+            {
+                conexion.Open();
+
+                // Obtener el último id_caja del usuario
+                string consultaCaja = @"
+            SELECT id_caja 
+            FROM caja 
+            WHERE id_usuario = @idUsuario 
+            ORDER BY fecha DESC 
+            LIMIT 1";
+
+                int idCaja = -1;
+                using (MySqlCommand cmd = new MySqlCommand(consultaCaja, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@idUsuario", idUsuario);
+                    object result = cmd.ExecuteScalar();
+                    if (result != null)
+                        idCaja = Convert.ToInt32(result);
+                }
+
+                if (idCaja == -1)
+                    return true; // Si no hay cajas aún, permitimos iniciar una nueva
+
+                // Verificar si existe un corte de caja con ese id_caja
+                string consultaCorte = "SELECT COUNT(*) FROM corte_de_caja WHERE id_caja = @idCaja";
+
+                using (MySqlCommand cmd = new MySqlCommand(consultaCorte, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@idCaja", idCaja);
+                    int conteo = Convert.ToInt32(cmd.ExecuteScalar());
+                    return conteo > 0;
+                }
+            }
+        }
+
+
         // -------------------- CORTE --------------------
 
 
