@@ -215,7 +215,7 @@
             this.panelConfirmacion.Controls.Add(this.btnConfirmarCorte);
             this.panelConfirmacion.Controls.Add(this.label5);
             this.panelConfirmacion.Controls.Add(this.label4);
-            this.panelConfirmacion.Location = new System.Drawing.Point(19, 666);
+            this.panelConfirmacion.Location = new System.Drawing.Point(333, 136);
             this.panelConfirmacion.Name = "panelConfirmacion";
             this.panelConfirmacion.Size = new System.Drawing.Size(419, 267);
             this.panelConfirmacion.TabIndex = 12;
@@ -279,7 +279,7 @@
             this.panelIngresoMonto.Controls.Add(this.btnConfirmarMonto);
             this.panelIngresoMonto.Controls.Add(this.txtMontoContado);
             this.panelIngresoMonto.Controls.Add(this.Label6);
-            this.panelIngresoMonto.Location = new System.Drawing.Point(482, 666);
+            this.panelIngresoMonto.Location = new System.Drawing.Point(101, 651);
             this.panelIngresoMonto.Name = "panelIngresoMonto";
             this.panelIngresoMonto.Size = new System.Drawing.Size(422, 267);
             this.panelIngresoMonto.TabIndex = 13;
@@ -343,9 +343,9 @@
             this.panelResultadoCorte.Controls.Add(this.labelResultado);
             this.panelResultadoCorte.Controls.Add(this.btnCerrarPanel_Click);
             this.panelResultadoCorte.Controls.Add(this.btnImprimirRecibo_Click);
-            this.panelResultadoCorte.Location = new System.Drawing.Point(939, 567);
+            this.panelResultadoCorte.Location = new System.Drawing.Point(506, 415);
             this.panelResultadoCorte.Name = "panelResultadoCorte";
-            this.panelResultadoCorte.Size = new System.Drawing.Size(423, 386);
+            this.panelResultadoCorte.Size = new System.Drawing.Size(591, 386);
             this.panelResultadoCorte.TabIndex = 14;
             this.panelResultadoCorte.Visible = false;
             this.panelResultadoCorte.Paint += new System.Windows.Forms.PaintEventHandler(this.panelResultadoCorte_Paint);
@@ -402,7 +402,7 @@
             this.panelCaja.Controls.Add(this.btnCancelarCaja);
             this.panelCaja.Controls.Add(this.btnConfirmarCaja);
             this.panelCaja.Controls.Add(this.txtMontoCaja);
-            this.panelCaja.Location = new System.Drawing.Point(12, 359);
+            this.panelCaja.Location = new System.Drawing.Point(48, 392);
             this.panelCaja.Name = "panelCaja";
             this.panelCaja.Size = new System.Drawing.Size(426, 286);
             this.panelCaja.TabIndex = 19;
@@ -491,10 +491,11 @@
             this.Panerl_corteX.Controls.Add(this.btn_cancelartarjeta);
             this.Panerl_corteX.Controls.Add(this.Btn_confirmartarjeta);
             this.Panerl_corteX.Controls.Add(this.label8);
-            this.Panerl_corteX.Location = new System.Drawing.Point(484, 401);
+            this.Panerl_corteX.Location = new System.Drawing.Point(1016, 770);
             this.Panerl_corteX.Name = "Panerl_corteX";
             this.Panerl_corteX.Size = new System.Drawing.Size(408, 213);
             this.Panerl_corteX.TabIndex = 20;
+            this.Panerl_corteX.Visible = false;
             this.Panerl_corteX.Paint += new System.Windows.Forms.PaintEventHandler(this.Panerl_corteX_Paint);
             // 
             // btn_cancelartarjeta
@@ -543,7 +544,7 @@
             this.Panel_vistaX.Controls.Add(this.btncancelar_x);
             this.Panel_vistaX.Controls.Add(this.btnImprimir_corteX);
             this.Panel_vistaX.Controls.Add(this.Label_resultadoX);
-            this.Panel_vistaX.Location = new System.Drawing.Point(932, 269);
+            this.Panel_vistaX.Location = new System.Drawing.Point(878, 167);
             this.Panel_vistaX.Name = "Panel_vistaX";
             this.Panel_vistaX.Size = new System.Drawing.Size(371, 276);
             this.Panel_vistaX.TabIndex = 21;
@@ -598,7 +599,7 @@
             this.panel_cortegeneral.Controls.Add(this.btn_cancelargeneral);
             this.panel_cortegeneral.Controls.Add(this.btn_okgeneral);
             this.panel_cortegeneral.Controls.Add(this.label9);
-            this.panel_cortegeneral.Location = new System.Drawing.Point(939, 38);
+            this.panel_cortegeneral.Location = new System.Drawing.Point(1261, 525);
             this.panel_cortegeneral.Name = "panel_cortegeneral";
             this.panel_cortegeneral.Size = new System.Drawing.Size(377, 203);
             this.panel_cortegeneral.TabIndex = 22;
@@ -648,7 +649,7 @@
             this.panel_corte_general.Controls.Add(this.btn_cerrarXZ);
             this.panel_corte_general.Controls.Add(this.btn_cortegeneral);
             this.panel_corte_general.Controls.Add(this.label_general);
-            this.panel_corte_general.Location = new System.Drawing.Point(1331, 38);
+            this.panel_corte_general.Location = new System.Drawing.Point(1302, 12);
             this.panel_corte_general.Name = "panel_corte_general";
             this.panel_corte_general.Size = new System.Drawing.Size(339, 507);
             this.panel_corte_general.TabIndex = 23;
@@ -705,14 +706,14 @@
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.fondo;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(1682, 965);
+            this.ClientSize = new System.Drawing.Size(1617, 930);
             this.Controls.Add(this.panel_corte_general);
             this.Controls.Add(this.panel_cortegeneral);
             this.Controls.Add(this.Panel_vistaX);
             this.Controls.Add(this.Panerl_corteX);
+            this.Controls.Add(this.panelResultadoCorte);
             this.Controls.Add(this.panelIngresoMonto);
             this.Controls.Add(this.panelCaja);
-            this.Controls.Add(this.panelResultadoCorte);
             this.Controls.Add(this.panelConfirmacion);
             this.Controls.Add(this.Gastos);
             this.Controls.Add(this.btnCajaInicial);
