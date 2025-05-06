@@ -31,6 +31,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
             // Posición fija (centrada en la pantalla)
             this.StartPosition = FormStartPosition.CenterScreen;
+            lblTipoPago.Text = tipoPago; // Directamente usar el string recibido
 
             CargarDatosOrden(idOrden, nombreCliente, total, descuento, fechaOrden, numeroMesa, tipoPago, nombreUsuario, estadoOrden);
             CargarPedidosDesdeBD(); // Cargar pedidos existentes al iniciar
@@ -65,6 +66,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             dataGridViewMenu.Tag = "EXTRA";
             tipoItemActual = "EXTRA";
         }
+
 
 
         private void CargarDatosOrden(int idOrden, string nombreCliente, decimal total, decimal descuento,
