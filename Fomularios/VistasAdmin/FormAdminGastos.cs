@@ -31,6 +31,11 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 idCaja = conexion.ObtenerCajaActiva(idUsuario);  // Obtenemos la caja más reciente activa
                 InitializeComponent();
                 dgvGastos.MultiSelect = false;
+                // Tamaño fijo
+                this.FormBorderStyle = FormBorderStyle.FixedSingle; // Evita redimensionar
+
+                // Posición fija (centrada en la pantalla)
+                this.StartPosition = FormStartPosition.CenterScreen;
 
             }
             catch (Exception ex)

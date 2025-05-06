@@ -31,6 +31,9 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             decimal montoContado = 0;
             idUsuario = usuarioId;  // Guardamos el ID del usuario en la variable
 
+            // Tamaño fijo
+
+
 
         }
 
