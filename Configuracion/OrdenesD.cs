@@ -19,20 +19,31 @@ namespace LaCaguamaSV.Configuracion
                 try
                 {
                     string query = @"SELECT 
-                                o.id_orden, 
-                                o.nombreCliente, 
-                                o.total, 
-                                o.descuento, 
-                                o.fecha_orden, 
-                                m.nombreMesa AS numero_mesa, 
-                                tp.nombrePago AS tipo_pago, 
-                                u.nombre AS nombre_usuario,
-                                eo.nombreEstadoO AS estado_orden
-                            FROM ordenes o
-                            INNER JOIN mesas m ON o.id_mesa = m.id_mesa
-                            INNER JOIN tipoPago tp ON o.tipo_pago = tp.id_pago
-                            INNER JOIN usuarios u ON o.id_usuario = u.id_usuario
-                            INNER JOIN estado_orden eo ON o.id_estadoO = eo.id_estadoO";
+                        o.id_orden, 
+                        o.nombreCliente, 
+                        o.total, 
+                        CASE
+                            WHEN p.id_tipo_descuento IS NOT NULL AND td.es_porcentaje = 1 
+                            THEN (o.total / (1 - (o.descuento/100))) - o.total
+                            ELSE o.descuento
+                        END AS descuento,
+                        o.fecha_orden, 
+                        m.nombreMesa AS numero_mesa, 
+                        tp.nombrePago AS tipo_pago, 
+                        u.nombre AS nombre_usuario,
+                        eo.nombreEstadoO AS estado_orden,
+                        CASE
+                            WHEN p.id_tipo_descuento IS NOT NULL AND td.es_porcentaje = 1 
+                            THEN CONCAT(o.descuento, '%')
+                            ELSE CONCAT('$', FORMAT(o.descuento, 2))
+                        END AS descuento_formato
+                    FROM ordenes o
+                    INNER JOIN mesas m ON o.id_mesa = m.id_mesa
+                    INNER JOIN tipoPago tp ON o.tipo_pago = tp.id_pago
+                    INNER JOIN usuarios u ON o.id_usuario = u.id_usuario
+                    INNER JOIN estado_orden eo ON o.id_estadoO = eo.id_estadoO
+                    LEFT JOIN pagos p ON o.id_orden = p.id_orden
+                    LEFT JOIN tipo_descuento td ON p.id_tipo_descuento = td.id_tipo_descuento";
 
                     MySqlCommand cmd = new MySqlCommand(query, conexion);
                     MySqlDataAdapter da = new MySqlDataAdapter(cmd);
@@ -49,19 +60,23 @@ namespace LaCaguamaSV.Configuracion
         public static DataTable ObtenerTiposPago()
         {
             DataTable dt = new DataTable();
-            using (MySqlConnection conexion = new Conexion().EstablecerConexion())
+            try
             {
-                try
+                using (MySqlConnection conexion = new Conexion().EstablecerConexion())
                 {
                     string query = "SELECT id_pago, nombrePago FROM tipoPago";
-                    MySqlCommand cmd = new MySqlCommand(query, conexion);
-                    MySqlDataAdapter da = new MySqlDataAdapter(cmd);
-                    da.Fill(dt);
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+                    }
                 }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Error al obtener tipos de pago: " + ex.Message);
-                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al obtener tipos de pago: {ex.Message}");
             }
             return dt;
         }

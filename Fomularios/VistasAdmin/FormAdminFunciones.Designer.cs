@@ -279,7 +279,7 @@
             this.panelIngresoMonto.Controls.Add(this.btnConfirmarMonto);
             this.panelIngresoMonto.Controls.Add(this.txtMontoContado);
             this.panelIngresoMonto.Controls.Add(this.Label6);
-            this.panelIngresoMonto.Location = new System.Drawing.Point(101, 651);
+            this.panelIngresoMonto.Location = new System.Drawing.Point(952, 33);
             this.panelIngresoMonto.Name = "panelIngresoMonto";
             this.panelIngresoMonto.Size = new System.Drawing.Size(422, 267);
             this.panelIngresoMonto.TabIndex = 13;
@@ -706,13 +706,13 @@
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.fondo;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(1617, 930);
+            this.ClientSize = new System.Drawing.Size(1370, 749);
             this.Controls.Add(this.panel_corte_general);
             this.Controls.Add(this.panel_cortegeneral);
             this.Controls.Add(this.Panel_vistaX);
+            this.Controls.Add(this.panelIngresoMonto);
             this.Controls.Add(this.Panerl_corteX);
             this.Controls.Add(this.panelResultadoCorte);
-            this.Controls.Add(this.panelIngresoMonto);
             this.Controls.Add(this.panelCaja);
             this.Controls.Add(this.panelConfirmacion);
             this.Controls.Add(this.Gastos);

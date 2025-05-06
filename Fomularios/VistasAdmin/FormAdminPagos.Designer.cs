@@ -47,11 +47,14 @@
             this.label2 = new System.Windows.Forms.Label();
             this.chkAplicarDescuento = new System.Windows.Forms.CheckBox();
             this.panelDescuentos = new System.Windows.Forms.Panel();
-            this.cmbTipoDescuento = new System.Windows.Forms.ComboBox();
-            this.txtMontoDescuento = new System.Windows.Forms.TextBox();
-            this.btnAplicarDescuento = new System.Windows.Forms.Button();
-            this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.btnAplicarDescuento = new System.Windows.Forms.Button();
+            this.txtMontoDescuento = new System.Windows.Forms.TextBox();
+            this.cmbTipoDescuento = new System.Windows.Forms.ComboBox();
+            this.lblDescuentoAplicado = new System.Windows.Forms.Label();
+            this.lblSubtotal = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDetalle)).BeginInit();
             this.panelEfectivo.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -81,7 +84,7 @@
             // lblTotalP
             // 
             this.lblTotalP.AutoSize = true;
-            this.lblTotalP.Location = new System.Drawing.Point(145, 41);
+            this.lblTotalP.Location = new System.Drawing.Point(145, 73);
             this.lblTotalP.Name = "lblTotalP";
             this.lblTotalP.Size = new System.Drawing.Size(34, 13);
             this.lblTotalP.TabIndex = 0;
@@ -197,19 +200,21 @@
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.label7);
+            this.panel2.Controls.Add(this.lblSubtotal);
             this.panel2.Controls.Add(this.label4);
             this.panel2.Controls.Add(this.label2);
             this.panel2.Controls.Add(this.lblCambio);
             this.panel2.Controls.Add(this.lblTotalP);
-            this.panel2.Location = new System.Drawing.Point(534, 372);
+            this.panel2.Location = new System.Drawing.Point(534, 390);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(239, 66);
+            this.panel2.Size = new System.Drawing.Size(239, 102);
             this.panel2.TabIndex = 14;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(51, 41);
+            this.label4.Location = new System.Drawing.Point(51, 73);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(71, 13);
             this.label4.TabIndex = 3;
@@ -238,6 +243,7 @@
             // 
             // panelDescuentos
             // 
+            this.panelDescuentos.Controls.Add(this.lblDescuentoAplicado);
             this.panelDescuentos.Controls.Add(this.label6);
             this.panelDescuentos.Controls.Add(this.label5);
             this.panelDescuentos.Controls.Add(this.btnAplicarDescuento);
@@ -249,23 +255,25 @@
             this.panelDescuentos.Size = new System.Drawing.Size(239, 150);
             this.panelDescuentos.TabIndex = 15;
             // 
-            // cmbTipoDescuento
+            // label6
             // 
-            this.cmbTipoDescuento.FormattingEnabled = true;
-            this.cmbTipoDescuento.Location = new System.Drawing.Point(104, 47);
-            this.cmbTipoDescuento.Name = "cmbTipoDescuento";
-            this.cmbTipoDescuento.Size = new System.Drawing.Size(121, 21);
-            this.cmbTipoDescuento.TabIndex = 16;
-            this.cmbTipoDescuento.Visible = false;
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(24, 83);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(37, 13);
+            this.label6.TabIndex = 19;
+            this.label6.Text = "Monto";
+            this.label6.Visible = false;
             // 
-            // txtMontoDescuento
+            // label5
             // 
-            this.txtMontoDescuento.Location = new System.Drawing.Point(103, 77);
-            this.txtMontoDescuento.Name = "txtMontoDescuento";
-            this.txtMontoDescuento.Size = new System.Drawing.Size(122, 20);
-            this.txtMontoDescuento.TabIndex = 17;
-            this.txtMontoDescuento.Visible = false;
-            this.txtMontoDescuento.TextChanged += new System.EventHandler(this.txtMontoDescuento_TextChanged);
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(15, 50);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(83, 13);
+            this.label5.TabIndex = 18;
+            this.label5.Text = "Tipo Descuento";
+            this.label5.Visible = false;
             // 
             // btnAplicarDescuento
             // 
@@ -280,32 +288,57 @@
             this.btnAplicarDescuento.Visible = false;
             this.btnAplicarDescuento.Click += new System.EventHandler(this.btnAplicarDescuento_Click);
             // 
-            // label5
+            // txtMontoDescuento
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(15, 50);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(83, 13);
-            this.label5.TabIndex = 18;
-            this.label5.Text = "Tipo Descuento";
-            this.label5.Visible = false;
+            this.txtMontoDescuento.Location = new System.Drawing.Point(103, 77);
+            this.txtMontoDescuento.Name = "txtMontoDescuento";
+            this.txtMontoDescuento.Size = new System.Drawing.Size(122, 20);
+            this.txtMontoDescuento.TabIndex = 17;
+            this.txtMontoDescuento.Visible = false;
+            this.txtMontoDescuento.TextChanged += new System.EventHandler(this.txtMontoDescuento_TextChanged);
             // 
-            // label6
+            // cmbTipoDescuento
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(24, 83);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(37, 13);
-            this.label6.TabIndex = 19;
-            this.label6.Text = "Monto";
-            this.label6.Visible = false;
+            this.cmbTipoDescuento.FormattingEnabled = true;
+            this.cmbTipoDescuento.Location = new System.Drawing.Point(104, 47);
+            this.cmbTipoDescuento.Name = "cmbTipoDescuento";
+            this.cmbTipoDescuento.Size = new System.Drawing.Size(121, 21);
+            this.cmbTipoDescuento.TabIndex = 16;
+            this.cmbTipoDescuento.Visible = false;
+            // 
+            // lblDescuentoAplicado
+            // 
+            this.lblDescuentoAplicado.AutoSize = true;
+            this.lblDescuentoAplicado.Location = new System.Drawing.Point(185, 123);
+            this.lblDescuentoAplicado.Name = "lblDescuentoAplicado";
+            this.lblDescuentoAplicado.Size = new System.Drawing.Size(35, 13);
+            this.lblDescuentoAplicado.TabIndex = 16;
+            this.lblDescuentoAplicado.Text = "label7";
+            // 
+            // lblSubtotal
+            // 
+            this.lblSubtotal.AutoSize = true;
+            this.lblSubtotal.Location = new System.Drawing.Point(145, 45);
+            this.lblSubtotal.Name = "lblSubtotal";
+            this.lblSubtotal.Size = new System.Drawing.Size(34, 13);
+            this.lblSubtotal.TabIndex = 4;
+            this.lblSubtotal.Text = "$0.00";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(64, 45);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(53, 13);
+            this.label7.TabIndex = 5;
+            this.label7.Text = "Sub Total";
             // 
             // FormAdminPagos
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.fondo;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(800, 504);
             this.Controls.Add(this.panelDescuentos);
             this.Controls.Add(this.dataGridViewDetalle);
             this.Controls.Add(this.panel1);
@@ -359,5 +392,8 @@
         private System.Windows.Forms.ComboBox cmbTipoDescuento;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label lblDescuentoAplicado;
+        private System.Windows.Forms.Label lblSubtotal;
+        private System.Windows.Forms.Label label7;
     }
 }
