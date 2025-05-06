@@ -44,25 +44,37 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             // Limpiar el DataSource para forzar la actualización
             dataGridViewOrdenesAdmin.DataSource = null;
-            dataGridViewOrdenesAdmin.DataSource = OrdenesService.ListarOrdenes();
+
+            // Obtener los datos con el descuento calculado correctamente
+            DataTable dtOrdenes = OrdenesD.ObtenerOrdenes();
+            dataGridViewOrdenesAdmin.DataSource = dtOrdenes;
 
             // Configuración del DataGridView
             dataGridViewOrdenesAdmin.ReadOnly = true;
             dataGridViewOrdenesAdmin.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridViewOrdenesAdmin.MultiSelect = false;
-           
+
+            // Ocultar columnas innecesarias
+            if (dataGridViewOrdenesAdmin.Columns["descuento_formato"] != null)
+            {
+                dataGridViewOrdenesAdmin.Columns["descuento_formato"].Visible = false;
+            }
 
             // Formatear columnas numéricas
             if (dataGridViewOrdenesAdmin.Columns["total"] != null)
             {
                 dataGridViewOrdenesAdmin.Columns["total"].DefaultCellStyle.Format = "C";
+                dataGridViewOrdenesAdmin.Columns["total"].HeaderText = "Total";
             }
+
             if (dataGridViewOrdenesAdmin.Columns["descuento"] != null)
             {
                 dataGridViewOrdenesAdmin.Columns["descuento"].DefaultCellStyle.Format = "C";
+                dataGridViewOrdenesAdmin.Columns["descuento"].HeaderText = "Descuento";
             }
 
-
+            // Ajustar el ancho de las columnas
+            dataGridViewOrdenesAdmin.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
         }
 
         public void RefrescarOrdenes()
@@ -146,21 +158,25 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             {
                 using (MySqlConnection conexion = new Conexion().EstablecerConexion())
                 {
-                    // Obtener información básica de la orden
+                    // Obtener información básica de la orden incluyendo tipo de descuento
                     string queryOrden = @"
-            SELECT 
-                o.nombreCliente, 
-                o.total, 
-                o.descuento,
-                DATE_FORMAT(o.fecha_orden, '%Y-%m-%d %H:%i') AS fecha_orden,
-                m.nombreMesa AS mesa,
-                tp.nombrePago AS metodo_pago,
-                u.nombre AS usuario_creador
-            FROM ordenes o
-            JOIN mesas m ON o.id_mesa = m.id_mesa
-            JOIN tipoPago tp ON o.tipo_pago = tp.id_pago
-            JOIN usuarios u ON o.id_usuario = u.id_usuario
-            WHERE o.id_orden = @idOrden";
+                SELECT 
+                    o.nombreCliente, 
+                    o.total, 
+                    o.descuento,
+                    DATE_FORMAT(o.fecha_orden, '%Y-%m-%d %H:%i') AS fecha_orden,
+                    m.nombreMesa AS mesa,
+                    tp.nombrePago AS metodo_pago,
+                    u.nombre AS usuario_creador,
+                    td.nombre AS tipo_descuento_nombre,
+                    td.es_porcentaje AS descuento_es_porcentaje
+                FROM ordenes o
+                JOIN mesas m ON o.id_mesa = m.id_mesa
+                JOIN tipoPago tp ON o.tipo_pago = tp.id_pago
+                JOIN usuarios u ON o.id_usuario = u.id_usuario
+                LEFT JOIN pagos p ON o.id_orden = p.id_orden
+                LEFT JOIN tipo_descuento td ON p.id_tipo_descuento = td.id_tipo_descuento
+                WHERE o.id_orden = @idOrden";
 
                     string cliente = "";
                     decimal total = 0;
@@ -169,6 +185,8 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                     string mesa = "";
                     string metodoPago = "";
                     string usuarioCreador = "";
+                    string tipoDescuentoNombre = "Ninguno";
+                    bool descuentoEsPorcentaje = false;
 
                     using (MySqlCommand cmd = new MySqlCommand(queryOrden, conexion))
                     {
@@ -185,45 +203,51 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                                 mesa = reader["mesa"].ToString();
                                 metodoPago = reader["metodo_pago"].ToString();
                                 usuarioCreador = reader["usuario_creador"].ToString();
+
+                                if (!reader.IsDBNull(reader.GetOrdinal("tipo_descuento_nombre")))
+                                {
+                                    tipoDescuentoNombre = reader["tipo_descuento_nombre"].ToString();
+                                    descuentoEsPorcentaje = Convert.ToBoolean(reader["descuento_es_porcentaje"]);
+                                }
                             }
                         }
                     }
 
-                    // Obtener detalles de la orden con promociones
+                    // Obtener detalles de la orden (código existente)
                     StringBuilder detalle = new StringBuilder();
                     decimal totalCalculado = 0;
 
                     string queryDetalle = @"
-            SELECT 
-                COALESCE(
-                    pl.nombrePlato,
-                    (SELECT i.nombreProducto FROM bebidas b JOIN inventario i ON b.id_inventario = i.id_inventario WHERE b.id_bebida = p.id_bebida),
-                    (SELECT i.nombreProducto FROM extras e JOIN inventario i ON e.id_inventario = i.id_inventario WHERE e.id_extra = p.id_extra),
-                    (SELECT pr.nombre FROM promociones pr WHERE pr.id_promocion = p.id_promocion)
-                ) AS Producto,
-                p.Cantidad,
-                COALESCE(
-                    pl.precioUnitario,
-                    (SELECT b.precioUnitario FROM bebidas b WHERE b.id_bebida = p.id_bebida),
-                    (SELECT e.precioUnitario FROM extras e WHERE e.id_extra = p.id_extra),
-                    (SELECT pr.precio_especial FROM promociones pr WHERE pr.id_promocion = p.id_promocion)
-                ) AS PrecioUnitario,
-                (p.Cantidad * COALESCE(
-                    pl.precioUnitario,
-                    (SELECT b.precioUnitario FROM bebidas b WHERE b.id_bebida = p.id_bebida),
-                    (SELECT e.precioUnitario FROM extras e WHERE e.id_extra = p.id_extra),
-                    (SELECT pr.precio_especial FROM promociones pr WHERE pr.id_promocion = p.id_promocion)
-                )) AS Subtotal,
-                CASE
-                    WHEN p.id_promocion IS NOT NULL THEN 1
-                    ELSE 0
-                END AS EsPromocion,
-                p.id_promocion
-            FROM pedidos p
-            LEFT JOIN platos pl ON p.id_plato = pl.id_plato
-            LEFT JOIN promociones pr ON p.id_promocion = pr.id_promocion
-            WHERE p.id_orden = @idOrden
-            ORDER BY EsPromocion DESC, Producto ASC";
+                SELECT 
+                    COALESCE(
+                        pl.nombrePlato,
+                        (SELECT i.nombreProducto FROM bebidas b JOIN inventario i ON b.id_inventario = i.id_inventario WHERE b.id_bebida = p.id_bebida),
+                        (SELECT i.nombreProducto FROM extras e JOIN inventario i ON e.id_inventario = i.id_inventario WHERE e.id_extra = p.id_extra),
+                        (SELECT pr.nombre FROM promociones pr WHERE pr.id_promocion = p.id_promocion)
+                    ) AS Producto,
+                    p.Cantidad,
+                    COALESCE(
+                        pl.precioUnitario,
+                        (SELECT b.precioUnitario FROM bebidas b WHERE b.id_bebida = p.id_bebida),
+                        (SELECT e.precioUnitario FROM extras e WHERE e.id_extra = p.id_extra),
+                        (SELECT pr.precio_especial FROM promociones pr WHERE pr.id_promocion = p.id_promocion)
+                    ) AS PrecioUnitario,
+                    (p.Cantidad * COALESCE(
+                        pl.precioUnitario,
+                        (SELECT b.precioUnitario FROM bebidas b WHERE b.id_bebida = p.id_bebida),
+                        (SELECT e.precioUnitario FROM extras e WHERE e.id_extra = p.id_extra),
+                        (SELECT pr.precio_especial FROM promociones pr WHERE pr.id_promocion = p.id_promocion)
+                    )) AS Subtotal,
+                    CASE
+                        WHEN p.id_promocion IS NOT NULL THEN 1
+                        ELSE 0
+                    END AS EsPromocion,
+                    p.id_promocion
+                FROM pedidos p
+                LEFT JOIN platos pl ON p.id_plato = pl.id_plato
+                LEFT JOIN promociones pr ON p.id_promocion = pr.id_promocion
+                WHERE p.id_orden = @idOrden
+                ORDER BY EsPromocion DESC, Producto ASC";
 
                     using (MySqlCommand cmd = new MySqlCommand(queryDetalle, conexion))
                     {
@@ -243,7 +267,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                                 detalle.AppendLine($"{producto} x{cantidad} - {precioUnitario.ToString("C")} = {subtotal.ToString("C")}");
                                 totalCalculado += subtotal;
 
-                                // Si es promoción, agregar sus items
                                 if (esPromocion && idPromocion.HasValue)
                                 {
                                     detalle.AppendLine(ObtenerItemsPromocion(idPromocion.Value, cantidad));
@@ -275,6 +298,13 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                         }
                     }
 
+                    // Calcular el monto real del descuento (si fue porcentaje)
+                    decimal montoDescuento = descuento;
+                    if (descuentoEsPorcentaje)
+                    {
+                        montoDescuento = totalCalculado * (descuento / 100);
+                    }
+
                     // Generar comprobante con mejor formato
                     StringBuilder factura = new StringBuilder();
                     factura.AppendLine("╔══════════════════════════════════╗");
@@ -294,7 +324,11 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
                     if (descuento > 0)
                     {
-                        factura.AppendLine($"DESCUENTO: -{descuento.ToString("C").PadLeft(18)}");
+                        string descuentoTexto = descuentoEsPorcentaje ?
+                            $"{descuento}% ( -{montoDescuento.ToString("C")} )" :
+                            $"-{descuento.ToString("C")}";
+
+                        factura.AppendLine($"DESCUENTO ({tipoDescuentoNombre}): {descuentoTexto.PadLeft(10)}");
                     }
 
                     factura.AppendLine($"TOTAL: {total.ToString("C").PadLeft(25)}");
