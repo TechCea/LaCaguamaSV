@@ -46,8 +46,10 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void FormAdminFunciones_Load(object sender, EventArgs e)
         {
+         
             panelCaja.Visible = false;
 
+           
 
         }
 
@@ -132,6 +134,9 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             // Cambiar la visibilidad de los paneles
             panelIngresoMonto.Visible = false;
             panelResultadoCorte.Visible = true;
+
+
+           
         }
         
 
@@ -273,20 +278,23 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             Conexion conn = new Conexion();
 
-            // Usa tus variables existentes
             int idUsuario = this.idUsuario;
             int idCaja = this.idCaja;
 
-            decimal totalTarjetas = conn.ObtenerTotalTarjetas(idCaja);
+            // Obtener el total de ventas con tarjeta y la cantidad de ventas
+            var (totalTarjetas, cantidadVentas) = conn.ObtenerTotalTarjetas(idCaja);
             string nombreCajero = conn.ObtenerNombreUsuario(idUsuario);
 
+            // Crear el mensaje con los resultados
             StringBuilder resultado = new StringBuilder();
             resultado.AppendLine($"Cajero: {nombreCajero}");
-            resultado.AppendLine($"Total en tarjetas: ${totalTarjetas:F2}");
+            resultado.AppendLine($"Ventas con tarjeta: {cantidadVentas} venta(s)");
+            resultado.AppendLine($"Total en tarjetas: {totalTarjetas:C}");
 
+            // Mostrar el resultado en el label
             Label_resultadoX.Text = resultado.ToString();
 
-            // Mostrar el panel con los resultados
+            // Mostrar el panel de resultados
             Panel_vistaX.Visible = true;
             Panerl_corteX.Visible = false;
         }

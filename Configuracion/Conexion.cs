@@ -2112,29 +2112,28 @@ namespace LaCaguamaSV.Configuracion
         public decimal ObtenerCajaInicial(int idCaja)
         {
 
+            decimal total = 0;
+            string query = @"SELECT SUM(total - descuento) 
+                     FROM ordenes 
+                     WHERE tipo_pago = 2 
+                     AND id_estadoO = 2 
+                     AND id_caja = @idCaja";
+
             using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
             {
                 conexion.Open();
-
-                // Consulta para obtener el monto de la caja inicial
-                string query = "SELECT cantidad FROM caja WHERE id_caja = @idCaja ORDER BY fecha DESC LIMIT 1";
-
                 using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                 {
                     cmd.Parameters.AddWithValue("@idCaja", idCaja);
                     object result = cmd.ExecuteScalar();
-
-                    // Verificamos si el resultado no es nulo y es un valor válido
                     if (result != DBNull.Value && result != null)
                     {
-                        return Convert.ToDecimal(result);
-                    }
-                    else
-                    {
-                        return 0m; // Si no se encuentra el valor o es nulo, devolvemos 0
+                        total = Convert.ToDecimal(result);
                     }
                 }
             }
+
+            return total;
         }
 
 
@@ -2156,32 +2155,38 @@ namespace LaCaguamaSV.Configuracion
 
         // -------------------- CORTE Tarjetas --------------------
 
-        public decimal ObtenerTotalTarjetas(int idCaja)
+        public (decimal totalTarjeta, int cantidadVentas) ObtenerTotalTarjetas(int idCaja)
         {
             decimal total = 0;
+            int cantidad = 0;
 
-            try
+            string query = @"
+        SELECT 
+            SUM(total - descuento) AS total, 
+            COUNT(*) AS cantidad 
+        FROM ordenes 
+        WHERE tipo_pago = 2 
+        AND id_estadoO = 2 
+        AND id_caja = @idCaja";
+
+            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
             {
-                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                conexion.Open();
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                 {
-                    conexion.Open();
-
-                    string query = @"SELECT SUM(total) FROM ordenes 
-                             WHERE tipo_pago = 2 AND id_estadoO = 2 AND DATE(fecha_orden) = CURDATE()";
-
-                    MySqlCommand cmd = new MySqlCommand(query, conexion);
-                    var resultado = cmd.ExecuteScalar();
-
-                    if (resultado != DBNull.Value)
-                        total = Convert.ToDecimal(resultado);
+                    cmd.Parameters.AddWithValue("@idCaja", idCaja);
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            if (!reader.IsDBNull(0)) total = reader.GetDecimal(0);
+                            if (!reader.IsDBNull(1)) cantidad = reader.GetInt32(1);
+                        }
+                    }
                 }
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al obtener el total de tarjetas: " + ex.Message);
-            }
 
-            return total;
+            return (total, cantidad);
         }
 
         public string ObtenerNombreUsuario(int idUsuario)
