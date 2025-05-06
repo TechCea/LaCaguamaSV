@@ -20,6 +20,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         private int idUsuario;  // Variable que guarda el ID del usuario
         private int idCaja;
         public string nombreUsuarioActual;
+        private int usuarioId;
 
 
         public FormAdminFunciones(int usuarioId)
@@ -30,6 +31,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             panelResultadoCorte.Visible = false;
             decimal montoContado = 0;
             idUsuario = usuarioId;  // Guardamos el ID del usuario en la variable
+            this.idUsuario = usuarioId;
 
             // Tamaño fijo
 
@@ -73,41 +75,65 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void btnConfirmarMonto_Click(object sender, EventArgs e)
         {
-            if (!decimal.TryParse(txtMontoContado.Text, out decimal montoContado))
+            // Convertir el monto ingresado en el TextBox a decimal
+            decimal montoContado;
+            if (!decimal.TryParse(txtMontoContado.Text, out montoContado))
             {
                 MessageBox.Show("Ingrese un monto válido.");
                 return;
             }
 
-            Conexion conn = new Conexion();
+           
+            // Obtener el ID de la caja actual (esta caja debe haber sido inicializada previamente)
+            int idCajaActual = conexion.ObtenerUltimoIdCajaInicializada(this.idUsuario); // Este método ya lo tienes
+            if (idCajaActual == -1)
+            {
+                MessageBox.Show("No se encontró una caja inicial activa.");
+                return;
+            }
 
-            // Obtener valores necesarios para el corte
-            decimal cajaInicial = conn.ObtenerCajaInicialDelDia(); // Método que te pasé
-            decimal totalGenerado = conn.ObtenerVentasEfectivoDelDia();
-            decimal gastos = conn.ObtenerGastosDelDiaCorteCaja(); // Renombrado para evitar conflicto
-            decimal totalEsperado = cajaInicial + totalGenerado - gastos;
-            decimal totalcajagenerada = cajaInicial + totalGenerado;
+            // ✅ NUEVA VALIDACIÓN: verificar si ya se hizo un corte para esta caja
+            if (conexion.CorteYaRealizado(idCajaActual))
+            {
+                MessageBox.Show("Ya se ha realizado un corte para esta caja. Debe iniciar una nueva caja antes de realizar otro corte.");
+                return;
+            }
 
-            // Guardar el corte
-            conn.InsertarCorteCaja(montoContado, idUsuario); // Ya tienes el idUsuario en este form
+            // Guardar el corte de caja
+            conexion.GuardarCorteCaja(montoContado, this.idUsuario, idCajaActual);
 
-            // Mostrar resultados
-            StringBuilder resultado = new StringBuilder();
-            resultado.AppendLine($"Monto contado: ${montoContado:F2}");
-            resultado.AppendLine($"Caja inicial: ${cajaInicial:F2}");
-            resultado.AppendLine($"Total generado (ventas): ${totalGenerado:F2}");
-            resultado.AppendLine($"Gastos: ${gastos:F2}");
-            resultado.AppendLine($"Venta del turno: ${totalcajagenerada:F2}");
-            resultado.AppendLine($"Total esperado: ${totalEsperado:F2}");
-            resultado.AppendLine($"Diferencia: ${(montoContado - totalEsperado):F2}");
+            // Obtener los valores necesarios para mostrar en el corte
+            
+            decimal cajaInicial = conexion.ObtenerCajaInicial(idCajaActual);
+            decimal totalGenerado = conexion.ObtenerTotalGenerado(idCajaActual);
+            decimal totalGastos = conexion.ObtenerGastos(idCajaActual);
 
-            labelResultado.Text = resultado.ToString();
 
-            // Mostrar panel de resultado
+            // Calcular la cantidad contada
+            decimal cantidadContada = totalGenerado + cajaInicial;
+
+            // Calcular el total esperado
+            decimal totalEsperado = cajaInicial + totalGenerado - totalGastos;
+
+            // Calcular la diferencia entre lo ingresado y lo esperado
+            decimal diferencia = montoContado - totalEsperado;
+
+            // Mostrar el resultado en los labels
+
+            labelResultado.Text = 
+                                  $"Dinero Ingresado: {montoContado:C}\n" + 
+                                  $"Caja Inicial: {cajaInicial:C}\n" +
+                                  $"Cantidad Contada : {cantidadContada:C}\n" +
+                                  $"Total Generado : {totalGenerado:C}\n" +
+                                  $"Gastos: {totalGastos:C}\n" +
+                                  $"Total Esperado : {totalEsperado:C}\n" +
+                                  $"Diferencia: {diferencia:C}";
+
+            // Cambiar la visibilidad de los paneles
             panelIngresoMonto.Visible = false;
             panelResultadoCorte.Visible = true;
         }
-
+        
 
 
         private void btnCancelarMonto_Click(object sender, EventArgs e)

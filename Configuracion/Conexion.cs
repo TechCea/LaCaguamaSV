@@ -14,7 +14,7 @@ namespace LaCaguamaSV.Configuracion
     {
         private MySqlConnection conectar = null;
         private static string usuario = "root";
-        private static string contrasenia = "180294";
+        private static string contrasenia = "slenderman";
         private static string bd = "lacaguamabd";
         private static string ip = "localhost";
         private static string puerto = "3306"; // 3306 o 3307 si eres javier 
@@ -1940,63 +1940,179 @@ namespace LaCaguamaSV.Configuracion
 
         // -------------------- CORTE --------------------
 
+
+        // Obtener el id_caja más reciente del usuario con estado inicializada
+        public int ObtenerIdCajaActualCorte(int idUsuario)
+        {
+            int idCaja = -1;
+            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+            {
+                conexion.Open();
+                string query = @"SELECT id_caja FROM caja 
+                                 WHERE id_usuario = @idUsuario AND id_estado_caja = 2 
+                                 ORDER BY fecha DESC LIMIT 1";
+
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@idUsuario", idUsuario);
+                    object resultado = cmd.ExecuteScalar();
+                    if (resultado != null)
+                        idCaja = Convert.ToInt32(resultado);
+                }
+            }
+            return idCaja;
+        }
+
+
         // OBTENER CAJA INICIAL DEL DÍA
-        public decimal ObtenerCajaInicialDelDia()
+        public int ObtenerUltimoIdCajaInicializada(int idUsuario)
         {
             using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
             {
                 conexion.Open();
-                string query = "SELECT cantidad FROM caja WHERE DATE(fecha) = CURDATE() ORDER BY id_caja ASC LIMIT 1";
-                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                string consulta = @"
+            SELECT id_caja 
+            FROM caja 
+            WHERE id_usuario = @idUsuario 
+            ORDER BY fecha DESC 
+            LIMIT 1";
+
+                using (MySqlCommand cmd = new MySqlCommand(consulta, conexion))
                 {
-                    object resultado = cmd.ExecuteScalar();
-                    return resultado != null ? Convert.ToDecimal(resultado) : 0;
+                    cmd.Parameters.AddWithValue("@idUsuario", idUsuario);
+                    object result = cmd.ExecuteScalar();
+                    return result != null ? Convert.ToInt32(result) : -1;
                 }
             }
         }
-        // OBTENER TOTAL EN EFECTIVO DEL DÍA (ORDENES)
-        public decimal ObtenerVentasEfectivoDelDia()
+        // Obtener total generado (ventas en efectivo con estado cerrada y misma caja)
+        public decimal ObtenerTotalGenerado(int idCaja)
         {
             using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
             {
                 conexion.Open();
-                string query = "SELECT SUM(total) FROM ordenes WHERE DATE(fecha_orden) = CURDATE() AND tipo_pago = 1 AND id_estadoO = 2";
+
+                // Consulta para obtener el total generado (ventas en efectivo)
+                string query = @"SELECT SUM(o.total) 
+                         FROM ordenes o 
+                         INNER JOIN estado_orden eo ON o.id_estadoO = eo.id_estadoO 
+                         WHERE o.id_caja = @idCaja AND o.tipo_pago = 1 AND eo.nombreEstadoO = 'cerrada'";
+
                 using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                 {
-                    object resultado = cmd.ExecuteScalar();
-                    return resultado != null ? Convert.ToDecimal(resultado) : 0;
+                    cmd.Parameters.AddWithValue("@idCaja", idCaja);
+                    object result = cmd.ExecuteScalar();
+
+                    // Verificamos si el resultado no es nulo y es un valor válido
+                    if (result != DBNull.Value && result != null)
+                    {
+                        return Convert.ToDecimal(result);
+                    }
+                    else
+                    {
+                        return 0m; // Si no se encuentra el valor o es nulo, devolvemos 0
+                    }
                 }
             }
         }
-        // OBTENER GASTOS DEL DÍA
-        public decimal ObtenerGastosDelDiaCorteCaja()
+        // Obtener total de gastos de esa caja
+        public decimal ObtenerGastos(int idCaja)
         {
             using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
             {
                 conexion.Open();
-                string query = "SELECT SUM(cantidad) FROM gastos WHERE DATE(fecha) = CURDATE()";
+
+                // Consulta para obtener el total de los gastos de la caja
+                string query = "SELECT SUM(cantidad) FROM gastos WHERE id_caja = @idCaja";
+
                 using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                 {
-                    object resultado = cmd.ExecuteScalar();
-                    return resultado != null ? Convert.ToDecimal(resultado) : 0;
+                    cmd.Parameters.AddWithValue("@idCaja", idCaja);
+                    object result = cmd.ExecuteScalar();
+
+                    // Verificamos si el resultado no es nulo y es un valor válido
+                    if (result != DBNull.Value && result != null)
+                    {
+                        return Convert.ToDecimal(result);
+                    }
+                    else
+                    {
+                        return 0m; // Si no se encuentra el valor o es nulo, devolvemos 0
+                    }
                 }
             }
         }
-        // INSERTAR CORTE DE CAJA
-        public void InsertarCorteCaja(decimal cantidad, int idUsuario)
+
+        // Guardar el corte de caja
+        public void GuardarCorteCaja(decimal cantidad, int idUsuario, int idCaja)
         {
             using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
             {
                 conexion.Open();
-                string query = "INSERT INTO corte_de_caja (cantidad, fecha, id_estado_corte, id_usuario) VALUES (@cantidad, NOW(), 2, @id_usuario)";
+
+                // Definimos el query para insertar el corte de caja
+                string query = @"INSERT INTO corte_de_caja (cantidad, fecha, id_estado_corte, id_usuario, id_caja) 
+                         VALUES (@cantidad, @fecha, @id_estado_corte, @id_usuario, @id_caja)";
+
                 using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                 {
+                    // Agregar los parámetros para evitar inyecciones SQL
                     cmd.Parameters.AddWithValue("@cantidad", cantidad);
+                    cmd.Parameters.AddWithValue("@fecha", DateTime.Now);
+                    cmd.Parameters.AddWithValue("@id_estado_corte", 2); // Suponiendo que 2 es el estado de "corte realizado"
                     cmd.Parameters.AddWithValue("@id_usuario", idUsuario);
+                    cmd.Parameters.AddWithValue("@id_caja", idCaja);
+
+                    // Ejecutar la consulta
                     cmd.ExecuteNonQuery();
                 }
             }
         }
+
+        public decimal ObtenerCajaInicial(int idCaja)
+        {
+
+            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+            {
+                conexion.Open();
+
+                // Consulta para obtener el monto de la caja inicial
+                string query = "SELECT cantidad FROM caja WHERE id_caja = @idCaja ORDER BY fecha DESC LIMIT 1";
+
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@idCaja", idCaja);
+                    object result = cmd.ExecuteScalar();
+
+                    // Verificamos si el resultado no es nulo y es un valor válido
+                    if (result != DBNull.Value && result != null)
+                    {
+                        return Convert.ToDecimal(result);
+                    }
+                    else
+                    {
+                        return 0m; // Si no se encuentra el valor o es nulo, devolvemos 0
+                    }
+                }
+            }
+        }
+
+
+        public bool CorteYaRealizado(int idCaja)
+        {
+            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+            {
+                conexion.Open();
+                string consulta = "SELECT COUNT(*) FROM corte_de_caja WHERE id_caja = @idCaja";
+                using (MySqlCommand cmd = new MySqlCommand(consulta, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@idCaja", idCaja);
+                    int cantidad = Convert.ToInt32(cmd.ExecuteScalar());
+                    return cantidad > 0;
+                }
+            }
+        }
+
 
         // -------------------- CORTE Tarjetas --------------------
 
