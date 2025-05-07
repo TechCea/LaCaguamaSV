@@ -2112,12 +2112,8 @@ namespace LaCaguamaSV.Configuracion
         public decimal ObtenerCajaInicial(int idCaja)
         {
 
-            decimal total = 0;
-            string query = @"SELECT SUM(total - descuento) 
-                     FROM ordenes 
-                     WHERE tipo_pago = 2 
-                     AND id_estadoO = 2 
-                     AND id_caja = @idCaja";
+            decimal cantidad = 0;
+            string query = "SELECT cantidad FROM caja WHERE id_caja = @idCaja";
 
             using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
             {
@@ -2126,14 +2122,14 @@ namespace LaCaguamaSV.Configuracion
                 {
                     cmd.Parameters.AddWithValue("@idCaja", idCaja);
                     object result = cmd.ExecuteScalar();
-                    if (result != DBNull.Value && result != null)
+                    if (result != null && result != DBNull.Value)
                     {
-                        total = Convert.ToDecimal(result);
+                        cantidad = Convert.ToDecimal(result);
                     }
                 }
             }
 
-            return total;
+            return cantidad;
         }
 
 

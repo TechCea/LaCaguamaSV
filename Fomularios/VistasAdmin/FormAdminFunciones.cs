@@ -14,6 +14,8 @@ using System.Windows.Forms;
 
 namespace LaCaguamaSV.Fomularios.VistasAdmin
 {
+
+
     public partial class FormAdminFunciones : Form
     {
         Conexion conexion = new Conexion();
@@ -34,11 +36,15 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             this.idUsuario = usuarioId;
 
             // Tamaño fijo
-
-
+            CentrarPanel(Panerl_corteX); // Reemplaza 'miPanel' con el nombre real de tu panel
 
         }
-
+        private void CentrarPanel(Panel panel)
+        {
+            int x = (this.ClientSize.Width - panel.Width) / 2;
+            int y = (this.ClientSize.Height - panel.Height) / 2;
+            panel.Location = new Point(x, y);
+        }
         private void label5_Click(object sender, EventArgs e)
         {
 
@@ -85,7 +91,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 return;
             }
 
-           
             // Obtener el ID de la caja actual (esta caja debe haber sido inicializada previamente)
             int idCajaActual = conexion.ObtenerUltimoIdCajaInicializada(this.idUsuario); // Este método ya lo tienes
             if (idCajaActual == -1)
@@ -105,11 +110,9 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             conexion.GuardarCorteCaja(montoContado, this.idUsuario, idCajaActual);
 
             // Obtener los valores necesarios para mostrar en el corte
-            
             decimal cajaInicial = conexion.ObtenerCajaInicial(idCajaActual);
             decimal totalGenerado = conexion.ObtenerTotalGenerado(idCajaActual);
             decimal totalGastos = conexion.ObtenerGastos(idCajaActual);
-
 
             // Calcular la cantidad contada
             decimal cantidadContada = totalGenerado + cajaInicial;
@@ -117,13 +120,12 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             // Calcular el total esperado
             decimal totalEsperado = cajaInicial + totalGenerado - totalGastos;
 
-            // Calcular la diferencia entre lo ingresado y lo esperado
+            // Calcular la diferencia
             decimal diferencia = montoContado - totalEsperado;
 
             // Mostrar el resultado en los labels
-
-            labelResultado.Text = 
-                                  $"Dinero Ingresado: {montoContado:C}\n" + 
+            labelResultado.Text =
+                                  $"Dinero Ingresado: {montoContado:C}\n" +
                                   $"Caja Inicial: {cajaInicial:C}\n" +
                                   $"Cantidad Contada : {cantidadContada:C}\n" +
                                   $"Total Generado : {totalGenerado:C}\n" +
@@ -135,10 +137,8 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             panelIngresoMonto.Visible = false;
             panelResultadoCorte.Visible = true;
 
-
-           
         }
-        
+
 
 
         private void btnCancelarMonto_Click(object sender, EventArgs e)

@@ -279,7 +279,7 @@
             this.panelIngresoMonto.Controls.Add(this.btnConfirmarMonto);
             this.panelIngresoMonto.Controls.Add(this.txtMontoContado);
             this.panelIngresoMonto.Controls.Add(this.Label6);
-            this.panelIngresoMonto.Location = new System.Drawing.Point(952, 33);
+            this.panelIngresoMonto.Location = new System.Drawing.Point(952, 1);
             this.panelIngresoMonto.Name = "panelIngresoMonto";
             this.panelIngresoMonto.Size = new System.Drawing.Size(422, 267);
             this.panelIngresoMonto.TabIndex = 13;
@@ -599,7 +599,7 @@
             this.panel_cortegeneral.Controls.Add(this.btn_cancelargeneral);
             this.panel_cortegeneral.Controls.Add(this.btn_okgeneral);
             this.panel_cortegeneral.Controls.Add(this.label9);
-            this.panel_cortegeneral.Location = new System.Drawing.Point(1261, 525);
+            this.panel_cortegeneral.Location = new System.Drawing.Point(1289, 534);
             this.panel_cortegeneral.Name = "panel_cortegeneral";
             this.panel_cortegeneral.Size = new System.Drawing.Size(377, 203);
             this.panel_cortegeneral.TabIndex = 22;
@@ -648,7 +648,6 @@
             // 
             this.panel_corte_general.Controls.Add(this.btn_cerrarXZ);
             this.panel_corte_general.Controls.Add(this.btn_cortegeneral);
-            this.panel_corte_general.Controls.Add(this.label_general);
             this.panel_corte_general.Location = new System.Drawing.Point(1302, 12);
             this.panel_corte_general.Name = "panel_corte_general";
             this.panel_corte_general.Size = new System.Drawing.Size(339, 507);
@@ -692,7 +691,7 @@
             this.label_general.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label_general.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_general.ForeColor = System.Drawing.SystemColors.Control;
-            this.label_general.Location = new System.Drawing.Point(30, 21);
+            this.label_general.Location = new System.Drawing.Point(1264, 96);
             this.label_general.Name = "label_general";
             this.label_general.Size = new System.Drawing.Size(235, 350);
             this.label_general.TabIndex = 5;
@@ -706,9 +705,10 @@
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.fondo;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(1370, 749);
+            this.ClientSize = new System.Drawing.Size(1370, 620);
             this.Controls.Add(this.panel_corte_general);
             this.Controls.Add(this.panel_cortegeneral);
+            this.Controls.Add(this.label_general);
             this.Controls.Add(this.Panel_vistaX);
             this.Controls.Add(this.panelIngresoMonto);
             this.Controls.Add(this.Panerl_corteX);
@@ -744,7 +744,6 @@
             this.panel_cortegeneral.ResumeLayout(false);
             this.panel_cortegeneral.PerformLayout();
             this.panel_corte_general.ResumeLayout(false);
-            this.panel_corte_general.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
