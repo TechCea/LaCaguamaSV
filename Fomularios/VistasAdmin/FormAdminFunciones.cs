@@ -37,6 +37,14 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
             // Tamaño fijo
             CentrarPanel(Panerl_corteX); // Reemplaza 'miPanel' con el nombre real de tu panel
+            CentrarPanel(panelCaja);
+            CentrarPanel(panelConfirmacion);
+            CentrarPanel(panelResultadoCorte);  
+            CentrarPanel(Panel_vistaX);  
+            CentrarPanel(panelIngresoMonto);  
+            CentrarPanel(panel_cortegeneral1);  
+            CentrarPanel(panel_corte_general);  
+
 
         }
         private void CentrarPanel(Panel panel)
@@ -128,7 +136,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                                   $"Dinero Ingresado: {montoContado:C}\n" +
                                   $"Caja Inicial: {cajaInicial:C}\n" +
                                   $"Cantidad Contada : {cantidadContada:C}\n" +
-                                  $"Total Generado : {totalGenerado:C}\n" +
+                                  $"Efectivo Generado : {totalGenerado:C}\n" +
                                   $"Gastos: {totalGastos:C}\n" +
                                   $"Total Esperado : {totalEsperado:C}\n" +
                                   $"Diferencia: {diferencia:C}";
@@ -143,7 +151,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void btnCancelarMonto_Click(object sender, EventArgs e)
         {
-            panelResultadoCorte.Visible = false; // Ocultar el panel de resultados
+            panelIngresoMonto.Visible = false; // Ocultar el panel de resultados
         }
 
 
@@ -324,9 +332,29 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             Panel_vistaX.Visible = false;
         }
 
+        private void label_general_Click(object sender, EventArgs e)
+        {
 
+        }
 
+        private void panel_cortegeneral1_Paint(object sender, PaintEventArgs e)
+        {
 
-     
+        }
+
+        private void btn_okgeneral_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btn_cancelargeneral_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btn_cortegeneral_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
