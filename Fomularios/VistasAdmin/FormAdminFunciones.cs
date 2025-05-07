@@ -179,7 +179,8 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void button4_Click(object sender, EventArgs e)
         {
-
+            panel_cortegeneral1.Visible = true;
+            panel_corte_general.Visible = false;
         }
 
         private void button5_Click(object sender, EventArgs e)
@@ -314,7 +315,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void btn_cerrarXZ_Click(object sender, EventArgs e)
         {
-
+            panel_corte_general.Visible = false;
         }
 
         private void panel_corte_general_Paint(object sender, PaintEventArgs e)
@@ -344,12 +345,58 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void btn_okgeneral_Click(object sender, EventArgs e)
         {
+            int idCajaActual = conexion.ObtenerUltimoIdCajaInicializada(this.idUsuario);
+            if (idCajaActual == -1)
+            {
+                MessageBox.Show("No hay caja activa.");
+                return;
+            }
 
+            // Obtener datos
+            decimal cajaInicial = conexion.ObtenerCajaInicial(idCajaActual);
+            decimal totalEfectivo = conexion.ObtenerTotalGenerado(idCajaActual);
+            decimal totalTarjeta = conexion.ObtenerTotalTarjetasGeneral(idCajaActual);
+            decimal descuento = conexion.ObtenerTotalDescuentos(idCajaActual);
+            decimal gastos = conexion.ObtenerGastos(idCajaActual);
+
+            // Calcular total final
+            decimal totalFinal = cajaInicial + totalEfectivo + totalTarjeta - gastos;
+
+            // Guardar en la base de datos
+            conexion.GuardarCorteGeneral(
+                cajaInicial,
+                totalFinal,
+                totalEfectivo,
+                totalTarjeta,
+                descuento,
+                gastos,
+                this.idUsuario,
+                idCajaActual
+            );
+
+            // Mostrar datos en label
+            string nombreCajero = conexion.ObtenerNombreUsuario(this.idUsuario);
+            string fechaActual = DateTime.Now.ToString("dd/MM/yyyy HH:mm");
+
+            label_general.Text =
+                "CORTE GENERAL\n\n" +
+                $"Caja inicial: {cajaInicial:C}\n" +
+                $"Ventas en tarjetas: {totalTarjeta:C}\n" +
+                $"Ventas en efectivo: {totalEfectivo:C}\n" +
+                $"Promociones: {descuento:C}\n" +
+                $"Gastos: {gastos:C}\n\n" +
+                $"Total generado: {totalFinal:C}\n" +
+                $"Fecha: {fechaActual}\n" +
+                $"Cajero: {nombreCajero}";
+
+            // Cambiar visibilidad de paneles
+            panel_cortegeneral1.Visible = false;
+            panel_corte_general.Visible = true;
         }
 
         private void btn_cancelargeneral_Click(object sender, EventArgs e)
         {
-
+            panel_cortegeneral1.Visible = false;
         }
 
         private void btn_cortegeneral_Click(object sender, EventArgs e)

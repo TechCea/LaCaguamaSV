@@ -2213,8 +2213,85 @@ namespace LaCaguamaSV.Configuracion
         }
 
 
+        // -------------------- CORTE General--------------------
+
+        public void GuardarCorteGeneral(decimal cajaInicial, decimal totalFinalDia, decimal efectivo, decimal tarjeta, decimal descuento, decimal gastos, int idUsuario, int idCaja)
+        {
+            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+            {
+                conexion.Open();
+                string consulta = @"INSERT INTO corte_general 
+        (caja_inicial_dia, total_final_dia, cant_efectivo, cant_tarjeta, descuento, total_gastos_general, fecha, id_gasto, id_usuario, id_caja)
+        VALUES (@cajaInicial, @totalFinal, @efectivo, @tarjeta, @descuento, @gastos, NOW(), NULL, @idUsuario, @idCaja)";
+
+                using (MySqlCommand cmd = new MySqlCommand(consulta, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@cajaInicial", cajaInicial);
+                    cmd.Parameters.AddWithValue("@totalFinal", totalFinalDia);
+                    cmd.Parameters.AddWithValue("@efectivo", efectivo);
+                    cmd.Parameters.AddWithValue("@tarjeta", tarjeta);
+                    cmd.Parameters.AddWithValue("@descuento", descuento);
+                    cmd.Parameters.AddWithValue("@gastos", gastos);
+                    cmd.Parameters.AddWithValue("@idUsuario", idUsuario);
+                    cmd.Parameters.AddWithValue("@idCaja", idCaja);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+
+
+        public decimal ObtenerTotalTarjetasGeneral(int idCaja)
+        {
+            decimal total = 0;
+
+            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+            {
+                conexion.Open();
+
+                string consulta = @"SELECT IFNULL(SUM(total), 0)
+                            FROM ordenes
+                            WHERE id_estadoO = 2 AND tipo_pago = 2 AND id_caja = @idCaja";
+
+                using (MySqlCommand cmd = new MySqlCommand(consulta, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@idCaja", idCaja);
+                    object resultado = cmd.ExecuteScalar();
+                    total = Convert.ToDecimal(resultado);
+                }
+            }
+
+            return total;
+        }
+
+        public decimal ObtenerTotalDescuentos(int idCaja)
+        {
+            decimal totalDescuento = 0;
+
+            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+            {
+                conexion.Open();
+
+                string consulta = @"SELECT IFNULL(SUM(descuento), 0)
+                            FROM ordenes
+                            WHERE id_estadoO = 2 AND id_caja = @idCaja";
+
+                using (MySqlCommand cmd = new MySqlCommand(consulta, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@idCaja", idCaja);
+                    object resultado = cmd.ExecuteScalar();
+                    totalDescuento = Convert.ToDecimal(resultado);
+                }
+            }
+
+            return totalDescuento;
+        }
+
+
 
     }
+
 
 
 

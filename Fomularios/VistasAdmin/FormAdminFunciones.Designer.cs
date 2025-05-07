@@ -652,9 +652,9 @@
             this.panel_corte_general.Controls.Add(this.btn_cerrarXZ);
             this.panel_corte_general.Controls.Add(this.btn_cortegeneral);
             this.panel_corte_general.Controls.Add(this.label_general);
-            this.panel_corte_general.Location = new System.Drawing.Point(1289, 413);
+            this.panel_corte_general.Location = new System.Drawing.Point(997, 54);
             this.panel_corte_general.Name = "panel_corte_general";
-            this.panel_corte_general.Size = new System.Drawing.Size(339, 507);
+            this.panel_corte_general.Size = new System.Drawing.Size(653, 507);
             this.panel_corte_general.TabIndex = 23;
             this.panel_corte_general.Visible = false;
             this.panel_corte_general.Paint += new System.Windows.Forms.PaintEventHandler(this.panel_corte_general_Paint);
