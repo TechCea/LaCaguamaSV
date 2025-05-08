@@ -429,13 +429,15 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
             label_general.Text =
                 "CORTE GENERAL\n\n" +
-                $"Ventas en tarjetas: {totalTarjeta:C}\n" +
+
+                 $"Cajero: {nombreCajero}\n"+
+                 $"Fecha: {fechaActual}\n" +
+
                 $"Ventas en efectivo: {totalEfectivo:C}\n" +
+                $"Ventas en tarjetas: {totalTarjeta:C}\n" +
                 $"Descuentos: {descuento:C}\n" +
                 $"Gastos: {gastos:C}\n\n" +
-                $"Total generado: {totalFinal:C}\n" +
-                $"Fecha: {fechaActual}\n" +
-                $"Cajero: {nombreCajero}";
+                $"Total generado: {totalFinal:C}\n";
 
             // Cambiar visibilidad de paneles
             panel_cortegeneral1.Visible = false;
