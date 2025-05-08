@@ -2341,50 +2341,53 @@ namespace LaCaguamaSV.Configuracion
 
 
 
-        public decimal ObtenerTotalTarjetasGeneral(int idCaja)
+        public (decimal totalEfectivo, decimal totalTarjeta, decimal totalDescuentos, decimal totalGastos) ObtenerDatosCorteGeneral()
         {
-            decimal total = 0;
+            decimal efectivo = 0, tarjeta = 0, descuentos = 0, gastos = 0;
 
             using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
             {
                 conexion.Open();
 
-                string consulta = @"SELECT IFNULL(SUM(total), 0)
-                            FROM ordenes
-                            WHERE id_estadoO = 2 AND tipo_pago = 2 AND id_caja = @idCaja";
+                DateTime ahora = DateTime.Now;
+                DateTime fechaInicio = ahora.Hour >= 3 ? new DateTime(ahora.Year, ahora.Month, ahora.Day, 10, 0, 0) : new DateTime(ahora.AddDays(-1).Year, ahora.AddDays(-1).Month, ahora.AddDays(-1).Day, 10, 0, 0);
+                DateTime fechaFin = fechaInicio.AddHours(17); // Hasta las 3am del día siguiente
+
+                string consulta = @"
+            SELECT 
+                IFNULL(SUM(CASE WHEN tipo_pago = 1 THEN total ELSE 0 END), 0) AS total_efectivo,
+                IFNULL(SUM(CASE WHEN tipo_pago = 2 THEN total ELSE 0 END), 0) AS total_tarjeta,
+                IFNULL(SUM(descuento), 0) AS total_descuento
+            FROM ordenes
+            WHERE id_estadoO = 2 AND fecha_orden BETWEEN @inicio AND @fin;
+
+            SELECT IFNULL(SUM(cantidad), 0)
+            FROM gastos
+            WHERE fecha BETWEEN @inicio AND @fin;";
 
                 using (MySqlCommand cmd = new MySqlCommand(consulta, conexion))
                 {
-                    cmd.Parameters.AddWithValue("@idCaja", idCaja);
-                    object resultado = cmd.ExecuteScalar();
-                    total = Convert.ToDecimal(resultado);
+                    cmd.Parameters.AddWithValue("@inicio", fechaInicio);
+                    cmd.Parameters.AddWithValue("@fin", fechaFin);
+
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            efectivo = reader.GetDecimal(0);
+                            tarjeta = reader.GetDecimal(1);
+                            descuentos = reader.GetDecimal(2);
+                        }
+
+                        if (reader.NextResult() && reader.Read())
+                        {
+                            gastos = reader.GetDecimal(0);
+                        }
+                    }
                 }
             }
 
-            return total;
-        }
-
-        public decimal ObtenerTotalDescuentos(int idCaja)
-        {
-            decimal totalDescuento = 0;
-
-            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
-            {
-                conexion.Open();
-
-                string consulta = @"SELECT IFNULL(SUM(descuento), 0)
-                            FROM ordenes
-                            WHERE id_estadoO = 2 AND id_caja = @idCaja";
-
-                using (MySqlCommand cmd = new MySqlCommand(consulta, conexion))
-                {
-                    cmd.Parameters.AddWithValue("@idCaja", idCaja);
-                    object resultado = cmd.ExecuteScalar();
-                    totalDescuento = Convert.ToDecimal(resultado);
-                }
-            }
-
-            return totalDescuento;
+            return (efectivo, tarjeta, descuentos, gastos);
         }
 
 

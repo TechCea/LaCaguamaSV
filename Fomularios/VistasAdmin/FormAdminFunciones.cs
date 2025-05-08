@@ -405,19 +405,15 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 return;
             }
 
-            // Obtener datos
-            decimal cajaInicial = conexion.ObtenerCajaInicial(idCajaActual);
-            decimal totalEfectivo = conexion.ObtenerTotalGenerado(idCajaActual);
-            decimal totalTarjeta = conexion.ObtenerTotalTarjetasGeneral(idCajaActual);
-            decimal descuento = conexion.ObtenerTotalDescuentos(idCajaActual);
-            decimal gastos = conexion.ObtenerGastos(idCajaActual);
+            // Obtener datos por horario (10am - 3am)
+            var (totalEfectivo, totalTarjeta, descuento, gastos) = conexion.ObtenerDatosCorteGeneral();
 
             // Calcular total final
-            decimal totalFinal = cajaInicial + totalEfectivo + totalTarjeta - gastos;
+            decimal totalFinal = totalEfectivo + totalTarjeta - gastos;
 
             // Guardar en la base de datos
             conexion.GuardarCorteGeneral(
-                cajaInicial,
+                0, // cajaInicial se ignora, puedes pasar 0 o null si actualizas el método
                 totalFinal,
                 totalEfectivo,
                 totalTarjeta,
@@ -433,10 +429,9 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
             label_general.Text =
                 "CORTE GENERAL\n\n" +
-                $"Caja inicial: {cajaInicial:C}\n" +
                 $"Ventas en tarjetas: {totalTarjeta:C}\n" +
                 $"Ventas en efectivo: {totalEfectivo:C}\n" +
-                $"Promociones: {descuento:C}\n" +
+                $"Descuentos: {descuento:C}\n" +
                 $"Gastos: {gastos:C}\n\n" +
                 $"Total generado: {totalFinal:C}\n" +
                 $"Fecha: {fechaActual}\n" +
