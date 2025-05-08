@@ -2194,6 +2194,8 @@ namespace LaCaguamaSV.Configuracion
             }
         }
 
+      
+
 
         // -------------------- CORTE Tarjetas --------------------
 

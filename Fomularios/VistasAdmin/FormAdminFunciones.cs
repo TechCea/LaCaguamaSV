@@ -103,9 +103,13 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             int idCajaActual = conexion.ObtenerUltimoIdCajaInicializada(this.idUsuario); // Este método ya lo tienes
             if (idCajaActual == -1)
             {
+
                 MessageBox.Show("No se encontró una caja inicial activa.");
                 return;
             }
+            // Habilitar el botón de inicio de caja
+            btnCajaInicial.Enabled = true;
+            btnCajaInicial.BackColor = Color.LightGreen;
 
             // ✅ NUEVA VALIDACIÓN: verificar si ya se hizo un corte para esta caja
             if (conexion.CorteYaRealizado(idCajaActual))
@@ -149,19 +153,24 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             int idUltimoCorte = conexion.ObtenerUltimoCortePorCaja(idCajaActual);
             conexion.ActualizarEstadoCorte(idUltimoCorte, 1); // corte a NO inicializado
 
-            // Desactivar botón de corte, activar botón de caja
-            Corte_Caja.Enabled = false;
-            Corte_Caja.BackColor = Color.Gray;
-
-            btnCajaInicial.Enabled = true;
-            btnCajaInicial.BackColor = SystemColors.Control; // o un color activo
 
 
             // Cambiar la visibilidad de los paneles
             panelIngresoMonto.Visible = false;
             panelResultadoCorte.Visible = true;
 
+
+            // Apagar botón de corte
+            Corte_Caja.Enabled = false;
+            Corte_Caja.BackColor = Color.Gray;
+
+            // Encender botón de inicio de caja
+            btnCajaInicial.Enabled = true;
+            btnCajaInicial.BackColor = Color.Orange;
+
         }
+
+
 
 
 
@@ -262,6 +271,16 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             {
                 MessageBox.Show("Monto inválido.");
             }
+
+
+            // Apagar botón de inicio
+            btnCajaInicial.Enabled = false;
+            btnCajaInicial.BackColor = Color.Gray;
+
+            // Encender botón de corte
+            Corte_Caja.Enabled = true;
+            Corte_Caja.BackColor = Color.Orange;
+
         }
 
         private void btnCancelarCaja_Click(object sender, EventArgs e)
