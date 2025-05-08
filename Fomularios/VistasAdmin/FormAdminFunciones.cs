@@ -141,6 +141,22 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                                   $"Total Esperado : {totalEsperado:C}\n" +
                                   $"Diferencia: {diferencia:C}";
 
+
+
+
+            // Cambiar estados en la base de datos
+            conexion.ActualizarEstadoCaja(idCajaActual, 1); // caja a NO inicializada
+            int idUltimoCorte = conexion.ObtenerUltimoCortePorCaja(idCajaActual);
+            conexion.ActualizarEstadoCorte(idUltimoCorte, 1); // corte a NO inicializado
+
+            // Desactivar botón de corte, activar botón de caja
+            Corte_Caja.Enabled = false;
+            Corte_Caja.BackColor = Color.Gray;
+
+            btnCajaInicial.Enabled = true;
+            btnCajaInicial.BackColor = SystemColors.Control; // o un color activo
+
+
             // Cambiar la visibilidad de los paneles
             panelIngresoMonto.Visible = false;
             panelResultadoCorte.Visible = true;

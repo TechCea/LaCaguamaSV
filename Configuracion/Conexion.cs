@@ -2149,6 +2149,52 @@ namespace LaCaguamaSV.Configuracion
         }
 
 
+        public void ActualizarEstadoCaja(int idCaja, int nuevoEstado)
+        {
+            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+            {
+                conexion.Open();
+                string query = "UPDATE caja SET id_estado_caja = @estado WHERE id_caja = @idCaja";
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@estado", nuevoEstado);
+                    cmd.Parameters.AddWithValue("@idCaja", idCaja);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public void ActualizarEstadoCorte(int idCorte, int nuevoEstado)
+        {
+            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+            {
+                conexion.Open();
+                string query = "UPDATE corte_de_caja SET id_estado_corte = @estado WHERE id_corte = @idCorte";
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@estado", nuevoEstado);
+                    cmd.Parameters.AddWithValue("@idCorte", idCorte);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public int ObtenerUltimoCortePorCaja(int idCaja)
+        {
+            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+            {
+                conexion.Open();
+                string query = "SELECT id_corte FROM corte_de_caja WHERE id_caja = @idCaja ORDER BY fecha DESC LIMIT 1";
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@idCaja", idCaja);
+                    object result = cmd.ExecuteScalar();
+                    return result != null ? Convert.ToInt32(result) : -1;
+                }
+            }
+        }
+
+
         // -------------------- CORTE Tarjetas --------------------
 
         public (decimal totalTarjeta, int cantidadVentas) ObtenerTotalTarjetas(int idCaja)
