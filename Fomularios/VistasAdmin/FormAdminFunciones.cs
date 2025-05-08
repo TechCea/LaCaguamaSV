@@ -1,5 +1,6 @@
 ﻿using LaCaguamaSV.Configuracion;
 using MySql.Data.MySqlClient;
+using Org.BouncyCastle.Ocsp;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -156,6 +157,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
 
             // Cambiar la visibilidad de los paneles
+            txtMontoContado.Text = ""; // limpiar textbox después de guardar corte
             panelIngresoMonto.Visible = false;
             panelResultadoCorte.Visible = true;
 
@@ -166,7 +168,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
             // Encender botón de inicio de caja
             btnCajaInicial.Enabled = true;
-            btnCajaInicial.BackColor = Color.Orange;
+            btnCajaInicial.BackColor = ColorTranslator.FromHtml("#e74719");
 
         }
 
@@ -265,6 +267,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 conexion.InsertarCajaInicial(monto, idUsuario);
 
                 MessageBox.Show("Caja inicial registrada correctamente.");
+                txtMontoCaja.Text = ""; // o txtCajaInicial.Clear();
                 panelCaja.Visible = false;  // Ocultamos el panel de caja
             }
             else
@@ -279,7 +282,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
             // Encender botón de corte
             Corte_Caja.Enabled = true;
-            Corte_Caja.BackColor = Color.Orange;
+            Corte_Caja.BackColor = ColorTranslator.FromHtml("#e74719");
 
         }
 
