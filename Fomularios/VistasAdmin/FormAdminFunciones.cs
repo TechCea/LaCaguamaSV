@@ -325,12 +325,21 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             Conexion conn = new Conexion();
 
-            int idUsuario = this.idUsuario;
-            int idCaja = this.idCaja;
+            // Obtener el id de la última caja cerrada
+            int idCaja = conn.ObtenerUltimoIdCaja();
 
-            // Obtener el total de ventas con tarjeta y la cantidad de ventas
-            var (totalTarjetas, cantidadVentas) = conn.ObtenerTotalTarjetas(idCaja);
-            string nombreCajero = conn.ObtenerNombreUsuario(idUsuario);
+            if (idCaja <= 0)
+            {
+                MessageBox.Show("No se ha encontrado una caja válida.");
+                return;
+            }
+
+            // Obtener el total de ventas con tarjeta entre las 10 AM y las 3 AM
+            var (totalTarjetas, cantidadVentas) = conn.ObtenerCorteTarjetasPorHorario();
+
+
+            // Obtener el nombre del usuario que hizo el corte
+            string nombreCajero = conn.ObtenerNombreUsuario(this.idUsuario);
 
             // Crear el mensaje con los resultados
             StringBuilder resultado = new StringBuilder();
@@ -340,6 +349,12 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
             // Mostrar el resultado en el label
             Label_resultadoX.Text = resultado.ToString();
+
+            // Guardar el corte de tarjetas en la base de datos
+            conexion.GuardarCorteTarjetas( 
+                totalTarjetas, 
+                this.idUsuario, 
+                idCaja);
 
             // Mostrar el panel de resultados
             Panel_vistaX.Visible = true;

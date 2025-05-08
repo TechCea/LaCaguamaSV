@@ -2194,15 +2194,40 @@ namespace LaCaguamaSV.Configuracion
             }
         }
 
-      
+
 
 
         // -------------------- CORTE Tarjetas --------------------
 
-        public (decimal totalTarjeta, int cantidadVentas) ObtenerTotalTarjetas(int idCaja)
+        public void GuardarCorteTarjetas( decimal cantidad, int idUsuario, int idCaja)
+        {
+            string query = @"
+        INSERT INTO corte_tarjetas (cantidad, fecha, id_usuario, id_caja)
+        VALUES (@cantidad, NOW(), @idUsuario, @idCaja);
+    ";
+
+            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+            {
+                conexion.Open();
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@cantidad", cantidad);       // Total de dinero en tarjetas
+                    cmd.Parameters.AddWithValue("@idUsuario", idUsuario);
+                    cmd.Parameters.AddWithValue("@idCaja", idCaja);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public (decimal total, int cantidad) ObtenerCorteTarjetasPorHorario()
         {
             decimal total = 0;
             int cantidad = 0;
+
+            // Obtener el rango de fechas desde hoy a las 10:00 hasta mañana a las 3:00 AM
+            DateTime fechaInicio = DateTime.Today.AddHours(10);       // Hoy 10:00 AM
+            DateTime fechaFin = DateTime.Today.AddDays(1).AddHours(3); // Mañana 3:00 AM
 
             string query = @"
         SELECT 
@@ -2211,14 +2236,17 @@ namespace LaCaguamaSV.Configuracion
         FROM ordenes 
         WHERE tipo_pago = 2 
         AND id_estadoO = 2 
-        AND id_caja = @idCaja";
+        AND fecha_orden BETWEEN @inicio AND @fin;
+    ";
 
             using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
             {
                 conexion.Open();
                 using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                 {
-                    cmd.Parameters.AddWithValue("@idCaja", idCaja);
+                    cmd.Parameters.AddWithValue("@inicio", fechaInicio);
+                    cmd.Parameters.AddWithValue("@fin", fechaFin);
+
                     using (MySqlDataReader reader = cmd.ExecuteReader())
                     {
                         if (reader.Read())
@@ -2232,6 +2260,29 @@ namespace LaCaguamaSV.Configuracion
 
             return (total, cantidad);
         }
+
+
+        public int ObtenerUltimoIdCaja()
+        {
+            int idCaja = 0;
+            string query = "SELECT id_caja FROM caja WHERE id_estado_caja = 2 ORDER BY fecha DESC LIMIT 1";  // Asegúrate de que 'id_estado_caja = 2' es el estado correcto de una caja cerrada
+
+            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+            {
+                conexion.Open();
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    var resultado = cmd.ExecuteScalar();
+                    if (resultado != null)
+                    {
+                        idCaja = Convert.ToInt32(resultado);  // Asignamos el último id_caja encontrado
+                    }
+                }
+            }
+
+            return idCaja;
+        }
+
 
         public string ObtenerNombreUsuario(int idUsuario)
         {

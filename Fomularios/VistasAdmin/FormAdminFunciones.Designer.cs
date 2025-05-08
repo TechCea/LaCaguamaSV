@@ -355,11 +355,11 @@
             this.labelResultado.AutoSize = true;
             this.labelResultado.BackColor = System.Drawing.Color.Transparent;
             this.labelResultado.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.labelResultado.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelResultado.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelResultado.ForeColor = System.Drawing.SystemColors.Control;
             this.labelResultado.Location = new System.Drawing.Point(84, 30);
             this.labelResultado.Name = "labelResultado";
-            this.labelResultado.Size = new System.Drawing.Size(255, 170);
+            this.labelResultado.Size = new System.Drawing.Size(220, 142);
             this.labelResultado.TabIndex = 2;
             this.labelResultado.Text = "Corte de caja Confirmado.\r\nCajero:\r\nMonto contado: $232.50\r\nCaja inicial: $200.00" +
     "\r\nTotal generado $32.50\r\nGastos: $2.50\r\nTotal esperado: $207.50";
@@ -586,11 +586,11 @@
             this.Label_resultadoX.AutoSize = true;
             this.Label_resultadoX.BackColor = System.Drawing.Color.Transparent;
             this.Label_resultadoX.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.Label_resultadoX.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label_resultadoX.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Label_resultadoX.ForeColor = System.Drawing.SystemColors.Control;
             this.Label_resultadoX.Location = new System.Drawing.Point(34, 55);
             this.Label_resultadoX.Name = "Label_resultadoX";
-            this.Label_resultadoX.Size = new System.Drawing.Size(289, 89);
+            this.Label_resultadoX.Size = new System.Drawing.Size(200, 62);
             this.Label_resultadoX.TabIndex = 3;
             this.Label_resultadoX.Text = "Corte de tarjeta\r\nCajero:\r\nDinero generado: $0.00\r\n";
             // 
@@ -694,11 +694,11 @@
             this.label_general.AutoSize = true;
             this.label_general.BackColor = System.Drawing.Color.Transparent;
             this.label_general.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.label_general.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_general.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_general.ForeColor = System.Drawing.SystemColors.Control;
             this.label_general.Location = new System.Drawing.Point(60, 39);
             this.label_general.Name = "label_general";
-            this.label_general.Size = new System.Drawing.Size(235, 350);
+            this.label_general.Size = new System.Drawing.Size(166, 242);
             this.label_general.TabIndex = 5;
             this.label_general.Text = "Corte General\r\n\r\nCaja inicial:\r\nVentas en tarjetas:\r\nVentas en efectivo:\r\nPromoci" +
     "ones:\r\nGastos:\r\n\r\nTotal Generado: \r\nFecha: \r\nCajero:\r\n\r\n";
