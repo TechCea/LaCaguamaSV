@@ -25,48 +25,116 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 return;
             }
 
+            // Configuración inicial
+            cmbTipoFiltro.Items.AddRange(new string[] { "Todos", "Hoy", "Esta semana", "Este mes", "Fecha específica", "Rango de fechas" });
+            cmbTipoFiltro.SelectedIndex = 0;
+            dtpFechaInicio.Visible = false;
+            dtpFechaFin.Visible = false;
+            lblA.Visible = false;
+
             CargarHistorialPagos();
             ConfigurarDataGridView();
             dataGridViewHistorial.MultiSelect = false;
+
+            cmbTipoFiltro.SelectedIndexChanged += CmbTipoFiltro_SelectedIndexChanged;
+            btnFiltrar.Click += btnFiltrar_Click;
+            btnResetear.Click += btnResetear_Click;
+        }
+        private void CmbTipoFiltro_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (cmbTipoFiltro.SelectedItem.ToString())
+            {
+                case "Fecha específica":
+                    dtpFechaInicio.Visible = true;
+                    dtpFechaFin.Visible = false;
+                    lblA.Visible = false;
+                    break;
+
+                case "Rango de fechas":
+                    dtpFechaInicio.Visible = true;
+                    dtpFechaFin.Visible = true;
+                    lblA.Visible = true;
+                    break;
+
+                default:
+                    dtpFechaInicio.Visible = false;
+                    dtpFechaFin.Visible = false;
+                    lblA.Visible = false;
+                    break;
+            }
         }
 
-        private void CargarHistorialPagos()
+        private void CargarHistorialPagos(string tipoFiltro = null, DateTime? fechaInicio = null, DateTime? fechaFin = null)
         {
             try
             {
                 using (MySqlConnection conexion = new Conexion().EstablecerConexion())
                 {
                     string query = @"
-            SELECT 
-                p.id_pago AS 'ID Pago',
-                p.id_orden AS 'Número Orden',
-                o.nombreCliente AS 'Cliente',
-                p.monto AS 'Total',
-                CASE
-                    WHEN td.es_porcentaje = 1 THEN (p.monto / (1 - (p.descuento/100))) - p.monto
-                    ELSE p.descuento
-                END AS 'Descuento',
-                p.recibido AS 'Recibido',
-                p.cambio AS 'Cambio',
-                tp.nombrePago AS 'Método Pago',
-                u.nombre AS 'Cajero',
-                DATE_FORMAT(p.fecha_pago, '%Y-%m-%d %H:%i') AS 'Fecha/Hora',
-                CASE
-                    WHEN td.es_porcentaje = 1 THEN CONCAT(p.descuento, '%')
-                    ELSE CONCAT('$', FORMAT(p.descuento, 2))
-                END AS 'Tipo Descuento'
-            FROM pagos p
-            JOIN ordenes o ON p.id_orden = o.id_orden
-            JOIN tipoPago tp ON p.id_tipo_pago = tp.id_pago
-            JOIN usuarios u ON p.id_usuario = u.id_usuario
-            LEFT JOIN tipo_descuento td ON p.id_tipo_descuento = td.id_tipo_descuento
-            ORDER BY p.fecha_pago DESC";
+                SELECT 
+                    p.id_pago AS 'ID Pago',
+                    p.id_orden AS 'Número Orden',
+                    o.nombreCliente AS 'Cliente',
+                    p.monto AS 'Total',
+                    CASE
+                        WHEN td.es_porcentaje = 1 THEN (p.monto / (1 - (p.descuento/100))) - p.monto
+                        ELSE p.descuento
+                    END AS 'Descuento',
+                    p.recibido AS 'Recibido',
+                    p.cambio AS 'Cambio',
+                    tp.nombrePago AS 'Método Pago',
+                    u.nombre AS 'Cajero',
+                    DATE_FORMAT(p.fecha_pago, '%Y-%m-%d %H:%i') AS 'Fecha/Hora',
+                    CASE
+                        WHEN td.es_porcentaje = 1 THEN CONCAT(p.descuento, '%')
+                        ELSE CONCAT('$', FORMAT(p.descuento, 2))
+                    END AS 'Tipo Descuento'
+                FROM pagos p
+                JOIN ordenes o ON p.id_orden = o.id_orden
+                JOIN tipoPago tp ON p.id_tipo_pago = tp.id_pago
+                JOIN usuarios u ON p.id_usuario = u.id_usuario
+                LEFT JOIN tipo_descuento td ON p.id_tipo_descuento = td.id_tipo_descuento";
+
+                    // Aplicar filtros según la selección
+                    switch (tipoFiltro)
+                    {
+                        case "Hoy":
+                            query += " WHERE DATE(p.fecha_pago) = CURDATE()";
+                            break;
+
+                        case "Esta semana":
+                            query += " WHERE YEARWEEK(p.fecha_pago, 1) = YEARWEEK(CURDATE(), 1)";
+                            break;
+
+                        case "Este mes":
+                            query += " WHERE MONTH(p.fecha_pago) = MONTH(CURDATE()) AND YEAR(p.fecha_pago) = YEAR(CURDATE())";
+                            break;
+
+                        case "Fecha específica":
+                            if (fechaInicio.HasValue)
+                            {
+                                query += $" WHERE DATE(p.fecha_pago) = '{fechaInicio.Value:yyyy-MM-dd}'";
+                            }
+                            break;
+
+                        case "Rango de fechas":
+                            if (fechaInicio.HasValue && fechaFin.HasValue)
+                            {
+                                query += $" WHERE DATE(p.fecha_pago) BETWEEN '{fechaInicio.Value:yyyy-MM-dd}' AND '{fechaFin.Value:yyyy-MM-dd}'";
+                            }
+                            break;
+                    }
+
+                    query += " ORDER BY p.fecha_pago DESC";
 
                     DataTable dt = new DataTable();
                     MySqlDataAdapter da = new MySqlDataAdapter(query, conexion);
                     da.Fill(dt);
 
                     dataGridViewHistorial.DataSource = dt;
+
+                    // Mostrar el total de registros filtrados
+                    lblTotalRegistros.Text = $"Total registros: {dt.Rows.Count}";
                 }
             }
             catch (Exception ex)
@@ -497,6 +565,69 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         private void btnCerrar_Click_1(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void lblFiltro_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblA_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnResetear_Click(object sender, EventArgs e)
+        {
+            cmbTipoFiltro.SelectedIndex = 0;
+            CargarHistorialPagos();
+        }
+
+        private void btnFiltrar_Click(object sender, EventArgs e)
+        {
+            string tipoFiltro = cmbTipoFiltro.SelectedItem.ToString();
+            DateTime? fechaInicio = null;
+            DateTime? fechaFin = null;
+
+            if (tipoFiltro == "Fecha específica" || tipoFiltro == "Rango de fechas")
+            {
+                fechaInicio = dtpFechaInicio.Value.Date;
+
+                if (tipoFiltro == "Rango de fechas")
+                {
+                    fechaFin = dtpFechaFin.Value.Date;
+
+                    // Validar que la fecha final no sea menor que la inicial
+                    if (fechaFin < fechaInicio)
+                    {
+                        MessageBox.Show("La fecha final no puede ser anterior a la fecha inicial",
+                                      "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                }
+            }
+
+            CargarHistorialPagos(tipoFiltro, fechaInicio, fechaFin);
+        }
+
+        private void dtpFechaFin_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dtpFechaInicio_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblTotalRegistros_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cmbTipoFiltro_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
