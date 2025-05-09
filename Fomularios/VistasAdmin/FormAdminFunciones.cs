@@ -37,6 +37,12 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             this.idUsuario = usuarioId;
 
             // Tamaño fijo
+            this.FormBorderStyle = FormBorderStyle.FixedSingle; // Evita redimensionar
+
+            // Posición fija (centrada en la pantalla)
+            this.StartPosition = FormStartPosition.CenterScreen;
+
+            // Tamaño fijo
             CentrarPanel(Panerl_corteX); // Reemplaza 'miPanel' con el nombre real de tu panel
             CentrarPanel(panelCaja);
             CentrarPanel(panelConfirmacion);
@@ -54,23 +60,14 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             int y = (this.ClientSize.Height - panel.Height) / 2;
             panel.Location = new Point(x, y);
         }
-        private void label5_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void FormAdminFunciones_Load(object sender, EventArgs e)
         {
          
             panelCaja.Visible = false;
-
-           
+            ActualizarLabelCaja(); // Llama aquí para que se actualice al cargar
 
         }
-
-
-
-
 
         private void Corte_Caja_Click(object sender, EventArgs e)
         {
@@ -82,6 +79,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             panelConfirmacion.Visible = false;
             panelIngresoMonto.Visible = true;
+            ActualizarLabelCaja();
         }
 
 
@@ -108,11 +106,9 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 MessageBox.Show("No se encontró una caja inicial activa.");
                 return;
             }
-            // Habilitar el botón de inicio de caja
             btnCajaInicial.Enabled = true;
             btnCajaInicial.BackColor = Color.LightGreen;
 
-            // ✅ NUEVA VALIDACIÓN: verificar si ya se hizo un corte para esta caja
             if (conexion.CorteYaRealizado(idCajaActual))
             {
                 MessageBox.Show("Ya se ha realizado un corte para esta caja. Debe iniciar una nueva caja antes de realizar otro corte.");
@@ -170,33 +166,18 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             btnCajaInicial.Enabled = true;
             btnCajaInicial.BackColor = ColorTranslator.FromHtml("#e74719");
 
+            ActualizarLabelCaja();
+
         }
-
-
-
-
 
         private void btnCancelarMonto_Click(object sender, EventArgs e)
         {
             panelIngresoMonto.Visible = false; // Ocultar el panel de resultados
         }
 
-
-
-
         private void button9_Click(object sender, EventArgs e)
         {
             this.Close();
-        }
-
-        private void txtMontoContado_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -210,11 +191,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             panel_corte_general.Visible = false;
         }
 
-        private void button5_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void btnImprimirRecibo_Click_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Recibo enviado a impresora (simulado).");
@@ -225,20 +201,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             panelResultadoCorte.Visible = false; // Ocultar el panel de resultados
         }
 
-        private void panelResultadoCorte_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void labelResultado_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label3_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void btnCajaInicial_Click(object sender, EventArgs e)
         {
@@ -269,20 +231,21 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 MessageBox.Show("Caja inicial registrada correctamente.");
                 txtMontoCaja.Text = ""; // o txtCajaInicial.Clear();
                 panelCaja.Visible = false;  // Ocultamos el panel de caja
+
+                // Apagar botón de inicio
+                btnCajaInicial.Enabled = false;
+                btnCajaInicial.BackColor = Color.Gray;
+
+                // Encender botón de corte
+                Corte_Caja.Enabled = true;
+                Corte_Caja.BackColor = ColorTranslator.FromHtml("#e74719");
+                ActualizarLabelCaja();
             }
             else
             {
                 MessageBox.Show("Monto inválido.");
+
             }
-
-
-            // Apagar botón de inicio
-            btnCajaInicial.Enabled = false;
-            btnCajaInicial.BackColor = Color.Gray;
-
-            // Encender botón de corte
-            Corte_Caja.Enabled = true;
-            Corte_Caja.BackColor = ColorTranslator.FromHtml("#e74719");
 
         }
 
@@ -292,28 +255,11 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             txtMontoCaja.Text = string.Empty;
         }
 
-        private void txtMontoCaja_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-
-
-        private void panelCaja_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
         private void button6_Click(object sender, EventArgs e)
         {
             this.Close();
             FormAdminGastos formGastos = new FormAdminGastos();
             formGastos.ShowDialog();
-        }
-
-        private void Panerl_corteX_Paint(object sender, PaintEventArgs e)
-        {
-           
         }
 
         private void btn_cancelartarjeta_Click(object sender, EventArgs e)
@@ -371,34 +317,15 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             panel_corte_general.Visible = false;
         }
 
-        private void panel_corte_general_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void Panel_vistaX_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
         private void btncancelar_x_Click(object sender, EventArgs e)
         {
             Panel_vistaX.Visible = false;
         }
 
-        private void label_general_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void panel_cortegeneral1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
         private void btn_okgeneral_Click(object sender, EventArgs e)
         {
             int idCajaActual = conexion.ObtenerUltimoIdCajaInicializada(this.idUsuario);
+            ActualizarLabelCaja();
             if (idCajaActual == -1)
             {
                 MessageBox.Show("No hay caja activa.");
@@ -449,9 +376,22 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             panel_cortegeneral1.Visible = false;
         }
 
-        private void btn_cortegeneral_Click(object sender, EventArgs e)
+        private void ActualizarLabelCaja()
         {
+            int idCaja = conexion.ObtenerCajaActiva(this.idUsuario);
 
+            if (idCaja > 0)
+            {
+                decimal monto = conexion.ObtenerMontoCaja(idCaja);
+                lbl_caja.Text = $"Caja activa ID: {idCaja}, Monto: {monto:C}";
+            }
+            else
+            {
+                lbl_caja.Text = "No hay caja activa. Inicializar caja.";
+            }
         }
+
+
+
     }
 }

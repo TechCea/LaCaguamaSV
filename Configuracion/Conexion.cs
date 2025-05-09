@@ -14,7 +14,7 @@ namespace LaCaguamaSV.Configuracion
     {
         private MySqlConnection conectar = null;
         private static string usuario = "root";
-        private static string contrasenia = "slenderman";
+        private static string contrasenia = "180294";
         private static string bd = "lacaguamabd";
         private static string ip = "localhost";
         private static string puerto = "3306"; // 3306 o 3307 si eres javier 
@@ -1629,7 +1629,7 @@ namespace LaCaguamaSV.Configuracion
             int idCaja = 0;
             using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
             {
-                string query = "SELECT id_caja FROM caja WHERE DATE(fecha) = CURDATE() AND id_usuario = @idUsuario ORDER BY fecha DESC LIMIT 1";
+                string query = "SELECT id_caja FROM caja WHERE DATE(fecha) = CURDATE() AND id_usuario = @idUsuario AND id_estado_caja = 2 ORDER BY fecha DESC LIMIT 1";
                 using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                 {
                     cmd.Parameters.AddWithValue("@idUsuario", idUsuario);
@@ -1640,6 +1640,25 @@ namespace LaCaguamaSV.Configuracion
             }
             return idCaja;
         }
+
+        //Obtener monto caja
+        public decimal ObtenerMontoCaja(int idCaja)
+        {
+            decimal monto = 0;
+            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+            {
+                string query = "SELECT cantidad FROM caja WHERE id_caja = @idCaja";
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@idCaja", idCaja);
+                    conexion.Open();
+                    var result = cmd.ExecuteScalar();
+                    if (result != null) monto = Convert.ToDecimal(result);
+                }
+            }
+            return monto;
+        }
+
 
         // Método para insertar un gasto
         public void InsertarGasto(decimal cantidad, string descripcion, int idCaja)
