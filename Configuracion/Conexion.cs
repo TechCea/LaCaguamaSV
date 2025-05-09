@@ -14,10 +14,10 @@ namespace LaCaguamaSV.Configuracion
     {
         private MySqlConnection conectar = null;
         private static string usuario = "root";
-        private static string contrasenia = "root";
+        private static string contrasenia = "slenderman";
         private static string bd = "lacaguamabd";
         private static string ip = "localhost";
-        private static string puerto = "3307"; // 3306 o 3307 si eres javier 
+        private static string puerto = "3306"; // 3306 o 3307 si eres javier 
 
         string cadenaConexion = $"Server={ip};Port={puerto};Database={bd};User Id={usuario};Password={contrasenia};";
 
@@ -1816,6 +1816,53 @@ namespace LaCaguamaSV.Configuracion
             {
                 throw new Exception("Error al obtener el total de los gastos: " + ex.Message);
             }
+        }
+
+        public DataTable ObtenerGastosPorFecha(int idCaja, DateTime fecha)
+        {
+            DataTable tabla = new DataTable();
+            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+            {
+                conexion.Open();
+                string consulta = @"SELECT id_gasto, cantidad, descripcion, fecha 
+                            FROM gastos 
+                            WHERE id_caja = @idCaja 
+                              AND DATE(fecha) = @fecha";
+
+                using (MySqlCommand cmd = new MySqlCommand(consulta, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@idCaja", idCaja);
+                    cmd.Parameters.AddWithValue("@fecha", fecha.ToString("yyyy-MM-dd"));
+                    MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                    da.Fill(tabla);
+                }
+            }
+            return tabla;
+        }
+
+        public decimal ObtenerTotalGastosPorFecha(int idCaja, DateTime fecha)
+        {
+            decimal total = 0;
+            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+            {
+                conexion.Open();
+                string consulta = @"SELECT IFNULL(SUM(cantidad), 0) 
+                            FROM gastos 
+                            WHERE id_caja = @idCaja 
+                              AND DATE(fecha) = @fecha";
+
+                using (MySqlCommand cmd = new MySqlCommand(consulta, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@idCaja", idCaja);
+                    cmd.Parameters.AddWithValue("@fecha", fecha.ToString("yyyy-MM-dd"));
+                    object resultado = cmd.ExecuteScalar();
+                    if (resultado != null && resultado != DBNull.Value)
+                    {
+                        total = Convert.ToDecimal(resultado);
+                    }
+                }
+            }
+            return total;
         }
 
 
