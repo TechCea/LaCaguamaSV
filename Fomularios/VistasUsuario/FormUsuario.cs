@@ -19,6 +19,14 @@ namespace LaCaguamaSV.Fomularios.VistasUsuario
         {
             InitializeComponent();
             CargarOrdenes();
+            dataGridViewOrdenesUsuario.CellFormatting += dataGridViewOrdenesUsuario_CellFormatting;
+
+            // Tamaño fijo
+            this.FormBorderStyle = FormBorderStyle.FixedSingle; // Evita redimensionar
+
+
+            // Posición fija (centrada en la pantalla)
+            this.StartPosition = FormStartPosition.CenterScreen;
 
             // Si el usuario no es normal (rol 2), cierra el formulario
             if (SesionUsuario.Rol != 2)
@@ -72,7 +80,6 @@ namespace LaCaguamaSV.Fomularios.VistasUsuario
             dataGridViewOrdenesUsuario.ReadOnly = true;
             dataGridViewOrdenesUsuario.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridViewOrdenesUsuario.MultiSelect = false;
-
         }
 
         private void btnCrearOrden_Click(object sender, EventArgs e)
@@ -293,17 +300,52 @@ namespace LaCaguamaSV.Fomularios.VistasUsuario
             CargarOrdenes(); // Refrescar lista después de cerrar
         }
 
-
-
-        private void Ordenes_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void BtnMenu_Click(object sender, EventArgs e)
         {
             Menu formMenu = new Menu();
             formMenu.Show();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            int usuarioId = SesionUsuario.IdUsuario;  // Suponiendo que ya tienes el ID del usuario
+            FormAdminFunciones formFunciones = new FormAdminFunciones(usuarioId);
+            formFunciones.ShowDialog();
+        }
+
+        private void dataGridViewOrdenesUsuario_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (dataGridViewOrdenesUsuario.Columns[e.ColumnIndex].Name == "estado_orden")
+            {
+                var estado = e.Value?.ToString();
+                if (!string.IsNullOrEmpty(estado))
+                {
+                    DataGridViewRow row = dataGridViewOrdenesUsuario.Rows[e.RowIndex];
+
+                    if (estado == "Cerrada")
+                    {
+                        row.DefaultCellStyle.BackColor = Color.FromArgb(255, 200, 200); // rojo claro
+                        row.DefaultCellStyle.ForeColor = Color.DarkRed;
+                    }
+                    else if (estado == "Abierta")
+                    {
+                        row.DefaultCellStyle.BackColor = Color.FromArgb(200, 255, 200); // verde claro
+                        row.DefaultCellStyle.ForeColor = Color.DarkGreen;
+                    }
+                }
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            // Cierra la sesión
+            SesionUsuario.CerrarSesion();
+
+            // Vuelve al formulario de login
+            Login loginForm = new Login();
+            this.Hide();
+            loginForm.ShowDialog();
+            this.Close();
         }
     }
 }

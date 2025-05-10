@@ -23,6 +23,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             InitializeComponent();
             CargarOrdenes();
+            dataGridViewOrdenesAdmin.CellFormatting += dataGridViewOrdenesAdmin_CellFormatting;
 
             // Tamaño fijo
             this.FormBorderStyle = FormBorderStyle.FixedSingle; // Evita redimensionar
@@ -425,8 +426,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             formminven.ShowDialog();
         }
 
-       
-
         private void BtnHistorialPagos_Click(object sender, EventArgs e)
         {
             try
@@ -491,6 +490,28 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             return items.ToString();
         }
 
+        private void dataGridViewOrdenesAdmin_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (dataGridViewOrdenesAdmin.Columns[e.ColumnIndex].Name == "estado_orden")
+            {
+                var estado = e.Value?.ToString();
+                if (!string.IsNullOrEmpty(estado))
+                {
+                    DataGridViewRow row = dataGridViewOrdenesAdmin.Rows[e.RowIndex];
+
+                    if (estado == "Cerrada")
+                    {
+                        row.DefaultCellStyle.BackColor = Color.FromArgb(255, 200, 200); // rojo claro
+                        row.DefaultCellStyle.ForeColor = Color.DarkRed;
+                    }
+                    else if (estado == "Abierta")
+                    {
+                        row.DefaultCellStyle.BackColor = Color.FromArgb(200, 255, 200); // verde claro
+                        row.DefaultCellStyle.ForeColor = Color.DarkGreen;
+                    }
+                }
+            }
+        }
 
     }
 }

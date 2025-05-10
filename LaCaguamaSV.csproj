@@ -314,12 +314,6 @@
     <Compile Include="Fomularios\VistasUsuario\FormCartaPlatos.Designer.cs">
       <DependentUpon>FormCartaPlatos.cs</DependentUpon>
     </Compile>
-    <Compile Include="Fomularios\VistasUsuario\FormMesasUsuario.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Fomularios\VistasUsuario\FormMesasUsuario.Designer.cs">
-      <DependentUpon>FormMesasUsuario.cs</DependentUpon>
-    </Compile>
     <Compile Include="Fomularios\VistasUsuario\FormUsuario.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -15,6 +15,11 @@ namespace LaCaguamaSV.Fomularios.VistasUsuario
         public Menu()
         {
             InitializeComponent();
+            // Tamaño fijo
+            this.FormBorderStyle = FormBorderStyle.FixedSingle; // Evita redimensionar
+
+            // Posición fija (centrada en la pantalla)
+            this.StartPosition = FormStartPosition.CenterScreen;
         }
 
         // Redirige al formulario de bebidas

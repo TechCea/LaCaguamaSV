@@ -37,6 +37,8 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 // Posición fija (centrada en la pantalla)
                 this.StartPosition = FormStartPosition.CenterScreen;
 
+                CargarGastosDelDia();
+
             }
             catch (Exception ex)
             {

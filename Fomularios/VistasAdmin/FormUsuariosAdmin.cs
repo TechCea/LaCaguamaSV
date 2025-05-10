@@ -18,6 +18,13 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             InitializeComponent();
 
+            // Tamaño fijo
+            this.FormBorderStyle = FormBorderStyle.FixedSingle; // Evita redimensionar
+
+            // Posición fija (centrada en la pantalla)
+            this.StartPosition = FormStartPosition.CenterScreen;
+
+
             // Si el usuario no es administrador, cierra el formulario
             if (SesionUsuario.Rol != 1)
             {
@@ -203,20 +210,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             txtTelefono.BackColor = SystemColors.Window;
         }
-        private void txtContraseñaU_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void txtCorreo_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void cmbRol_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
 
         private void BtnAgregarU_Click(object sender, EventArgs e)
         {
@@ -399,11 +392,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             dgvUsuarios.DefaultCellStyle.ForeColor = Color.Black;
             CargarRoles();
-        }
-
-        private void txtIdUsuario_TextChanged(object sender, EventArgs e)
-        {
-
         }
 
         private void button1_Click(object sender, EventArgs e)
