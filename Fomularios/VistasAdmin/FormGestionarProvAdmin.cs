@@ -23,7 +23,12 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 MessageBox.Show("Acceso denegado. No tienes permisos de administrador.", "Acceso Restringido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            
+
+            // Tamaño fijo
+            this.FormBorderStyle = FormBorderStyle.FixedSingle; // Evita redimensionar
+
+            // Posición fija (centrada en la pantalla)
+            this.StartPosition = FormStartPosition.CenterScreen;
 
             CargarProveedores();
             dgvProveedor.SelectionChanged += dgvProveedor_SelectionChanged;

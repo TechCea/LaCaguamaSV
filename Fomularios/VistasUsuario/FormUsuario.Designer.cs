@@ -44,7 +44,7 @@
             this.btnMesas.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
             this.btnMesas.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMesas.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btnMesas.Location = new System.Drawing.Point(497, 50);
+            this.btnMesas.Location = new System.Drawing.Point(502, 81);
             this.btnMesas.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnMesas.Name = "btnMesas";
             this.btnMesas.Size = new System.Drawing.Size(187, 82);
@@ -58,7 +58,7 @@
             this.btnCrearOrden.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
             this.btnCrearOrden.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCrearOrden.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btnCrearOrden.Location = new System.Drawing.Point(56, 49);
+            this.btnCrearOrden.Location = new System.Drawing.Point(61, 80);
             this.btnCrearOrden.Margin = new System.Windows.Forms.Padding(4);
             this.btnCrearOrden.Name = "btnCrearOrden";
             this.btnCrearOrden.Size = new System.Drawing.Size(225, 82);
@@ -70,7 +70,7 @@
             // dataGridViewOrdenesUsuario
             // 
             this.dataGridViewOrdenesUsuario.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewOrdenesUsuario.Location = new System.Drawing.Point(56, 150);
+            this.dataGridViewOrdenesUsuario.Location = new System.Drawing.Point(61, 181);
             this.dataGridViewOrdenesUsuario.Margin = new System.Windows.Forms.Padding(4);
             this.dataGridViewOrdenesUsuario.Name = "dataGridViewOrdenesUsuario";
             this.dataGridViewOrdenesUsuario.RowHeadersWidth = 51;
@@ -83,7 +83,7 @@
             this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button1.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.button1.Location = new System.Drawing.Point(289, 49);
+            this.button1.Location = new System.Drawing.Point(294, 80);
             this.button1.Margin = new System.Windows.Forms.Padding(4);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(203, 82);
@@ -95,11 +95,12 @@
             // label1
             // 
             this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.label1.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label1.Location = new System.Drawing.Point(53, 19);
+            this.label1.Location = new System.Drawing.Point(58, 33);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(125, 16);
+            this.label1.Size = new System.Drawing.Size(154, 20);
             this.label1.TabIndex = 14;
             this.label1.Text = "Bienvenido Usuario";
             // 
@@ -119,7 +120,7 @@
             this.BtnMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
             this.BtnMenu.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BtnMenu.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.BtnMenu.Location = new System.Drawing.Point(689, 49);
+            this.BtnMenu.Location = new System.Drawing.Point(694, 80);
             this.BtnMenu.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.BtnMenu.Name = "BtnMenu";
             this.BtnMenu.Size = new System.Drawing.Size(187, 82);
@@ -135,7 +136,7 @@
             this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button2.ForeColor = System.Drawing.SystemColors.Control;
-            this.button2.Location = new System.Drawing.Point(1018, 49);
+            this.button2.Location = new System.Drawing.Point(1023, 80);
             this.button2.Margin = new System.Windows.Forms.Padding(4);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(143, 47);
@@ -150,7 +151,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.fondo;
-            this.ClientSize = new System.Drawing.Size(1201, 688);
+            this.ClientSize = new System.Drawing.Size(1216, 720);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.BtnMenu);
             this.Controls.Add(this.btnMesas);

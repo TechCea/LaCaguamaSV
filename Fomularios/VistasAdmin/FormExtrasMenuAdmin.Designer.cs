@@ -37,6 +37,7 @@
             this.lblSeleccionExtra = new System.Windows.Forms.Label();
             this.lblNombreE = new System.Windows.Forms.Label();
             this.btnActualizarB = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgvExtras)).BeginInit();
             this.gbDatosExtras.SuspendLayout();
             this.SuspendLayout();
@@ -151,6 +152,18 @@
             this.btnActualizarB.UseVisualStyleBackColor = false;
             this.btnActualizarB.Click += new System.EventHandler(this.btnActualizarB_Click);
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.label2.Location = new System.Drawing.Point(32, 20);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(100, 26);
+            this.label2.TabIndex = 15;
+            this.label2.Text = "EXTRAS";
+            // 
             // FormExtrasMenuAdmin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -159,18 +172,20 @@
             this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.fondo;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(976, 614);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.gbDatosExtras);
             this.Controls.Add(this.btnRegresarMenu);
             this.Controls.Add(this.dgvExtras);
             this.Controls.Add(this.btnActualizarB);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FormExtrasMenuAdmin";
-            this.Text = "FormExtrasMenuAdmin";
+            this.Text = "Extras del menú";
             this.Load += new System.EventHandler(this.FormExtrasMenuAdmin_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvExtras)).EndInit();
             this.gbDatosExtras.ResumeLayout(false);
             this.gbDatosExtras.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -185,5 +200,6 @@
         private System.Windows.Forms.Label lblNombreE;
         private System.Windows.Forms.TextBox txtPrecioUE;
         private System.Windows.Forms.TextBox txtNombreE;
+        private System.Windows.Forms.Label label2;
     }
 }

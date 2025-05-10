@@ -142,7 +142,7 @@
             this.btnCerrar_Click.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnCerrar_Click.ForeColor = System.Drawing.SystemColors.Control;
             this.btnCerrar_Click.Location = new System.Drawing.Point(727, 15);
-            this.btnCerrar_Click.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnCerrar_Click.Margin = new System.Windows.Forms.Padding(4);
             this.btnCerrar_Click.Name = "btnCerrar_Click";
             this.btnCerrar_Click.Size = new System.Drawing.Size(57, 28);
             this.btnCerrar_Click.TabIndex = 9;
@@ -163,7 +163,7 @@
             this.Controls.Add(this.groupBox1);
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "FormInventarioAdmin";
-            this.Text = "FormInventarioAdmin";
+            this.Text = "Inventario";
             this.Load += new System.EventHandler(this.FormInventarioAdmin_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
