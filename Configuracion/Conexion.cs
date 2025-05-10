@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,7 +15,7 @@ namespace LaCaguamaSV.Configuracion
     {
         private MySqlConnection conectar = null;
         private static string usuario = "root";
-        private static string contrasenia = "180294";
+        private static string contrasenia = "slenderman";
         private static string bd = "lacaguamabd";
         private static string ip = "localhost";
         private static string puerto = "3306"; // 3306 o 3307 si eres javier 
@@ -2265,7 +2266,7 @@ namespace LaCaguamaSV.Configuracion
 
         // -------------------- CORTE Tarjetas --------------------
 
-        public void GuardarCorteTarjetas( decimal cantidad, int idUsuario, int idCaja)
+        public void GuardarCorteTarjetas(decimal cantidad, int idUsuario, int idCaja)
         {
             string query = @"
         INSERT INTO corte_tarjetas (cantidad, fecha, id_usuario, id_caja)
@@ -2454,6 +2455,35 @@ namespace LaCaguamaSV.Configuracion
             }
 
             return (efectivo, tarjeta, descuentos, gastos);
+        }
+
+
+
+
+
+        // -------------------- Importar--------------------
+        public void ImportarBaseDeDatos(string rutaArchivo)
+        {
+            string usuario = "root";
+            string contraseña = "tu_contraseña";
+            string baseDeDatos = "nombre_de_tu_base";
+            string rutaMysql = @"C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe";
+
+            ProcessStartInfo psi = new ProcessStartInfo
+            {
+                FileName = rutaMysql,
+                Arguments = $"-u {usuario} -p{contraseña} {baseDeDatos} < \"{rutaArchivo}\"",
+                RedirectStandardInput = true,
+                UseShellExecute = false,
+                CreateNoWindow = true
+            };
+
+            using (Process proceso = Process.Start(psi))
+            {
+                proceso.WaitForExit();
+            }
+
+            MessageBox.Show("Base de datos importada correctamente.");
         }
 
 

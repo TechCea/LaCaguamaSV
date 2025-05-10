@@ -15,6 +15,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Net.Http;
+using System.Diagnostics;
 
 
 namespace LaCaguamaSV.Fomularios.VistasAdmin
@@ -435,7 +436,63 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             }
         }
 
+        private void btnRespaldarBD_Click(object sender, EventArgs e)
+        {
 
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Filter = "Archivo SQL (*.sql)|*.sql";
+            sfd.FileName = "respaldo_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".sql";
 
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                string rutaRespaldo = sfd.FileName;
+                string usuario = "root";
+                string contraseña = "slenderman"; // Reemplaza por tu contraseña real
+                string baseDeDatos = "lacaguamabd"; // Reemplaza por el nombre real de tu base de datos
+                string mysqldumpPath = @"C:\Program Files\MySQL\MySQL Server 8.0\bin\mysqldump.exe";
+
+                ProcessStartInfo psi = new ProcessStartInfo();
+                psi.FileName = mysqldumpPath;
+                psi.RedirectStandardInput = false;
+                psi.RedirectStandardOutput = true;
+                psi.UseShellExecute = false;
+                psi.CreateNoWindow = true;
+
+                psi.Arguments = $"-u {usuario} -p{contraseña} {baseDeDatos}";
+
+                try
+                {
+                    using (Process process = Process.Start(psi))
+                    {
+                        using (StreamReader reader = process.StandardOutput)
+                        {
+                            string result = reader.ReadToEnd();
+                            File.WriteAllText(rutaRespaldo, result);
+                        }
+
+                        process.WaitForExit();
+                        MessageBox.Show("Respaldo creado correctamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al respaldar la base de datos:\n" + ex.Message);
+                }
+            }
+        }
+
+        private void btnImportarBD_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog dialog = new OpenFileDialog())
+            {
+                dialog.Filter = "Archivo SQL (*.sql)|*.sql";
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    string rutaArchivo = dialog.FileName;
+                    Conexion conexion = new Conexion();
+                    conexion.ImportarBaseDeDatos(rutaArchivo);
+                }
+            }
+        }
     }
 }
