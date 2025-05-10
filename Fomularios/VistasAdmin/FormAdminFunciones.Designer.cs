@@ -77,6 +77,7 @@
             this.lbl_caja = new System.Windows.Forms.Label();
             this.btnRespaldarBD = new System.Windows.Forms.Button();
             this.btnImportarBD = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.panelConfirmacion.SuspendLayout();
             this.panelIngresoMonto.SuspendLayout();
             this.panelResultadoCorte.SuspendLayout();
@@ -732,6 +733,19 @@
             this.btnImportarBD.UseVisualStyleBackColor = false;
             this.btnImportarBD.Click += new System.EventHandler(this.btnImportarBD_Click);
             // 
+            // button1
+            // 
+            this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.button1.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.button1.Location = new System.Drawing.Point(756, 216);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(171, 74);
+            this.button1.TabIndex = 27;
+            this.button1.Text = "Historial de Cortes";
+            this.button1.UseVisualStyleBackColor = false;
+            // 
             // FormAdminFunciones
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -739,7 +753,8 @@
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.fondo;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(1375, 919);
+            this.ClientSize = new System.Drawing.Size(1255, 516);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.btnImportarBD);
             this.Controls.Add(this.btnRespaldarBD);
             this.Controls.Add(this.lbl_caja);
@@ -837,5 +852,6 @@
         private System.Windows.Forms.Label lbl_caja;
         private System.Windows.Forms.Button btnRespaldarBD;
         private System.Windows.Forms.Button btnImportarBD;
+        private System.Windows.Forms.Button button1;
     }
 }
