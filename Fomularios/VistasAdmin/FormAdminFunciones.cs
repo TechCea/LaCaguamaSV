@@ -6,11 +6,15 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Printing;
+using System.IO;
+using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Net.Http;
 
 
 namespace LaCaguamaSV.Fomularios.VistasAdmin
@@ -191,10 +195,50 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             panel_corte_general.Visible = false;
         }
 
+
         private void btnImprimirRecibo_Click_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Recibo enviado a impresora (simulado).");
+            Impresion imp = new Impresion();
+
+            // Prueba con datos simulados
+            string cliente = "Juan Pérez";
+            decimal total = 120.00m;
+            decimal descuento = 10.00m;
+            decimal totalFinal = total - descuento;
+
+            imp.ImprimirTicket(cliente, total, descuento, totalFinal);
         }
+
+
+
+        public class Impresion
+        {
+            private string textoImprimir;
+
+            public void ImprimirTicket(string nombreCliente, decimal total, decimal descuento, decimal totalFinal)
+            {
+            
+            }
+
+            private void PrintPage(object sender, PrintPageEventArgs e)
+            {
+                Font fuente = new Font("Courier New", 10); // Letra monoespaciada
+                float y = 10;
+                float saltoLinea = fuente.GetHeight(e.Graphics) + 2;
+
+                using (StringReader sr = new StringReader(textoImprimir))
+                {
+                    string linea;
+                    while ((linea = sr.ReadLine()) != null)
+                    {
+                        e.Graphics.DrawString(linea, fuente, Brushes.Black, 10, y);
+                        y += saltoLinea;
+                    }
+                }
+            }
+        }
+
+
 
         private void btnCerrarPanel_Click_Click(object sender, EventArgs e)
         {
