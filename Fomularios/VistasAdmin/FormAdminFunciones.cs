@@ -54,8 +54,17 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             CentrarPanel(panelResultadoCorte);  
             CentrarPanel(Panel_vistaX);  
             CentrarPanel(panelIngresoMonto);  
-            CentrarPanel(panel_cortegeneral1);  
-            CentrarPanel(panel_corte_general);  
+            CentrarPanel(panel_cortegeneral1);
+            CentrarPanel(panel_corte_general);
+
+            Panerl_corteX.BringToFront();
+            panelCaja.BringToFront();
+            panelResultadoCorte.BringToFront();
+            panelConfirmacion.BringToFront();
+            Panel_vistaX.BringToFront();
+            panelIngresoMonto.BringToFront();
+            panel_cortegeneral1.BringToFront();
+            panel_corte_general.BringToFront();
 
 
         }
@@ -68,9 +77,20 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void FormAdminFunciones_Load(object sender, EventArgs e)
         {
-         
+
             panelCaja.Visible = false;
             ActualizarLabelCaja(); // Llama aquí para que se actualice al cargar
+
+            Conexion conn = new Conexion();
+
+            if (conn.CorteTarjetasYaRealizado())
+            {
+                Btn_confirmartarjeta.Enabled = false;
+            }
+            if (conexion.CorteGeneralYaRealizado())
+            {
+                btn_okgeneral.Enabled = false;
+            }
 
         }
 
@@ -83,6 +103,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         private void btnConfirmarCorte_Click(object sender, EventArgs e)
         {
             panelConfirmacion.Visible = false;
+            
             panelIngresoMonto.Visible = true;
             ActualizarLabelCaja();
         }
@@ -91,6 +112,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         private void btnCancelarCorte_Click(object sender, EventArgs e)
         {
             panelConfirmacion.Visible = false; // Ocultar la ventana de confirmación
+           
         }
 
         private void btnConfirmarMonto_Click(object sender, EventArgs e)
@@ -112,7 +134,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 return;
             }
             btnCajaInicial.Enabled = true;
-            btnCajaInicial.BackColor = Color.LightGreen;
+            btnCajaInicial.BackColor = ColorTranslator.FromHtml("#e74719");
 
             if (conexion.CorteYaRealizado(idCajaActual))
             {
@@ -316,40 +338,33 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             Conexion conn = new Conexion();
 
-            // Obtener el id de la última caja cerrada
-            int idCaja = conn.ObtenerUltimoIdCaja();
-
-            if (idCaja <= 0)
+            if (conn.CorteTarjetasYaRealizado())
             {
-                MessageBox.Show("No se ha encontrado una caja válida.");
+                MessageBox.Show("El corte de tarjetas ya fue realizado en este turno.");
+                Btn_confirmartarjeta.Enabled = false;
+                Btn_confirmartarjeta.BackColor = Color.LightGray;
                 return;
             }
+    
 
-            // Obtener el total de ventas con tarjeta entre las 10 AM y las 3 AM
+            int idCaja = conn.ObtenerUltimoIdCaja();
+
             var (totalTarjetas, cantidadVentas) = conn.ObtenerCorteTarjetasPorHorario();
-
-
-            // Obtener el nombre del usuario que hizo el corte
             string nombreCajero = conn.ObtenerNombreUsuario(this.idUsuario);
 
-            // Crear el mensaje con los resultados
             StringBuilder resultado = new StringBuilder();
             resultado.AppendLine($"Cajero: {nombreCajero}");
             resultado.AppendLine($"Ventas con tarjeta: {cantidadVentas} venta(s)");
             resultado.AppendLine($"Total en tarjetas: {totalTarjetas:C}");
-
-            // Mostrar el resultado en el label
+            
             Label_resultadoX.Text = resultado.ToString();
 
-            // Guardar el corte de tarjetas en la base de datos
-            conexion.GuardarCorteTarjetas( 
-                totalTarjetas, 
-                this.idUsuario, 
-                idCaja);
+            conn.GuardarCorteTarjetas(totalTarjetas, this.idUsuario, idCaja);
 
-            // Mostrar el panel de resultados
             Panel_vistaX.Visible = true;
             Panerl_corteX.Visible = false;
+
+            Btn_confirmartarjeta.Enabled = false; // lo deshabilitas una vez guardado
         }
 
         private void btnImprimir_corteX_Click(object sender, EventArgs e)
@@ -369,6 +384,17 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void btn_okgeneral_Click(object sender, EventArgs e)
         {
+
+
+            if (conexion.CorteGeneralYaRealizado())
+            {
+                MessageBox.Show("El corte general ya fue realizado en este turno.");
+                btn_okgeneral.Enabled = false;
+                btn_okgeneral.BackColor = Color.LightGray;
+                return;
+            }
+       
+
             int idCajaActual = conexion.ObtenerUltimoIdCajaInicializada(this.idUsuario);
             ActualizarLabelCaja();
             if (idCajaActual == -1)
@@ -383,6 +409,8 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             // Calcular total final
             decimal totalFinal = totalEfectivo + totalTarjeta - gastos;
 
+            // Calcular Venta efectivo final
+            decimal totalFinalEfectivo = totalEfectivo  - gastos;
             // Guardar en la base de datos
             conexion.GuardarCorteGeneral(
                 0, // cajaInicial se ignora, puedes pasar 0 o null si actualizas el método
@@ -403,13 +431,16 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 "CORTE GENERAL\n\n" +
 
                  $"Cajero: {nombreCajero}\n"+
-                 $"Fecha: {fechaActual}\n" +
+                 $"Fecha: {fechaActual}\n\n" +
 
-                $"Ventas en efectivo: {totalEfectivo:C}\n" +
-                $"Ventas en tarjetas: {totalTarjeta:C}\n" +
-                $"Descuentos: {descuento:C}\n" +
-                $"Gastos: {gastos:C}\n\n" +
-                $"Total generado: {totalFinal:C}\n";
+                $"Ventas en efectivo del dia: {totalEfectivo:C}\n" +
+                $"Ventas en tarjetas del dia: {totalTarjeta:C}\n" +
+                $"Descuentos Realizado en el Dia: {descuento:C}\n" +
+                $"Gastos del dia : {gastos:C}\n\n" +
+
+
+                $"Total Efectivo Final: {totalFinalEfectivo:C}\n" +
+                $"Total de Venta Generada: {totalFinal:C}\n";
 
             // Cambiar visibilidad de paneles
             panel_cortegeneral1.Visible = false;
@@ -499,6 +530,16 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             FormHistorialCortes formhistorialcortes = new FormHistorialCortes();
             formhistorialcortes.ShowDialog();
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

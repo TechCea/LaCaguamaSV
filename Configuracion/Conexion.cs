@@ -2264,6 +2264,25 @@ namespace LaCaguamaSV.Configuracion
             }
         }
 
+        public void GuardarCorteTarjetasSinCaja(decimal cantidad, int idUsuario)
+        {
+            string query = @"
+        INSERT INTO corte_tarjetas (cantidad, fecha, id_usuario, id_caja)
+        VALUES (@cantidad, NOW(), @idUsuario, NULL);
+    ";
+
+            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+            {
+                conexion.Open();
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@cantidad", cantidad);
+                    cmd.Parameters.AddWithValue("@idUsuario", idUsuario);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
         public (decimal total, int cantidad) ObtenerCorteTarjetasPorHorario()
         {
             decimal total = 0;
@@ -2309,7 +2328,8 @@ namespace LaCaguamaSV.Configuracion
         public int ObtenerUltimoIdCaja()
         {
             int idCaja = 0;
-            string query = "SELECT id_caja FROM caja WHERE id_estado_caja = 2 ORDER BY fecha DESC LIMIT 1";  // Asegúrate de que 'id_estado_caja = 2' es el estado correcto de una caja cerrada
+
+            string query = "SELECT id_caja FROM caja ORDER BY fecha DESC LIMIT 1"; // sin filtro por estado
 
             using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
             {
@@ -2319,7 +2339,7 @@ namespace LaCaguamaSV.Configuracion
                     var resultado = cmd.ExecuteScalar();
                     if (resultado != null)
                     {
-                        idCaja = Convert.ToInt32(resultado);  // Asignamos el último id_caja encontrado
+                        idCaja = Convert.ToInt32(resultado);
                     }
                 }
             }
@@ -2353,6 +2373,31 @@ namespace LaCaguamaSV.Configuracion
             }
 
             return nombre;
+        }
+
+        public bool CorteTarjetasYaRealizado()
+        {
+            DateTime fechaInicio = DateTime.Today.AddHours(10);       // Hoy 10:00 AM
+            DateTime fechaFin = DateTime.Today.AddDays(1).AddHours(3); // Mañana 3:00 AM
+
+            string query = @"
+        SELECT COUNT(*) 
+        FROM corte_tarjetas 
+        WHERE fecha BETWEEN @inicio AND @fin;
+    ";
+
+            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+            {
+                conexion.Open();
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@inicio", fechaInicio);
+                    cmd.Parameters.AddWithValue("@fin", fechaFin);
+
+                    int cantidad = Convert.ToInt32(cmd.ExecuteScalar());
+                    return cantidad > 0; // Si ya hay un corte en ese horario
+                }
+            }
         }
 
 
@@ -2432,6 +2477,31 @@ namespace LaCaguamaSV.Configuracion
             }
 
             return (efectivo, tarjeta, descuentos, gastos);
+        }
+
+        public bool CorteGeneralYaRealizado()
+        {
+            DateTime fechaInicio = DateTime.Today.AddHours(10);        // Hoy 10:00 AM
+            DateTime fechaFin = DateTime.Today.AddDays(1).AddHours(3); // Mañana 3:00 AM
+
+            string query = @"
+        SELECT COUNT(*) 
+        FROM corte_general 
+        WHERE fecha BETWEEN @inicio AND @fin;
+    ";
+
+            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+            {
+                conexion.Open();
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@inicio", fechaInicio);
+                    cmd.Parameters.AddWithValue("@fin", fechaFin);
+
+                    int cantidad = Convert.ToInt32(cmd.ExecuteScalar());
+                    return cantidad > 0;
+                }
+            }
         }
 
 

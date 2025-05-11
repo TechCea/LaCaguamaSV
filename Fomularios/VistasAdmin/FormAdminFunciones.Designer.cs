@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
             this.Corte_Caja = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
@@ -78,6 +77,8 @@
             this.btnRespaldarBD = new System.Windows.Forms.Button();
             this.btnImportarBD = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.panelConfirmacion.SuspendLayout();
             this.panelIngresoMonto.SuspendLayout();
             this.panelResultadoCorte.SuspendLayout();
@@ -88,18 +89,6 @@
             this.panel_corte_general.SuspendLayout();
             this.SuspendLayout();
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.BackColor = System.Drawing.Color.Transparent;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.label1.Location = new System.Drawing.Point(74, 76);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(254, 25);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Operaciones de Cajero";
-            // 
             // Corte_Caja
             // 
             this.Corte_Caja.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
@@ -107,7 +96,7 @@
             this.Corte_Caja.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.Corte_Caja.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Corte_Caja.ForeColor = System.Drawing.SystemColors.Control;
-            this.Corte_Caja.Location = new System.Drawing.Point(87, 216);
+            this.Corte_Caja.Location = new System.Drawing.Point(112, 239);
             this.Corte_Caja.Name = "Corte_Caja";
             this.Corte_Caja.Size = new System.Drawing.Size(171, 74);
             this.Corte_Caja.TabIndex = 1;
@@ -122,7 +111,7 @@
             this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button2.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.button2.Location = new System.Drawing.Point(87, 307);
+            this.button2.Location = new System.Drawing.Point(112, 330);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(171, 74);
             this.button2.TabIndex = 2;
@@ -135,11 +124,12 @@
             this.label2.BackColor = System.Drawing.Color.Transparent;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.label2.Location = new System.Drawing.Point(411, 76);
+            this.label2.Location = new System.Drawing.Point(66, 93);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(246, 25);
+            this.label2.Size = new System.Drawing.Size(254, 25);
             this.label2.TabIndex = 3;
-            this.label2.Text = "Operaciones Auditoria";
+            this.label2.Text = "Operaciones de Cajero";
+            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // label3
             // 
@@ -147,37 +137,41 @@
             this.label3.BackColor = System.Drawing.Color.Transparent;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.label3.Location = new System.Drawing.Point(791, 76);
+            this.label3.Location = new System.Drawing.Point(934, 262);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(107, 25);
             this.label3.TabIndex = 4;
             this.label3.Text = "Reportes";
+            this.label3.Click += new System.EventHandler(this.label3_Click);
             // 
             // btnCorte_tarjetas
             // 
             this.btnCorte_tarjetas.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
             this.btnCorte_tarjetas.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnCorte_tarjetas.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCorte_tarjetas.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCorte_tarjetas.ForeColor = System.Drawing.SystemColors.Control;
-            this.btnCorte_tarjetas.Location = new System.Drawing.Point(429, 114);
+            this.btnCorte_tarjetas.Location = new System.Drawing.Point(453, 137);
             this.btnCorte_tarjetas.Name = "btnCorte_tarjetas";
             this.btnCorte_tarjetas.Size = new System.Drawing.Size(171, 74);
             this.btnCorte_tarjetas.TabIndex = 5;
-            this.btnCorte_tarjetas.Text = "Realizar corte X";
+            this.btnCorte_tarjetas.Text = "Corte de Tarjetas";
             this.btnCorte_tarjetas.UseVisualStyleBackColor = false;
             this.btnCorte_tarjetas.Click += new System.EventHandler(this.button3_Click);
             // 
             // btnCorte_general
             // 
             this.btnCorte_general.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
+            this.btnCorte_general.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.btnCorte_general.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnCorte_general.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCorte_general.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCorte_general.ForeColor = System.Drawing.SystemColors.Control;
-            this.btnCorte_general.Location = new System.Drawing.Point(429, 216);
+            this.btnCorte_general.Location = new System.Drawing.Point(453, 239);
             this.btnCorte_general.Name = "btnCorte_general";
             this.btnCorte_general.Size = new System.Drawing.Size(171, 74);
             this.btnCorte_general.TabIndex = 6;
-            this.btnCorte_general.Text = "Realizar corte Z";
+            this.btnCorte_general.Text = "Corte General";
             this.btnCorte_general.UseVisualStyleBackColor = false;
             this.btnCorte_general.Click += new System.EventHandler(this.button4_Click);
             // 
@@ -185,13 +179,14 @@
             // 
             this.btnReimprimir_corte_general.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.btnReimprimir_corte_general.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnReimprimir_corte_general.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnReimprimir_corte_general.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnReimprimir_corte_general.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btnReimprimir_corte_general.Location = new System.Drawing.Point(429, 307);
+            this.btnReimprimir_corte_general.Location = new System.Drawing.Point(453, 341);
             this.btnReimprimir_corte_general.Name = "btnReimprimir_corte_general";
             this.btnReimprimir_corte_general.Size = new System.Drawing.Size(171, 74);
             this.btnReimprimir_corte_general.TabIndex = 7;
-            this.btnReimprimir_corte_general.Text = "Realizar corte  XZ";
+            this.btnReimprimir_corte_general.Text = "Reimprimir Corte General";
             this.btnReimprimir_corte_general.UseVisualStyleBackColor = false;
             // 
             // button9
@@ -201,7 +196,7 @@
             this.button9.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button9.ForeColor = System.Drawing.Color.White;
-            this.button9.Location = new System.Drawing.Point(1140, 446);
+            this.button9.Location = new System.Drawing.Point(1116, 533);
             this.button9.Name = "button9";
             this.button9.Size = new System.Drawing.Size(80, 32);
             this.button9.TabIndex = 11;
@@ -458,7 +453,7 @@
             this.btnCajaInicial.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnCajaInicial.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCajaInicial.ForeColor = System.Drawing.SystemColors.Control;
-            this.btnCajaInicial.Location = new System.Drawing.Point(87, 114);
+            this.btnCajaInicial.Location = new System.Drawing.Point(112, 137);
             this.btnCajaInicial.Name = "btnCajaInicial";
             this.btnCajaInicial.Size = new System.Drawing.Size(171, 74);
             this.btnCajaInicial.TabIndex = 15;
@@ -473,7 +468,7 @@
             this.Gastos.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.Gastos.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Gastos.ForeColor = System.Drawing.SystemColors.Control;
-            this.Gastos.Location = new System.Drawing.Point(756, 125);
+            this.Gastos.Location = new System.Drawing.Point(800, 330);
             this.Gastos.Name = "Gastos";
             this.Gastos.Size = new System.Drawing.Size(171, 74);
             this.Gastos.TabIndex = 16;
@@ -644,9 +639,9 @@
             this.panel_corte_general.Controls.Add(this.btn_cerrarXZ);
             this.panel_corte_general.Controls.Add(this.btn_cortegeneral);
             this.panel_corte_general.Controls.Add(this.label_general);
-            this.panel_corte_general.Location = new System.Drawing.Point(1318, 800);
+            this.panel_corte_general.Location = new System.Drawing.Point(1398, 631);
             this.panel_corte_general.Name = "panel_corte_general";
-            this.panel_corte_general.Size = new System.Drawing.Size(352, 507);
+            this.panel_corte_general.Size = new System.Drawing.Size(524, 450);
             this.panel_corte_general.TabIndex = 23;
             this.panel_corte_general.Visible = false;
             // 
@@ -657,7 +652,7 @@
             this.btn_cerrarXZ.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btn_cerrarXZ.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_cerrarXZ.ForeColor = System.Drawing.SystemColors.Control;
-            this.btn_cerrarXZ.Location = new System.Drawing.Point(187, 409);
+            this.btn_cerrarXZ.Location = new System.Drawing.Point(291, 357);
             this.btn_cerrarXZ.Name = "btn_cerrarXZ";
             this.btn_cerrarXZ.Size = new System.Drawing.Size(149, 60);
             this.btn_cerrarXZ.TabIndex = 6;
@@ -672,7 +667,7 @@
             this.btn_cortegeneral.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btn_cortegeneral.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_cortegeneral.ForeColor = System.Drawing.SystemColors.Control;
-            this.btn_cortegeneral.Location = new System.Drawing.Point(15, 409);
+            this.btn_cortegeneral.Location = new System.Drawing.Point(87, 357);
             this.btn_cortegeneral.Name = "btn_cortegeneral";
             this.btn_cortegeneral.Size = new System.Drawing.Size(149, 60);
             this.btn_cortegeneral.TabIndex = 5;
@@ -686,7 +681,7 @@
             this.label_general.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label_general.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_general.ForeColor = System.Drawing.SystemColors.Control;
-            this.label_general.Location = new System.Drawing.Point(60, 39);
+            this.label_general.Location = new System.Drawing.Point(87, 42);
             this.label_general.Name = "label_general";
             this.label_general.Size = new System.Drawing.Size(166, 242);
             this.label_general.TabIndex = 5;
@@ -709,9 +704,10 @@
             // 
             this.btnRespaldarBD.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.btnRespaldarBD.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnRespaldarBD.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnRespaldarBD.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnRespaldarBD.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btnRespaldarBD.Location = new System.Drawing.Point(1049, 125);
+            this.btnRespaldarBD.Location = new System.Drawing.Point(800, 149);
             this.btnRespaldarBD.Name = "btnRespaldarBD";
             this.btnRespaldarBD.Size = new System.Drawing.Size(171, 74);
             this.btnRespaldarBD.TabIndex = 25;
@@ -723,9 +719,10 @@
             // 
             this.btnImportarBD.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
             this.btnImportarBD.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnImportarBD.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnImportarBD.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnImportarBD.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btnImportarBD.Location = new System.Drawing.Point(1049, 216);
+            this.btnImportarBD.Location = new System.Drawing.Point(1014, 149);
             this.btnImportarBD.Name = "btnImportarBD";
             this.btnImportarBD.Size = new System.Drawing.Size(171, 74);
             this.btnImportarBD.TabIndex = 26;
@@ -737,15 +734,40 @@
             // 
             this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
             this.button1.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.button1.Location = new System.Drawing.Point(1049, 316);
+            this.button1.Location = new System.Drawing.Point(1025, 330);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(171, 74);
             this.button1.TabIndex = 27;
             this.button1.Text = "Historial de Cortes";
             this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.BackColor = System.Drawing.Color.Transparent;
+            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.label10.Location = new System.Drawing.Point(885, 93);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(217, 25);
+            this.label10.TabIndex = 28;
+            this.label10.Text = "Copia de seguridad";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.BackColor = System.Drawing.Color.Transparent;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.label1.Location = new System.Drawing.Point(417, 93);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(254, 25);
+            this.label1.TabIndex = 29;
+            this.label1.Text = "Operaciones de Cajero";
             // 
             // FormAdminFunciones
             // 
@@ -754,7 +776,9 @@
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.fondo;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(1255, 516);
+            this.ClientSize = new System.Drawing.Size(1267, 663);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.label10);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.btnImportarBD);
             this.Controls.Add(this.btnRespaldarBD);
@@ -777,7 +801,6 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.Corte_Caja);
-            this.Controls.Add(this.label1);
             this.Name = "FormAdminFunciones";
             this.Text = "FormAdminFunciones";
             this.Load += new System.EventHandler(this.FormAdminFunciones_Load);
@@ -803,8 +826,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button Corte_Caja;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Label label2;
@@ -854,5 +875,7 @@
         private System.Windows.Forms.Button btnRespaldarBD;
         private System.Windows.Forms.Button btnImportarBD;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label1;
     }
 }
