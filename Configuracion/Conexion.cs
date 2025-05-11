@@ -15,10 +15,10 @@ namespace LaCaguamaSV.Configuracion
     {
         private MySqlConnection conectar = null;
         private static string usuario = "root";
-        private static string contrasenia = "root";
+        private static string contrasenia = "slenderman";
         private static string bd = "lacaguamabd";
         private static string ip = "localhost";
-        private static string puerto = "3307"; // 3306 o 3307 si eres javier 
+        private static string puerto = "3306"; // 3306 o 3307 si eres javier 
 
         string cadenaConexion = $"Server={ip};Port={puerto};Database={bd};User Id={usuario};Password={contrasenia};";
 
@@ -1534,24 +1534,6 @@ namespace LaCaguamaSV.Configuracion
         // -------------------- Gastos --------------------
 
 
-        public int ObtenerIdCajaActual(int idUsuario)
-        {
-            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
-            {
-                string query = "SELECT id_caja FROM caja WHERE id_usuario = @idUsuario AND DATE(fecha) = CURDATE() ORDER BY id_caja DESC LIMIT 1";
-                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
-                {
-                    cmd.Parameters.AddWithValue("@idUsuario", idUsuario);
-                    conexion.Open();
-                    object result = cmd.ExecuteScalar();
-                    if (result != null)
-                        return Convert.ToInt32(result);
-                    else
-                        throw new Exception("No se encontró una caja activa para el usuario actual.");
-                }
-            }
-        }
-
         // Método para obtener el fondo inicial de la caja
         public decimal ObtenerFondoInicial(int idUsuario)
         {
@@ -1840,24 +1822,21 @@ namespace LaCaguamaSV.Configuracion
 
         public DataTable ObtenerGastosPorFecha(int idCaja, DateTime fecha)
         {
-            DataTable tabla = new DataTable();
+            DataTable dt = new DataTable();
             using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
             {
-                conexion.Open();
                 string consulta = @"SELECT id_gasto, cantidad, descripcion, fecha 
                             FROM gastos 
-                            WHERE id_caja = @idCaja 
-                              AND DATE(fecha) = @fecha";
+                            WHERE DATE(fecha) = @fecha";
 
-                using (MySqlCommand cmd = new MySqlCommand(consulta, conexion))
+                using (MySqlDataAdapter da = new MySqlDataAdapter(consulta, conexion))
                 {
-                    cmd.Parameters.AddWithValue("@idCaja", idCaja);
-                    cmd.Parameters.AddWithValue("@fecha", fecha.ToString("yyyy-MM-dd"));
-                    MySqlDataAdapter da = new MySqlDataAdapter(cmd);
-                    da.Fill(tabla);
+                    // Convertimos la fecha a un formato adecuado (yyyy-MM-dd)
+                    da.SelectCommand.Parameters.AddWithValue("@fecha", fecha.ToString("yyyy-MM-dd"));
+                    da.Fill(dt);
                 }
             }
-            return tabla;
+            return dt;
         }
 
         public decimal ObtenerTotalGastosPorFecha(int idCaja, DateTime fecha)
@@ -1868,12 +1847,10 @@ namespace LaCaguamaSV.Configuracion
                 conexion.Open();
                 string consulta = @"SELECT IFNULL(SUM(cantidad), 0) 
                             FROM gastos 
-                            WHERE id_caja = @idCaja 
-                              AND DATE(fecha) = @fecha";
+                            WHERE DATE(fecha) = @fecha";
 
                 using (MySqlCommand cmd = new MySqlCommand(consulta, conexion))
                 {
-                    cmd.Parameters.AddWithValue("@idCaja", idCaja);
                     cmd.Parameters.AddWithValue("@fecha", fecha.ToString("yyyy-MM-dd"));
                     object resultado = cmd.ExecuteScalar();
                     if (resultado != null && resultado != DBNull.Value)

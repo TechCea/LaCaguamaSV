@@ -370,34 +370,12 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void dtpBuscarGastos_ValueChanged(object sender, EventArgs e)
         {
-            try
-            {
-                DateTime fechaSeleccionada = dtpBuscarGastos.Value.Date;
-
-                // Obtener los gastos para la fecha seleccionada y el idCaja actual
-                DataTable gastosPorFecha = conexion.ObtenerGastosPorFecha(idCaja, fechaSeleccionada);
-
-                if (gastosPorFecha.Rows.Count > 0)
-                {
-                    dgvGastos.DataSource = gastosPorFecha;
-
-                    // Actualiza totales con base en la fecha seleccionada
-                    decimal totalGastos = conexion.ObtenerTotalGastosPorFecha(idCaja, fechaSeleccionada);
-                    txtTotalGastos.Text = totalGastos.ToString("C2");
-
-                    // Puedes decidir si mostrar utilidad o no con base en esta fecha
-                }
-                else
-                {
-                    dgvGastos.DataSource = null;
-                    txtTotalGastos.Text = "$0.00";
-                    MessageBox.Show("No hay gastos registrados en esta fecha.");
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al buscar gastos por fecha: " + ex.Message);
-            }
+           
         }
-    }
+
+        private void btnFiltrar_Click(object sender, EventArgs e)
+        {
+           
+        }
+}
 }
