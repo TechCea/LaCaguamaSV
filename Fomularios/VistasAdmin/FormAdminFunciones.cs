@@ -494,5 +494,11 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 }
             }
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            FormHistorialCortes formhistorialcortes = new FormHistorialCortes();
+            formhistorialcortes.ShowDialog();
+        }
     }
 }

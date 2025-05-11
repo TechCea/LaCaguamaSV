@@ -230,6 +230,12 @@
     <Compile Include="Fomularios\VistasAdmin\FormGestionPromociones.Designer.cs">
       <DependentUpon>FormGestionPromociones.cs</DependentUpon>
     </Compile>
+    <Compile Include="Fomularios\VistasAdmin\FormHistorialCortes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Fomularios\VistasAdmin\FormHistorialCortes.Designer.cs">
+      <DependentUpon>FormHistorialCortes.cs</DependentUpon>
+    </Compile>
     <Compile Include="Fomularios\VistasAdmin\FormHistorialPagosAdmin.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -369,6 +375,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Fomularios\VistasAdmin\FormGestionPromociones.resx">
       <DependentUpon>FormGestionPromociones.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fomularios\VistasAdmin\FormHistorialCortes.resx">
+      <DependentUpon>FormHistorialCortes.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fomularios\VistasAdmin\FormHistorialPagosAdmin.resx">
       <DependentUpon>FormHistorialPagosAdmin.cs</DependentUpon>
