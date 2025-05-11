@@ -104,12 +104,13 @@ namespace LaCaguamaSV.Configuracion
         public static int CrearOrdenVacia(string nombreCliente, int idMesa, int tipoPago)
         {
             int idOrden = -1;
-            int idUsuario = SesionUsuario.IdUsuario; // Obtener el ID del usuario actual
-            int idCaja = ObtenerIdCajaActiva(); // Necesitamos obtener la caja activa
+            int idUsuario = SesionUsuario.IdUsuario;
+            int idCaja = ObtenerIdCajaActiva();
 
             if (idCaja <= 0)
             {
-                MessageBox.Show("No hay una caja activa para registrar la orden", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("No hay una caja activa para registrar la orden", "Error",
+                               MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return -1;
             }
 
@@ -152,14 +153,26 @@ namespace LaCaguamaSV.Configuracion
 
                         idOrden = Convert.ToInt32(cmd.ExecuteScalar());
 
-                        // Actualizar estado de la mesa a "Ocupado"
-                        if (idOrden > 0)
+                        // Solo actualizar estado de la mesa si NO es "Para Llevar" y es la primera orden
+                        if (idOrden > 0 && !EsMesaParaLlevar(idMesa))
                         {
-                            string updateMesa = "UPDATE mesas SET id_estadoM = 2 WHERE id_mesa = @idMesa";
-                            using (MySqlCommand cmdMesa = new MySqlCommand(updateMesa, conexion))
+                            // Verificar si es la primera orden para esta mesa
+                            string queryCount = "SELECT COUNT(*) FROM ordenes WHERE id_mesa = @idMesa AND id_estadoO = 1";
+                            using (MySqlCommand cmdCount = new MySqlCommand(queryCount, conexion))
                             {
-                                cmdMesa.Parameters.AddWithValue("@idMesa", idMesa);
-                                cmdMesa.ExecuteNonQuery();
+                                cmdCount.Parameters.AddWithValue("@idMesa", idMesa);
+                                int ordenesAbiertas = Convert.ToInt32(cmdCount.ExecuteScalar());
+
+                                // Si es la primera orden, marcar la mesa como ocupada
+                                if (ordenesAbiertas == 1)
+                                {
+                                    string updateMesa = "UPDATE mesas SET id_estadoM = 2 WHERE id_mesa = @idMesa";
+                                    using (MySqlCommand cmdMesa = new MySqlCommand(updateMesa, conexion))
+                                    {
+                                        cmdMesa.Parameters.AddWithValue("@idMesa", idMesa);
+                                        cmdMesa.ExecuteNonQuery();
+                                    }
+                                }
                             }
                         }
                     }
@@ -167,11 +180,33 @@ namespace LaCaguamaSV.Configuracion
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al crear la orden: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error al crear la orden: {ex.Message}", "Error",
+                               MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return -1;
             }
 
             return idOrden;
+        }
+
+        private static bool EsMesaParaLlevar(int idMesa)
+        {
+            try
+            {
+                using (MySqlConnection conexion = new Conexion().EstablecerConexion())
+                {
+                    string query = "SELECT nombreMesa FROM mesas WHERE id_mesa = @idMesa";
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@idMesa", idMesa);
+                        string nombreMesa = cmd.ExecuteScalar()?.ToString();
+                        return nombreMesa == "Para Llevar";
+                    }
+                }
+            }
+            catch
+            {
+                return false;
+            }
         }
 
 

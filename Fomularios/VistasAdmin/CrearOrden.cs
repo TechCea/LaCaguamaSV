@@ -23,6 +23,15 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             CargarTipoPago();
             CargarMesas();
 
+
+            // Configuración de estilo para el ComboBox
+            cmbMesas.FlatStyle = FlatStyle.Flat;
+            cmbMesas.BackColor = SystemColors.Window;
+            cmbMesas.ForeColor = SystemColors.WindowText;
+
+            // Configurar el botón desplegable
+            cmbMesas.DropDownStyle = ComboBoxStyle.DropDownList;
+
             // Tamaño fijo
             this.FormBorderStyle = FormBorderStyle.FixedSingle; // Evita redimensionar
 
@@ -57,17 +66,90 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void CargarMesas()
         {
-            DataTable dtMesas = OrdenesD.ObtenerMesas(); // Obtener mesas desde la BD
-            cmbMesas.DataSource = dtMesas;
-            cmbMesas.DisplayMember = "nombreMesa"; // Mostrar el nombre de la mesa
-            cmbMesas.ValueMember = "id_mesa"; // Usar el ID de la mesa como valor
+            // Configurar estilos del ComboBox antes de cargar los datos
+            cmbMesas.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            cmbMesas.DropDownHeight = 200; // Altura del menú desplegable
+            cmbMesas.Height = 35; // Altura del control
+            cmbMesas.DropDownWidth = cmbMesas.Width; // Ancho del menú desplegable
 
-            if (dtMesas.Rows.Count > 0)
+            DataTable dtMesas = new DataTable();
+            try
             {
-                cmbMesas.SelectedIndex = 0; // Seleccionar la primera mesa por defecto
+                using (MySqlConnection conexion = new Conexion().EstablecerConexion())
+                {
+                    string query = @"
+                SELECT m.id_mesa, m.nombreMesa, m.id_estadoM,
+                    CASE 
+                        WHEN m.nombreMesa = 'Para Llevar' THEN 1
+                        WHEN m.id_estadoM = 1 THEN 1
+                        ELSE 0
+                    END AS disponible
+                FROM mesas m
+                ORDER BY m.nombreMesa";
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dtMesas);
+                        }
+                    }
+                }
+
+                cmbMesas.DataSource = dtMesas;
+                cmbMesas.DisplayMember = "nombreMesa";
+                cmbMesas.ValueMember = "id_mesa";
+
+                // Personalizar el dibujado del ComboBox para mejor visualización
+                cmbMesas.DrawMode = DrawMode.OwnerDrawVariable;
+                cmbMesas.DrawItem += CmbMesas_DrawItem;
+                cmbMesas.MeasureItem += CmbMesas_MeasureItem;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al cargar mesas: {ex.Message}");
             }
         }
 
+        private void CmbMesas_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            if (e.Index < 0) return;
+
+            e.DrawBackground();
+
+            // Obtener el texto del ítem
+            string text = cmbMesas.GetItemText(cmbMesas.Items[e.Index]);
+
+            // Configurar el color del texto según disponibilidad
+            Brush brush;
+            DataRowView row = (DataRowView)cmbMesas.Items[e.Index];
+            bool disponible = Convert.ToBoolean(row["disponible"]);
+
+            if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
+            {
+                brush = Brushes.White;
+            }
+            else
+            {
+                brush = disponible ? Brushes.Black : Brushes.Gray;
+            }
+
+            // Dibujar el texto con el estilo y tamaño adecuados
+            e.Graphics.DrawString(text,
+                                 new Font("Segoe UI", 12F, FontStyle.Regular),
+                                 brush,
+                                 e.Bounds);
+
+            e.DrawFocusRectangle();
+        }
+
+        private void CmbMesas_MeasureItem(object sender, MeasureItemEventArgs e)
+        {
+            // Establecer la altura de cada ítem en el menú desplegable
+            e.ItemHeight = 30;
+        }
+
+        
 
         private void txtNombreCliente_TextChanged(object sender, EventArgs e)
         {
@@ -76,7 +158,21 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void cmbMesas_SelectedIndexChanged(object sender, EventArgs e)
         {
+            // Resaltar visualmente cuando se selecciona una mesa ocupada
+            if (cmbMesas.SelectedValue != null)
+            {
+                DataRowView selectedRow = (DataRowView)cmbMesas.SelectedItem;
+                bool disponible = Convert.ToBoolean(selectedRow["disponible"]);
 
+                if (!disponible && selectedRow["nombreMesa"].ToString() != "Para Llevar")
+                {
+                    cmbMesas.BackColor = Color.LightYellow;
+                }
+                else
+                {
+                    cmbMesas.BackColor = SystemColors.Window;
+                }
+            }
         }
 
         private void cmbTipoPago_SelectedIndexChanged(object sender, EventArgs e)
@@ -86,24 +182,22 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void btnCrearOrden_Click(object sender, EventArgs e)
         {
-            // Validar campos obligatorios
             if (string.IsNullOrWhiteSpace(txtNombreCliente.Text))
             {
-                MessageBox.Show("Por favor ingrese el nombre del cliente", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Por favor ingrese el nombre del cliente", "Error",
+                               MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
             try
             {
-                // Obtener datos del formulario
                 string nombreCliente = txtNombreCliente.Text;
                 int idMesa = Convert.ToInt32(cmbMesas.SelectedValue);
                 int tipoPago = Convert.ToInt32(cmbTipoPago.SelectedValue);
 
-                // Verificar si la mesa está disponible
+                // Verificar disponibilidad (con confirmación para mesas ocupadas)
                 if (!MesaDisponible(idMesa))
                 {
-                    MessageBox.Show("La mesa seleccionada no está disponible", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
@@ -112,7 +206,8 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
                 if (idOrden > 0)
                 {
-                    MessageBox.Show($"Orden #{idOrden} creada exitosamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show($"Orden #{idOrden} creada exitosamente", "Éxito",
+                                  MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     // Cerrar este formulario
                     this.DialogResult = DialogResult.OK;
@@ -120,12 +215,14 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 }
                 else
                 {
-                    MessageBox.Show("Error al crear la orden", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Error al crear la orden", "Error",
+                                  MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al crear la orden: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error al crear la orden: {ex.Message}", "Error",
+                               MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -135,18 +232,31 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             {
                 using (MySqlConnection conexion = new Conexion().EstablecerConexion())
                 {
-                    string query = "SELECT id_estadoM FROM mesas WHERE id_mesa = @idMesa";
+                    string query = "SELECT id_estadoM, nombreMesa FROM mesas WHERE id_mesa = @idMesa";
                     using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                     {
                         cmd.Parameters.AddWithValue("@idMesa", idMesa);
-                        object result = cmd.ExecuteScalar();
-
-                        if (result != null && result != DBNull.Value)
+                        using (MySqlDataReader reader = cmd.ExecuteReader())
                         {
-                            int estado = Convert.ToInt32(result);
-                            return estado == 1; // 1 = Disponible
+                            if (reader.Read())
+                            {
+                                string nombreMesa = reader.GetString("nombreMesa");
+
+                                // "Para Llevar" siempre está disponible
+                                if (nombreMesa == "Para Llevar")
+                                    return true;
+
+                                int estado = reader.GetInt32("id_estadoM");
+
+                                // Si la mesa está ocupada, preguntar al usuario
+                                if (estado != 1) // 1 = Disponible
+                                {
+                                    return MostrarConfirmacionMesaOcupada(nombreMesa);
+                                }
+                                return true;
+                            }
+                            return false;
                         }
-                        return false;
                     }
                 }
             }
@@ -155,6 +265,19 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 return false;
             }
         }
+
+
+        private bool MostrarConfirmacionMesaOcupada(string nombreMesa)
+        {
+            DialogResult result = MessageBox.Show(
+                $"La mesa {nombreMesa} está ocupada. ¿Desea agregar otra orden a esta mesa?",
+                "Mesa Ocupada",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
+
+            return result == DialogResult.Yes;
+        }
+
 
 
         private void btnCancelar_Click(object sender, EventArgs e)

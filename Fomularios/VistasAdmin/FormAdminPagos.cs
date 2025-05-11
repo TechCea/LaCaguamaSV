@@ -238,7 +238,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                         decimal totalConDescuento = CalcularTotalConDescuento();
                         bool esEfectivo = (nombrePago == "Efectivo");
 
-                        // 1. Registrar el pago (actualizado para incluir tipo de descuento)
+                        // 1. Registrar el pago
                         string queryPago = @"
                     INSERT INTO pagos 
                         (id_orden, monto, recibido, cambio, id_usuario, id_tipo_pago, 
@@ -263,23 +263,24 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
                         // 2. Actualizar la orden con el descuento
                         string queryUpdateOrden = @"
-                UPDATE ordenes 
-                SET 
-                    tipo_pago = @tipoPago,
-                    total = @total,
-                    descuento = @descuento
-                WHERE id_orden = @idOrden";
+                    UPDATE ordenes 
+                    SET 
+                        tipo_pago = @tipoPago,
+                        total = @total,
+                        descuento = @descuento,
+                        id_estadoO = 2 -- Estado 'Cerrada'
+                    WHERE id_orden = @idOrden";
 
                         using (MySqlCommand cmd = new MySqlCommand(queryUpdateOrden, conexion, transaction))
                         {
-                            cmd.Parameters.AddWithValue("@tipoPago", idMetodoPago); // Usar el ID obtenido
+                            cmd.Parameters.AddWithValue("@tipoPago", idMetodoPago);
                             cmd.Parameters.AddWithValue("@total", totalConDescuento);
                             cmd.Parameters.AddWithValue("@descuento", descuentoAplicado ? montoDescuento : 0);
                             cmd.Parameters.AddWithValue("@idOrden", idOrden);
                             cmd.ExecuteNonQuery();
                         }
 
-                        // 3. Actualizar estado de los pedidos a "Entregado" (id_estadoP = 2)
+                        // 3. Actualizar estado de los pedidos a "Entregado"
                         string queryPedidos = "UPDATE pedidos SET id_estadoP = 2 WHERE id_orden = @idOrden";
                         using (MySqlCommand cmd = new MySqlCommand(queryPedidos, conexion, transaction))
                         {
@@ -287,20 +288,31 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                             cmd.ExecuteNonQuery();
                         }
 
-                        // 4. Actualizar estado de la orden a "Cerrada"
-                        string queryOrden = "UPDATE ordenes SET id_estadoO = 2 WHERE id_orden = @idOrden";
-                        using (MySqlCommand cmd = new MySqlCommand(queryOrden, conexion, transaction))
-                        {
-                            cmd.Parameters.AddWithValue("@idOrden", idOrden);
-                            cmd.ExecuteNonQuery();
-                        }
+                        // 4. Verificar si es la última orden abierta para esta mesa
+                        string queryOrdenesAbiertas = @"
+                    SELECT COUNT(*) 
+                    FROM ordenes 
+                    WHERE id_mesa = @idMesa 
+                    AND id_estadoO = 1 -- Estado 'Abierta'
+                    AND id_orden != @idOrden";
 
-                        // 5. Liberar la mesa
-                        string queryMesa = "UPDATE mesas SET id_estadoM = 1 WHERE id_mesa = @idMesa";
-                        using (MySqlCommand cmd = new MySqlCommand(queryMesa, conexion, transaction))
+                        int ordenesAbiertas = 0;
+                        using (MySqlCommand cmd = new MySqlCommand(queryOrdenesAbiertas, conexion, transaction))
                         {
                             cmd.Parameters.AddWithValue("@idMesa", idMesa);
-                            cmd.ExecuteNonQuery();
+                            cmd.Parameters.AddWithValue("@idOrden", idOrden);
+                            ordenesAbiertas = Convert.ToInt32(cmd.ExecuteScalar());
+                        }
+
+                        // 5. Liberar la mesa solo si no hay más órdenes abiertas
+                        if (ordenesAbiertas == 0)
+                        {
+                            string queryMesa = "UPDATE mesas SET id_estadoM = 1 WHERE id_mesa = @idMesa";
+                            using (MySqlCommand cmd = new MySqlCommand(queryMesa, conexion, transaction))
+                            {
+                                cmd.Parameters.AddWithValue("@idMesa", idMesa);
+                                cmd.ExecuteNonQuery();
+                            }
                         }
 
                         // 6. Actualizar inventario
