@@ -44,20 +44,18 @@
             // dataGridViewHistorial
             // 
             this.dataGridViewHistorial.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewHistorial.Location = new System.Drawing.Point(56, 112);
-            this.dataGridViewHistorial.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dataGridViewHistorial.Location = new System.Drawing.Point(42, 91);
             this.dataGridViewHistorial.Name = "dataGridViewHistorial";
             this.dataGridViewHistorial.RowHeadersWidth = 51;
-            this.dataGridViewHistorial.Size = new System.Drawing.Size(943, 358);
+            this.dataGridViewHistorial.Size = new System.Drawing.Size(707, 291);
             this.dataGridViewHistorial.TabIndex = 0;
             this.dataGridViewHistorial.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewHistorial_CellContentClick);
             // 
             // btnCerrar
             // 
-            this.btnCerrar.Location = new System.Drawing.Point(56, 478);
-            this.btnCerrar.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnCerrar.Location = new System.Drawing.Point(42, 388);
             this.btnCerrar.Name = "btnCerrar";
-            this.btnCerrar.Size = new System.Drawing.Size(137, 52);
+            this.btnCerrar.Size = new System.Drawing.Size(103, 42);
             this.btnCerrar.TabIndex = 1;
             this.btnCerrar.Text = "Cerrar";
             this.btnCerrar.UseVisualStyleBackColor = true;
@@ -66,10 +64,9 @@
             // lblTotalRegistros
             // 
             this.lblTotalRegistros.AutoSize = true;
-            this.lblTotalRegistros.Location = new System.Drawing.Point(764, 70);
-            this.lblTotalRegistros.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblTotalRegistros.Location = new System.Drawing.Point(573, 57);
             this.lblTotalRegistros.Name = "lblTotalRegistros";
-            this.lblTotalRegistros.Size = new System.Drawing.Size(44, 16);
+            this.lblTotalRegistros.Size = new System.Drawing.Size(35, 13);
             this.lblTotalRegistros.TabIndex = 27;
             this.lblTotalRegistros.Text = "label1";
             this.lblTotalRegistros.Click += new System.EventHandler(this.lblTotalRegistros_Click);
@@ -77,20 +74,18 @@
             // lblA
             // 
             this.lblA.AutoSize = true;
-            this.lblA.Location = new System.Drawing.Point(151, 76);
-            this.lblA.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblA.Location = new System.Drawing.Point(46, 62);
             this.lblA.Name = "lblA";
-            this.lblA.Size = new System.Drawing.Size(44, 16);
+            this.lblA.Size = new System.Drawing.Size(35, 13);
             this.lblA.TabIndex = 26;
             this.lblA.Text = "label1";
             this.lblA.Click += new System.EventHandler(this.lblA_Click);
             // 
             // btnResetear
             // 
-            this.btnResetear.Location = new System.Drawing.Point(597, 64);
-            this.btnResetear.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnResetear.Location = new System.Drawing.Point(448, 52);
             this.btnResetear.Name = "btnResetear";
-            this.btnResetear.Size = new System.Drawing.Size(100, 28);
+            this.btnResetear.Size = new System.Drawing.Size(75, 23);
             this.btnResetear.TabIndex = 25;
             this.btnResetear.Text = "Resetear";
             this.btnResetear.UseVisualStyleBackColor = true;
@@ -98,10 +93,9 @@
             // 
             // btnFiltrar
             // 
-            this.btnFiltrar.Location = new System.Drawing.Point(486, 64);
-            this.btnFiltrar.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnFiltrar.Location = new System.Drawing.Point(364, 52);
             this.btnFiltrar.Name = "btnFiltrar";
-            this.btnFiltrar.Size = new System.Drawing.Size(100, 28);
+            this.btnFiltrar.Size = new System.Drawing.Size(75, 23);
             this.btnFiltrar.TabIndex = 24;
             this.btnFiltrar.Text = "F";
             this.btnFiltrar.UseVisualStyleBackColor = true;
@@ -109,49 +103,46 @@
             // 
             // dtpFechaFin
             // 
-            this.dtpFechaFin.Location = new System.Drawing.Point(597, 27);
-            this.dtpFechaFin.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dtpFechaFin.Location = new System.Drawing.Point(448, 22);
             this.dtpFechaFin.Name = "dtpFechaFin";
-            this.dtpFechaFin.Size = new System.Drawing.Size(265, 22);
+            this.dtpFechaFin.Size = new System.Drawing.Size(200, 20);
             this.dtpFechaFin.TabIndex = 23;
             this.dtpFechaFin.ValueChanged += new System.EventHandler(this.dtpFechaFin_ValueChanged);
             // 
             // dtpFechaInicio
             // 
-            this.dtpFechaInicio.Location = new System.Drawing.Point(321, 27);
-            this.dtpFechaInicio.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dtpFechaInicio.Location = new System.Drawing.Point(241, 22);
             this.dtpFechaInicio.Name = "dtpFechaInicio";
-            this.dtpFechaInicio.Size = new System.Drawing.Size(265, 22);
+            this.dtpFechaInicio.Size = new System.Drawing.Size(200, 20);
             this.dtpFechaInicio.TabIndex = 22;
             this.dtpFechaInicio.ValueChanged += new System.EventHandler(this.dtpFechaInicio_ValueChanged);
             // 
             // cmbTipoFiltro
             // 
             this.cmbTipoFiltro.FormattingEnabled = true;
-            this.cmbTipoFiltro.Location = new System.Drawing.Point(151, 31);
-            this.cmbTipoFiltro.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cmbTipoFiltro.Location = new System.Drawing.Point(113, 25);
             this.cmbTipoFiltro.Name = "cmbTipoFiltro";
-            this.cmbTipoFiltro.Size = new System.Drawing.Size(160, 24);
+            this.cmbTipoFiltro.Size = new System.Drawing.Size(121, 21);
             this.cmbTipoFiltro.TabIndex = 21;
             this.cmbTipoFiltro.SelectedIndexChanged += new System.EventHandler(this.cmbTipoFiltro_SelectedIndexChanged);
             // 
             // lblFiltro
             // 
             this.lblFiltro.AutoSize = true;
-            this.lblFiltro.Location = new System.Drawing.Point(61, 31);
-            this.lblFiltro.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblFiltro.Location = new System.Drawing.Point(46, 25);
             this.lblFiltro.Name = "lblFiltro";
-            this.lblFiltro.Size = new System.Drawing.Size(44, 16);
+            this.lblFiltro.Size = new System.Drawing.Size(35, 13);
             this.lblFiltro.TabIndex = 20;
             this.lblFiltro.Text = "label1";
+            this.lblFiltro.Visible = false;
             this.lblFiltro.Click += new System.EventHandler(this.lblFiltro_Click);
             // 
             // FormHistorialPagosAdmin
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.fondo;
-            this.ClientSize = new System.Drawing.Size(1067, 554);
+            this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.lblTotalRegistros);
             this.Controls.Add(this.lblA);
             this.Controls.Add(this.btnResetear);
@@ -162,7 +153,6 @@
             this.Controls.Add(this.lblFiltro);
             this.Controls.Add(this.btnCerrar);
             this.Controls.Add(this.dataGridViewHistorial);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "FormHistorialPagosAdmin";
             this.Text = "Historial de ordenes";
             this.Load += new System.EventHandler(this.FormHistorialPagosAdmin_Load);
