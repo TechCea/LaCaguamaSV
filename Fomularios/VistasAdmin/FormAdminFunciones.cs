@@ -217,17 +217,12 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         private void button3_Click(object sender, EventArgs e)
         {
             Panerl_corteX.Visible = true;
-            Btn_confirmartarjeta.Enabled = false;
-            Btn_confirmartarjeta.BackColor = Color.LightGray;
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
             panel_cortegeneral1.Visible = true;
             panel_corte_general.Visible = false;
-
-            btn_okgeneral.Enabled = false;
-            btn_okgeneral.BackColor = Color.LightGray;
         }
 
 

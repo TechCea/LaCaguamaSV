@@ -37,7 +37,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.btnEditar = new System.Windows.Forms.Button();
-            this.btnEliminar = new System.Windows.Forms.Button();
             this.BtnAgregarU = new System.Windows.Forms.Button();
             this.cmbRol = new System.Windows.Forms.ComboBox();
             this.txtContraseñaU = new System.Windows.Forms.TextBox();
@@ -60,8 +59,8 @@
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button1.ForeColor = System.Drawing.SystemColors.Control;
-            this.button1.Location = new System.Drawing.Point(704, 95);
-            this.button1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button1.Location = new System.Drawing.Point(726, 48);
+            this.button1.Margin = new System.Windows.Forms.Padding(4);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(169, 28);
             this.button1.TabIndex = 34;
@@ -149,29 +148,13 @@
             this.btnEditar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnEditar.ForeColor = System.Drawing.SystemColors.Control;
             this.btnEditar.Location = new System.Drawing.Point(549, 23);
-            this.btnEditar.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnEditar.Margin = new System.Windows.Forms.Padding(4);
             this.btnEditar.Name = "btnEditar";
             this.btnEditar.Size = new System.Drawing.Size(169, 48);
             this.btnEditar.TabIndex = 27;
             this.btnEditar.Text = " Editar un Usuario";
             this.btnEditar.UseVisualStyleBackColor = false;
             this.btnEditar.Click += new System.EventHandler(this.btnEditar_Click);
-            // 
-            // btnEliminar
-            // 
-            this.btnEliminar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(236)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
-            this.btnEliminar.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnEliminar.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnEliminar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnEliminar.ForeColor = System.Drawing.SystemColors.Control;
-            this.btnEliminar.Location = new System.Drawing.Point(739, 23);
-            this.btnEliminar.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.btnEliminar.Name = "btnEliminar";
-            this.btnEliminar.Size = new System.Drawing.Size(169, 48);
-            this.btnEliminar.TabIndex = 26;
-            this.btnEliminar.Text = "Eliminar un Usuario";
-            this.btnEliminar.UseVisualStyleBackColor = false;
-            this.btnEliminar.Click += new System.EventHandler(this.btnEliminar_Click);
             // 
             // BtnAgregarU
             // 
@@ -181,7 +164,7 @@
             this.BtnAgregarU.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BtnAgregarU.ForeColor = System.Drawing.SystemColors.Control;
             this.BtnAgregarU.Location = new System.Drawing.Point(372, 22);
-            this.BtnAgregarU.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.BtnAgregarU.Margin = new System.Windows.Forms.Padding(4);
             this.BtnAgregarU.Name = "BtnAgregarU";
             this.BtnAgregarU.Size = new System.Drawing.Size(169, 48);
             this.BtnAgregarU.TabIndex = 25;
@@ -193,7 +176,7 @@
             // 
             this.cmbRol.FormattingEnabled = true;
             this.cmbRol.Location = new System.Drawing.Point(201, 134);
-            this.cmbRol.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cmbRol.Margin = new System.Windows.Forms.Padding(4);
             this.cmbRol.Name = "cmbRol";
             this.cmbRol.Size = new System.Drawing.Size(132, 24);
             this.cmbRol.TabIndex = 24;
@@ -201,7 +184,7 @@
             // txtContraseñaU
             // 
             this.txtContraseñaU.Location = new System.Drawing.Point(201, 75);
-            this.txtContraseñaU.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtContraseñaU.Margin = new System.Windows.Forms.Padding(4);
             this.txtContraseñaU.Name = "txtContraseñaU";
             this.txtContraseñaU.Size = new System.Drawing.Size(132, 22);
             this.txtContraseñaU.TabIndex = 22;
@@ -209,7 +192,7 @@
             // txtTelefono
             // 
             this.txtTelefono.Location = new System.Drawing.Point(201, 22);
-            this.txtTelefono.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtTelefono.Margin = new System.Windows.Forms.Padding(4);
             this.txtTelefono.Name = "txtTelefono";
             this.txtTelefono.Size = new System.Drawing.Size(132, 22);
             this.txtTelefono.TabIndex = 21;
@@ -218,7 +201,7 @@
             // txtCorreo
             // 
             this.txtCorreo.Location = new System.Drawing.Point(41, 134);
-            this.txtCorreo.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtCorreo.Margin = new System.Windows.Forms.Padding(4);
             this.txtCorreo.Name = "txtCorreo";
             this.txtCorreo.Size = new System.Drawing.Size(132, 22);
             this.txtCorreo.TabIndex = 20;
@@ -226,7 +209,7 @@
             // txtNombreU
             // 
             this.txtNombreU.Location = new System.Drawing.Point(41, 75);
-            this.txtNombreU.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtNombreU.Margin = new System.Windows.Forms.Padding(4);
             this.txtNombreU.Name = "txtNombreU";
             this.txtNombreU.Size = new System.Drawing.Size(132, 22);
             this.txtNombreU.TabIndex = 19;
@@ -235,7 +218,7 @@
             // txtUsuario
             // 
             this.txtUsuario.Location = new System.Drawing.Point(41, 22);
-            this.txtUsuario.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtUsuario.Margin = new System.Windows.Forms.Padding(4);
             this.txtUsuario.Name = "txtUsuario";
             this.txtUsuario.Size = new System.Drawing.Size(132, 22);
             this.txtUsuario.TabIndex = 23;
@@ -251,7 +234,7 @@
             this.dgvUsuarios.BackgroundColor = System.Drawing.SystemColors.ControlDarkDark;
             this.dgvUsuarios.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvUsuarios.Location = new System.Drawing.Point(41, 180);
-            this.dgvUsuarios.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dgvUsuarios.Margin = new System.Windows.Forms.Padding(4);
             this.dgvUsuarios.MultiSelect = false;
             this.dgvUsuarios.Name = "dgvUsuarios";
             this.dgvUsuarios.ReadOnly = true;
@@ -263,8 +246,8 @@
             // 
             // txtIdUsuario
             // 
-            this.txtIdUsuario.Location = new System.Drawing.Point(881, 98);
-            this.txtIdUsuario.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtIdUsuario.Location = new System.Drawing.Point(903, 51);
+            this.txtIdUsuario.Margin = new System.Windows.Forms.Padding(4);
             this.txtIdUsuario.Name = "txtIdUsuario";
             this.txtIdUsuario.Size = new System.Drawing.Size(25, 22);
             this.txtIdUsuario.TabIndex = 35;
@@ -282,7 +265,7 @@
             this.btnCerrar_Click.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCerrar_Click.ForeColor = System.Drawing.SystemColors.Control;
             this.btnCerrar_Click.Location = new System.Drawing.Point(952, 18);
-            this.btnCerrar_Click.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnCerrar_Click.Margin = new System.Windows.Forms.Padding(4);
             this.btnCerrar_Click.Name = "btnCerrar_Click";
             this.btnCerrar_Click.Size = new System.Drawing.Size(57, 28);
             this.btnCerrar_Click.TabIndex = 36;
@@ -307,7 +290,6 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnEditar);
-            this.Controls.Add(this.btnEliminar);
             this.Controls.Add(this.BtnAgregarU);
             this.Controls.Add(this.cmbRol);
             this.Controls.Add(this.txtContraseñaU);
@@ -317,7 +299,7 @@
             this.Controls.Add(this.txtUsuario);
             this.Controls.Add(this.dgvUsuarios);
             this.ForeColor = System.Drawing.SystemColors.Control;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FormUsuariosAdmin";
             this.Text = "Usuarios del sistema";
             this.Load += new System.EventHandler(this.FormUsuariosAdmin_Load);
@@ -338,7 +320,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnEditar;
-        private System.Windows.Forms.Button btnEliminar;
         private System.Windows.Forms.Button BtnAgregarU;
         private System.Windows.Forms.ComboBox cmbRol;
         private System.Windows.Forms.TextBox txtContraseñaU;

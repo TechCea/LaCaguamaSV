@@ -1017,7 +1017,7 @@
             this.Controls.Add(this.paneldetodo);
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "FormMesasAdmin";
-            this.Text = "FormMesasAdmin";
+            this.Text = "Mesas";
             this.paneldetodo.ResumeLayout(false);
             this.paneldetodo.PerformLayout();
             this.panel24.ResumeLayout(false);

@@ -42,6 +42,7 @@
             this.txtNombreC = new System.Windows.Forms.TextBox();
             this.lbNombreBebida = new System.Windows.Forms.Label();
             this.btnActualizarC = new System.Windows.Forms.Button();
+            this.label4 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgvComidas)).BeginInit();
             this.gbDatosBebida.SuspendLayout();
             this.SuspendLayout();
@@ -112,7 +113,7 @@
             // txtDescripcionC
             // 
             this.txtDescripcionC.Location = new System.Drawing.Point(168, 225);
-            this.txtDescripcionC.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtDescripcionC.Margin = new System.Windows.Forms.Padding(4);
             this.txtDescripcionC.Name = "txtDescripcionC";
             this.txtDescripcionC.Size = new System.Drawing.Size(227, 26);
             this.txtDescripcionC.TabIndex = 11;
@@ -215,6 +216,18 @@
             this.btnActualizarC.UseVisualStyleBackColor = false;
             this.btnActualizarC.Click += new System.EventHandler(this.btnActualizarC_Click);
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.label4.Location = new System.Drawing.Point(66, 23);
+            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(98, 26);
+            this.label4.TabIndex = 16;
+            this.label4.Text = "PALTOS";
+            // 
             // FormComidasMenuAdmin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -223,19 +236,21 @@
             this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.fondo;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1321, 598);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.gbDatosBebida);
             this.Controls.Add(this.btnRegresarMenu);
             this.Controls.Add(this.cbCategoriaC);
             this.Controls.Add(this.dgvComidas);
             this.Controls.Add(this.btnActualizarC);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FormComidasMenuAdmin";
-            this.Text = "FormComidasMenuAdmin";
+            this.Text = "Platos del menú";
             this.Load += new System.EventHandler(this.FormComidasMenuAdmin_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvComidas)).EndInit();
             this.gbDatosBebida.ResumeLayout(false);
             this.gbDatosBebida.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -255,5 +270,6 @@
         private System.Windows.Forms.Label lbNombreBebida;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox txtDescripcionC;
+        private System.Windows.Forms.Label label4;
     }
 }

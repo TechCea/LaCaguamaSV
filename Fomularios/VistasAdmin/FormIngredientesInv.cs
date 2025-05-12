@@ -26,6 +26,8 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             InitializeComponent();
 
+            dgvIngredientes.MultiSelect = false;
+
             // Tamaño fijo
             this.FormBorderStyle = FormBorderStyle.FixedSingle; // Evita redimensionar
 
@@ -49,7 +51,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             btnActualizarB.Enabled = false;
             CargarDisponibilidadCombo();
             dgvIngredientes.CellFormatting += dgvIngredientes_CellFormatting;
-            dgvIngredientes.RowHeadersVisible = false;
 
         }
 

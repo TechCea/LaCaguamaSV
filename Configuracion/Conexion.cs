@@ -15,10 +15,10 @@ namespace LaCaguamaSV.Configuracion
     {
         private MySqlConnection conectar = null;
         private static string usuario = "root";
-        private static string contrasenia = "root";
+        private static string contrasenia = "180294";
         private static string bd = "lacaguamabd";
         private static string ip = "localhost";
-        private static string puerto = "3307"; // 3306 o 3307 si eres javier 
+        private static string puerto = "3306"; // 3306 o 3307 si eres javier 
 
         string cadenaConexion = $"Server={ip};Port={puerto};Database={bd};User Id={usuario};Password={contrasenia};";
 
@@ -244,32 +244,6 @@ namespace LaCaguamaSV.Configuracion
             }
             return dt;
         }
-
-        public bool EliminarUsuario(int idUsuario)
-        {
-            try
-            {
-                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
-                {
-                    conexion.Open();
-                    string query = "DELETE FROM usuarios WHERE id_usuario = @idUsuario";
-
-                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
-                    {
-                        cmd.Parameters.AddWithValue("@idUsuario", idUsuario);
-
-                        int filasAfectadas = cmd.ExecuteNonQuery();
-                        return filasAfectadas > 0;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al eliminar usuario: " + ex.Message);
-                return false;
-            }
-        }
-
 
         public bool EditarUsuario(int idUsuario, string usuario, string nombre, string correo, string contrasena, string telefono, int idRol)
         {

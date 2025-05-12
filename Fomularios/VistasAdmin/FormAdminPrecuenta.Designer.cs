@@ -58,9 +58,10 @@
             this.btnImprimir.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnImprimir.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnImprimir.ForeColor = System.Drawing.SystemColors.Control;
-            this.btnImprimir.Location = new System.Drawing.Point(532, 367);
+            this.btnImprimir.Location = new System.Drawing.Point(709, 452);
+            this.btnImprimir.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnImprimir.Name = "btnImprimir";
-            this.btnImprimir.Size = new System.Drawing.Size(97, 46);
+            this.btnImprimir.Size = new System.Drawing.Size(129, 57);
             this.btnImprimir.TabIndex = 0;
             this.btnImprimir.Text = "Imprimir";
             this.btnImprimir.UseVisualStyleBackColor = false;
@@ -73,9 +74,10 @@
             this.btnCerrar.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnCerrar.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCerrar.ForeColor = System.Drawing.Color.White;
-            this.btnCerrar.Location = new System.Drawing.Point(657, 367);
+            this.btnCerrar.Location = new System.Drawing.Point(876, 452);
+            this.btnCerrar.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnCerrar.Name = "btnCerrar";
-            this.btnCerrar.Size = new System.Drawing.Size(98, 45);
+            this.btnCerrar.Size = new System.Drawing.Size(131, 55);
             this.btnCerrar.TabIndex = 1;
             this.btnCerrar.Text = "Cerrar";
             this.btnCerrar.UseVisualStyleBackColor = false;
@@ -85,9 +87,10 @@
             // 
             this.lblNumeroFactura.AutoSize = true;
             this.lblNumeroFactura.ForeColor = System.Drawing.SystemColors.Control;
-            this.lblNumeroFactura.Location = new System.Drawing.Point(18, 12);
+            this.lblNumeroFactura.Location = new System.Drawing.Point(24, 15);
+            this.lblNumeroFactura.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblNumeroFactura.Name = "lblNumeroFactura";
-            this.lblNumeroFactura.Size = new System.Drawing.Size(80, 13);
+            this.lblNumeroFactura.Size = new System.Drawing.Size(100, 16);
             this.lblNumeroFactura.TabIndex = 2;
             this.lblNumeroFactura.Text = "NumeroFactura";
             // 
@@ -95,9 +98,10 @@
             // 
             this.lblFecha.AutoSize = true;
             this.lblFecha.ForeColor = System.Drawing.SystemColors.Control;
-            this.lblFecha.Location = new System.Drawing.Point(107, 9);
+            this.lblFecha.Location = new System.Drawing.Point(143, 11);
+            this.lblFecha.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblFecha.Name = "lblFecha";
-            this.lblFecha.Size = new System.Drawing.Size(37, 13);
+            this.lblFecha.Size = new System.Drawing.Size(45, 16);
             this.lblFecha.TabIndex = 3;
             this.lblFecha.Text = "Fecha";
             // 
@@ -108,18 +112,20 @@
             this.panel1.Controls.Add(this.lblHora);
             this.panel1.Controls.Add(this.lblMesa);
             this.panel1.Controls.Add(this.lblAtendidoPor);
-            this.panel1.Location = new System.Drawing.Point(13, 13);
+            this.panel1.Location = new System.Drawing.Point(17, 16);
+            this.panel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(510, 33);
+            this.panel1.Size = new System.Drawing.Size(680, 41);
             this.panel1.TabIndex = 4;
             // 
             // lblCliente
             // 
             this.lblCliente.AutoSize = true;
             this.lblCliente.ForeColor = System.Drawing.SystemColors.Control;
-            this.lblCliente.Location = new System.Drawing.Point(8, 9);
+            this.lblCliente.Location = new System.Drawing.Point(11, 11);
+            this.lblCliente.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblCliente.Name = "lblCliente";
-            this.lblCliente.Size = new System.Drawing.Size(39, 13);
+            this.lblCliente.Size = new System.Drawing.Size(48, 16);
             this.lblCliente.TabIndex = 6;
             this.lblCliente.Text = "Cliente";
             // 
@@ -127,9 +133,10 @@
             // 
             this.lblHora.AutoSize = true;
             this.lblHora.ForeColor = System.Drawing.SystemColors.Control;
-            this.lblHora.Location = new System.Drawing.Point(192, 9);
+            this.lblHora.Location = new System.Drawing.Point(256, 11);
+            this.lblHora.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblHora.Name = "lblHora";
-            this.lblHora.Size = new System.Drawing.Size(30, 13);
+            this.lblHora.Size = new System.Drawing.Size(37, 16);
             this.lblHora.TabIndex = 6;
             this.lblHora.Text = "Hora";
             // 
@@ -137,9 +144,10 @@
             // 
             this.lblMesa.AutoSize = true;
             this.lblMesa.ForeColor = System.Drawing.SystemColors.Control;
-            this.lblMesa.Location = new System.Drawing.Point(272, 9);
+            this.lblMesa.Location = new System.Drawing.Point(363, 11);
+            this.lblMesa.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblMesa.Name = "lblMesa";
-            this.lblMesa.Size = new System.Drawing.Size(33, 13);
+            this.lblMesa.Size = new System.Drawing.Size(41, 16);
             this.lblMesa.TabIndex = 6;
             this.lblMesa.Text = "Mesa";
             // 
@@ -147,9 +155,10 @@
             // 
             this.lblAtendidoPor.AutoSize = true;
             this.lblAtendidoPor.ForeColor = System.Drawing.SystemColors.Control;
-            this.lblAtendidoPor.Location = new System.Drawing.Point(357, 9);
+            this.lblAtendidoPor.Location = new System.Drawing.Point(476, 11);
+            this.lblAtendidoPor.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblAtendidoPor.Name = "lblAtendidoPor";
-            this.lblAtendidoPor.Size = new System.Drawing.Size(65, 13);
+            this.lblAtendidoPor.Size = new System.Drawing.Size(82, 16);
             this.lblAtendidoPor.TabIndex = 6;
             this.lblAtendidoPor.Text = "AtendidoPor";
             // 
@@ -157,9 +166,11 @@
             // 
             this.dgvDetalle.BackgroundColor = System.Drawing.SystemColors.ControlDarkDark;
             this.dgvDetalle.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvDetalle.Location = new System.Drawing.Point(13, 53);
+            this.dgvDetalle.Location = new System.Drawing.Point(17, 65);
+            this.dgvDetalle.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.dgvDetalle.Name = "dgvDetalle";
-            this.dgvDetalle.Size = new System.Drawing.Size(510, 255);
+            this.dgvDetalle.RowHeadersWidth = 51;
+            this.dgvDetalle.Size = new System.Drawing.Size(680, 314);
             this.dgvDetalle.TabIndex = 5;
             this.dgvDetalle.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvDetalle_CellContentClick);
             // 
@@ -167,9 +178,10 @@
             // 
             this.lblSubtotal.AutoSize = true;
             this.lblSubtotal.ForeColor = System.Drawing.SystemColors.Control;
-            this.lblSubtotal.Location = new System.Drawing.Point(22, 118);
+            this.lblSubtotal.Location = new System.Drawing.Point(29, 145);
+            this.lblSubtotal.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblSubtotal.Name = "lblSubtotal";
-            this.lblSubtotal.Size = new System.Drawing.Size(46, 13);
+            this.lblSubtotal.Size = new System.Drawing.Size(56, 16);
             this.lblSubtotal.TabIndex = 6;
             this.lblSubtotal.Text = "Subtotal";
             // 
@@ -177,9 +189,10 @@
             // 
             this.lblTotal.AutoSize = true;
             this.lblTotal.ForeColor = System.Drawing.SystemColors.Control;
-            this.lblTotal.Location = new System.Drawing.Point(22, 146);
+            this.lblTotal.Location = new System.Drawing.Point(29, 180);
+            this.lblTotal.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblTotal.Name = "lblTotal";
-            this.lblTotal.Size = new System.Drawing.Size(31, 13);
+            this.lblTotal.Size = new System.Drawing.Size(38, 16);
             this.lblTotal.TabIndex = 6;
             this.lblTotal.Text = "Total";
             // 
@@ -187,9 +200,10 @@
             // 
             this.lblDescuento.AutoSize = true;
             this.lblDescuento.ForeColor = System.Drawing.SystemColors.Control;
-            this.lblDescuento.Location = new System.Drawing.Point(22, 90);
+            this.lblDescuento.Location = new System.Drawing.Point(29, 111);
+            this.lblDescuento.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblDescuento.Name = "lblDescuento";
-            this.lblDescuento.Size = new System.Drawing.Size(59, 13);
+            this.lblDescuento.Size = new System.Drawing.Size(72, 16);
             this.lblDescuento.TabIndex = 6;
             this.lblDescuento.Text = "Descuento";
             // 
@@ -197,18 +211,20 @@
             // 
             this.lblTipoPago.AutoSize = true;
             this.lblTipoPago.ForeColor = System.Drawing.SystemColors.Control;
-            this.lblTipoPago.Location = new System.Drawing.Point(21, 63);
+            this.lblTipoPago.Location = new System.Drawing.Point(28, 78);
+            this.lblTipoPago.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblTipoPago.Name = "lblTipoPago";
-            this.lblTipoPago.Size = new System.Drawing.Size(53, 13);
+            this.lblTipoPago.Size = new System.Drawing.Size(68, 16);
             this.lblTipoPago.TabIndex = 6;
             this.lblTipoPago.Text = "TipoPago";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, -3);
+            this.label1.Location = new System.Drawing.Point(16, -4);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(502, 13);
+            this.label1.Size = new System.Drawing.Size(557, 16);
             this.label1.TabIndex = 7;
             this.label1.Text = "_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _" +
     " _ _ _ _ _ _ _ _ _ _ _ _ _ _ ";
@@ -218,9 +234,10 @@
             // 
             this.label2.AutoSize = true;
             this.label2.ForeColor = System.Drawing.SystemColors.Control;
-            this.label2.Location = new System.Drawing.Point(21, 36);
+            this.label2.Location = new System.Drawing.Point(28, 44);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(115, 13);
+            this.label2.Size = new System.Drawing.Size(127, 16);
             this.label2.TabIndex = 7;
             this.label2.Text = "_ _ _ _ _ _ _ _ _ _ _ _ ";
             this.label2.Click += new System.EventHandler(this.label1_Click);
@@ -229,9 +246,10 @@
             // 
             this.label3.AutoSize = true;
             this.label3.ForeColor = System.Drawing.SystemColors.Control;
-            this.label3.Location = new System.Drawing.Point(22, 174);
+            this.label3.Location = new System.Drawing.Point(29, 214);
+            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(115, 13);
+            this.label3.Size = new System.Drawing.Size(127, 16);
             this.label3.TabIndex = 7;
             this.label3.Text = "_ _ _ _ _ _ _ _ _ _ _ _ ";
             this.label3.Click += new System.EventHandler(this.label1_Click);
@@ -246,27 +264,29 @@
             this.panel2.Controls.Add(this.lblTotal);
             this.panel2.Controls.Add(this.lblDescuento);
             this.panel2.Controls.Add(this.lblSubtotal);
-            this.panel2.Location = new System.Drawing.Point(555, 53);
+            this.panel2.Location = new System.Drawing.Point(740, 65);
+            this.panel2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(200, 255);
+            this.panel2.Size = new System.Drawing.Size(267, 314);
             this.panel2.TabIndex = 8;
             // 
             // FormAdminPrecuenta
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.fondo;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(1067, 554);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.dgvDetalle);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.btnCerrar);
             this.Controls.Add(this.btnImprimir);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "FormAdminPrecuenta";
-            this.Text = "FormAdminPrecuenta";
+            this.Text = "Precuenta";
             this.Load += new System.EventHandler(this.FormAdminPrecuenta_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();

@@ -272,34 +272,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             }
         }
 
-        private void btnEliminar_Click(object sender, EventArgs e)
-        {
-            if (string.IsNullOrEmpty(txtIdUsuario.Text))
-            {
-                MessageBox.Show("Seleccione un usuario para eliminar.");
-                return;
-            }
-
-            int idUsuario = Convert.ToInt32(txtIdUsuario.Text);
-
-            DialogResult confirmacion = MessageBox.Show("¿Está seguro de que desea eliminar este usuario?",
-                                                        "Confirmar Eliminación", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-
-            if (confirmacion == DialogResult.Yes)
-            {
-                if (conexion.EliminarUsuario(idUsuario))
-                {
-                    MessageBox.Show("Usuario eliminado correctamente.");
-                    CargarUsuarios();
-                    LimpiarCampos();
-                }
-                else
-                {
-                    MessageBox.Show("Error al eliminar usuario.");
-                }
-            }
-        }
-
         private void btnEditar_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(txtIdUsuario.Text))
@@ -403,5 +375,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             this.Close();
         }
+
     }
 }
