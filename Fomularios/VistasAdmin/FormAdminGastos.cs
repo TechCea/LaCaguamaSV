@@ -26,17 +26,23 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         public FormAdminGastos()
         {
+
+            InitializeComponent();
+
+
             try
             {
-                idCaja = conexion.ObtenerCajaActiva(idUsuario);  // Obtenemos la caja más reciente activa
-                InitializeComponent();
+                idCaja = conexion.ObtenerCajaActiva(idUsuario); 
+                // Obtenemos la caja más reciente activa
+                
+               
                 dgvGastos.MultiSelect = false;
                 // Tamaño fijo
                 this.FormBorderStyle = FormBorderStyle.FixedSingle; // Evita redimensionar
 
                 // Posición fija (centrada en la pantalla)
                 this.StartPosition = FormStartPosition.CenterScreen;
-
+                
                 CargarGastosDelDia();
 
             }
@@ -51,47 +57,32 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         // Método para cargar el resumen del día
         private void CargarResumenDelDia()
         {
-            try
-            {
-                if (idCaja > 0)
-                {
-                    // Mostrar fondo inicial
-                    txtFondoInicial.Text = conexion.ObtenerFondoInicial(idUsuario).ToString("C");
-
-                    // Mostrar efectivo recolectado
-                    txtEfectivoRecolectado.Text = conexion.ObtenerEfectivoRecolectado(idCaja).ToString("C");
-
-                    // Mostrar total de gastos
-                    txtTotalGastos.Text = conexion.ObtenerTotalGastosDelDia(idCaja).ToString("C");
-
-                    // Mostrar los gastos en el DataGridView
-                    dgvGastos.DataSource = conexion.ObtenerGastosDelDia(idCaja);
-                }
-                else
-                {
-                    MessageBox.Show("No hay una caja activa para este usuario.");
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al cargar el resumen del día: " + ex.Message);
-            }
+            
         }
 
 
 
 
         // Evento Load para cargar los datos al abrir el formulario
-        private void FormAdminGastos_Load(object sender, EventArgs e)
+        private void FormAdminGastos_Load_1(object sender, EventArgs e)
         {
-            try
+            Conexion conexion = new Conexion();
+
+            int idCaja = conexion.ObtenerCajaActiva(idUsuario);
+            MostrarTotales();
+            if (idCaja != -1)
             {
-                CargarGastosDelDia();
-                CargarResumenDelDia();
+                decimal fondoInicial = conexion.ObtenerFondoInicial(idCaja);
+                decimal efectivoRecolectado = conexion.ObtenerEfectivoRecolectado(idCaja);
+                decimal totalGastos = conexion.ObtenerTotalGastos(idCaja);
+
+                txtFondoInicial.Text = fondoInicial.ToString("C2");
+                txtEfectivoRecolectado.Text = efectivoRecolectado.ToString("C2");
+                txtTotalGastos.Text = totalGastos.ToString("C2");
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show("Error al cargar los datos: " + ex.Message);
+                MessageBox.Show("No se encontró ninguna caja registrada para este usuario.");
             }
         }
 
@@ -116,10 +107,18 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             try
             {
-                decimal fondoInicial = conexion.ObtenerFondoInicial(idUsuario);
+                int idCaja = conexion.ObtenerIdCajaReciente(); // ya no por idUsuario
+
+                if (idCaja == -1)
+                {
+                    MessageBox.Show("No se encontró una caja reciente.");
+                    return;
+                }
+
+                decimal fondoInicial = conexion.ObtenerFondoInicial(idCaja);
                 decimal efectivoRecolectado = conexion.ObtenerEfectivoRecolectado(idCaja);
                 decimal totalGastos = conexion.ObtenerTotalGastosDelDia(idCaja);
-                decimal utilidad = efectivoRecolectado - totalGastos;
+                decimal utilidad = fondoInicial+ efectivoRecolectado - totalGastos;
 
                 txtFondoInicial.Text = fondoInicial.ToString("C2");
                 txtEfectivoRecolectado.Text = efectivoRecolectado.ToString("C2");
@@ -129,6 +128,21 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             catch (Exception ex)
             {
                 MessageBox.Show("Error al mostrar los totales: " + ex.Message);
+            }
+        }
+
+        private void ActualizarResumen()
+        {
+            try
+            {
+                decimal totalGastos = conexion.ObtenerTotalGastosDelDia(idCaja);
+                txtTotalGastos.Text = totalGastos.ToString("C2");
+
+                // Otros TextBox como fondoInicial, efectivo, totalFinal los puedes ocultar o ignorar por ahora
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al actualizar resumen: " + ex.Message);
             }
         }
 
@@ -142,7 +156,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 int idCaja = conexion.ObtenerCajaActiva(idUsuario); // O el método que uses para obtener el idCaja
 
                 // Verificamos que idCaja sea válido antes de hacer cualquier operación
-                if (idCaja > 0)
+                if (idCaja == -1)
                 {
                     // Si idCaja es válido, obtenemos los datos
                     decimal totalGastos = conexion.ObtenerTotalGastos(idCaja);
@@ -164,6 +178,11 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 MessageBox.Show("Error al limpiar los campos: " + ex.Message);
             }
         }
+
+
+
+
+
 
         private void dgvGastos_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -292,36 +311,17 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void btnMostrarGastos_Click(object sender, EventArgs e)
         {
-            try
-            {
-                CargarGastosDelDia();
-                ActualizarResumen();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al mostrar los gastos: " + ex.Message);
-            }
+      
         }
 
-        private void ActualizarResumen()
-        {
-            try
-            {
-                decimal totalGastos = conexion.ObtenerTotalGastosDelDia(idCaja);
-                txtTotalGastos.Text = totalGastos.ToString("C2");
-
-                // Otros TextBox como fondoInicial, efectivo, totalFinal los puedes ocultar o ignorar por ahora
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al actualizar resumen: " + ex.Message);
-            }
-        }
+        
 
 
         private void btnFiltrar_Click(object sender, EventArgs e)
         {
 
         }
+
+        
     }
 }

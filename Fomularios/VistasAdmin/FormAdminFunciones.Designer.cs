@@ -194,7 +194,7 @@
             this.button9.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button9.ForeColor = System.Drawing.Color.White;
-            this.button9.Location = new System.Drawing.Point(1116, 533);
+            this.button9.Location = new System.Drawing.Point(1116, 637);
             this.button9.Name = "button9";
             this.button9.Size = new System.Drawing.Size(80, 32);
             this.button9.TabIndex = 11;
@@ -335,9 +335,9 @@
             this.panelResultadoCorte.Controls.Add(this.labelResultado);
             this.panelResultadoCorte.Controls.Add(this.btnCerrarPanel_Click);
             this.panelResultadoCorte.Controls.Add(this.btnImprimirRecibo_Click);
-            this.panelResultadoCorte.Location = new System.Drawing.Point(451, 770);
+            this.panelResultadoCorte.Location = new System.Drawing.Point(463, 862);
             this.panelResultadoCorte.Name = "panelResultadoCorte";
-            this.panelResultadoCorte.Size = new System.Drawing.Size(424, 329);
+            this.panelResultadoCorte.Size = new System.Drawing.Size(424, 382);
             this.panelResultadoCorte.TabIndex = 14;
             this.panelResultadoCorte.Visible = false;
             // 
@@ -348,12 +348,11 @@
             this.labelResultado.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.labelResultado.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelResultado.ForeColor = System.Drawing.SystemColors.Control;
-            this.labelResultado.Location = new System.Drawing.Point(84, 30);
+            this.labelResultado.Location = new System.Drawing.Point(113, 37);
             this.labelResultado.Name = "labelResultado";
-            this.labelResultado.Size = new System.Drawing.Size(220, 142);
+            this.labelResultado.Size = new System.Drawing.Size(200, 62);
             this.labelResultado.TabIndex = 2;
-            this.labelResultado.Text = "Corte de caja Confirmado.\r\nCajero:\r\nMonto contado: $232.50\r\nCaja inicial: $200.00" +
-    "\r\nTotal generado $32.50\r\nGastos: $2.50\r\nTotal esperado: $207.50";
+            this.labelResultado.Text = "Corte de tarjeta\r\nCajero:\r\nDinero generado: $0.00\r\n";
             // 
             // btnCerrarPanel_Click
             // 
@@ -362,7 +361,7 @@
             this.btnCerrarPanel_Click.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnCerrarPanel_Click.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCerrarPanel_Click.ForeColor = System.Drawing.SystemColors.Control;
-            this.btnCerrarPanel_Click.Location = new System.Drawing.Point(214, 239);
+            this.btnCerrarPanel_Click.Location = new System.Drawing.Point(226, 309);
             this.btnCerrarPanel_Click.Name = "btnCerrarPanel_Click";
             this.btnCerrarPanel_Click.Size = new System.Drawing.Size(149, 60);
             this.btnCerrarPanel_Click.TabIndex = 1;
@@ -377,7 +376,7 @@
             this.btnImprimirRecibo_Click.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnImprimirRecibo_Click.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnImprimirRecibo_Click.ForeColor = System.Drawing.SystemColors.Control;
-            this.btnImprimirRecibo_Click.Location = new System.Drawing.Point(54, 239);
+            this.btnImprimirRecibo_Click.Location = new System.Drawing.Point(51, 309);
             this.btnImprimirRecibo_Click.Name = "btnImprimirRecibo_Click";
             this.btnImprimirRecibo_Click.Size = new System.Drawing.Size(149, 60);
             this.btnImprimirRecibo_Click.TabIndex = 0;
@@ -774,7 +773,7 @@
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.fondo;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(1267, 663);
+            this.ClientSize = new System.Drawing.Size(1240, 700);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.button1);

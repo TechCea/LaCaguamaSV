@@ -106,6 +106,8 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             
             panelIngresoMonto.Visible = true;
             ActualizarLabelCaja();
+
+           
         }
 
 
@@ -149,6 +151,8 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             decimal cajaInicial = conexion.ObtenerCajaInicial(idCajaActual);
             decimal totalGenerado = conexion.ObtenerTotalGenerado(idCajaActual);
             decimal totalGastos = conexion.ObtenerGastos(idCajaActual);
+            string nombreCajero = conexion.ObtenerNombreUsuario(this.idUsuario);
+            string fechaActual = DateTime.Now.ToString("dd/MM/yyyy HH:mm");
 
             // Calcular la cantidad contada
             decimal cantidadContada = totalGenerado + cajaInicial;
@@ -160,12 +164,15 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             decimal diferencia = montoContado - totalEsperado;
 
             // Mostrar el resultado en los labels
-            labelResultado.Text =
+            labelResultado.Text = $"Fecha: {fechaActual}\n\n" +
+                                  $"Cajero: {nombreCajero}\n\n" +
+                                  
                                   $"Dinero Ingresado: {montoContado:C}\n" +
                                   $"Caja Inicial: {cajaInicial:C}\n" +
                                   $"Cantidad Contada : {cantidadContada:C}\n" +
                                   $"Efectivo Generado : {totalGenerado:C}\n" +
-                                  $"Gastos: {totalGastos:C}\n" +
+                                  $"Gastos: {totalGastos:C}\n\n" +
+
                                   $"Total Esperado : {totalEsperado:C}\n" +
                                   $"Diferencia: {diferencia:C}";
 
@@ -184,10 +191,10 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             panelIngresoMonto.Visible = false;
             panelResultadoCorte.Visible = true;
 
-
             // Apagar botón de corte
             Corte_Caja.Enabled = false;
             Corte_Caja.BackColor = Color.Gray;
+
 
             // Encender botón de inicio de caja
             btnCajaInicial.Enabled = true;

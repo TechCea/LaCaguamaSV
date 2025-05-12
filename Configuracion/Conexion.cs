@@ -1532,35 +1532,51 @@ namespace LaCaguamaSV.Configuracion
         }
 
         // -------------------- Gastos --------------------
-
-
-        // Método para obtener el fondo inicial de la caja
-        public decimal ObtenerFondoInicial(int idUsuario)
+       
+        public int ObtenerIdCajaReciente()
         {
-            decimal fondo = 0;
+            int idCaja = -1;
 
-            using (MySqlConnection conexionDB = new MySqlConnection(cadenaConexion))
+            string query = "SELECT id_caja FROM caja ORDER BY fecha DESC LIMIT 1";
+
+            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
             {
-                try
+                conexion.Open();
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                 {
-                    conexionDB.Open();
-                    string query = "SELECT cantidad FROM caja WHERE id_usuario = @idUsuario ORDER BY id_caja DESC LIMIT 1";
-                    MySqlCommand comando = new MySqlCommand(query, conexionDB);
-                    comando.Parameters.AddWithValue("@idUsuario", idUsuario);
-
-                    object resultado = comando.ExecuteScalar();
-                    if (resultado != null && resultado != DBNull.Value)
+                    object resultado = cmd.ExecuteScalar();
+                    if (resultado != null)
                     {
-                        fondo = Convert.ToDecimal(resultado);
+                        idCaja = Convert.ToInt32(resultado);
                     }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error al obtener el fondo inicial: " + ex.Message);
                 }
             }
 
-            return fondo;
+            return idCaja;
+        }
+
+        // Método para obtener el fondo inicial de la caja
+        public decimal ObtenerFondoInicial(int idCaja)
+        {
+
+            decimal cantidad = 0;
+            string query = "SELECT cantidad FROM caja WHERE id_caja = @idCaja";
+
+            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+            {
+                conexion.Open();
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@idCaja", idCaja);
+                    object result = cmd.ExecuteScalar();
+                    if (result != null && result != DBNull.Value)
+                    {
+                        cantidad = Convert.ToDecimal(result);
+                    }
+                }
+            }
+
+            return cantidad;
         }
 
         // Método para obtener el total de gastos del día (para un id_caja específico)
@@ -1609,16 +1625,20 @@ namespace LaCaguamaSV.Configuracion
         // Método para obtener la caja activa más reciente del día para un usuario
         public int ObtenerCajaActiva(int idUsuario)
         {
-            int idCaja = 0;
+            int idCaja = -1;
             using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
             {
-                string query = "SELECT id_caja FROM caja WHERE DATE(fecha) = CURDATE() AND id_usuario = @idUsuario AND id_estado_caja = 2 ORDER BY fecha DESC LIMIT 1";
+                conexion.Open();
+                string query = @"SELECT id_caja FROM caja 
+                           WHERE id_usuario = @idUsuario AND id_estado_caja = 2 
+                           ORDER BY fecha DESC LIMIT 1";
+
                 using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                 {
                     cmd.Parameters.AddWithValue("@idUsuario", idUsuario);
-                    conexion.Open();
-                    var result = cmd.ExecuteScalar();
-                    if (result != null) idCaja = Convert.ToInt32(result);
+                    object resultado = cmd.ExecuteScalar();
+                    if (resultado != null)
+                        idCaja = Convert.ToInt32(resultado);
                 }
             }
             return idCaja;
@@ -1717,28 +1737,32 @@ namespace LaCaguamaSV.Configuracion
         // Método para obtener el efectivo recolectado (general)
         public decimal ObtenerEfectivoRecolectado(int idCaja)
         {
-            decimal total = 0;
             using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
             {
-                string query = @"
-            SELECT SUM(total - descuento)
-            FROM ordenes 
-            WHERE id_estadoO = 2 AND tipo_pago = 1 
-            AND DATE(fecha_orden) = CURDATE() 
-            AND id_usuario = (
-                SELECT id_usuario FROM caja WHERE id_caja = @idCaja
-            )";
+                conexion.Open();
+
+                // Consulta para obtener el total generado (ventas en efectivo)
+                string query = @"SELECT SUM(o.total) 
+                         FROM ordenes o 
+                         INNER JOIN estado_orden eo ON o.id_estadoO = eo.id_estadoO 
+                         WHERE o.id_caja = @idCaja AND o.tipo_pago = 1 AND eo.nombreEstadoO = 'cerrada'";
 
                 using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                 {
                     cmd.Parameters.AddWithValue("@idCaja", idCaja);
-                    conexion.Open();
-                    var result = cmd.ExecuteScalar();
+                    object result = cmd.ExecuteScalar();
+
+                    // Verificamos si el resultado no es nulo y es un valor válido
                     if (result != DBNull.Value && result != null)
-                        total = Convert.ToDecimal(result);
+                    {
+                        return Convert.ToDecimal(result);
+                    }
+                    else
+                    {
+                        return 0m; // Si no se encuentra el valor o es nulo, devolvemos 0
+                    }
                 }
             }
-            return total;
         }
 
         // Método para obtener la última caja activa (para corte de caja)
@@ -1795,28 +1819,25 @@ namespace LaCaguamaSV.Configuracion
             }
         }
 
-        public decimal ObtenerTotalGastos(int idCaja)
+        public decimal ObtenerTotalGastos(int idCaja, DateTime? fecha = null)
         {
-            try
+            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
             {
-                decimal total = 0;
-                string query = "SELECT SUM(cantidad) FROM gastos WHERE id_caja = @idCaja";
+                conexion.Open();
+                string query = "SELECT IFNULL(SUM(cantidad), 0) FROM gastos WHERE id_caja = @idCaja";
 
-                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                if (fecha.HasValue)
+                    query += " AND DATE(fecha) = @fecha";
+
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                 {
-                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
-                    {
-                        cmd.Parameters.AddWithValue("@idCaja", idCaja);
-                        conexion.Open();
-                        var result = cmd.ExecuteScalar();
-                        total = result != DBNull.Value ? Convert.ToDecimal(result) : 0;
-                    }
+                    cmd.Parameters.AddWithValue("@idCaja", idCaja);
+                    if (fecha.HasValue)
+                        cmd.Parameters.AddWithValue("@fecha", fecha.Value.ToString("yyyy-MM-dd"));
+
+                    object result = cmd.ExecuteScalar();
+                    return result != DBNull.Value ? Convert.ToDecimal(result) : 0;
                 }
-                return total;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error al obtener el total de los gastos: " + ex.Message);
             }
         }
 
