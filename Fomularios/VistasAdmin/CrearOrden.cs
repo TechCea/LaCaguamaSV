@@ -153,7 +153,71 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void txtNombreCliente_TextChanged(object sender, EventArgs e)
         {
+            // Validar longitud máxima (50 caracteres)
+            if (txtNombreCliente.Text.Length > 50)
+            {
+                txtNombreCliente.Text = txtNombreCliente.Text.Substring(0, 50);
+                txtNombreCliente.SelectionStart = 50;
+                return;
+            }
 
+            // Validar caracteres permitidos (letras, espacios, apóstrofes y guiones)
+            string textoValidado = new string(txtNombreCliente.Text
+                .Where(c => char.IsLetter(c) || c == ' ' || c == '\'' || c == '-').ToArray());
+
+            if (txtNombreCliente.Text != textoValidado)
+            {
+                int posicion = txtNombreCliente.SelectionStart;
+                txtNombreCliente.Text = textoValidado;
+                txtNombreCliente.SelectionStart = posicion - 1;
+            }
+
+            // Validar que no comience con espacio
+            if (txtNombreCliente.Text.StartsWith(" "))
+            {
+                txtNombreCliente.Text = txtNombreCliente.Text.TrimStart();
+                txtNombreCliente.SelectionStart = 0;
+            }
+
+            // Validar múltiples espacios consecutivos
+            if (txtNombreCliente.Text.Contains("  "))
+            {
+                int posicion = txtNombreCliente.SelectionStart;
+                txtNombreCliente.Text = System.Text.RegularExpressions.Regex.Replace(txtNombreCliente.Text, @"\s+", " ");
+                txtNombreCliente.SelectionStart = posicion - 1;
+            }
+
+            // Actualizar color de borde según validación
+            if (string.IsNullOrWhiteSpace(txtNombreCliente.Text))
+            {
+                txtNombreCliente.BorderStyle = BorderStyle.FixedSingle;
+                txtNombreCliente.BackColor = SystemColors.Window;
+            }
+            else
+            {
+                txtNombreCliente.BorderStyle = BorderStyle.Fixed3D;
+                txtNombreCliente.BackColor = Color.LightYellow;
+            }
+        }
+
+        private void txtNombreCliente_Enter(object sender, EventArgs e)
+        {
+            // Resaltar cuando el campo recibe foco
+            txtNombreCliente.BackColor = Color.LightYellow;
+            txtNombreCliente.BorderStyle = BorderStyle.Fixed3D;
+        }
+
+        private void txtNombreCliente_Leave(object sender, EventArgs e)
+        {
+            // Normalizar cuando pierde el foco
+            txtNombreCliente.BackColor = SystemColors.Window;
+            txtNombreCliente.BorderStyle = BorderStyle.FixedSingle;
+
+            // Capitalizar nombre (opcional)
+            if (!string.IsNullOrWhiteSpace(txtNombreCliente.Text))
+            {
+                txtNombreCliente.Text = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(txtNombreCliente.Text.ToLower());
+            }
         }
 
         private void cmbMesas_SelectedIndexChanged(object sender, EventArgs e)

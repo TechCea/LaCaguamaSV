@@ -174,7 +174,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             }
         }
 
-        // Modifica el método ActualizarCamposPago para manejar mejor el txtRecibido
         private void ActualizarCamposPago()
         {
             try
@@ -186,11 +185,11 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
                     if (panelEfectivo.Visible)
                     {
-                        // Solo sugerir monto si el campo está vacío
+                        // Eliminamos la sugerencia automática del monto
+                        // Solo dejamos el campo vacío
                         if (string.IsNullOrEmpty(txtRecibido.Text))
                         {
-                            decimal totalActual = CalcularTotalConDescuento();
-                            txtRecibido.Text = totalActual.ToString("0.00");
+                            txtRecibido.Text = "";
                         }
                         txtRecibido.Focus();
                     }
@@ -1117,13 +1116,6 @@ WHERE p.id_orden = @idOrden AND p.id_promocion IS NOT NULL";
                 // Actualizar la interfaz
                 ActualizarTotalConDescuento();
 
-                // Actualizar txtRecibido solo si es pago en efectivo y está visible
-                if (panelEfectivo.Visible)
-                {
-                    decimal totalActual = CalcularTotalConDescuento();
-                    txtRecibido.Text = totalActual.ToString("0.00");
-                }
-
                 MessageBox.Show("Descuento aplicado correctamente", "Éxito",
                               MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -1179,11 +1171,6 @@ WHERE p.id_orden = @idOrden AND p.id_promocion IS NOT NULL";
                 lblSubtotal.Text = subtotal.ToString("C");
                 lblTotalP.Text = totalConDescuento.ToString("C");
 
-                // Actualizar txtRecibido si es pago en efectivo
-                if (panelEfectivo.Visible)
-                {
-                    txtRecibido.Text = totalConDescuento.ToString("0.00");
-                }
             }
             catch (Exception ex)
             {

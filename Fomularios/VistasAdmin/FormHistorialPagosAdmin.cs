@@ -78,7 +78,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 {
                     string query = @"
                 SELECT 
-                    p.id_pago AS 'ID Pago',
                     p.id_orden AS 'Número Orden',
                     o.nombreCliente AS 'Cliente',
                     p.monto AS 'Total',
@@ -561,6 +560,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void dataGridViewHistorial_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
+
             if (e.RowIndex >= 0)
             {
                 int idOrden = Convert.ToInt32(dataGridViewHistorial.Rows[e.RowIndex].Cells["Número Orden"].Value);
