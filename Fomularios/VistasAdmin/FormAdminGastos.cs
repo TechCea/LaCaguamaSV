@@ -116,6 +116,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 }
 
                 decimal fondoInicial = conexion.ObtenerFondoInicial(idCaja);
+              
                 decimal efectivoRecolectado = conexion.ObtenerEfectivoRecolectado(idCaja);
                 decimal totalGastos = conexion.ObtenerTotalGastosDelDia(idCaja);
                 decimal utilidad = fondoInicial+ efectivoRecolectado - totalGastos;
@@ -150,6 +151,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void LimpiarCampos()
         {
+           
             try
             {
                 // Asegúrate de obtener el idCaja de forma segura
@@ -172,6 +174,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                     txtTotalGastos.Text = "0.00";
                     txtEfectivoRecolectado.Text = "0.00";
                 }
+                MostrarTotales();
             }
             catch (Exception ex)
             {
@@ -267,6 +270,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                     {
                         MessageBox.Show("Gasto actualizado correctamente.");
                         CargarGastosDelDia(); // refrescar el DataGridView
+                        MostrarTotales();
                         LimpiarCampos();
                     }
                     else
@@ -296,6 +300,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 {
                     int idGasto = Convert.ToInt32(dgvGastos.SelectedRows[0].Cells["id_gasto"].Value);
                     conexion.EliminarGasto(idGasto);
+                    MostrarTotales();
                     CargarResumenDelDia(); // Actualiza los resúmenes después de la eliminación
                 }
                 else
@@ -307,6 +312,8 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             {
                 MessageBox.Show("Error al eliminar el gasto: " + ex.Message);
             }
+
+         
         }
 
         private void btnMostrarGastos_Click(object sender, EventArgs e)

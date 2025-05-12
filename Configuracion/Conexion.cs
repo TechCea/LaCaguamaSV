@@ -1680,18 +1680,34 @@ namespace LaCaguamaSV.Configuracion
             }
         }
 
+
+
+
+
+
         // Método para eliminar un gasto por ID
-        public void EliminarGasto(int idGasto)
+        public bool EliminarGasto(int idGasto)
         {
-            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+            try
             {
-                string query = "DELETE FROM gastos WHERE id_gasto = @idGasto";
-                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
                 {
-                    cmd.Parameters.AddWithValue("@idGasto", idGasto);
                     conexion.Open();
-                    cmd.ExecuteNonQuery();
+                    string query = "DELETE FROM gastos WHERE id_gasto = @idGasto";
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@idGasto", idGasto);
+
+                        int filasAfectadas = cmd.ExecuteNonQuery();
+                        return filasAfectadas > 0;
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("No se eliminó ningún gasto. Verifica que el ID existe." + ex.Message);
+                return false;
             }
         }
 
