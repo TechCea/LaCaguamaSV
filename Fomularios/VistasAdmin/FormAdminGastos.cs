@@ -68,8 +68,9 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             Conexion conexion = new Conexion();
 
-            int idCaja = conexion.ObtenerCajaActiva(idUsuario);
-            MostrarTotales();
+            // Obtener la caja más reciente sin filtrar por usuario
+            int idCaja = conexion.ObtenerUltimaCaja(); // Asegúrate de tener este método en tu clase Conexion
+
             if (idCaja != -1)
             {
                 decimal fondoInicial = conexion.ObtenerFondoInicial(idCaja);
@@ -79,10 +80,8 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 txtFondoInicial.Text = fondoInicial.ToString("C2");
                 txtEfectivoRecolectado.Text = efectivoRecolectado.ToString("C2");
                 txtTotalGastos.Text = totalGastos.ToString("C2");
-            }
-            else
-            {
-                MessageBox.Show("No se encontró ninguna caja registrada para este usuario.");
+
+                MostrarTotales();
             }
         }
 
