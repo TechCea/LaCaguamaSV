@@ -15,10 +15,10 @@ namespace LaCaguamaSV.Configuracion
     {
         private MySqlConnection conectar = null;
         private static string usuario = "root";
-        private static string contrasenia = "root";
+        private static string contrasenia = "slenderman";
         private static string bd = "lacaguamabd";
         private static string ip = "localhost";
-        private static string puerto = "3307"; // 3306 o 3307 si eres javier 
+        private static string puerto = "3306"; // 3306 o 3307 si eres javier 
 
         string cadenaConexion = $"Server={ip};Port={puerto};Database={bd};User Id={usuario};Password={contrasenia};";
 
@@ -2512,9 +2512,9 @@ namespace LaCaguamaSV.Configuracion
         public void ImportarBaseDeDatos(string rutaArchivo)
         {
             string usuario = "root";
-            string contraseña = "tu_contraseña";
-            string baseDeDatos = "nombre_de_tu_base";
-            string rutaMysql = @"C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe";
+            string contraseña = "slenderman";
+            string baseDeDatos = "lacaguamabd";
+            string rutaMysql = @"C:\Program Files\MySQL\MySQL Server 8.0\bin";
 
             ProcessStartInfo psi = new ProcessStartInfo
             {

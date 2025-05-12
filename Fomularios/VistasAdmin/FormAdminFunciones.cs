@@ -210,12 +210,17 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         private void button3_Click(object sender, EventArgs e)
         {
             Panerl_corteX.Visible = true;
+            Btn_confirmartarjeta.Enabled = false;
+            Btn_confirmartarjeta.BackColor = Color.LightGray;
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
             panel_cortegeneral1.Visible = true;
             panel_corte_general.Visible = false;
+
+            btn_okgeneral.Enabled = false;
+            btn_okgeneral.BackColor = Color.LightGray;
         }
 
 
@@ -341,8 +346,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             if (conn.CorteTarjetasYaRealizado())
             {
                 MessageBox.Show("El corte de tarjetas ya fue realizado en este turno.");
-                Btn_confirmartarjeta.Enabled = false;
-                Btn_confirmartarjeta.BackColor = Color.LightGray;
+                
                 return;
             }
     
@@ -389,8 +393,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             if (conexion.CorteGeneralYaRealizado())
             {
                 MessageBox.Show("El corte general ya fue realizado en este turno.");
-                btn_okgeneral.Enabled = false;
-                btn_okgeneral.BackColor = Color.LightGray;
+                
                 return;
             }
        
@@ -478,9 +481,9 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             {
                 string rutaRespaldo = sfd.FileName;
                 string usuario = "root";
-                string contraseña = "root"; // Reemplaza por tu contraseña real
+                string contraseña = "slenderman"; // Reemplaza por tu contraseña real
                 string baseDeDatos = "lacaguamabd"; // Reemplaza por el nombre real de tu base de datos
-                string mysqldumpPath = @"C:\Program Files\MySQL\MySQL Server 8.0\bin\mysqldump.exe";
+                string mysqldumpPath = @"C:\Program Files\MySQL\MySQL Server 8.0\bin";
 
                 ProcessStartInfo psi = new ProcessStartInfo();
                 psi.FileName = mysqldumpPath;
