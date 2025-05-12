@@ -650,6 +650,9 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                     if (totalAPagar < 0) totalAPagar = 0;
                 }
 
+                // Obtener detalles de promociones
+                Dictionary<int, List<string>> promocionesConItems = ObtenerDetallesPromociones();
+
                 // Generar comprobante
                 StringBuilder comprobante = new StringBuilder();
                 comprobante.AppendLine("══════════════════════════════════");
@@ -663,15 +666,27 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 comprobante.AppendLine("──────────────────────────────────");
 
                 // Detalle de productos
-                foreach (DataGridViewRow row in dataGridViewDetalle.Rows)
+                for (int i = 0; i < dataGridViewDetalle.Rows.Count; i++)
                 {
-                    if (!row.IsNewRow)
+                    if (!dataGridViewDetalle.Rows[i].IsNewRow)
                     {
-                        string producto = row.Cells["Producto"].Value?.ToString() ?? "Desconocido";
-                        int cantidad = Convert.ToInt32(row.Cells["Cantidad"].Value);
-                        decimal subtotalItem = Convert.ToDecimal(row.Cells["Subtotal"].Value);
+                        string producto = dataGridViewDetalle.Rows[i].Cells["Producto"].Value?.ToString() ?? "Desconocido";
+                        int cantidad = Convert.ToInt32(dataGridViewDetalle.Rows[i].Cells["Cantidad"].Value);
+                        decimal subtotalItem = Convert.ToDecimal(dataGridViewDetalle.Rows[i].Cells["Subtotal"].Value);
 
                         comprobante.AppendLine($"{producto} x{cantidad} - {subtotalItem.ToString("C")}");
+
+                        // Mostrar items de promoción si existe
+                        if (promocionesConItems.ContainsKey(i))
+                        {
+                            comprobante.AppendLine("   ┌───────────────────────────────");
+                            comprobante.AppendLine("   │ Items incluidos en la promoción:");
+                            foreach (var item in promocionesConItems[i])
+                            {
+                                comprobante.AppendLine($"   ├─ {item}");
+                            }
+                            comprobante.AppendLine("   └───────────────────────────────");
+                        }
                     }
                 }
 
@@ -741,21 +756,21 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             {
                 // Obtener promociones en esta orden
                 string query = @"
-        SELECT 
-            p.id_promocion,
-            pr.nombre AS nombre_promocion,
-            p.Cantidad AS cantidad_pedida,
-            pi.tipo_item,
-            CASE
-                WHEN pi.tipo_item = 'PLATO' THEN (SELECT pl.nombrePlato FROM platos pl WHERE pl.id_plato = pi.id_item)
-                WHEN pi.tipo_item = 'BEBIDA' THEN (SELECT i.nombreProducto FROM bebidas b JOIN inventario i ON b.id_inventario = i.id_inventario WHERE b.id_bebida = pi.id_item)
-                WHEN pi.tipo_item = 'EXTRA' THEN (SELECT i.nombreProducto FROM extras e JOIN inventario i ON e.id_inventario = i.id_inventario WHERE e.id_extra = pi.id_item)
-            END AS nombre_item,
-            pi.cantidad AS cantidad_en_promo
-        FROM pedidos p
-        JOIN promociones pr ON p.id_promocion = pr.id_promocion
-        JOIN promocion_items pi ON pr.id_promocion = pi.id_promocion
-        WHERE p.id_orden = @idOrden AND p.id_promocion IS NOT NULL";
+SELECT 
+    p.id_promocion,
+    pr.nombre AS nombre_promocion,
+    p.Cantidad AS cantidad_pedida,
+    pi.tipo_item,
+    CASE
+        WHEN pi.tipo_item = 'PLATO' THEN (SELECT pl.nombrePlato FROM platos pl WHERE pl.id_plato = pi.id_item)
+        WHEN pi.tipo_item = 'BEBIDA' THEN (SELECT i.nombreProducto FROM bebidas b JOIN inventario i ON b.id_inventario = i.id_inventario WHERE b.id_bebida = pi.id_item)
+        WHEN pi.tipo_item = 'EXTRA' THEN (SELECT i.nombreProducto FROM extras e JOIN inventario i ON e.id_inventario = i.id_inventario WHERE e.id_extra = pi.id_item)
+    END AS nombre_item,
+    pi.cantidad AS cantidad_en_promo
+FROM pedidos p
+JOIN promociones pr ON p.id_promocion = pr.id_promocion
+JOIN promocion_items pi ON pr.id_promocion = pi.id_promocion
+WHERE p.id_orden = @idOrden AND p.id_promocion IS NOT NULL";
 
                 using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                 {
@@ -803,16 +818,48 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void txtRecibido_TextChanged(object sender, EventArgs e)
         {
-            // Solo validar monto si es pago en efectivo
+            // Solo validar monto si es pago en efectivo (manteniendo tu lógica original)
             if (panelEfectivo.Visible)
             {
+                // Validar el formato del texto mientras se escribe
+                if (txtRecibido.Text.Length > 0)
+                {
+                    // Eliminar múltiples puntos decimales
+                    if (txtRecibido.Text.Count(c => c == '.') > 1)
+                    {
+                        int lastIndex = txtRecibido.Text.LastIndexOf('.');
+                        txtRecibido.Text = txtRecibido.Text.Remove(lastIndex, 1);
+                        txtRecibido.SelectionStart = txtRecibido.Text.Length;
+                        return;
+                    }
+
+                    // Si comienza con punto, agregar 0 antes
+                    if (txtRecibido.Text.StartsWith("."))
+                    {
+                        txtRecibido.Text = "0" + txtRecibido.Text;
+                        txtRecibido.SelectionStart = txtRecibido.Text.Length;
+                        return;
+                    }
+
+                    // Eliminar cualquier carácter no numérico excepto punto
+                    string newText = new string(txtRecibido.Text.Where(c => char.IsDigit(c) || c == '.').ToArray());
+                    if (txtRecibido.Text != newText)
+                    {
+                        txtRecibido.Text = newText;
+                        txtRecibido.SelectionStart = txtRecibido.Text.Length;
+                        return;
+                    }
+                }
+
                 if (decimal.TryParse(txtRecibido.Text, out decimal recibido))
                 {
                     decimal totalAPagar = CalcularTotalConDescuento();
                     decimal cambio = recibido - totalAPagar;
-                    if (cambio < 0) cambio = 0;
 
-                    lblCambio.Text = cambio.ToString("C");
+                    // Mostrar cambio (no permitir valores negativos)
+                    lblCambio.Text = cambio >= 0 ? cambio.ToString("C") : "$0.00";
+
+                    // Habilitar botón solo si el monto es suficiente
                     btnProcesarPago.Enabled = (recibido >= totalAPagar);
                 }
                 else
@@ -823,18 +870,55 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             }
         }
 
+        private void txtRecibido_Leave(object sender, EventArgs e)
+        {
+            // Formatear al salir del campo
+            if (panelEfectivo.Visible)
+            {
+                if (decimal.TryParse(txtRecibido.Text, out decimal valor))
+                {
+                    txtRecibido.Text = valor.ToString("0.00");
+                }
+                else if (string.IsNullOrEmpty(txtRecibido.Text))
+                {
+                    txtRecibido.Text = "0.00";
+                }
+                else
+                {
+                    // Si el texto no es un número válido, resetear a 0.00
+                    txtRecibido.Text = "0.00";
+                }
+
+                // Forzar actualización del cambio
+                txtRecibido_TextChanged(sender, e);
+            }
+        }
+
         private void txtRecibido_KeyPress(object sender, KeyPressEventArgs e)
         {
-            // Permitir solo números, punto decimal y tecla de retroceso
+            // Permitir:
+            // - Dígitos (0-9)
+            // - Punto decimal (.)
+            // - Tecla de retroceso (Backspace)
+            // - Tecla de suprimir (Delete)
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
             {
                 e.Handled = true;
+                return;
             }
 
             // Solo permitir un punto decimal
-            if ((e.KeyChar == '.') && ((sender as TextBox).Text.IndexOf('.') > -1))
+            if (e.KeyChar == '.' && (sender as TextBox).Text.IndexOf('.') > -1)
             {
                 e.Handled = true;
+                return;
+            }
+
+            // Si el punto es el primer carácter, agregar un 0 antes
+            if (e.KeyChar == '.' && (sender as TextBox).Text.Length == 0)
+            {
+                (sender as TextBox).Text = "0";
+                (sender as TextBox).SelectionStart = (sender as TextBox).Text.Length;
             }
         }
 

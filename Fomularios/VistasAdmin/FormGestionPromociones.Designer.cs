@@ -60,16 +60,16 @@
             this.dataGridViewPromociones.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewPromociones.Location = new System.Drawing.Point(13, 168);
             this.dataGridViewPromociones.Name = "dataGridViewPromociones";
-            this.dataGridViewPromociones.Size = new System.Drawing.Size(240, 150);
+            this.dataGridViewPromociones.Size = new System.Drawing.Size(519, 150);
             this.dataGridViewPromociones.TabIndex = 1;
             this.dataGridViewPromociones.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewPromociones_CellClick);
             // 
             // dataGridViewMenu
             // 
             this.dataGridViewMenu.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewMenu.Location = new System.Drawing.Point(506, 168);
+            this.dataGridViewMenu.Location = new System.Drawing.Point(12, 324);
             this.dataGridViewMenu.Name = "dataGridViewMenu";
-            this.dataGridViewMenu.Size = new System.Drawing.Size(240, 150);
+            this.dataGridViewMenu.Size = new System.Drawing.Size(520, 185);
             this.dataGridViewMenu.TabIndex = 2;
             this.dataGridViewMenu.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridViewMenu_CellDoubleClick);
             // 
@@ -83,7 +83,7 @@
             // 
             // txtDescripcion
             // 
-            this.txtDescripcion.Location = new System.Drawing.Point(118, 28);
+            this.txtDescripcion.Location = new System.Drawing.Point(144, 29);
             this.txtDescripcion.Name = "txtDescripcion";
             this.txtDescripcion.Size = new System.Drawing.Size(100, 20);
             this.txtDescripcion.TabIndex = 4;
@@ -91,7 +91,7 @@
             // 
             // dateInicio
             // 
-            this.dateInicio.Location = new System.Drawing.Point(354, 28);
+            this.dateInicio.Location = new System.Drawing.Point(432, 29);
             this.dateInicio.Name = "dateInicio";
             this.dateInicio.Size = new System.Drawing.Size(200, 20);
             this.dateInicio.TabIndex = 6;
@@ -99,7 +99,7 @@
             // 
             // dateFin
             // 
-            this.dateFin.Location = new System.Drawing.Point(354, 90);
+            this.dateFin.Location = new System.Drawing.Point(432, 91);
             this.dateFin.Name = "dateFin";
             this.dateFin.Size = new System.Drawing.Size(200, 20);
             this.dateFin.TabIndex = 7;
@@ -108,7 +108,7 @@
             // checkSinFin
             // 
             this.checkSinFin.AutoSize = true;
-            this.checkSinFin.Location = new System.Drawing.Point(582, 33);
+            this.checkSinFin.Location = new System.Drawing.Point(674, 31);
             this.checkSinFin.Name = "checkSinFin";
             this.checkSinFin.Size = new System.Drawing.Size(150, 17);
             this.checkSinFin.TabIndex = 8;
@@ -119,7 +119,7 @@
             // checkActiva
             // 
             this.checkActiva.AutoSize = true;
-            this.checkActiva.Location = new System.Drawing.Point(582, 65);
+            this.checkActiva.Location = new System.Drawing.Point(674, 96);
             this.checkActiva.Name = "checkActiva";
             this.checkActiva.Size = new System.Drawing.Size(56, 17);
             this.checkActiva.TabIndex = 9;
@@ -129,49 +129,53 @@
             // 
             // btnPlatos
             // 
+            this.btnPlatos.BackColor = System.Drawing.Color.CornflowerBlue;
             this.btnPlatos.Location = new System.Drawing.Point(13, 125);
             this.btnPlatos.Name = "btnPlatos";
-            this.btnPlatos.Size = new System.Drawing.Size(75, 23);
+            this.btnPlatos.Size = new System.Drawing.Size(99, 37);
             this.btnPlatos.TabIndex = 10;
             this.btnPlatos.Text = "Platos";
-            this.btnPlatos.UseVisualStyleBackColor = true;
+            this.btnPlatos.UseVisualStyleBackColor = false;
             this.btnPlatos.Click += new System.EventHandler(this.btnPlatos_Click_1);
             // 
             // btnBebidas
             // 
+            this.btnBebidas.BackColor = System.Drawing.Color.Coral;
             this.btnBebidas.Location = new System.Drawing.Point(146, 125);
             this.btnBebidas.Name = "btnBebidas";
-            this.btnBebidas.Size = new System.Drawing.Size(75, 23);
+            this.btnBebidas.Size = new System.Drawing.Size(98, 37);
             this.btnBebidas.TabIndex = 11;
             this.btnBebidas.Text = "Bebidas";
-            this.btnBebidas.UseVisualStyleBackColor = true;
+            this.btnBebidas.UseVisualStyleBackColor = false;
             this.btnBebidas.Click += new System.EventHandler(this.btnBebidas_Click_1);
             // 
             // btnExtras
             // 
-            this.btnExtras.Location = new System.Drawing.Point(259, 125);
+            this.btnExtras.BackColor = System.Drawing.Color.Cyan;
+            this.btnExtras.Location = new System.Drawing.Point(285, 125);
             this.btnExtras.Name = "btnExtras";
-            this.btnExtras.Size = new System.Drawing.Size(75, 23);
+            this.btnExtras.Size = new System.Drawing.Size(99, 37);
             this.btnExtras.TabIndex = 12;
             this.btnExtras.Text = "Extras";
-            this.btnExtras.UseVisualStyleBackColor = true;
+            this.btnExtras.UseVisualStyleBackColor = false;
             this.btnExtras.Click += new System.EventHandler(this.btnExtras_Click);
             // 
             // btnGuardarPromocion
             // 
-            this.btnGuardarPromocion.Location = new System.Drawing.Point(645, 354);
+            this.btnGuardarPromocion.BackColor = System.Drawing.Color.Lime;
+            this.btnGuardarPromocion.Location = new System.Drawing.Point(773, 125);
             this.btnGuardarPromocion.Name = "btnGuardarPromocion";
-            this.btnGuardarPromocion.Size = new System.Drawing.Size(75, 23);
+            this.btnGuardarPromocion.Size = new System.Drawing.Size(124, 37);
             this.btnGuardarPromocion.TabIndex = 14;
             this.btnGuardarPromocion.Text = "Guardar Promocion";
-            this.btnGuardarPromocion.UseVisualStyleBackColor = true;
+            this.btnGuardarPromocion.UseVisualStyleBackColor = false;
             this.btnGuardarPromocion.Click += new System.EventHandler(this.btnGuardarPromocion_Click_1);
             // 
             // panelItems
             // 
-            this.panelItems.Location = new System.Drawing.Point(260, 168);
+            this.panelItems.Location = new System.Drawing.Point(549, 168);
             this.panelItems.Name = "panelItems";
-            this.panelItems.Size = new System.Drawing.Size(240, 150);
+            this.panelItems.Size = new System.Drawing.Size(348, 150);
             this.panelItems.TabIndex = 15;
             // 
             // errorProvider
@@ -190,7 +194,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(118, 11);
+            this.label2.Location = new System.Drawing.Point(143, 12);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(63, 13);
             this.label2.TabIndex = 17;
@@ -199,7 +203,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(224, 11);
+            this.label3.Location = new System.Drawing.Point(260, 12);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(85, 13);
             this.label3.TabIndex = 18;
@@ -208,7 +212,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(354, 9);
+            this.label4.Location = new System.Drawing.Point(432, 10);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(80, 13);
             this.label4.TabIndex = 19;
@@ -217,7 +221,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(354, 71);
+            this.label5.Location = new System.Drawing.Point(432, 72);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(69, 13);
             this.label5.TabIndex = 20;
@@ -225,7 +229,7 @@
             // 
             // txtPrecio
             // 
-            this.txtPrecio.Location = new System.Drawing.Point(225, 28);
+            this.txtPrecio.Location = new System.Drawing.Point(261, 29);
             this.txtPrecio.Name = "txtPrecio";
             this.txtPrecio.Size = new System.Drawing.Size(123, 20);
             this.txtPrecio.TabIndex = 21;
@@ -235,7 +239,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.fondo;
+            this.ClientSize = new System.Drawing.Size(977, 602);
             this.Controls.Add(this.txtPrecio);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);

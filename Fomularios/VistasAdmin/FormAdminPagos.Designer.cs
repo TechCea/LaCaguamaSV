@@ -43,18 +43,19 @@
             this.panel5 = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.label7 = new System.Windows.Forms.Label();
+            this.lblSubtotal = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.chkAplicarDescuento = new System.Windows.Forms.CheckBox();
             this.panelDescuentos = new System.Windows.Forms.Panel();
+            this.label8 = new System.Windows.Forms.Label();
+            this.lblDescuentoAplicado = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.btnAplicarDescuento = new System.Windows.Forms.Button();
             this.txtMontoDescuento = new System.Windows.Forms.TextBox();
             this.cmbTipoDescuento = new System.Windows.Forms.ComboBox();
-            this.lblDescuentoAplicado = new System.Windows.Forms.Label();
-            this.lblSubtotal = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDetalle)).BeginInit();
             this.panelEfectivo.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -206,10 +207,28 @@
             this.panel2.Controls.Add(this.label2);
             this.panel2.Controls.Add(this.lblCambio);
             this.panel2.Controls.Add(this.lblTotalP);
-            this.panel2.Location = new System.Drawing.Point(534, 390);
+            this.panel2.Location = new System.Drawing.Point(534, 406);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(239, 102);
             this.panel2.TabIndex = 14;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(64, 45);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(53, 13);
+            this.label7.TabIndex = 5;
+            this.label7.Text = "Sub Total";
+            // 
+            // lblSubtotal
+            // 
+            this.lblSubtotal.AutoSize = true;
+            this.lblSubtotal.Location = new System.Drawing.Point(145, 45);
+            this.lblSubtotal.Name = "lblSubtotal";
+            this.lblSubtotal.Size = new System.Drawing.Size(34, 13);
+            this.lblSubtotal.TabIndex = 4;
+            this.lblSubtotal.Text = "$0.00";
             // 
             // label4
             // 
@@ -243,6 +262,7 @@
             // 
             // panelDescuentos
             // 
+            this.panelDescuentos.Controls.Add(this.label8);
             this.panelDescuentos.Controls.Add(this.lblDescuentoAplicado);
             this.panelDescuentos.Controls.Add(this.label6);
             this.panelDescuentos.Controls.Add(this.label5);
@@ -252,13 +272,31 @@
             this.panelDescuentos.Controls.Add(this.chkAplicarDescuento);
             this.panelDescuentos.Location = new System.Drawing.Point(534, 216);
             this.panelDescuentos.Name = "panelDescuentos";
-            this.panelDescuentos.Size = new System.Drawing.Size(239, 150);
+            this.panelDescuentos.Size = new System.Drawing.Size(239, 184);
             this.panelDescuentos.TabIndex = 15;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(16, 114);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(98, 13);
+            this.label8.TabIndex = 20;
+            this.label8.Text = "Monto Descontado";
+            // 
+            // lblDescuentoAplicado
+            // 
+            this.lblDescuentoAplicado.AutoSize = true;
+            this.lblDescuentoAplicado.Location = new System.Drawing.Point(132, 114);
+            this.lblDescuentoAplicado.Name = "lblDescuentoAplicado";
+            this.lblDescuentoAplicado.Size = new System.Drawing.Size(28, 13);
+            this.lblDescuentoAplicado.TabIndex = 16;
+            this.lblDescuentoAplicado.Text = "0.00";
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(24, 83);
+            this.label6.Location = new System.Drawing.Point(16, 84);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(37, 13);
             this.label6.TabIndex = 19;
@@ -279,7 +317,7 @@
             // 
             this.btnAplicarDescuento.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
             this.btnAplicarDescuento.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.btnAplicarDescuento.Location = new System.Drawing.Point(37, 111);
+            this.btnAplicarDescuento.Location = new System.Drawing.Point(54, 139);
             this.btnAplicarDescuento.Name = "btnAplicarDescuento";
             this.btnAplicarDescuento.Size = new System.Drawing.Size(142, 36);
             this.btnAplicarDescuento.TabIndex = 16;
@@ -306,39 +344,12 @@
             this.cmbTipoDescuento.TabIndex = 16;
             this.cmbTipoDescuento.Visible = false;
             // 
-            // lblDescuentoAplicado
-            // 
-            this.lblDescuentoAplicado.AutoSize = true;
-            this.lblDescuentoAplicado.Location = new System.Drawing.Point(185, 123);
-            this.lblDescuentoAplicado.Name = "lblDescuentoAplicado";
-            this.lblDescuentoAplicado.Size = new System.Drawing.Size(35, 13);
-            this.lblDescuentoAplicado.TabIndex = 16;
-            this.lblDescuentoAplicado.Text = "label7";
-            // 
-            // lblSubtotal
-            // 
-            this.lblSubtotal.AutoSize = true;
-            this.lblSubtotal.Location = new System.Drawing.Point(145, 45);
-            this.lblSubtotal.Name = "lblSubtotal";
-            this.lblSubtotal.Size = new System.Drawing.Size(34, 13);
-            this.lblSubtotal.TabIndex = 4;
-            this.lblSubtotal.Text = "$0.00";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(64, 45);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(53, 13);
-            this.label7.TabIndex = 5;
-            this.label7.Text = "Sub Total";
-            // 
             // FormAdminPagos
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.fondo;
-            this.ClientSize = new System.Drawing.Size(800, 504);
+            this.ClientSize = new System.Drawing.Size(800, 515);
             this.Controls.Add(this.panelDescuentos);
             this.Controls.Add(this.dataGridViewDetalle);
             this.Controls.Add(this.panel1);
@@ -395,5 +406,6 @@
         private System.Windows.Forms.Label lblDescuentoAplicado;
         private System.Windows.Forms.Label lblSubtotal;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label8;
     }
 }

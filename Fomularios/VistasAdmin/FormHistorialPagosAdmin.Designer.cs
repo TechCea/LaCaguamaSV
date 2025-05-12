@@ -38,13 +38,16 @@
             this.dtpFechaInicio = new System.Windows.Forms.DateTimePicker();
             this.cmbTipoFiltro = new System.Windows.Forms.ComboBox();
             this.lblFiltro = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewHistorial)).BeginInit();
             this.SuspendLayout();
             // 
             // dataGridViewHistorial
             // 
             this.dataGridViewHistorial.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewHistorial.Location = new System.Drawing.Point(42, 91);
+            this.dataGridViewHistorial.Location = new System.Drawing.Point(42, 123);
             this.dataGridViewHistorial.Name = "dataGridViewHistorial";
             this.dataGridViewHistorial.RowHeadersWidth = 51;
             this.dataGridViewHistorial.Size = new System.Drawing.Size(707, 291);
@@ -53,7 +56,7 @@
             // 
             // btnCerrar
             // 
-            this.btnCerrar.Location = new System.Drawing.Point(42, 388);
+            this.btnCerrar.Location = new System.Drawing.Point(42, 420);
             this.btnCerrar.Name = "btnCerrar";
             this.btnCerrar.Size = new System.Drawing.Size(103, 42);
             this.btnCerrar.TabIndex = 1;
@@ -64,17 +67,17 @@
             // lblTotalRegistros
             // 
             this.lblTotalRegistros.AutoSize = true;
-            this.lblTotalRegistros.Location = new System.Drawing.Point(573, 57);
+            this.lblTotalRegistros.Location = new System.Drawing.Point(664, 107);
             this.lblTotalRegistros.Name = "lblTotalRegistros";
-            this.lblTotalRegistros.Size = new System.Drawing.Size(35, 13);
+            this.lblTotalRegistros.Size = new System.Drawing.Size(71, 13);
             this.lblTotalRegistros.TabIndex = 27;
-            this.lblTotalRegistros.Text = "label1";
+            this.lblTotalRegistros.Text = "Mostrar todos";
             this.lblTotalRegistros.Click += new System.EventHandler(this.lblTotalRegistros_Click);
             // 
             // lblA
             // 
             this.lblA.AutoSize = true;
-            this.lblA.Location = new System.Drawing.Point(46, 62);
+            this.lblA.Location = new System.Drawing.Point(1, 180);
             this.lblA.Name = "lblA";
             this.lblA.Size = new System.Drawing.Size(35, 13);
             this.lblA.TabIndex = 26;
@@ -83,27 +86,31 @@
             // 
             // btnResetear
             // 
-            this.btnResetear.Location = new System.Drawing.Point(448, 52);
+            this.btnResetear.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
+            this.btnResetear.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.btnResetear.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.btnResetear.Location = new System.Drawing.Point(535, 81);
             this.btnResetear.Name = "btnResetear";
-            this.btnResetear.Size = new System.Drawing.Size(75, 23);
+            this.btnResetear.Size = new System.Drawing.Size(88, 36);
             this.btnResetear.TabIndex = 25;
             this.btnResetear.Text = "Resetear";
-            this.btnResetear.UseVisualStyleBackColor = true;
+            this.btnResetear.UseVisualStyleBackColor = false;
             this.btnResetear.Click += new System.EventHandler(this.btnResetear_Click);
             // 
             // btnFiltrar
             // 
-            this.btnFiltrar.Location = new System.Drawing.Point(364, 52);
+            this.btnFiltrar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.btnFiltrar.Location = new System.Drawing.Point(192, 84);
             this.btnFiltrar.Name = "btnFiltrar";
-            this.btnFiltrar.Size = new System.Drawing.Size(75, 23);
+            this.btnFiltrar.Size = new System.Drawing.Size(85, 33);
             this.btnFiltrar.TabIndex = 24;
-            this.btnFiltrar.Text = "F";
-            this.btnFiltrar.UseVisualStyleBackColor = true;
+            this.btnFiltrar.Text = "Filtrar Datos";
+            this.btnFiltrar.UseVisualStyleBackColor = false;
             this.btnFiltrar.Click += new System.EventHandler(this.btnFiltrar_Click);
             // 
             // dtpFechaFin
             // 
-            this.dtpFechaFin.Location = new System.Drawing.Point(448, 22);
+            this.dtpFechaFin.Location = new System.Drawing.Point(423, 54);
             this.dtpFechaFin.Name = "dtpFechaFin";
             this.dtpFechaFin.Size = new System.Drawing.Size(200, 20);
             this.dtpFechaFin.TabIndex = 23;
@@ -111,7 +118,7 @@
             // 
             // dtpFechaInicio
             // 
-            this.dtpFechaInicio.Location = new System.Drawing.Point(241, 22);
+            this.dtpFechaInicio.Location = new System.Drawing.Point(192, 54);
             this.dtpFechaInicio.Name = "dtpFechaInicio";
             this.dtpFechaInicio.Size = new System.Drawing.Size(200, 20);
             this.dtpFechaInicio.TabIndex = 22;
@@ -120,7 +127,7 @@
             // cmbTipoFiltro
             // 
             this.cmbTipoFiltro.FormattingEnabled = true;
-            this.cmbTipoFiltro.Location = new System.Drawing.Point(113, 25);
+            this.cmbTipoFiltro.Location = new System.Drawing.Point(42, 84);
             this.cmbTipoFiltro.Name = "cmbTipoFiltro";
             this.cmbTipoFiltro.Size = new System.Drawing.Size(121, 21);
             this.cmbTipoFiltro.TabIndex = 21;
@@ -129,7 +136,7 @@
             // lblFiltro
             // 
             this.lblFiltro.AutoSize = true;
-            this.lblFiltro.Location = new System.Drawing.Point(46, 25);
+            this.lblFiltro.Location = new System.Drawing.Point(1, 152);
             this.lblFiltro.Name = "lblFiltro";
             this.lblFiltro.Size = new System.Drawing.Size(35, 13);
             this.lblFiltro.TabIndex = 20;
@@ -137,12 +144,42 @@
             this.lblFiltro.Visible = false;
             this.lblFiltro.Click += new System.EventHandler(this.lblFiltro_Click);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(39, 35);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(106, 13);
+            this.label1.TabIndex = 28;
+            this.label1.Text = "Selecione para Filtrar";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(192, 35);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(80, 13);
+            this.label2.TabIndex = 29;
+            this.label2.Text = "Fecha de Inicio";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(543, 35);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(62, 13);
+            this.label3.TabIndex = 30;
+            this.label3.Text = "Fecha Final";
+            // 
             // FormHistorialPagosAdmin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.fondo;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(800, 473);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.lblTotalRegistros);
             this.Controls.Add(this.lblA);
             this.Controls.Add(this.btnResetear);
@@ -174,5 +211,8 @@
         private System.Windows.Forms.DateTimePicker dtpFechaInicio;
         private System.Windows.Forms.ComboBox cmbTipoFiltro;
         private System.Windows.Forms.Label lblFiltro;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
     }
 }
