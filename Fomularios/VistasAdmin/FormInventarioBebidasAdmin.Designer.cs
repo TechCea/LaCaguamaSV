@@ -30,6 +30,7 @@
         {
             this.dgvInventarioB = new System.Windows.Forms.DataGridView();
             this.gbDatosExtras = new System.Windows.Forms.GroupBox();
+            this.btn_limpiar = new System.Windows.Forms.Button();
             this.cbc_disponibilidad = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
             this.cbxCategoria = new System.Windows.Forms.ComboBox();
@@ -46,7 +47,7 @@
             this.btnRegresar = new System.Windows.Forms.Button();
             this.btnAgregar = new System.Windows.Forms.Button();
             this.btnActualizar = new System.Windows.Forms.Button();
-            this.btn_limpiar = new System.Windows.Forms.Button();
+            this.label6 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgvInventarioB)).BeginInit();
             this.gbDatosExtras.SuspendLayout();
             this.SuspendLayout();
@@ -55,7 +56,7 @@
             // 
             this.dgvInventarioB.BackgroundColor = System.Drawing.SystemColors.ControlDarkDark;
             this.dgvInventarioB.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvInventarioB.Location = new System.Drawing.Point(36, 30);
+            this.dgvInventarioB.Location = new System.Drawing.Point(36, 69);
             this.dgvInventarioB.Margin = new System.Windows.Forms.Padding(4);
             this.dgvInventarioB.Name = "dgvInventarioB";
             this.dgvInventarioB.RowHeadersWidth = 51;
@@ -82,7 +83,7 @@
             this.gbDatosExtras.Controls.Add(this.lblSeleccionExtra);
             this.gbDatosExtras.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.gbDatosExtras.ForeColor = System.Drawing.SystemColors.Control;
-            this.gbDatosExtras.Location = new System.Drawing.Point(769, 30);
+            this.gbDatosExtras.Location = new System.Drawing.Point(769, 69);
             this.gbDatosExtras.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.gbDatosExtras.Name = "gbDatosExtras";
             this.gbDatosExtras.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -90,6 +91,21 @@
             this.gbDatosExtras.TabIndex = 11;
             this.gbDatosExtras.TabStop = false;
             this.gbDatosExtras.Text = "Datos Bebidas";
+            // 
+            // btn_limpiar
+            // 
+            this.btn_limpiar.BackColor = System.Drawing.Color.Snow;
+            this.btn_limpiar.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btn_limpiar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_limpiar.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.btn_limpiar.Location = new System.Drawing.Point(309, 388);
+            this.btn_limpiar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btn_limpiar.Name = "btn_limpiar";
+            this.btn_limpiar.Size = new System.Drawing.Size(177, 47);
+            this.btn_limpiar.TabIndex = 17;
+            this.btn_limpiar.Text = "Limpiar datos";
+            this.btn_limpiar.UseVisualStyleBackColor = false;
+            this.btn_limpiar.Click += new System.EventHandler(this.btn_limpiar_Click);
             // 
             // cbc_disponibilidad
             // 
@@ -227,7 +243,7 @@
             this.btnRegresar.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnRegresar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnRegresar.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btnRegresar.Location = new System.Drawing.Point(36, 494);
+            this.btnRegresar.Location = new System.Drawing.Point(36, 533);
             this.btnRegresar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnRegresar.Name = "btnRegresar";
             this.btnRegresar.Size = new System.Drawing.Size(177, 47);
@@ -243,7 +259,7 @@
             this.btnAgregar.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnAgregar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAgregar.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btnAgregar.Location = new System.Drawing.Point(966, 494);
+            this.btnAgregar.Location = new System.Drawing.Point(966, 533);
             this.btnAgregar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnAgregar.Name = "btnAgregar";
             this.btnAgregar.Size = new System.Drawing.Size(135, 63);
@@ -259,7 +275,7 @@
             this.btnActualizar.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnActualizar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnActualizar.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btnActualizar.Location = new System.Drawing.Point(1149, 498);
+            this.btnActualizar.Location = new System.Drawing.Point(1149, 537);
             this.btnActualizar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnActualizar.Name = "btnActualizar";
             this.btnActualizar.Size = new System.Drawing.Size(141, 54);
@@ -268,20 +284,18 @@
             this.btnActualizar.UseVisualStyleBackColor = false;
             this.btnActualizar.Click += new System.EventHandler(this.btnActualizar_Click);
             // 
-            // btn_limpiar
+            // label6
             // 
-            this.btn_limpiar.BackColor = System.Drawing.Color.Snow;
-            this.btn_limpiar.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btn_limpiar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_limpiar.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btn_limpiar.Location = new System.Drawing.Point(309, 388);
-            this.btn_limpiar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.btn_limpiar.Name = "btn_limpiar";
-            this.btn_limpiar.Size = new System.Drawing.Size(177, 47);
-            this.btn_limpiar.TabIndex = 17;
-            this.btn_limpiar.Text = "Limpiar datos";
-            this.btn_limpiar.UseVisualStyleBackColor = false;
-            this.btn_limpiar.Click += new System.EventHandler(this.btn_limpiar_Click);
+            this.label6.AutoSize = true;
+            this.label6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.label6.Location = new System.Drawing.Point(31, 25);
+            this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(330, 26);
+            this.label6.TabIndex = 17;
+            this.label6.Text = "INVENTARIO: PROVEEDORES";
             // 
             // FormInventarioBebidasAdmin
             // 
@@ -289,7 +303,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.fondo;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(1344, 577);
+            this.ClientSize = new System.Drawing.Size(1348, 621);
+            this.Controls.Add(this.label6);
             this.Controls.Add(this.btnAgregar);
             this.Controls.Add(this.btnActualizar);
             this.Controls.Add(this.btnRegresar);
@@ -297,11 +312,12 @@
             this.Controls.Add(this.dgvInventarioB);
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FormInventarioBebidasAdmin";
-            this.Text = "FormInventarioBebidasAdmin";
+            this.Text = "Bebidas del inventario";
             ((System.ComponentModel.ISupportInitialize)(this.dgvInventarioB)).EndInit();
             this.gbDatosExtras.ResumeLayout(false);
             this.gbDatosExtras.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -326,5 +342,6 @@
         private System.Windows.Forms.ComboBox cbc_disponibilidad;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button btn_limpiar;
+        private System.Windows.Forms.Label label6;
     }
 }

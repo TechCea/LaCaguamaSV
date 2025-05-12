@@ -32,6 +32,9 @@
             this.btnActualizar = new System.Windows.Forms.Button();
             this.btnRegresar = new System.Windows.Forms.Button();
             this.gbDatosExtras = new System.Windows.Forms.GroupBox();
+            this.btnLimpiar = new System.Windows.Forms.Button();
+            this.cbxDisponibilidad = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.cbxProveedor = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -42,9 +45,7 @@
             this.lblPrecioExtraU = new System.Windows.Forms.Label();
             this.lblSeleccionExtra = new System.Windows.Forms.Label();
             this.dgvInventarioE = new System.Windows.Forms.DataGridView();
-            this.cbxDisponibilidad = new System.Windows.Forms.ComboBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.btnLimpiar = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
             this.gbDatosExtras.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvInventarioE)).BeginInit();
             this.SuspendLayout();
@@ -56,7 +57,7 @@
             this.btnAgregar.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnAgregar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAgregar.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btnAgregar.Location = new System.Drawing.Point(826, 519);
+            this.btnAgregar.Location = new System.Drawing.Point(829, 568);
             this.btnAgregar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnAgregar.Name = "btnAgregar";
             this.btnAgregar.Size = new System.Drawing.Size(141, 54);
@@ -72,7 +73,7 @@
             this.btnActualizar.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnActualizar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnActualizar.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btnActualizar.Location = new System.Drawing.Point(1001, 522);
+            this.btnActualizar.Location = new System.Drawing.Point(1004, 571);
             this.btnActualizar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnActualizar.Name = "btnActualizar";
             this.btnActualizar.Size = new System.Drawing.Size(141, 54);
@@ -88,7 +89,7 @@
             this.btnRegresar.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnRegresar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnRegresar.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btnRegresar.Location = new System.Drawing.Point(47, 526);
+            this.btnRegresar.Location = new System.Drawing.Point(50, 575);
             this.btnRegresar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnRegresar.Name = "btnRegresar";
             this.btnRegresar.Size = new System.Drawing.Size(177, 47);
@@ -114,7 +115,7 @@
             this.gbDatosExtras.Controls.Add(this.lblSeleccionExtra);
             this.gbDatosExtras.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.gbDatosExtras.ForeColor = System.Drawing.SystemColors.Control;
-            this.gbDatosExtras.Location = new System.Drawing.Point(621, 38);
+            this.gbDatosExtras.Location = new System.Drawing.Point(624, 87);
             this.gbDatosExtras.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.gbDatosExtras.Name = "gbDatosExtras";
             this.gbDatosExtras.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -123,12 +124,47 @@
             this.gbDatosExtras.TabStop = false;
             this.gbDatosExtras.Text = "Datos extras";
             // 
+            // btnLimpiar
+            // 
+            this.btnLimpiar.BackColor = System.Drawing.Color.Snow;
+            this.btnLimpiar.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnLimpiar.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnLimpiar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnLimpiar.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.btnLimpiar.Location = new System.Drawing.Point(311, 388);
+            this.btnLimpiar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnLimpiar.Name = "btnLimpiar";
+            this.btnLimpiar.Size = new System.Drawing.Size(177, 47);
+            this.btnLimpiar.TabIndex = 23;
+            this.btnLimpiar.Text = "Limpiar campos";
+            this.btnLimpiar.UseVisualStyleBackColor = false;
+            // 
+            // cbxDisponibilidad
+            // 
+            this.cbxDisponibilidad.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.cbxDisponibilidad.FormattingEnabled = true;
+            this.cbxDisponibilidad.Location = new System.Drawing.Point(235, 338);
+            this.cbxDisponibilidad.Margin = new System.Windows.Forms.Padding(4);
+            this.cbxDisponibilidad.Name = "cbxDisponibilidad";
+            this.cbxDisponibilidad.Size = new System.Drawing.Size(253, 28);
+            this.cbxDisponibilidad.TabIndex = 21;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.ForeColor = System.Drawing.SystemColors.Control;
+            this.label3.Location = new System.Drawing.Point(35, 341);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(119, 20);
+            this.label3.TabIndex = 20;
+            this.label3.Text = "Disponibilidad:";
+            // 
             // cbxProveedor
             // 
             this.cbxProveedor.Cursor = System.Windows.Forms.Cursors.Hand;
             this.cbxProveedor.FormattingEnabled = true;
             this.cbxProveedor.Location = new System.Drawing.Point(235, 281);
-            this.cbxProveedor.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbxProveedor.Margin = new System.Windows.Forms.Padding(4);
             this.cbxProveedor.Name = "cbxProveedor";
             this.cbxProveedor.Size = new System.Drawing.Size(253, 28);
             this.cbxProveedor.TabIndex = 19;
@@ -216,48 +252,26 @@
             // 
             this.dgvInventarioE.BackgroundColor = System.Drawing.SystemColors.ControlDarkDark;
             this.dgvInventarioE.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvInventarioE.Location = new System.Drawing.Point(47, 38);
-            this.dgvInventarioE.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dgvInventarioE.Location = new System.Drawing.Point(50, 87);
+            this.dgvInventarioE.Margin = new System.Windows.Forms.Padding(4);
             this.dgvInventarioE.Name = "dgvInventarioE";
             this.dgvInventarioE.RowHeadersWidth = 51;
             this.dgvInventarioE.Size = new System.Drawing.Size(547, 458);
             this.dgvInventarioE.TabIndex = 18;
             this.dgvInventarioE.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvInventarioE_CellContentClick);
             // 
-            // cbxDisponibilidad
+            // label5
             // 
-            this.cbxDisponibilidad.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.cbxDisponibilidad.FormattingEnabled = true;
-            this.cbxDisponibilidad.Location = new System.Drawing.Point(235, 338);
-            this.cbxDisponibilidad.Margin = new System.Windows.Forms.Padding(4);
-            this.cbxDisponibilidad.Name = "cbxDisponibilidad";
-            this.cbxDisponibilidad.Size = new System.Drawing.Size(253, 28);
-            this.cbxDisponibilidad.TabIndex = 21;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.ForeColor = System.Drawing.SystemColors.Control;
-            this.label3.Location = new System.Drawing.Point(35, 341);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(119, 20);
-            this.label3.TabIndex = 20;
-            this.label3.Text = "Disponibilidad:";
-            // 
-            // btnLimpiar
-            // 
-            this.btnLimpiar.BackColor = System.Drawing.Color.Snow;
-            this.btnLimpiar.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnLimpiar.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnLimpiar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnLimpiar.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btnLimpiar.Location = new System.Drawing.Point(311, 388);
-            this.btnLimpiar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.btnLimpiar.Name = "btnLimpiar";
-            this.btnLimpiar.Size = new System.Drawing.Size(177, 47);
-            this.btnLimpiar.TabIndex = 23;
-            this.btnLimpiar.Text = "Limpiar campos";
-            this.btnLimpiar.UseVisualStyleBackColor = false;
+            this.label5.AutoSize = true;
+            this.label5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.label5.Location = new System.Drawing.Point(45, 33);
+            this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(246, 26);
+            this.label5.TabIndex = 23;
+            this.label5.Text = "INVENTARIO: EXTRAS";
             // 
             // FormInventarioExtrasAdmin
             // 
@@ -265,20 +279,22 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.fondo;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(1193, 610);
+            this.ClientSize = new System.Drawing.Size(1195, 663);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.btnAgregar);
             this.Controls.Add(this.btnActualizar);
             this.Controls.Add(this.btnRegresar);
             this.Controls.Add(this.gbDatosExtras);
             this.Controls.Add(this.dgvInventarioE);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FormInventarioExtrasAdmin";
-            this.Text = "FormInventarioExtrasAdmin";
+            this.Text = "Extras del inventario";
             this.Load += new System.EventHandler(this.FormInventarioExtrasAdmin_Load);
             this.gbDatosExtras.ResumeLayout(false);
             this.gbDatosExtras.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvInventarioE)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -300,5 +316,6 @@
         private System.Windows.Forms.ComboBox cbxDisponibilidad;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btnLimpiar;
+        private System.Windows.Forms.Label label5;
     }
 }

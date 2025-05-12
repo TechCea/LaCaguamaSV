@@ -56,7 +56,6 @@
             this.dgvBebidas.RowTemplate.Height = 24;
             this.dgvBebidas.Size = new System.Drawing.Size(581, 412);
             this.dgvBebidas.TabIndex = 0;
-            this.dgvBebidas.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvBebidas_CellContentClick);
             // 
             // cbCategoria
             // 
@@ -67,7 +66,6 @@
             this.cbCategoria.Name = "cbCategoria";
             this.cbCategoria.Size = new System.Drawing.Size(184, 24);
             this.cbCategoria.TabIndex = 1;
-            this.cbCategoria.SelectedIndexChanged += new System.EventHandler(this.cbCategoria_SelectedIndexChanged_1);
             // 
             // btnRegresarMenu
             // 
@@ -125,7 +123,6 @@
             this.cbCategoriaB.Name = "cbCategoriaB";
             this.cbCategoriaB.Size = new System.Drawing.Size(225, 28);
             this.cbCategoriaB.TabIndex = 5;
-            this.cbCategoriaB.SelectedIndexChanged += new System.EventHandler(this.cbCategoriaB_SelectedIndexChanged);
             // 
             // txtPrecioU
             // 
@@ -218,7 +215,6 @@
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "FormBebidasMenuAdmin";
             this.Text = "Bebidas del menú";
-            this.Load += new System.EventHandler(this.FormBebidasMenuAdmin_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvBebidas)).EndInit();
             this.gbDatosBebida.ResumeLayout(false);
             this.gbDatosBebida.PerformLayout();

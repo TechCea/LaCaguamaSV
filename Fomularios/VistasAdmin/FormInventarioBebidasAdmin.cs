@@ -21,8 +21,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             // Tamaño fijo
             this.FormBorderStyle = FormBorderStyle.FixedSingle; // Evita redimensionar
 
-            this.Size = new Size(1000, 500); // Establece un tamaño fijo
-
             // Posición fija (centrada en la pantalla)
             this.StartPosition = FormStartPosition.CenterScreen;
 
@@ -41,12 +39,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             this.Load += FormInventarioBebidasAdmin_Load;
             dgvInventarioB.DataBindingComplete += dgvInventarioB_DataBindingComplete;
         }
-  
-        private void FormInventarioBebidasAdmin_MouseDown(object sender, MouseEventArgs e)
-        {
-           
-        }
-
 
         // Carga el inventario de bebidas en el DataGridView
         private void CargarInventarioBebidas()
@@ -304,7 +296,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         private void FormInventarioBebidasAdmin_Load(object sender, EventArgs e)
         {
             CargarInventarioBebidas();
-
         }
 
         private void dgvInventarioB_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
@@ -315,7 +306,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void btn_limpiar_Click(object sender, EventArgs e)
         {
-
             txtNombre.Clear();
             txtCantida.Clear();
             txtPrecio.Clear();

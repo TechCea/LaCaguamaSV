@@ -24,7 +24,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             InitializeComponent();
 
-
             // Tamaño fijo
             this.FormBorderStyle = FormBorderStyle.FixedSingle; // Evita redimensionar
 
@@ -111,16 +110,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             }
         }
 
-        private void dgvBebidas_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
-
-        private void cbCategoria_SelectedIndexChanged_1(object sender, EventArgs e)
-        {
-
-        }
-
         private void btnRegresarMenu_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -174,11 +163,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         }
 
 
-        private void cbCategoriaB_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            
-        }
-
         private void dgvBebidas_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0) // Asegurar que se selecciona una fila válida
@@ -217,11 +201,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             }
         }
 
-        private void FormBebidasMenuAdmin_Load(object sender, EventArgs e)
-        {
-
-        }
-
         public class RoundedControl
         {
             public static void ApplyRoundedCorners(Control control, int radius)
@@ -229,9 +208,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                
             }
         }
-        private void FormBebidasMenuAdmin_MouseDown(object sender, MouseEventArgs e)
-        {
-            
-        }
+
     }
 }

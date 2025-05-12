@@ -13,6 +13,12 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             InitializeComponent();
 
+            // Tamaño fijo
+            this.FormBorderStyle = FormBorderStyle.FixedSingle; // Evita redimensionar
+
+            // Posición fija (centrada en la pantalla)
+            this.StartPosition = FormStartPosition.CenterScreen;
+
             // Si el usuario no es administrador, cierra el formulario
             if (SesionUsuario.Rol != 1)
             {
@@ -141,21 +147,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             formplatos.ShowDialog();
         }
 
-        private void FormPlatosMenu_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void cbCategoriaB_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void cbCategoriaC_SelectedIndexChanged_1(object sender, EventArgs e)
-        {
-
-        }
-
         private void btnRegresarInv_Click(object sender, EventArgs e)
         {
             this.Hide();
@@ -163,9 +154,5 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             forminventario.ShowDialog();
         }
 
-        private void label4_Click(object sender, EventArgs e)
-        {
-
-        }
     }
 }

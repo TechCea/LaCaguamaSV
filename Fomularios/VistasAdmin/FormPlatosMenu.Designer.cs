@@ -74,7 +74,7 @@
             // txtDescripcionC
             // 
             this.txtDescripcionC.Location = new System.Drawing.Point(168, 225);
-            this.txtDescripcionC.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtDescripcionC.Margin = new System.Windows.Forms.Padding(4);
             this.txtDescripcionC.Name = "txtDescripcionC";
             this.txtDescripcionC.Size = new System.Drawing.Size(227, 26);
             this.txtDescripcionC.TabIndex = 11;
@@ -110,7 +110,6 @@
             this.cbCategoriaB.Name = "cbCategoriaB";
             this.cbCategoriaB.Size = new System.Drawing.Size(225, 28);
             this.cbCategoriaB.TabIndex = 5;
-            this.cbCategoriaB.SelectedIndexChanged += new System.EventHandler(this.cbCategoriaB_SelectedIndexChanged);
             // 
             // txtPrecioU
             // 
@@ -183,7 +182,6 @@
             this.cbCategoriaC.Name = "cbCategoriaC";
             this.cbCategoriaC.Size = new System.Drawing.Size(121, 24);
             this.cbCategoriaC.TabIndex = 9;
-            this.cbCategoriaC.SelectedIndexChanged += new System.EventHandler(this.cbCategoriaC_SelectedIndexChanged_1);
             // 
             // dgvComidas
             // 
@@ -240,7 +238,6 @@
             this.label4.Size = new System.Drawing.Size(447, 25);
             this.label4.TabIndex = 14;
             this.label4.Text = "Selecciona un plato para desplegar su receta";
-            this.label4.Click += new System.EventHandler(this.label4_Click);
             // 
             // FormPlatosMenu
             // 
@@ -258,8 +255,7 @@
             this.Controls.Add(this.btnCrearPlato);
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "FormPlatosMenu";
-            this.Text = "FormPlatosMenu";
-            this.Load += new System.EventHandler(this.FormPlatosMenu_Load);
+            this.Text = "Platos del inventario";
             this.gbDatosBebida.ResumeLayout(false);
             this.gbDatosBebida.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvComidas)).EndInit();

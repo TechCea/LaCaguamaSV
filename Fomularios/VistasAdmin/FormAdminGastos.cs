@@ -165,39 +165,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             }
         }
 
-
-
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void txtDescripcion_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void txtFondoInicial_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void txtEfectivoRecolectado_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void txtTotalGastos_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void dgvGastos_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             try
@@ -323,17 +290,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             }
         }
 
-
-        private void btnRegresar_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label5_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void btnMostrarGastos_Click(object sender, EventArgs e)
         {
             try
@@ -346,12 +302,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 MessageBox.Show("Error al mostrar los gastos: " + ex.Message);
             }
         }
-
-        private void FormAdminGastos_Load_1(object sender, EventArgs e)
-        {
-
-        }
-
 
         private void ActualizarResumen()
         {
@@ -368,14 +318,10 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             }
         }
 
-        private void dtpBuscarGastos_ValueChanged(object sender, EventArgs e)
-        {
-           
-        }
 
         private void btnFiltrar_Click(object sender, EventArgs e)
         {
-           
+
         }
-}
+    }
 }

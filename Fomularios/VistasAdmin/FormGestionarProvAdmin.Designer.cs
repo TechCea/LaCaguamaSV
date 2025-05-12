@@ -219,9 +219,9 @@
             this.label2.Location = new System.Drawing.Point(35, 22);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(184, 26);
+            this.label2.Size = new System.Drawing.Size(330, 26);
             this.label2.TabIndex = 14;
-            this.label2.Text = "PROVEEDORES";
+            this.label2.Text = "INVENTARIO: PROVEEDORES";
             // 
             // FormGestionarProvAdmin
             // 
@@ -238,10 +238,9 @@
             this.Controls.Add(this.dgvProveedor);
             this.Controls.Add(this.btnEliminarE);
             this.Controls.Add(this.btnActualizarP);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FormGestionarProvAdmin";
             this.Text = "Proveedores";
-            this.Load += new System.EventHandler(this.FormGestionarProvAdmin_Load);
             this.gbDatosExtras.ResumeLayout(false);
             this.gbDatosExtras.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvProveedor)).EndInit();

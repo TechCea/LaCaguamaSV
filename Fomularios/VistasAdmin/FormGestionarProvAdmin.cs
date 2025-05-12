@@ -34,29 +34,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             dgvProveedor.SelectionChanged += dgvProveedor_SelectionChanged;
             dgvProveedor.MultiSelect = false;
         }
-        public class RoundedControl
-        {
-            public static void ApplyRoundedCorners(Control control, int radius)
-            {
-                
-            }
-        }
-        private void FormGestionarProvAdmin_MouseDown(object sender, MouseEventArgs e)
-        {
-            
-        }
-
-
-
-
-
-
-
-
-        private void FormGestionarProvAdmin_Load(object sender, EventArgs e)
-        {
-            // Opcional: Puedes llamar a CargarProveedores() aquí si no lo haces en el constructor
-        }
 
         // Carga los proveedores en el DataGridView
         private void CargarProveedores()

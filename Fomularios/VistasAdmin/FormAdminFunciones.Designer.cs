@@ -129,7 +129,6 @@
             this.label2.Size = new System.Drawing.Size(254, 25);
             this.label2.TabIndex = 3;
             this.label2.Text = "Operaciones de Cajero";
-            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // label3
             // 
@@ -142,7 +141,6 @@
             this.label3.Size = new System.Drawing.Size(107, 25);
             this.label3.TabIndex = 4;
             this.label3.Text = "Reportes";
-            this.label3.Click += new System.EventHandler(this.label3_Click);
             // 
             // btnCorte_tarjetas
             // 

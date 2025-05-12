@@ -31,10 +31,10 @@
             this.flowLayoutPanelReceta = new System.Windows.Forms.FlowLayoutPanel();
             this.dataGridViewReceta = new System.Windows.Forms.DataGridView();
             this.panel5 = new System.Windows.Forms.Panel();
+            this.lblIDPLATO = new System.Windows.Forms.Label();
+            this.lblPlato = new System.Windows.Forms.Label();
             this.btnCerrar_Click = new System.Windows.Forms.Button();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.lblPlato = new System.Windows.Forms.Label();
-            this.lblIDPLATO = new System.Windows.Forms.Label();
             this.lblReceta = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
@@ -84,29 +84,17 @@
             this.panel5.Size = new System.Drawing.Size(746, 67);
             this.panel5.TabIndex = 36;
             // 
-            // btnCerrar_Click
+            // lblIDPLATO
             // 
-            this.btnCerrar_Click.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(236)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
-            this.btnCerrar_Click.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnCerrar_Click.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnCerrar_Click.ForeColor = System.Drawing.SystemColors.Control;
-            this.btnCerrar_Click.Location = new System.Drawing.Point(673, 6);
-            this.btnCerrar_Click.Margin = new System.Windows.Forms.Padding(4);
-            this.btnCerrar_Click.Name = "btnCerrar_Click";
-            this.btnCerrar_Click.Size = new System.Drawing.Size(57, 28);
-            this.btnCerrar_Click.TabIndex = 35;
-            this.btnCerrar_Click.Text = "X";
-            this.btnCerrar_Click.UseVisualStyleBackColor = false;
-            // 
-            // panel3
-            // 
-            this.panel3.BackColor = System.Drawing.Color.Gray;
-            this.panel3.Controls.Add(this.lblReceta);
-            this.panel3.Location = new System.Drawing.Point(13, 7);
-            this.panel3.Margin = new System.Windows.Forms.Padding(4);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(316, 66);
-            this.panel3.TabIndex = 35;
+            this.lblIDPLATO.AutoSize = true;
+            this.lblIDPLATO.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F);
+            this.lblIDPLATO.ForeColor = System.Drawing.Color.White;
+            this.lblIDPLATO.Location = new System.Drawing.Point(30, 25);
+            this.lblIDPLATO.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblIDPLATO.Name = "lblIDPLATO";
+            this.lblIDPLATO.Size = new System.Drawing.Size(45, 26);
+            this.lblIDPLATO.TabIndex = 0;
+            this.lblIDPLATO.Text = "IdP";
             // 
             // lblPlato
             // 
@@ -120,17 +108,30 @@
             this.lblPlato.TabIndex = 5;
             this.lblPlato.Text = "Plato";
             // 
-            // lblIDPLATO
+            // btnCerrar_Click
             // 
-            this.lblIDPLATO.AutoSize = true;
-            this.lblIDPLATO.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F);
-            this.lblIDPLATO.ForeColor = System.Drawing.Color.White;
-            this.lblIDPLATO.Location = new System.Drawing.Point(30, 25);
-            this.lblIDPLATO.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.lblIDPLATO.Name = "lblIDPLATO";
-            this.lblIDPLATO.Size = new System.Drawing.Size(45, 26);
-            this.lblIDPLATO.TabIndex = 0;
-            this.lblIDPLATO.Text = "IdP";
+            this.btnCerrar_Click.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(236)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
+            this.btnCerrar_Click.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnCerrar_Click.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnCerrar_Click.ForeColor = System.Drawing.SystemColors.Control;
+            this.btnCerrar_Click.Location = new System.Drawing.Point(673, 6);
+            this.btnCerrar_Click.Margin = new System.Windows.Forms.Padding(4);
+            this.btnCerrar_Click.Name = "btnCerrar_Click";
+            this.btnCerrar_Click.Size = new System.Drawing.Size(57, 28);
+            this.btnCerrar_Click.TabIndex = 35;
+            this.btnCerrar_Click.Text = "X";
+            this.btnCerrar_Click.UseVisualStyleBackColor = false;
+            this.btnCerrar_Click.Click += new System.EventHandler(this.btnCerrar_Click_Click);
+            // 
+            // panel3
+            // 
+            this.panel3.BackColor = System.Drawing.Color.Gray;
+            this.panel3.Controls.Add(this.lblReceta);
+            this.panel3.Location = new System.Drawing.Point(13, 7);
+            this.panel3.Margin = new System.Windows.Forms.Padding(4);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(316, 66);
+            this.panel3.TabIndex = 35;
             // 
             // lblReceta
             // 
@@ -194,7 +195,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.fondo;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(1124, 577);
+            this.ClientSize = new System.Drawing.Size(1111, 570);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.flowLayoutPanelReceta);
@@ -203,7 +204,7 @@
             this.Controls.Add(this.panel3);
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "FormRecetaPlato";
-            this.Text = "FormRecetaPlato";
+            this.Text = "Receta del plato seleccionado";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewReceta)).EndInit();
             this.panel5.ResumeLayout(false);
             this.panel5.PerformLayout();

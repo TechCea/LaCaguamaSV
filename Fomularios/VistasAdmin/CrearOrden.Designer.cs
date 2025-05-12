@@ -44,18 +44,20 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(45, 33);
+            this.label1.Location = new System.Drawing.Point(60, 41);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(191, 24);
+            this.label1.Size = new System.Drawing.Size(241, 29);
             this.label1.TabIndex = 0;
             this.label1.Text = "Nombre del Cliente";
             // 
             // txtNombreCliente
             // 
             this.txtNombreCliente.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.txtNombreCliente.Location = new System.Drawing.Point(266, 38);
+            this.txtNombreCliente.Location = new System.Drawing.Point(355, 47);
+            this.txtNombreCliente.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtNombreCliente.Name = "txtNombreCliente";
-            this.txtNombreCliente.Size = new System.Drawing.Size(121, 20);
+            this.txtNombreCliente.Size = new System.Drawing.Size(160, 22);
             this.txtNombreCliente.TabIndex = 1;
             this.txtNombreCliente.TextChanged += new System.EventHandler(this.txtNombreCliente_TextChanged);
             // 
@@ -63,9 +65,10 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(45, 72);
+            this.label2.Location = new System.Drawing.Point(60, 89);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(177, 24);
+            this.label2.Size = new System.Drawing.Size(222, 29);
             this.label2.TabIndex = 2;
             this.label2.Text = "Seleccionar Mesa";
             // 
@@ -73,9 +76,10 @@
             // 
             this.cmbMesas.Cursor = System.Windows.Forms.Cursors.Hand;
             this.cmbMesas.FormattingEnabled = true;
-            this.cmbMesas.Location = new System.Drawing.Point(266, 77);
+            this.cmbMesas.Location = new System.Drawing.Point(355, 95);
+            this.cmbMesas.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.cmbMesas.Name = "cmbMesas";
-            this.cmbMesas.Size = new System.Drawing.Size(121, 21);
+            this.cmbMesas.Size = new System.Drawing.Size(160, 24);
             this.cmbMesas.TabIndex = 3;
             this.cmbMesas.SelectedIndexChanged += new System.EventHandler(this.cmbMesas_SelectedIndexChanged);
             // 
@@ -83,9 +87,10 @@
             // 
             this.cmbTipoPago.Cursor = System.Windows.Forms.Cursors.Hand;
             this.cmbTipoPago.FormattingEnabled = true;
-            this.cmbTipoPago.Location = new System.Drawing.Point(266, 115);
+            this.cmbTipoPago.Location = new System.Drawing.Point(355, 142);
+            this.cmbTipoPago.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.cmbTipoPago.Name = "cmbTipoPago";
-            this.cmbTipoPago.Size = new System.Drawing.Size(121, 21);
+            this.cmbTipoPago.Size = new System.Drawing.Size(160, 24);
             this.cmbTipoPago.TabIndex = 4;
             this.cmbTipoPago.SelectedIndexChanged += new System.EventHandler(this.cmbTipoPago_SelectedIndexChanged);
             // 
@@ -93,9 +98,10 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(45, 115);
+            this.label3.Location = new System.Drawing.Point(60, 142);
+            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(170, 24);
+            this.label3.Size = new System.Drawing.Size(213, 29);
             this.label3.TabIndex = 5;
             this.label3.Text = "Método de Pago:";
             // 
@@ -106,9 +112,10 @@
             this.btnCrearOrden.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnCrearOrden.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCrearOrden.ForeColor = System.Drawing.Color.White;
-            this.btnCrearOrden.Location = new System.Drawing.Point(62, 190);
+            this.btnCrearOrden.Location = new System.Drawing.Point(83, 234);
+            this.btnCrearOrden.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnCrearOrden.Name = "btnCrearOrden";
-            this.btnCrearOrden.Size = new System.Drawing.Size(96, 43);
+            this.btnCrearOrden.Size = new System.Drawing.Size(128, 53);
             this.btnCrearOrden.TabIndex = 6;
             this.btnCrearOrden.Text = "Crear Orden";
             this.btnCrearOrden.UseVisualStyleBackColor = false;
@@ -121,9 +128,10 @@
             this.btnCancelar.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnCancelar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCancelar.ForeColor = System.Drawing.Color.White;
-            this.btnCancelar.Location = new System.Drawing.Point(282, 190);
+            this.btnCancelar.Location = new System.Drawing.Point(376, 234);
+            this.btnCancelar.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnCancelar.Name = "btnCancelar";
-            this.btnCancelar.Size = new System.Drawing.Size(96, 43);
+            this.btnCancelar.Size = new System.Drawing.Size(128, 53);
             this.btnCancelar.TabIndex = 7;
             this.btnCancelar.Text = "Cancelar";
             this.btnCancelar.UseVisualStyleBackColor = false;
@@ -140,21 +148,23 @@
             this.panel1.Controls.Add(this.btnCrearOrden);
             this.panel1.Controls.Add(this.txtNombreCliente);
             this.panel1.Controls.Add(this.label3);
-            this.panel1.Location = new System.Drawing.Point(102, 49);
+            this.panel1.Location = new System.Drawing.Point(136, 60);
+            this.panel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(450, 283);
+            this.panel1.Size = new System.Drawing.Size(600, 348);
             this.panel1.TabIndex = 8;
             // 
             // CrearOrden
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.fondo;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(688, 402);
+            this.ClientSize = new System.Drawing.Size(917, 495);
             this.Controls.Add(this.panel1);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "CrearOrden";
-            this.Text = "CrearOrden";
+            this.Text = "Crear Orden";
             this.Load += new System.EventHandler(this.CrearOrden_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();

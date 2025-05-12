@@ -19,6 +19,12 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             InitializeComponent();
 
+            // Tamaño fijo
+            this.FormBorderStyle = FormBorderStyle.FixedSingle; // Evita redimensionar
+
+            // Posición fija (centrada en la pantalla)
+            this.StartPosition = FormStartPosition.CenterScreen;
+
             // Si el usuario no es administrador, cierra el formulario
             if (SesionUsuario.Rol != 1)
             {
@@ -254,7 +260,11 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             dataGridViewReceta.DataSource = conexion.ObtenerInventario();
             dataGridViewReceta.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
         }
-    }
 
+        private void btnCerrar_Click_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+    }
 
 }
