@@ -10,6 +10,9 @@ using System.Windows.Forms;
 using LaCaguamaSV.Configuracion;
 using MySql.Data.MySqlClient;
 using Org.BouncyCastle.Asn1.Crmf;
+using System.IO.Ports;
+using System.Drawing.Printing;
+
 
 namespace LaCaguamaSV.Fomularios.VistasAdmin
 {
@@ -24,7 +27,10 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         private string tipoDescuento = "";
         private int idTipoDescuentoSeleccionado = 0;
         private DataTable tiposDescuentoDisponibles;
-
+        // Constantes ESC/POS
+        private const string ESC = "\x1B";
+        private const string GS = "\x1D";
+        private const string LF = "\x0A";
         public FormAdminPagos(int idOrden, string nombreCliente, decimal total, int idMesa, int idUsuarioCreador)
         {
             InitializeComponent();
@@ -56,6 +62,8 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             CargarTiposDescuento();
             CargarDetalleOrden();
             ActualizarCamposPago();
+
+
         }
 
         private void CargarMetodosPago()
@@ -625,191 +633,263 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             try
             {
-                // Calcular valores
-                decimal subtotal = totalOrden;
-                decimal descuentoMonto = 0;
-                decimal totalAPagar = subtotal;
+                // 1. Generar el contenido del comprobante
+                string contenidoComprobante = GenerarContenidoComprobante();
 
-                if (descuentoAplicado)
-                {
-                    bool esPorcentaje = tipoDescuento.Contains("%") ||
-                                      (tiposDescuentoDisponibles != null &&
-                                       cmbTipoDescuento.SelectedIndex >= 0 &&
-                                       Convert.ToBoolean(tiposDescuentoDisponibles.Rows[cmbTipoDescuento.SelectedIndex]["es_porcentaje"]));
+                // 2. Método de impresión por USB
+                ImprimirPorUSB(contenidoComprobante);
 
-                    if (esPorcentaje)
-                    {
-                        descuentoMonto = subtotal * (montoDescuento / 100);
-                    }
-                    else
-                    {
-                        descuentoMonto = montoDescuento;
-                    }
-                    totalAPagar = subtotal - descuentoMonto;
-                    if (totalAPagar < 0) totalAPagar = 0;
-                }
-
-                // Obtener detalles de promociones
-                Dictionary<int, List<string>> promocionesConItems = ObtenerDetallesPromociones();
-
-                // Generar comprobante
-                StringBuilder comprobante = new StringBuilder();
-                comprobante.AppendLine("══════════════════════════════════");
-                comprobante.AppendLine("        LA CAGUAMA RESTAURANTE    ");
-                comprobante.AppendLine("══════════════════════════════════");
-                comprobante.AppendLine($"Orden: #{idOrden}");
-                comprobante.AppendLine($"Cliente: {lblCliente.Text.Replace("Cliente: ", "")}");
-                comprobante.AppendLine($"Fecha: {DateTime.Now.ToString("g")}");
-                comprobante.AppendLine("──────────────────────────────────");
-                comprobante.AppendLine("              DETALLE             ");
-                comprobante.AppendLine("──────────────────────────────────");
-
-                // Detalle de productos
-                for (int i = 0; i < dataGridViewDetalle.Rows.Count; i++)
-                {
-                    if (!dataGridViewDetalle.Rows[i].IsNewRow)
-                    {
-                        string producto = dataGridViewDetalle.Rows[i].Cells["Producto"].Value?.ToString() ?? "Desconocido";
-                        int cantidad = Convert.ToInt32(dataGridViewDetalle.Rows[i].Cells["Cantidad"].Value);
-                        decimal subtotalItem = Convert.ToDecimal(dataGridViewDetalle.Rows[i].Cells["Subtotal"].Value);
-
-                        comprobante.AppendLine($"{producto} x{cantidad} - {subtotalItem.ToString("C")}");
-
-                        // Mostrar items de promoción si existe
-                        if (promocionesConItems.ContainsKey(i))
-                        {
-                            comprobante.AppendLine("   ┌───────────────────────────────");
-                            comprobante.AppendLine("   │ Items incluidos en la promoción:");
-                            foreach (var item in promocionesConItems[i])
-                            {
-                                comprobante.AppendLine($"   ├─ {item}");
-                            }
-                            comprobante.AppendLine("   └───────────────────────────────");
-                        }
-                    }
-                }
-
-                comprobante.AppendLine("──────────────────────────────────");
-                comprobante.AppendLine($"SUBTOTAL: {subtotal.ToString("C")}");
-
-                // Mostrar descuento si aplica
-                if (descuentoAplicado)
-                {
-                    string tipoDesc = tipoDescuento.Contains("%") ? $"{montoDescuento}%" : "Fijo";
-                    comprobante.AppendLine($"DESCUENTO ({tipoDesc}): -{descuentoMonto.ToString("C")}");
-                }
-
-                comprobante.AppendLine("──────────────────────────────────");
-                comprobante.AppendLine($"TOTAL: {totalAPagar.ToString("C")}");
-                comprobante.AppendLine("──────────────────────────────────");
-                comprobante.AppendLine($"Método de pago: {comboMetodoPago.Text}");
-
-                if (panelEfectivo.Visible) // Verificar si es pago en efectivo
-                {
-                    comprobante.AppendLine($"Recibido: {txtRecibido.Text}");
-                    comprobante.AppendLine($"Cambio: {lblCambio.Text}");
-                }
-
-                comprobante.AppendLine("══════════════════════════════════");
-                comprobante.AppendLine("   ¡Gracias por su preferencia!   ");
-                comprobante.AppendLine("══════════════════════════════════");
-
-                // Mostrar el comprobante en un formulario
-                using (var formFactura = new Form()
-                {
-                    Width = 500,
-                    Height = 600,
-                    FormBorderStyle = FormBorderStyle.FixedDialog,
-                    Text = $"Comprobante Orden #{idOrden}",
-                    StartPosition = FormStartPosition.CenterParent,
-                    MaximizeBox = false,
-                    MinimizeBox = false
-                })
-                {
-                    var textBox = new TextBox()
-                    {
-                        Multiline = true,
-                        Dock = DockStyle.Fill,
-                        ReadOnly = true,
-                        ScrollBars = ScrollBars.Vertical,
-                        Text = comprobante.ToString(),
-                        Font = new Font("Consolas", 10)
-                    };
-
-                    formFactura.Controls.Add(textBox);
-                    formFactura.ShowDialog();
-                }
+                MessageBox.Show("Comprobante enviado a la impresora", "Éxito",
+                               MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al generar comprobante: {ex.Message}", "Error",
+                MessageBox.Show($"Error al imprimir: {ex.Message}", "Error",
                                MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private string GenerarContenidoComprobante()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            // 1. Inicialización y encabezado
+            sb.Append(ESC + "@"); // Reset printer
+            sb.Append(ESC + "!" + "\x38"); // Fuente tamaño doble
+            sb.Append(CenterText("LA CAGUAMA RESTAURANTE"));
+            sb.Append(LF);
+            sb.Append(CenterText("══════════════════════"));
+            sb.Append(LF + LF);
+            sb.Append(ESC + "!" + "\x00"); // Restaurar fuente normal
+
+            // 2. Información básica de la orden
+            sb.Append($"ORDEN: #{idOrden}{LF}");
+            sb.Append($"CLIENTE: {lblCliente.Text.Replace("Cliente: ", "")}{LF}");
+            sb.Append($"FECHA: {DateTime.Now.ToString("g")}{LF}");
+            sb.Append("──────────────────────────" + LF);
+
+            // 3. Detalle de productos
+            sb.Append(ESC + "!" + "\x08"); // Fuente enfatizada
+            sb.Append("          DETALLE" + LF);
+            sb.Append(ESC + "!" + "\x00"); // Restaurar fuente
+            sb.Append("──────────────────────────" + LF);
+
+            // Obtener detalles de promociones si existen
+            var detallesPromociones = ObtenerDetallesPromociones();
+
+            for (int i = 0; i < dataGridViewDetalle.Rows.Count; i++)
+            {
+                if (!dataGridViewDetalle.Rows[i].IsNewRow)
+                {
+                    string producto = dataGridViewDetalle.Rows[i].Cells["Producto"].Value?.ToString() ?? "Desconocido";
+                    int cantidad = Convert.ToInt32(dataGridViewDetalle.Rows[i].Cells["Cantidad"].Value);
+                    decimal subtotalItem = Convert.ToDecimal(dataGridViewDetalle.Rows[i].Cells["Subtotal"].Value);
+
+                    sb.Append($"{cantidad}x {producto}{LF}");
+                    sb.Append($"  {subtotalItem.ToString("C")}{LF}");
+
+                    // Mostrar detalles de promoción si existe
+                    if (detallesPromociones.ContainsKey(i))
+                    {
+                        sb.Append("  Incluye:" + LF);
+                        foreach (var item in detallesPromociones[i])
+                        {
+                            sb.Append($"  - {item}{LF}");
+                        }
+                    }
+                }
+            }
+
+            // 4. Totales y descuentos
+            decimal totalAPagar = CalcularTotalConDescuento();
+            sb.Append("──────────────────────────" + LF);
+            sb.Append($"SUBTOTAL: {totalOrden.ToString("C")}{LF}");
+
+            if (descuentoAplicado)
+            {
+                string tipoDesc = tipoDescuento.Contains("%") ? $"{montoDescuento}%" : "Fijo";
+                decimal descuentoMonto = tipoDescuento.Contains("%") ?
+                    totalOrden * (montoDescuento / 100) : montoDescuento;
+
+                sb.Append($"DESCUENTO ({tipoDesc}): -{descuentoMonto.ToString("C")}{LF}");
+            }
+
+            sb.Append("──────────────────────────" + LF);
+            sb.Append(ESC + "!" + "\x08"); // Fuente enfatizada
+            sb.Append($"TOTAL: {totalAPagar.ToString("C")}{LF}");
+            sb.Append(ESC + "!" + "\x00"); // Restaurar fuente
+
+            // 5. Información de pago
+            sb.Append("──────────────────────────" + LF);
+            sb.Append($"MÉTODO: {comboMetodoPago.Text}{LF}");
+
+            if (panelEfectivo.Visible)
+            {
+                sb.Append($"RECIBIDO: {txtRecibido.Text}{LF}");
+                sb.Append($"CAMBIO: {lblCambio.Text}{LF}");
+            }
+
+            // 6. Pie de página y cortes
+            sb.Append(LF + LF);
+            sb.Append(CenterText("¡Gracias por su preferencia!"));
+            sb.Append(LF + LF);
+
+            sb.Append(LF + LF + LF + LF); // Espacios adicionales antes del corte
+            sb.Append(GS + "V" + "\x41" + "\x00"); // Corte completo
+
+            return sb.ToString();
+        }
+
+        private string CenterText(string text)
+        {
+            int maxWidth = 32; // Ajustar según tu impresora
+            if (text.Length >= maxWidth) return text;
+
+            int spaces = (maxWidth - text.Length) / 2;
+            return new string(' ', spaces) + text;
+        }
+
+        private void ImprimirPorUSB(string contenido)
+        {
+            // Opción 1: Usando PrintDocument (recomendado para Windows)
+            PrintDocument pd = new PrintDocument();
+            pd.PrinterSettings.PrinterName = ObtenerNombreImpresoraTermica();
+
+            pd.PrintPage += (sender, e) =>
+            {
+                Font font = new Font("Courier New", 9);
+                e.Graphics.DrawString(contenido, font, Brushes.Black,
+                    new RectangleF(0, 0, pd.DefaultPageSettings.PrintableArea.Width,
+                                  pd.DefaultPageSettings.PrintableArea.Height));
+            };
+
+            pd.Print();
+
+            // Opción 2: Directo al puerto serial (alternativa)
+            /*
+            string portName = ObtenerPuertoImpresoraUSB();
+            if (!string.IsNullOrEmpty(portName))
+            {
+                using (SerialPort port = new SerialPort(portName, 9600, Parity.None, 8, StopBits.One))
+                {
+                    port.Open();
+                    port.Write(contenido);
+                    port.Close();
+                }
+            }
+            */
+        }
+
+
+        private string ObtenerNombreImpresoraTermica()
+        {
+            // Busca la impresora por nombre
+            foreach (string printer in PrinterSettings.InstalledPrinters)
+            {
+                if (printer.Contains("PT-210") || printer.Contains("GOOJPRT") || printer.Contains("POS"))
+                {
+                    return printer;
+                }
+            }
+
+            // Si no la encuentra, usa la predeterminada
+            return new PrinterSettings().PrinterName;
+        }
+
+        private void ForzarCortePapel()
+        {
+            string[] comandosCorte = {
+        GS + "V" + "\x41" + "\x00",  // Corte completo estándar
+        ESC + "i",                   // Corte alternativo 1
+        ESC + "m",                   // Corte alternativo 2
+        GS + "V" + "\x01",           // Corte parcial alternativo
+        ESC + "d" + "\x03"           // Avanzar 3 líneas antes de cortar
+    };
+
+            PrintDocument pd = new PrintDocument();
+            pd.PrinterSettings.PrinterName = ObtenerNombreImpresoraTermica();
+
+            foreach (var comando in comandosCorte)
+            {
+                try
+                {
+                    pd.PrintPage += (sender, e) => {
+                        e.Graphics.DrawString(comando, new Font("Courier New", 1),
+                            Brushes.White, new PointF(0, 0)); // Texto casi invisible
+                    };
+                    pd.Print();
+                    System.Threading.Thread.Sleep(300); // Pequeña pausa
+                }
+                catch { continue; }
+            }
+        }
+
 
         private Dictionary<int, List<string>> ObtenerDetallesPromociones()
         {
             var promocionesConItems = new Dictionary<int, List<string>>();
 
-            using (MySqlConnection conexion = new Conexion().EstablecerConexion())
+            try
             {
-                // Obtener promociones en esta orden
-                string query = @"
-SELECT 
-    p.id_promocion,
-    pr.nombre AS nombre_promocion,
-    p.Cantidad AS cantidad_pedida,
-    pi.tipo_item,
-    CASE
-        WHEN pi.tipo_item = 'PLATO' THEN (SELECT pl.nombrePlato FROM platos pl WHERE pl.id_plato = pi.id_item)
-        WHEN pi.tipo_item = 'BEBIDA' THEN (SELECT i.nombreProducto FROM bebidas b JOIN inventario i ON b.id_inventario = i.id_inventario WHERE b.id_bebida = pi.id_item)
-        WHEN pi.tipo_item = 'EXTRA' THEN (SELECT i.nombreProducto FROM extras e JOIN inventario i ON e.id_inventario = i.id_inventario WHERE e.id_extra = pi.id_item)
-    END AS nombre_item,
-    pi.cantidad AS cantidad_en_promo
-FROM pedidos p
-JOIN promociones pr ON p.id_promocion = pr.id_promocion
-JOIN promocion_items pi ON pr.id_promocion = pi.id_promocion
-WHERE p.id_orden = @idOrden AND p.id_promocion IS NOT NULL";
-
-                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                using (MySqlConnection conexion = new Conexion().EstablecerConexion())
                 {
-                    cmd.Parameters.AddWithValue("@idOrden", idOrden);
+                    string query = @"
+                SELECT 
+                    p.id_pedido,
+                    pr.nombre AS nombre_promocion,
+                    pi.tipo_item,
+                    CASE
+                        WHEN pi.tipo_item = 'PLATO' THEN (SELECT pl.nombrePlato FROM platos pl WHERE pl.id_plato = pi.id_item)
+                        WHEN pi.tipo_item = 'BEBIDA' THEN (SELECT i.nombreProducto FROM bebidas b JOIN inventario i ON b.id_inventario = i.id_inventario WHERE b.id_bebida = pi.id_item)
+                        WHEN pi.tipo_item = 'EXTRA' THEN (SELECT i.nombreProducto FROM extras e JOIN inventario i ON e.id_inventario = i.id_inventario WHERE e.id_extra = pi.id_item)
+                    END AS nombre_item,
+                    pi.cantidad AS cantidad_en_promo,
+                    p.Cantidad AS cantidad_pedida
+                FROM pedidos p
+                JOIN promociones pr ON p.id_promocion = pr.id_promocion
+                JOIN promocion_items pi ON pr.id_promocion = pi.id_promocion
+                WHERE p.id_orden = @idOrden AND p.id_promocion IS NOT NULL";
 
-                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                     {
-                        while (reader.Read())
+                        cmd.Parameters.AddWithValue("@idOrden", idOrden);
+
+                        using (MySqlDataReader reader = cmd.ExecuteReader())
                         {
-                            string nombreItem = reader["nombre_item"].ToString();
-                            string tipoItem = reader["tipo_item"].ToString();
-                            int cantidadEnPromo = Convert.ToInt32(reader["cantidad_en_promo"]);
-                            int cantidadPedida = Convert.ToInt32(reader["cantidad_pedida"]);
-                            int cantidadTotal = cantidadEnPromo * cantidadPedida;
-
-                            string itemDesc = $"{nombreItem} ({tipoItem}) x{cantidadTotal}";
-
-                            // Buscar el índice de la fila en el DataGridView que corresponde a esta promoción
-                            int rowIndex = -1;
-                            for (int i = 0; i < dataGridViewDetalle.Rows.Count; i++)
+                            while (reader.Read())
                             {
-                                if (!dataGridViewDetalle.Rows[i].IsNewRow &&
-                                    dataGridViewDetalle.Rows[i].Cells["Producto"].Value.ToString() == reader["nombre_promocion"].ToString())
-                                {
-                                    rowIndex = i;
-                                    break;
-                                }
-                            }
+                                int idPedido = Convert.ToInt32(reader["id_pedido"]);
+                                string nombrePromo = reader["nombre_promocion"].ToString();
+                                string nombreItem = reader["nombre_item"].ToString();
+                                string tipoItem = reader["tipo_item"].ToString();
+                                int cantidadEnPromo = Convert.ToInt32(reader["cantidad_en_promo"]);
+                                int cantidadPedida = Convert.ToInt32(reader["cantidad_pedida"]);
+                                int cantidadTotal = cantidadEnPromo * cantidadPedida;
 
-                            if (rowIndex >= 0)
-                            {
-                                if (!promocionesConItems.ContainsKey(rowIndex))
+                                string itemDesc = $"{nombreItem} ({tipoItem}) x{cantidadTotal}";
+
+                                // Buscar la fila correspondiente en el DataGridView
+                                for (int i = 0; i < dataGridViewDetalle.Rows.Count; i++)
                                 {
-                                    promocionesConItems[rowIndex] = new List<string>();
+                                    if (!dataGridViewDetalle.Rows[i].IsNewRow &&
+                                        dataGridViewDetalle.Rows[i].Cells["Producto"].Value.ToString() == nombrePromo)
+                                    {
+                                        if (!promocionesConItems.ContainsKey(i))
+                                        {
+                                            promocionesConItems[i] = new List<string>();
+                                        }
+                                        promocionesConItems[i].Add(itemDesc);
+                                        break;
+                                    }
                                 }
-                                promocionesConItems[rowIndex].Add(itemDesc);
                             }
                         }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error al obtener detalles de promoción: {ex.Message}");
             }
 
             return promocionesConItems;
