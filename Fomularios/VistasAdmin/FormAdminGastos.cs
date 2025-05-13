@@ -32,17 +32,17 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
             try
             {
-                idCaja = conexion.ObtenerCajaActiva(idUsuario); 
+                idCaja = conexion.ObtenerCajaActiva(idUsuario);
                 // Obtenemos la caja más reciente activa
-                
-               
+
+
                 dgvGastos.MultiSelect = false;
                 // Tamaño fijo
                 this.FormBorderStyle = FormBorderStyle.FixedSingle; // Evita redimensionar
 
                 // Posición fija (centrada en la pantalla)
                 this.StartPosition = FormStartPosition.CenterScreen;
-                
+
                 CargarGastosDelDia();
 
             }
@@ -57,7 +57,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         // Método para cargar el resumen del día
         private void CargarResumenDelDia()
         {
-            
+
         }
 
 
@@ -67,6 +67,14 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         private void FormAdminGastos_Load_1(object sender, EventArgs e)
         {
             Conexion conexion = new Conexion();
+
+
+            cmbTipoFiltroGasto.Items.AddRange(new string[] {
+        "Todos", "Hoy", "Esta semana", "Este mes", "Fecha específica", "Rango de fechas"
+    });
+            cmbTipoFiltroGasto.SelectedIndex = 0;
+
+
 
             // Obtener la caja más reciente sin filtrar por usuario
             int idCaja = conexion.ObtenerUltimaCaja(); // Asegúrate de tener este método en tu clase Conexion
@@ -80,7 +88,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 txtFondoInicial.Text = fondoInicial.ToString("C2");
                 txtEfectivoRecolectado.Text = efectivoRecolectado.ToString("C2");
                 txtTotalGastos.Text = totalGastos.ToString("C2");
-
+                CargarGastos();
                 MostrarTotales();
             }
         }
@@ -115,10 +123,10 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 }
 
                 decimal fondoInicial = conexion.ObtenerFondoInicial(idCaja);
-              
+
                 decimal efectivoRecolectado = conexion.ObtenerEfectivoRecolectado(idCaja);
                 decimal totalGastos = conexion.ObtenerTotalGastosDelDia(idCaja);
-                decimal utilidad = fondoInicial+ efectivoRecolectado - totalGastos;
+                decimal utilidad = fondoInicial + efectivoRecolectado - totalGastos;
 
                 txtFondoInicial.Text = fondoInicial.ToString("C2");
                 txtEfectivoRecolectado.Text = efectivoRecolectado.ToString("C2");
@@ -150,7 +158,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void LimpiarCampos()
         {
-           
+
             try
             {
                 // Asegúrate de obtener el idCaja de forma segura
@@ -181,9 +189,16 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             }
         }
 
+        private void CargarGastos()
+        {
+            int idCaja = conexion.ObtenerUltimaCaja(); // Asegúrate de tener este método ya hecho
 
-
-
+            if (idCaja != -1)
+            {
+                DataTable gastos = conexion.ObtenerGastosPorCaja(idCaja);
+                dgvGastos.DataSource = gastos;
+            }
+        }
 
 
         private void dgvGastos_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -289,45 +304,104 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         }
 
+
+        private void FiltrarGastos()
+        {
+            string tipoFiltro = cmbTipoFiltroGasto.SelectedItem?.ToString();
+            DateTime fechaInicio = dtpFechaInicioGasto.Value.Date;
+            DateTime fechaFin = dtpFechaFinGasto.Value.Date;
+
+            switch (tipoFiltro)
+            {
+                case "Hoy":
+                    fechaInicio = DateTime.Today;
+                    fechaFin = DateTime.Today;
+                    break;
+
+                case "Esta semana":
+                    int delta = (int)DateTime.Today.DayOfWeek;
+                    fechaInicio = DateTime.Today.AddDays(-delta);
+                    fechaFin = DateTime.Today;
+                    break;
+
+                case "Este mes":
+                    fechaInicio = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+                    fechaFin = DateTime.Today;
+                    break;
+
+                case "Fecha específica":
+                    fechaFin = fechaInicio;
+                    break;
+
+                case "Rango de fechas":
+                    // fechaInicio y fechaFin ya vienen del DateTimePicker
+                    break;
+
+                case "Todos":
+                default:
+                    // valores por defecto
+                    fechaInicio = DateTime.MinValue;
+                    fechaFin = DateTime.MaxValue;
+                    break;
+            }
+
+            DataTable gastosFiltrados = conexion.ObtenerGastosPorFiltro(tipoFiltro, fechaInicio, fechaFin);
+            dgvGastos.DataSource = gastosFiltrados;
+        }
+
+
         // Evento para eliminar un gasto seleccionado
         private void btnEliminarGasto_Click(object sender, EventArgs e)
         {
 
-            try
-            {
-                if (dgvGastos.SelectedRows.Count > 0)
-                {
-                    int idGasto = Convert.ToInt32(dgvGastos.SelectedRows[0].Cells["id_gasto"].Value);
-                    conexion.EliminarGasto(idGasto);
-                    MostrarTotales();
-                    CargarResumenDelDia(); // Actualiza los resúmenes después de la eliminación
-                }
-                else
-                {
-                    MessageBox.Show("Selecciona un gasto para eliminar.");
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al eliminar el gasto: " + ex.Message);
-            }
 
-         
         }
 
         private void btnMostrarGastos_Click(object sender, EventArgs e)
         {
-      
+
         }
 
-        
+
 
 
         private void btnFiltrar_Click(object sender, EventArgs e)
         {
 
+            FiltrarGastos();
         }
 
-        
+        private void cmbTipoFiltroGasto_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+            string filtro = cmbTipoFiltroGasto.SelectedItem.ToString();
+
+            dtpFechaInicioGasto.Enabled = filtro == "Fecha específica" || filtro == "Rango de fechas";
+            dtpFechaFinGasto.Enabled = filtro == "Rango de fechas";
+
+
+            FiltrarGastos();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            MostrarGastosDeCajaReciente();
+        }
+
+        private void MostrarGastosDeCajaReciente()
+        {
+            int idCaja = conexion.ObtenerUltimaCajaRegistrada(); // Ya no depende del idUsuario
+
+            if (idCaja != -1)
+            {
+                DataTable tablaGastos = conexion.ObtenerGastosPorIdCaja(idCaja);
+                dgvGastos.DataSource = tablaGastos;
+            }
+            else
+            {
+                MessageBox.Show("No hay una caja reciente registrada.");
+                dgvGastos.DataSource = null;
+            }
+        }
     }
 }

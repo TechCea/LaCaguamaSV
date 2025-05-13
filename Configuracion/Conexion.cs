@@ -15,7 +15,7 @@ namespace LaCaguamaSV.Configuracion
     {
         private MySqlConnection conectar = null;
         private static string usuario = "root";
-        private static string contrasenia = "180294";
+        private static string contrasenia = "slenderman";
         private static string bd = "lacaguamabd";
         private static string ip = "localhost";
         private static string puerto = "3306"; // 3306 o 3307 si eres javier 
@@ -1654,37 +1654,6 @@ namespace LaCaguamaSV.Configuracion
             }
         }
 
-
-
-
-
-
-        // Método para eliminar un gasto por ID
-        public bool EliminarGasto(int idGasto)
-        {
-            try
-            {
-                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
-                {
-                    conexion.Open();
-                    string query = "DELETE FROM gastos WHERE id_gasto = @idGasto";
-
-                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
-                    {
-                        cmd.Parameters.AddWithValue("@idGasto", idGasto);
-
-                        int filasAfectadas = cmd.ExecuteNonQuery();
-                        return filasAfectadas > 0;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("No se eliminó ningún gasto. Verifica que el ID existe." + ex.Message);
-                return false;
-            }
-        }
-
         // Método para obtener el efectivo recolectado por caja
         public decimal ObtenerEfectivoRecolectadoPorCaja(int idCaja)
         {
@@ -1831,48 +1800,174 @@ namespace LaCaguamaSV.Configuracion
             }
         }
 
-        public DataTable ObtenerGastosPorFecha(int idCaja, DateTime fecha)
+        public DataTable ObtenerGastosPorCaja(int idCaja)
         {
-            DataTable dt = new DataTable();
             using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
             {
-                string consulta = @"SELECT id_gasto, cantidad, descripcion, fecha 
-                            FROM gastos 
-                            WHERE DATE(fecha) = @fecha";
-
-                using (MySqlDataAdapter da = new MySqlDataAdapter(consulta, conexion))
+                string query = "SELECT id_gasto, cantidad, descripcion, fecha FROM gastos WHERE id_caja = @idCaja ORDER BY fecha DESC";
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                 {
-                    // Convertimos la fecha a un formato adecuado (yyyy-MM-dd)
-                    da.SelectCommand.Parameters.AddWithValue("@fecha", fecha.ToString("yyyy-MM-dd"));
-                    da.Fill(dt);
-                }
-            }
-            return dt;
-        }
+                    cmd.Parameters.AddWithValue("@idCaja", idCaja);
+                    conexion.Open();
 
-        public decimal ObtenerTotalGastosPorFecha(int idCaja, DateTime fecha)
-        {
-            decimal total = 0;
-            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
-            {
-                conexion.Open();
-                string consulta = @"SELECT IFNULL(SUM(cantidad), 0) 
-                            FROM gastos 
-                            WHERE DATE(fecha) = @fecha";
-
-                using (MySqlCommand cmd = new MySqlCommand(consulta, conexion))
-                {
-                    cmd.Parameters.AddWithValue("@fecha", fecha.ToString("yyyy-MM-dd"));
-                    object resultado = cmd.ExecuteScalar();
-                    if (resultado != null && resultado != DBNull.Value)
+                    using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
                     {
-                        total = Convert.ToDecimal(resultado);
+                        DataTable tabla = new DataTable();
+                        adapter.Fill(tabla);
+                        return tabla;
                     }
                 }
             }
-            return total;
         }
 
+        public DataTable ObtenerGastosPorIdCaja(int idCaja)
+        {
+            DataTable tabla = new DataTable();
+
+            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+            {
+                string query = "SELECT id_gasto, cantidad, descripcion, fecha FROM gastos WHERE id_caja = @idCaja ORDER BY fecha DESC";
+
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@idCaja", idCaja);
+                    using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                    {
+                        da.Fill(tabla);
+                    }
+                }
+            }
+
+            return tabla;
+        }
+
+
+        public DataTable ObtenerGastosFiltrados(int idCaja, string tipoFiltro, DateTime fechaInicio, DateTime fechaFin)
+        {
+            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+            {
+                string query = "SELECT id_gasto, cantidad, descripcion, fecha FROM gastos WHERE id_caja = @idCaja";
+
+                if (tipoFiltro == "Hoy")
+                {
+                    query += " AND DATE(fecha) = CURDATE()";
+                }
+                else if (tipoFiltro == "Esta semana")
+                {
+                    query += " AND YEARWEEK(fecha, 1) = YEARWEEK(CURDATE(), 1)";
+                }
+                else if (tipoFiltro == "Este mes")
+                {
+                    query += " AND MONTH(fecha) = MONTH(CURDATE()) AND YEAR(fecha) = YEAR(CURDATE())";
+                }
+                else if (tipoFiltro == "Fecha específica")
+                {
+                    query += " AND DATE(fecha) = @fechaInicio";
+                }
+                else if (tipoFiltro == "Rango de fechas")
+                {
+                    query += " AND DATE(fecha) BETWEEN @fechaInicio AND @fechaFin";
+                }
+
+                query += " ORDER BY fecha DESC";
+
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@idCaja", idCaja);
+                    if (tipoFiltro == "Fecha específica" || tipoFiltro == "Rango de fechas")
+                    {
+                        cmd.Parameters.AddWithValue("@fechaInicio", fechaInicio.Date);
+                    }
+                    if (tipoFiltro == "Rango de fechas")
+                    {
+                        cmd.Parameters.AddWithValue("@fechaFin", fechaFin.Date);
+                    }
+
+                    conexion.Open();
+                    using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
+                    {
+                        DataTable tabla = new DataTable();
+                        adapter.Fill(tabla);
+                        return tabla;
+                    }
+                }
+            }
+        }
+
+
+        public DataTable ObtenerGastosPorFiltro(string tipoFiltro, DateTime fechaInicio, DateTime fechaFin)
+        {
+            DataTable tabla = new DataTable();
+
+            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+            {
+                string query = "SELECT id_gasto, cantidad, descripcion, fecha FROM gastos WHERE 1=1";
+
+                if (tipoFiltro != "Todos")
+                {
+                    query += " AND fecha BETWEEN @fechaInicio AND @fechaFin";
+                }
+
+                query += " ORDER BY fecha DESC";
+
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    if (tipoFiltro != "Todos")
+                    {
+                        cmd.Parameters.AddWithValue("@fechaInicio", fechaInicio.Date);
+                        cmd.Parameters.AddWithValue("@fechaFin", fechaFin.Date.AddDays(1).AddSeconds(-1));
+                    }
+
+                    using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                    {
+                        da.Fill(tabla);
+                    }
+                }
+            }
+
+            return tabla;
+        }
+
+        public DataTable ObtenerGastosPorFecha(int idCaja, DateTime fechaInicio, DateTime fechaFin)
+        {
+            DataTable tabla = new DataTable();
+
+            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+            {
+                string query = @"SELECT id_gasto, cantidad, descripcion, fecha
+                         FROM gastos
+                         WHERE id_caja = @idCaja 
+                         AND DATE(fecha) BETWEEN @fechaInicio AND @fechaFin
+                         ORDER BY fecha DESC";
+
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@idCaja", idCaja);
+                    cmd.Parameters.AddWithValue("@fechaInicio", fechaInicio.ToString("yyyy-MM-dd"));
+                    cmd.Parameters.AddWithValue("@fechaFin", fechaFin.ToString("yyyy-MM-dd"));
+
+                    using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
+                    {
+                        adapter.Fill(tabla);
+                    }
+                }
+            }
+
+            return tabla;
+        }
+        public int ObtenerUltimaCajaRegistrada()
+        {
+            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+            {
+                string query = "SELECT id_caja FROM caja ORDER BY fecha DESC LIMIT 1";
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    conexion.Open();
+                    object resultado = cmd.ExecuteScalar();
+                    return resultado != null ? Convert.ToInt32(resultado) : -1;
+                }
+            }
+        }
 
 
 
