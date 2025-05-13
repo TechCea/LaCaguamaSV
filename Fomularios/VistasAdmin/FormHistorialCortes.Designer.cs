@@ -204,6 +204,7 @@
             this.Controls.Add(this.dataGridViewCortes);
             this.Name = "FormHistorialCortes";
             this.Text = "Historial de cortes";
+            this.Load += new System.EventHandler(this.FormHistorialCortes_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCortes)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -616,5 +616,10 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             cmbTipoFiltroCortes.SelectedIndex = 0;
             CargarVistaActual();
         }
+
+        private void FormHistorialCortes_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
