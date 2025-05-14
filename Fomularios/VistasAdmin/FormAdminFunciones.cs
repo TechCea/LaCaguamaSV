@@ -770,6 +770,11 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
             return sb.ToString();
         }
+
+        private void btn_cortegeneral_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
      

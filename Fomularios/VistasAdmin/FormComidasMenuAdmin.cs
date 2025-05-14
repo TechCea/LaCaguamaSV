@@ -33,6 +33,12 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 return;
             }
 
+            dgvComidas.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvComidas.MultiSelect = false;
+            dgvComidas.ReadOnly = true;
+            dgvComidas.AllowUserToAddRows = false;
+            dgvComidas.AllowUserToDeleteRows = false;
+            dgvComidas.AllowUserToResizeRows = false;
 
             CargarCategoriasComida();
             CargarComidas();
@@ -47,40 +53,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             dgvComidas.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 
         }
-
-
-
-        private void txtDescripcionC_TextChanged(object sender, EventArgs e)
-        {
-            // Evento generado por el diseñador, puedes dejarlo vacío
-        }
-
-        private void label3_Click(object sender, EventArgs e)
-        {
-            // Evento generado por el diseñador, puedes dejarlo vacío
-        }
-
-        private void txtNombreC_TextChanged(object sender, EventArgs e)
-        {
-            // Puedes dejarlo vacío o agregar lógica si quieres
-        }
-
-        private void txtPrecioU_TextChanged(object sender, EventArgs e)
-        {
-            // Puedes dejarlo vacío
-        }
-
-
-        private void cbCategoriaB_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            // Puedes dejarlo vacío si no usarás nada por ahora
-        }
-
-        private void dgvComidas_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-            // Puedes dejarlo vacío o meterle lógica si luego la necesitas
-        }
-
 
         private void CargarCategoriasComida()
         {
@@ -181,14 +153,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             FormMenuAdmin.Show();
         }
 
-        private void FormComidasMenuAdmin_Load(object sender, EventArgs e)
-        {
-
-        }
-        private void FormComidasMenuAdmin_MouseDown(object sender, MouseEventArgs e)
-        {
-           
-        }
         public class RoundedControl
         {
             public static void ApplyRoundedCorners(Control control, int radius)

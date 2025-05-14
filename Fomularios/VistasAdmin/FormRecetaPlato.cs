@@ -40,6 +40,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             MostrarInventarioEnGrid();
             dataGridViewReceta.CellClick += dataGridViewReceta_CellClick;
             dataGridViewReceta.MultiSelect = false;
+            dataGridViewReceta.AllowUserToResizeRows = false;
         }
 
         private void MostrarIngredientesEnPanel(int idPlato)

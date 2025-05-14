@@ -85,7 +85,6 @@
             this.dgvComidas.RowTemplate.Height = 24;
             this.dgvComidas.Size = new System.Drawing.Size(741, 412);
             this.dgvComidas.TabIndex = 3;
-            this.dgvComidas.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvComidas_CellContentClick);
             // 
             // gbDatosBebida
             // 
@@ -117,7 +116,6 @@
             this.txtDescripcionC.Name = "txtDescripcionC";
             this.txtDescripcionC.Size = new System.Drawing.Size(227, 26);
             this.txtDescripcionC.TabIndex = 11;
-            this.txtDescripcionC.TextChanged += new System.EventHandler(this.txtDescripcionC_TextChanged);
             // 
             // label3
             // 
@@ -128,7 +126,6 @@
             this.label3.Size = new System.Drawing.Size(104, 20);
             this.label3.TabIndex = 10;
             this.label3.Text = "Descripción:";
-            this.label3.Click += new System.EventHandler(this.label3_Click);
             // 
             // lblSeleccionBebida
             // 
@@ -150,7 +147,6 @@
             this.cbCategoriaB.Name = "cbCategoriaB";
             this.cbCategoriaB.Size = new System.Drawing.Size(225, 28);
             this.cbCategoriaB.TabIndex = 5;
-            this.cbCategoriaB.SelectedIndexChanged += new System.EventHandler(this.cbCategoriaB_SelectedIndexChanged);
             // 
             // txtPrecioU
             // 
@@ -159,7 +155,6 @@
             this.txtPrecioU.Name = "txtPrecioU";
             this.txtPrecioU.Size = new System.Drawing.Size(227, 26);
             this.txtPrecioU.TabIndex = 4;
-            this.txtPrecioU.TextChanged += new System.EventHandler(this.txtPrecioU_TextChanged);
             // 
             // label2
             // 
@@ -188,7 +183,6 @@
             this.txtNombreC.Name = "txtNombreC";
             this.txtNombreC.Size = new System.Drawing.Size(225, 26);
             this.txtNombreC.TabIndex = 1;
-            this.txtNombreC.TextChanged += new System.EventHandler(this.txtNombreC_TextChanged);
             // 
             // lbNombreBebida
             // 
@@ -245,7 +239,6 @@
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FormComidasMenuAdmin";
             this.Text = "Platos del menú";
-            this.Load += new System.EventHandler(this.FormComidasMenuAdmin_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvComidas)).EndInit();
             this.gbDatosBebida.ResumeLayout(false);
             this.gbDatosBebida.PerformLayout();

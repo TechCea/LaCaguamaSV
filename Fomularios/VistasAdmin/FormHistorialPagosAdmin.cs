@@ -42,6 +42,13 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             ConfigurarDataGridView();
             dataGridViewHistorial.MultiSelect = false;
 
+            dataGridViewHistorial.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridViewHistorial.MultiSelect = false;
+            dataGridViewHistorial.ReadOnly = true;
+            dataGridViewHistorial.AllowUserToAddRows = false;
+            dataGridViewHistorial.AllowUserToDeleteRows = false;
+            dataGridViewHistorial.AllowUserToResizeRows = false;
+
             cmbTipoFiltro.SelectedIndexChanged += CmbTipoFiltro_SelectedIndexChanged;
             btnFiltrar.Click += btnFiltrar_Click;
             btnResetear.Click += btnResetear_Click;

@@ -38,6 +38,15 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             ActualizarTotal(); // Sincronizar el total
             dataGridViewMenu.MultiSelect = false;
 
+            dataGridViewMenu.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridViewMenu.MultiSelect = false;
+            dataGridViewMenu.ReadOnly = true;
+            dataGridViewMenu.AllowUserToAddRows = false;
+            dataGridViewMenu.AllowUserToDeleteRows = false;
+            dataGridViewMenu.AllowUserToResizeRows = false;
+
+            dataGridViewMenu.CellClick += dataGridViewMenu_CellDoubleClick;
+
             lblTotal.Font = new Font(lblTotal.Font.FontFamily, 16);
             label5.Font = new Font(label5.Font.FontFamily, 14);
         }

@@ -43,6 +43,13 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             // Posición fija (centrada en la pantalla)
             this.StartPosition = FormStartPosition.CenterScreen;
 
+            dgvBebidas.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvBebidas.MultiSelect = false;
+            dgvBebidas.ReadOnly = true;
+            dgvBebidas.AllowUserToAddRows = false;
+            dgvBebidas.AllowUserToDeleteRows = false;
+            dgvBebidas.AllowUserToResizeRows = false;
+
             CargarCategorias();
             CargarBebidas();
             CargarCategoriasBebidas(); // Cargar categorías en cbCategoriaB

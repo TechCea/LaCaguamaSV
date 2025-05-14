@@ -67,7 +67,7 @@
             this.dgvExtras.Name = "dgvExtras";
             this.dgvExtras.RowHeadersWidth = 51;
             this.dgvExtras.RowTemplate.Height = 24;
-            this.dgvExtras.Size = new System.Drawing.Size(437, 412);
+            this.dgvExtras.Size = new System.Drawing.Size(545, 412);
             this.dgvExtras.TabIndex = 3;
             // 
             // gbDatosExtras
@@ -80,7 +80,7 @@
             this.gbDatosExtras.Controls.Add(this.lblNombreE);
             this.gbDatosExtras.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.gbDatosExtras.ForeColor = System.Drawing.SystemColors.Control;
-            this.gbDatosExtras.Location = new System.Drawing.Point(500, 98);
+            this.gbDatosExtras.Location = new System.Drawing.Point(628, 100);
             this.gbDatosExtras.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.gbDatosExtras.Name = "gbDatosExtras";
             this.gbDatosExtras.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -143,7 +143,7 @@
             this.btnActualizarB.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnActualizarB.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnActualizarB.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btnActualizarB.Location = new System.Drawing.Point(762, 420);
+            this.btnActualizarB.Location = new System.Drawing.Point(890, 422);
             this.btnActualizarB.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnActualizarB.Name = "btnActualizarB";
             this.btnActualizarB.Size = new System.Drawing.Size(177, 54);
@@ -171,7 +171,7 @@
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.fondo;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(976, 614);
+            this.ClientSize = new System.Drawing.Size(1135, 614);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.gbDatosExtras);
             this.Controls.Add(this.btnRegresarMenu);
@@ -180,7 +180,6 @@
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FormExtrasMenuAdmin";
             this.Text = "Extras del menú";
-            this.Load += new System.EventHandler(this.FormExtrasMenuAdmin_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvExtras)).EndInit();
             this.gbDatosExtras.ResumeLayout(false);
             this.gbDatosExtras.PerformLayout();

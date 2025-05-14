@@ -37,12 +37,17 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 MessageBox.Show("Acceso denegado. No tienes permisos de administrador.", "Acceso Restringido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            
 
+            dgvExtras.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvExtras.MultiSelect = false;
+            dgvExtras.ReadOnly = true;
+            dgvExtras.AllowUserToAddRows = false;
+            dgvExtras.AllowUserToDeleteRows = false;
+            dgvExtras.AllowUserToResizeRows = false;
 
             CargarExtras(); // Llamamos la función al iniciar el formulario
             dgvExtras.DataSource = conexion.ObtenerExtras();
-            dgvExtras.SelectionChanged += dgvExtras_SelectionChanged;
+            dgvExtras.CellClick += dgvExtras_CellClick;
             dgvExtras.MultiSelect = false;
         }
 
@@ -57,7 +62,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             txtPrecioUE.Clear();
         }
 
-        private void dgvExtras_SelectionChanged(object sender, EventArgs e)
+        private void dgvExtras_CellClick(object sender, EventArgs e)
         {
             if (dgvExtras.SelectedRows.Count > 0)
             {
@@ -119,14 +124,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             FormMenuAdmin.Show();
         }
 
-        private void FormExtrasMenuAdmin_Load(object sender, EventArgs e)
-        {
-
-        }
-        private void FormExtrasMenuAdmin_MouseDown(object sender, MouseEventArgs e)
-        {
-
-        }
         public class RoundedControl
         {
             public static void ApplyRoundedCorners(Control control, int radius)
