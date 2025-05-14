@@ -35,10 +35,10 @@ namespace LaCaguamaSV.Configuracion
     {
         private MySqlConnection conectar = null;
         private static string usuario = "root";
-        private static string contrasenia = "root";
+        private static string contrasenia = "Caguama2025";
         private static string bd = "lacaguamabd";
         private static string ip = "localhost";
-        private static string puerto = "3307"; // 3306 o 3307 si eres javier 
+        private static string puerto = "3306"; // 3306 o 3307 si eres javier 
 
         string cadenaConexion = $"Server={ip};Port={puerto};Database={bd};User Id={usuario};Password={contrasenia};";
 
@@ -2678,7 +2678,7 @@ namespace LaCaguamaSV.Configuracion
             string usuario = "root";
             string contraseña = "Caguama2025";
             string baseDeDatos = "lacaguamabd";
-            string rutaMysql = @"C:\Program Files\MySQL\MySQL Server 8.0\bin";
+            string rutaMysql = @"C:\Program Files\MySQL\MySQL Server 9.3\bin";
 
             ProcessStartInfo psi = new ProcessStartInfo
             {
