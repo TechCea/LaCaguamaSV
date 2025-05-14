@@ -75,7 +75,6 @@
             this.dataGridViewOrdenesUsuario.RowHeadersWidth = 51;
             this.dataGridViewOrdenesUsuario.Size = new System.Drawing.Size(829, 402);
             this.dataGridViewOrdenesUsuario.TabIndex = 18;
-            this.dataGridViewOrdenesUsuario.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewOrdenesUsuario_CellContentClick);
             // 
             // button1
             // 

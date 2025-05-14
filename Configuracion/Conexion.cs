@@ -31,8 +31,6 @@ namespace LaCaguamaSV.Configuracion
 
         string cadenaConexion = $"Server={ip};Port={puerto};Database={bd};User Id={usuario};Password={contrasenia};";
 
-
-
         public MySqlConnection EstablecerConexion()
         {
             try

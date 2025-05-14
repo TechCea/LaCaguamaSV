@@ -136,29 +136,24 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void dataGridViewOrdenesAdmin_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0) // Ignorar clics en encabezados
+            if (e.RowIndex >= 0) // Asegurar que no se haga clic en el encabezado
             {
                 // Obtener la fila seleccionada
                 DataGridViewRow row = dataGridViewOrdenesAdmin.Rows[e.RowIndex];
 
-                // Validar que las celdas no sean nulas
-                if (row.Cells["estado_orden"].Value != null && row.Cells["id_orden"].Value != null)
-                {
-                    string estadoOrden = row.Cells["estado_orden"].Value.ToString();
-                    int idOrden = Convert.ToInt32(row.Cells["id_orden"].Value);
+                // Obtener el estado de la orden
+                string estadoOrden = row.Cells["estado_orden"].Value.ToString();
+                int idOrden = Convert.ToInt32(row.Cells["id_orden"].Value);
 
-                    if (estadoOrden == "Cerrada")
-                    {
-                        MostrarFacturaOrden(idOrden);
-                    }
-                    else
-                    {
-                        AbrirGestionOrden(row); // Aquí podés pasar solo el ID si querés
-                    }
+                if (estadoOrden == "Cerrada")
+                {
+                    // Mostrar factura/comprobante para órdenes cerradas
+                    MostrarFacturaOrden(idOrden);
                 }
                 else
                 {
-                    MessageBox.Show("La fila seleccionada no contiene datos válidos.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    // Abrir gestión de orden para órdenes abiertas
+                    AbrirGestionOrden(row);
                 }
             }
         }

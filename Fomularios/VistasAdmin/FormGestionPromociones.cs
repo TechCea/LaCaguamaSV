@@ -29,6 +29,18 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             ConfigurarPanelItems();
             ConfigurarValidaciones();
 
+            // Tamaño fijo
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
+ 
+            this.StartPosition = FormStartPosition.CenterScreen;
+
+            dataGridViewMenu.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridViewMenu.MultiSelect = false;
+            dataGridViewMenu.ReadOnly = true;
+            dataGridViewMenu.AllowUserToAddRows = false;
+            dataGridViewMenu.AllowUserToDeleteRows = false;
+            dataGridViewMenu.AllowUserToResizeRows = false;
+
             dataGridViewMenu.CellDoubleClick += DataGridViewMenu_CellDoubleClick;
 
             txtPrecio.Enter += txtPrecio_Enter;

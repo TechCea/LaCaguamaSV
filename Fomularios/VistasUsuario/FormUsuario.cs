@@ -33,6 +33,17 @@ namespace LaCaguamaSV.Fomularios.VistasUsuario
             // Posición fija (centrada en la pantalla)
             this.StartPosition = FormStartPosition.CenterScreen;
 
+            //Ojoooo, esto hace que pueda seleccionar toda la fila de datos, independientemente de donde le de click
+            dataGridViewOrdenesUsuario.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridViewOrdenesUsuario.MultiSelect = false;
+            dataGridViewOrdenesUsuario.ReadOnly = true;
+            dataGridViewOrdenesUsuario.AllowUserToAddRows = false;
+            dataGridViewOrdenesUsuario.AllowUserToDeleteRows = false;
+            dataGridViewOrdenesUsuario.AllowUserToResizeRows = false;
+
+            // 💡 Asocia el evento para permitir clic en cualquier parte de la fila
+            dataGridViewOrdenesUsuario.CellClick += dataGridViewOrdenesUsuario_CellClick;
+
             // Si el usuario no es normal (rol 2), cierra el formulario
             if (SesionUsuario.Rol != 2)
             {
@@ -118,7 +129,7 @@ namespace LaCaguamaSV.Fomularios.VistasUsuario
             this.Close();
         }
 
-        private void dataGridViewOrdenesUsuario_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void dataGridViewOrdenesUsuario_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0) // Asegurar que no se haga clic en el encabezado
             {

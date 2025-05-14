@@ -84,7 +84,6 @@
             this.dgvGastos.RowHeadersWidth = 51;
             this.dgvGastos.Size = new System.Drawing.Size(476, 208);
             this.dgvGastos.TabIndex = 4;
-            this.dgvGastos.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvGastos_CellContentClick);
             // 
             // btnAgregarGasto
             // 

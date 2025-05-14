@@ -43,6 +43,17 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 // Posición fija (centrada en la pantalla)
                 this.StartPosition = FormStartPosition.CenterScreen;
 
+                //Ojoooo, esto hace que pueda seleccionar toda la fila de datos, independientemente de donde le de click
+                dgvGastos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+                dgvGastos.MultiSelect = false;
+                dgvGastos.ReadOnly = true;
+                dgvGastos.AllowUserToAddRows = false;
+                dgvGastos.AllowUserToDeleteRows = false;
+                dgvGastos.AllowUserToResizeRows = false;
+
+                // 💡 Asocia el evento para permitir clic en cualquier parte de la fila
+                dgvGastos.CellClick += dgvGastos_CellClick;
+
                 CargarGastosDelDia();
 
             }
@@ -201,7 +212,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         }
 
 
-        private void dgvGastos_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void dgvGastos_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             try
             {

@@ -49,6 +49,8 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             dataGridViewHistorial.AllowUserToDeleteRows = false;
             dataGridViewHistorial.AllowUserToResizeRows = false;
 
+            dataGridViewHistorial.CellClick += dataGridViewHistorial_CellClick;
+
             cmbTipoFiltro.SelectedIndexChanged += CmbTipoFiltro_SelectedIndexChanged;
             btnFiltrar.Click += btnFiltrar_Click;
             btnResetear.Click += btnResetear_Click;
@@ -565,7 +567,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         }
 
-        private void dataGridViewHistorial_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void dataGridViewHistorial_CellClick(object sender, DataGridViewCellEventArgs e)
         {
 
             if (e.RowIndex >= 0)

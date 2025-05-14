@@ -52,7 +52,6 @@
             this.dataGridViewHistorial.RowHeadersWidth = 51;
             this.dataGridViewHistorial.Size = new System.Drawing.Size(707, 291);
             this.dataGridViewHistorial.TabIndex = 0;
-            this.dataGridViewHistorial.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewHistorial_CellContentClick);
             // 
             // btnCerrar
             // 
