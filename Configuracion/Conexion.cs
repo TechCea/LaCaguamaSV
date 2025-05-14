@@ -2661,7 +2661,7 @@ namespace LaCaguamaSV.Configuracion
         public void ImportarBaseDeDatos(string rutaArchivo)
         {
             string usuario = "root";
-            string contraseña = "slenderman";
+            string contraseña = "180294";
             string baseDeDatos = "lacaguamabd";
             string rutaMysql = @"C:\Program Files\MySQL\MySQL Server 8.0\bin";
 
