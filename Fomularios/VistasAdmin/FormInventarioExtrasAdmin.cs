@@ -12,7 +12,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
     public partial class FormInventarioExtrasAdmin : Form
     {
      
-
         private Conexion conexion = new Conexion();
         private int idExtraSeleccionado = -1;
         private int idInventarioSeleccionado = -1;
@@ -32,9 +31,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 MessageBox.Show("Acceso denegado. No tienes permisos de administrador.", "Acceso Restringido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 this.Close();
                 return;
-            }
-
-           
+            } 
 
             // Cargar datos al iniciar
             CargarDatosIniciales();
@@ -42,13 +39,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             dgvInventarioE.MultiSelect = false;
             btnLimpiar.Click += btnLimpiar_Click;
             dgvInventarioE.DataBindingComplete += dgvInventarioExtras_DataBindingComplete;
-        }
-
-       
-
-        private void FormInventarioExtrasAdmin_MouseDown(object sender, MouseEventArgs e)
-        {
-        
         }
 
         private void CargarDatosIniciales()
@@ -138,8 +128,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                         {
                             cbxDisponibilidad.SelectedIndex = -1;
                         }
-
-
 
                         // Guardar IDs para operaciones
                         idExtraSeleccionado = row["ID"] != DBNull.Value ? Convert.ToInt32(row["ID"]) : -1;
@@ -337,9 +325,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void btnRegresar_Click(object sender, EventArgs e)
         {
-            this.Hide();
-            FormInventarioAdmin forminventario = new FormInventarioAdmin();
-            forminventario.ShowDialog();
+            this.Close();
         }
 
         // Eventos vacíos para el diseñador
@@ -349,9 +335,5 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         private void txtPrecio_TextChanged(object sender, EventArgs e) { }
         private void cbxProveedor_SelectedIndexChanged(object sender, EventArgs e) { }
 
-        private void FormInventarioExtrasAdmin_Load(object sender, EventArgs e)
-        {
-
-        }
     }
 }

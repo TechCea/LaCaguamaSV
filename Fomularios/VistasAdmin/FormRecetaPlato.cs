@@ -32,6 +32,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 return;
             }
 
+            dataGridViewReceta.AllowUserToResizeRows = false;
             // Asignar los valores a los labels
             lblIDPLATO.Text = idPlato.ToString();
             lblPlato.Text = nombrePlato;
@@ -66,7 +67,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 // Crear la etiqueta para mostrar el nombre y cantidad
                 Label lblIngrediente = new Label
                 {
-                    Text = $"{nombreIngrediente} - {cantidad} unidades",
+                    Text = $"{nombreIngrediente} - {cantidad} cantidad",
                     ForeColor = Color.Black,
                     Dock = DockStyle.Fill,
                     TextAlign = ContentAlignment.MiddleLeft,

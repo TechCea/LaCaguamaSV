@@ -41,8 +41,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             using (FormGestionarProvAdmin formProveedor = new FormGestionarProvAdmin())
             {
-                this.Hide();
-                this.Close();// Oculta el menú
                 formProveedor.ShowDialog(); // Muestra el formulario 
                 this.Show(); // Vuelve a mostrar el menú cuando el formulario de proveedore se cierra
             }
@@ -50,12 +48,8 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void btnBebidas_Click(object sender, EventArgs e)
         {
-
-
             using (FormInventarioBebidasAdmin formInventarioBebidas = new FormInventarioBebidasAdmin())
             {
-                this.Hide();
-                this.Close();// Oculta el menú
                 formInventarioBebidas.ShowDialog(); // Muestra el formulario 
                 this.Show(); // Vuelve a mostrar el menú cuando el formulario de proveedore se cierra
             }
@@ -63,18 +57,15 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void btnComidas_Click(object sender, EventArgs e)
         {
-            this.Hide();
-            this.Close();
             FormIngredientesInv formIngredientes = new FormIngredientesInv();
             formIngredientes.ShowDialog();
+            this.Show(); // Vuelve a mostrar el menú cuando el formulario de proveedore se cierra
         }
 
         private void btnExtras_Click(object sender, EventArgs e)
         {
             using (FormInventarioExtrasAdmin FormInventarioExtras = new FormInventarioExtrasAdmin())
             {
-                this.Hide();
-                this.Close();
                 FormInventarioExtras.ShowDialog(); // Muestra el formulario 
                 this.Show(); // Vuelve a mostrar el menú cuando el formulario de proveedore se cierra
             }
@@ -84,15 +75,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         private void btnCerrar_Click_Click(object sender, EventArgs e)
         {
             this.Close();
-        }
-
-        private void FormInventarioAdmin_Load(object sender, EventArgs e)
-        {
-
-        }
-        private void FormInventarioAdmin_MouseDown(object sender, MouseEventArgs e)
-        {
-           
         }
        
     }

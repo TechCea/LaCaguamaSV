@@ -42,12 +42,19 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 return;
             }
 
+            dgvIngredientes.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvIngredientes.ReadOnly = true;
+            dgvIngredientes.MultiSelect = false;
+            dgvIngredientes.AllowUserToAddRows = false;
+            dgvIngredientes.AllowUserToDeleteRows = false;
+            dgvIngredientes.AllowUserToResizeRows = false;
 
             CargarIngredientes();
             CargarProveedores();
             CargarProveedoresCombo();
+            CargarUnidadesCombo();
             cbFiltrarProv.SelectedIndexChanged += cbFiltrarProv_SelectedIndexChanged;
-            dgvIngredientes.SelectionChanged += dgvIngredientes_SelectionChanged;
+            dgvIngredientes.CellClick += dgvIngredientes_CellClick;
             btnActualizarB.Enabled = false;
             CargarDisponibilidadCombo();
             dgvIngredientes.CellFormatting += dgvIngredientes_CellFormatting;
@@ -58,10 +65,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             DataTable dt = conexion.ObtenerIngredientes();
             dgvIngredientes.DataSource = conexion.ObtenerIngredientes();
-        }
-        private void FormIngredientesInv_MouseDown(object sender, MouseEventArgs e)
-        {
-           
         }
 
         private void CargarProveedores()
@@ -116,9 +119,8 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             }
         }
 
-        private void dgvIngredientes_SelectionChanged(object sender, EventArgs e)
+        private void dgvIngredientes_CellClick(object sender, EventArgs e)
         {
-            // Verifica si hay una fila seleccionada en el DataGridView
             if (dgvIngredientes.SelectedRows.Count > 0)
             {
                 idIngredienteSeleccionado = Convert.ToInt32(dgvIngredientes.SelectedRows[0].Cells["ID"].Value);
@@ -126,15 +128,19 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 string cantidad = dgvIngredientes.SelectedRows[0].Cells["Cantidad"].Value.ToString();
                 string proveedor = dgvIngredientes.SelectedRows[0].Cells["Proveedor"].Value.ToString();
                 string disponibilidad = dgvIngredientes.SelectedRows[0].Cells["Disponibilidad"].Value.ToString();
+                string unidad = dgvIngredientes.SelectedRows[0].Cells["Unidad"].Value.ToString(); // 👈 Nuevo
 
-                cbc_disponibilidad.SelectedIndex = cbc_disponibilidad.FindStringExact(disponibilidad);
-                lblSeleccion.Text = $"Se ha seleccionado el ingrediente: {nombreIngrediente}";
+                // Asignar valores a los controles
                 txtNombreC.Text = nombreIngrediente;
                 txtCantidad.Text = cantidad;
                 cbProveedores.SelectedItem = proveedor;
+                cbc_disponibilidad.SelectedIndex = cbc_disponibilidad.FindStringExact(disponibilidad);
+                cbb_unidad.SelectedIndex = cbb_unidad.FindStringExact(unidad); // 👈 Nuevo
 
+                lblSeleccion.Text = $"Se ha seleccionado el ingrediente: {nombreIngrediente}";
+
+                // Control de botones
                 btnActualizarB.Enabled = true;
-
                 btnAgregarIng.Enabled = false;
             }
             else
@@ -143,10 +149,10 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 txtNombreC.Clear();
                 txtCantidad.Clear();
                 cbProveedores.SelectedIndex = -1;
+                cbb_unidad.SelectedIndex = -1;
+                cbc_disponibilidad.SelectedIndex = -1;
 
                 btnActualizarB.Enabled = false;
-
-                // También aseguramos que se pueda volver a agregar si no hay nada seleccionado
                 btnAgregarIng.Enabled = true;
             }
         }
@@ -196,7 +202,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void btnAgregarIng_Click(object sender, EventArgs e)
         {
-            // Verificar que los campos no estén vacíos
             if (string.IsNullOrWhiteSpace(txtNombreC.Text))
             {
                 MessageBox.Show("Por favor, ingrese el nombre del producto.");
@@ -221,19 +226,20 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 return;
             }
 
-            // Obtener datos de los controles
+            if (cbb_unidad.SelectedValue == null)
+            {
+                MessageBox.Show("Por favor, selecciona una unidad.");
+                return;
+            }
+
             string nombreProducto = txtNombreC.Text;
             decimal cantidad;
-            bool esCantidadValida = decimal.TryParse(txtCantidad.Text, out cantidad);
-
-            // Verificar que la cantidad sea válida
-            if (!esCantidadValida || cantidad <= 0)
+            if (!decimal.TryParse(txtCantidad.Text, out cantidad) || cantidad <= 0)
             {
                 MessageBox.Show("Por favor, ingrese una cantidad válida y mayor a cero.");
                 return;
             }
 
-            // Obtener el ID del proveedor
             string proveedorSeleccionado = cbProveedores.SelectedItem.ToString();
             int idProveedor = ObtenerIdProveedor(proveedorSeleccionado);
 
@@ -243,16 +249,14 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 return;
             }
 
-            // Obtener el ID de disponibilidad
+            int idUnidad = Convert.ToInt32(cbb_unidad.SelectedValue);
             int idDisponibilidad = Convert.ToInt32(cbc_disponibilidad.SelectedValue);
 
-            // Llamar a la función de agregar ingrediente
-            bool resultado = conexion.AgregarIngrediente(nombreProducto, cantidad, idProveedor, idDisponibilidad);
+            bool resultado = conexion.AgregarIngrediente(nombreProducto, cantidad, idProveedor, idUnidad, idDisponibilidad);
 
             if (resultado)
             {
                 MessageBox.Show("Ingrediente agregado correctamente.");
-                // Recargar la lista de ingredientes
                 dgvIngredientes.DataSource = conexion.ObtenerIngredientes();
             }
             else
@@ -301,12 +305,28 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
             int nuevoIdDisponibilidad = Convert.ToInt32(cbc_disponibilidad.SelectedValue);
 
-            bool resultado = conexion.EditarIngrediente(idIngredienteSeleccionado, nuevoNombre, nuevaCantidad, nuevoIdProveedor, nuevoIdDisponibilidad);
+            if (cbb_unidad.SelectedValue == null)
+            {
+                MessageBox.Show("Selecciona una unidad.");
+                return;
+            }
+
+            int nuevoIdUnidad = Convert.ToInt32(cbb_unidad.SelectedValue); // 👈 nuevo dato
+
+            // Llama la función con el nuevo parámetro
+            bool resultado = conexion.EditarIngrediente(
+                idIngredienteSeleccionado,
+                nuevoNombre,
+                nuevaCantidad,
+                nuevoIdProveedor,
+                nuevoIdDisponibilidad,
+                nuevoIdUnidad // 👈 agregado
+            );
 
             if (resultado)
             {
                 MessageBox.Show("Ingrediente actualizado correctamente.");
-                dgvIngredientes.DataSource = conexion.ObtenerIngredientes(); 
+                dgvIngredientes.DataSource = conexion.ObtenerIngredientes();
             }
             else
             {
@@ -335,16 +355,17 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             formplatos.ShowDialog();
         }
 
-        private void FormIngredientesInv_Load(object sender, EventArgs e)
+        private void CargarUnidadesCombo()
         {
-
+            DataTable dtUnidades = conexion.ObtenerUnidades();
+            cbb_unidad.DataSource = dtUnidades;
+            cbb_unidad.DisplayMember = "nombreUnidad"; // Lo que el usuario verá
+            cbb_unidad.ValueMember = "id_unidad"; // El valor real usado internamente
         }
 
         private void btnRegresarMenu_Click(object sender, EventArgs e)
         {
-            this.Hide();
-            FormInventarioAdmin forminventario = new FormInventarioAdmin();
-            forminventario.ShowDialog();
+            this.Close();
         }
 
         private void btn_limpiarcampos_Click(object sender, EventArgs e)

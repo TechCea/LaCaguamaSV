@@ -30,8 +30,16 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             // Posición fija (centrada en la pantalla)
             this.StartPosition = FormStartPosition.CenterScreen;
 
+            dgvProveedor.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvProveedor.ReadOnly = true;
+            dgvProveedor.MultiSelect = false;
+            dgvProveedor.AllowUserToAddRows = false;
+            dgvProveedor.AllowUserToDeleteRows = false;
+            dgvProveedor.AllowUserToResizeRows = false;
+
+
             CargarProveedores();
-            dgvProveedor.SelectionChanged += dgvProveedor_SelectionChanged;
+            dgvProveedor.CellClick += dgvProveedor_CellClick;
             dgvProveedor.MultiSelect = false;
         }
 
@@ -49,14 +57,14 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             txtDirecion.Clear();
         }
 
-        // Cuando se cambia la selección en el DataGridView, carga los datos en los TextBox
-        private void dgvProveedor_SelectionChanged(object sender, EventArgs e)
+        private void dgvProveedor_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (dgvProveedor.SelectedRows.Count > 0)
+            if (e.RowIndex >= 0)
             {
-                txtNombreP.Text = dgvProveedor.SelectedRows[0].Cells["Nombre"].Value.ToString();
-                txtContacto.Text = dgvProveedor.SelectedRows[0].Cells["Contacto"].Value.ToString();
-                txtDirecion.Text = dgvProveedor.SelectedRows[0].Cells["Direccion"].Value.ToString();
+                DataGridViewRow row = dgvProveedor.Rows[e.RowIndex];
+                txtNombreP.Text = row.Cells["Nombre"].Value.ToString();
+                txtContacto.Text = row.Cells["Contacto"].Value.ToString();
+                txtDirecion.Text = row.Cells["Direccion"].Value.ToString();
             }
         }
 
@@ -147,9 +155,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         // Regresa al menú
         private void btnRegresar_Click(object sender, EventArgs e)
         {
-            this.Hide();
-            FormInventarioAdmin forminventario = new FormInventarioAdmin();
-            forminventario.ShowDialog();
+            this.Close();
         }
 
         // Los métodos de eventos de cambio de texto se dejan vacíos si no se necesita funcionalidad adicional.

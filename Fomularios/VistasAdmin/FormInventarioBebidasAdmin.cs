@@ -31,10 +31,17 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 return;
             }
 
+            dgvInventarioB.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvInventarioB.ReadOnly = true;
+            dgvInventarioB.MultiSelect = false;
+            dgvInventarioB.AllowUserToAddRows = false;
+            dgvInventarioB.AllowUserToDeleteRows = false;
+            dgvInventarioB.AllowUserToResizeRows = false;
+
             CargarProveedores();
             CargarCategorias();
             CargarDisponibilidad();
-            dgvInventarioB.SelectionChanged += dgvInventarioB_SelectionChanged;
+            dgvInventarioB.CellClick += dgvInventarioB_CellClick;
             dgvInventarioB.MultiSelect = false;
             this.Load += FormInventarioBebidasAdmin_Load;
             dgvInventarioB.DataBindingComplete += dgvInventarioB_DataBindingComplete;
@@ -118,7 +125,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         }
 
         // Cuando se selecciona una fila en el DataGridView, se muestran los datos en los controles
-        private void dgvInventarioB_SelectionChanged(object sender, EventArgs e)
+        private void dgvInventarioB_CellClick(object sender, EventArgs e)
         {
             if (dgvInventarioB.SelectedRows.Count > 0)
             {
@@ -279,9 +286,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         // Regresar al menú
         private void btnRegresar_Click(object sender, EventArgs e)
         {
-            this.Hide();
-            FormInventarioAdmin forminventario = new FormInventarioAdmin();
-            forminventario.ShowDialog();
+            this.Close();
         }
 
 

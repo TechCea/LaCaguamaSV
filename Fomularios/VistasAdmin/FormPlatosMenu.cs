@@ -26,6 +26,13 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 return;
             }
 
+            dgvComidas.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvComidas.ReadOnly = true;
+            dgvComidas.MultiSelect = false;
+            dgvComidas.AllowUserToAddRows = false;
+            dgvComidas.AllowUserToDeleteRows = false;
+            dgvComidas.AllowUserToResizeRows = false;
+
             CargarCategoriasComida();
             CargarComidas();
             cbCategoriaC.SelectedIndexChanged += cbCategoriaC_SelectedIndexChanged;
@@ -38,7 +45,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             dgvComidas.DataSource = conexion.ObtenerComidas();
             dgvComidas.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-
         }
 
 
@@ -149,9 +155,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void btnRegresarInv_Click(object sender, EventArgs e)
         {
-            this.Hide();
-            FormInventarioAdmin forminventario = new FormInventarioAdmin();
-            forminventario.ShowDialog();
+            this.Close();
         }
 
     }

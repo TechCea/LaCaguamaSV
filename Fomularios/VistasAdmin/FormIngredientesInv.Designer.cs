@@ -46,6 +46,8 @@
             this.dgvIngredientes = new System.Windows.Forms.DataGridView();
             this.btncrearPlato = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
+            this.cbb_unidad = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.gbDatosIngrediente.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvIngredientes)).BeginInit();
             this.SuspendLayout();
@@ -53,6 +55,8 @@
             // gbDatosIngrediente
             // 
             this.gbDatosIngrediente.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.gbDatosIngrediente.Controls.Add(this.cbb_unidad);
+            this.gbDatosIngrediente.Controls.Add(this.label3);
             this.gbDatosIngrediente.Controls.Add(this.btn_limpiarcampos);
             this.gbDatosIngrediente.Controls.Add(this.cbc_disponibilidad);
             this.gbDatosIngrediente.Controls.Add(this.label5);
@@ -81,7 +85,7 @@
             this.btn_limpiarcampos.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btn_limpiarcampos.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_limpiarcampos.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btn_limpiarcampos.Location = new System.Drawing.Point(232, 359);
+            this.btn_limpiarcampos.Location = new System.Drawing.Point(232, 385);
             this.btn_limpiarcampos.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btn_limpiarcampos.Name = "btn_limpiarcampos";
             this.btn_limpiarcampos.Size = new System.Drawing.Size(208, 42);
@@ -94,8 +98,8 @@
             // 
             this.cbc_disponibilidad.Cursor = System.Windows.Forms.Cursors.Hand;
             this.cbc_disponibilidad.FormattingEnabled = true;
-            this.cbc_disponibilidad.Location = new System.Drawing.Point(212, 295);
-            this.cbc_disponibilidad.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbc_disponibilidad.Location = new System.Drawing.Point(212, 304);
+            this.cbc_disponibilidad.Margin = new System.Windows.Forms.Padding(4);
             this.cbc_disponibilidad.Name = "cbc_disponibilidad";
             this.cbc_disponibilidad.Size = new System.Drawing.Size(227, 28);
             this.cbc_disponibilidad.TabIndex = 24;
@@ -104,7 +108,7 @@
             // 
             this.label5.AutoSize = true;
             this.label5.ForeColor = System.Drawing.SystemColors.Control;
-            this.label5.Location = new System.Drawing.Point(37, 299);
+            this.label5.Location = new System.Drawing.Point(36, 304);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(119, 20);
             this.label5.TabIndex = 23;
@@ -125,7 +129,7 @@
             // 
             this.cbProveedores.Cursor = System.Windows.Forms.Cursors.Hand;
             this.cbProveedores.FormattingEnabled = true;
-            this.cbProveedores.Location = new System.Drawing.Point(212, 236);
+            this.cbProveedores.Location = new System.Drawing.Point(212, 204);
             this.cbProveedores.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cbProveedores.Name = "cbProveedores";
             this.cbProveedores.Size = new System.Drawing.Size(227, 28);
@@ -133,7 +137,7 @@
             // 
             // txtCantidad
             // 
-            this.txtCantidad.Location = new System.Drawing.Point(212, 174);
+            this.txtCantidad.Location = new System.Drawing.Point(212, 156);
             this.txtCantidad.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtCantidad.Name = "txtCantidad";
             this.txtCantidad.Size = new System.Drawing.Size(227, 26);
@@ -143,7 +147,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.ForeColor = System.Drawing.SystemColors.Control;
-            this.label2.Location = new System.Drawing.Point(37, 244);
+            this.label2.Location = new System.Drawing.Point(37, 212);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(150, 20);
             this.label2.TabIndex = 3;
@@ -153,7 +157,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.ForeColor = System.Drawing.SystemColors.Control;
-            this.label1.Location = new System.Drawing.Point(37, 178);
+            this.label1.Location = new System.Drawing.Point(37, 160);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(156, 20);
             this.label1.TabIndex = 2;
@@ -271,9 +275,29 @@
             this.label4.Location = new System.Drawing.Point(69, 36);
             this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(177, 26);
+            this.label4.Size = new System.Drawing.Size(323, 26);
             this.label4.TabIndex = 16;
-            this.label4.Text = "INGREDIENTES";
+            this.label4.Text = "INVENTARIO: INGREDIENTES";
+            // 
+            // cbb_unidad
+            // 
+            this.cbb_unidad.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.cbb_unidad.FormattingEnabled = true;
+            this.cbb_unidad.Location = new System.Drawing.Point(212, 254);
+            this.cbb_unidad.Margin = new System.Windows.Forms.Padding(4);
+            this.cbb_unidad.Name = "cbb_unidad";
+            this.cbb_unidad.Size = new System.Drawing.Size(227, 28);
+            this.cbb_unidad.TabIndex = 26;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.ForeColor = System.Drawing.SystemColors.Control;
+            this.label3.Location = new System.Drawing.Point(36, 262);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(66, 20);
+            this.label3.TabIndex = 25;
+            this.label3.Text = "Unidad:";
             // 
             // FormIngredientesInv
             // 
@@ -294,7 +318,6 @@
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "FormIngredientesInv";
             this.Text = "Ingredientes del inventario";
-            this.Load += new System.EventHandler(this.FormIngredientesInv_Load);
             this.gbDatosIngrediente.ResumeLayout(false);
             this.gbDatosIngrediente.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvIngredientes)).EndInit();
@@ -323,5 +346,7 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button btn_limpiarcampos;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.ComboBox cbb_unidad;
+        private System.Windows.Forms.Label label3;
     }
 }

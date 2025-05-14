@@ -57,7 +57,7 @@
             this.btnAgregar.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnAgregar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAgregar.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btnAgregar.Location = new System.Drawing.Point(829, 568);
+            this.btnAgregar.Location = new System.Drawing.Point(1014, 568);
             this.btnAgregar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnAgregar.Name = "btnAgregar";
             this.btnAgregar.Size = new System.Drawing.Size(141, 54);
@@ -73,7 +73,7 @@
             this.btnActualizar.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnActualizar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnActualizar.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btnActualizar.Location = new System.Drawing.Point(1004, 571);
+            this.btnActualizar.Location = new System.Drawing.Point(1189, 571);
             this.btnActualizar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnActualizar.Name = "btnActualizar";
             this.btnActualizar.Size = new System.Drawing.Size(141, 54);
@@ -115,7 +115,7 @@
             this.gbDatosExtras.Controls.Add(this.lblSeleccionExtra);
             this.gbDatosExtras.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.gbDatosExtras.ForeColor = System.Drawing.SystemColors.Control;
-            this.gbDatosExtras.Location = new System.Drawing.Point(624, 87);
+            this.gbDatosExtras.Location = new System.Drawing.Point(809, 87);
             this.gbDatosExtras.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.gbDatosExtras.Name = "gbDatosExtras";
             this.gbDatosExtras.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -256,7 +256,7 @@
             this.dgvInventarioE.Margin = new System.Windows.Forms.Padding(4);
             this.dgvInventarioE.Name = "dgvInventarioE";
             this.dgvInventarioE.RowHeadersWidth = 51;
-            this.dgvInventarioE.Size = new System.Drawing.Size(547, 458);
+            this.dgvInventarioE.Size = new System.Drawing.Size(733, 458);
             this.dgvInventarioE.TabIndex = 18;
             this.dgvInventarioE.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvInventarioE_CellContentClick);
             // 
@@ -279,7 +279,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.fondo;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(1195, 663);
+            this.ClientSize = new System.Drawing.Size(1363, 663);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.btnAgregar);
             this.Controls.Add(this.btnActualizar);
@@ -289,7 +289,6 @@
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FormInventarioExtrasAdmin";
             this.Text = "Extras del inventario";
-            this.Load += new System.EventHandler(this.FormInventarioExtrasAdmin_Load);
             this.gbDatosExtras.ResumeLayout(false);
             this.gbDatosExtras.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvInventarioE)).EndInit();

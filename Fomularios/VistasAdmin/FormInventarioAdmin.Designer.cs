@@ -164,7 +164,6 @@
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "FormInventarioAdmin";
             this.Text = "Inventario";
-            this.Load += new System.EventHandler(this.FormInventarioAdmin_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.ResumeLayout(false);

@@ -24,6 +24,17 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             // Posición fija (centrada en la pantalla)
             this.StartPosition = FormStartPosition.CenterScreen;
 
+            //Ojoooo, esto hace que pueda seleccionar toda la fila de datos, independientemente de donde le de click
+            dgvUsuarios.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvUsuarios.MultiSelect = false;
+            dgvUsuarios.ReadOnly = true;
+            dgvUsuarios.AllowUserToAddRows = false;
+            dgvUsuarios.AllowUserToDeleteRows = false;
+            dgvUsuarios.AllowUserToResizeRows = false;
+
+            // 💡 Asocia el evento para permitir clic en cualquier parte de la fila
+            dgvUsuarios.CellClick += dgvUsuarios_CellClick;
+
 
             // Si el usuario no es administrador, cierra el formulario
             if (SesionUsuario.Rol != 1)

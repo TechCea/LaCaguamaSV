@@ -982,15 +982,19 @@ namespace LaCaguamaSV.Configuracion
                 {
                     conexion.Open();
                     string query = @"
-                            SELECT i.id_inventario AS 'ID',
-                                   i.nombreProducto AS 'Nombre',
-                                   i.cantidad AS 'Cantidad',
-                                   p.nombreProv AS 'Proveedor',
-                                   d.nombreDis AS 'Disponibilidad'
-                            FROM inventario i
-                            JOIN proveedores p ON i.id_proveedor = p.id_proveedor
-                            JOIN disponibilidad d ON i.id_disponibilidad = d.id_disponibilidad
-                            WHERE NOT EXISTS (SELECT 1 FROM bebidas b WHERE b.id_inventario = i.id_inventario)";
+                SELECT i.id_inventario AS 'ID',
+                       i.nombreProducto AS 'Nombre',
+                       i.cantidad AS 'Cantidad',
+                       u.nombreUnidad AS 'Unidad',
+                       p.nombreProv AS 'Proveedor',
+                       d.nombreDis AS 'Disponibilidad'
+                FROM inventario i
+                JOIN unidad u ON i.id_unidad = u.id_unidad
+                JOIN proveedores p ON i.id_proveedor = p.id_proveedor
+                JOIN disponibilidad d ON i.id_disponibilidad = d.id_disponibilidad
+                WHERE NOT EXISTS (
+                    SELECT 1 FROM bebidas b WHERE b.id_inventario = i.id_inventario
+                )";
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                     using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
@@ -1005,6 +1009,7 @@ namespace LaCaguamaSV.Configuracion
             }
             return dt;
         }
+
 
 
         //Filtrar ingrediente spor el  proveedor
@@ -1070,21 +1075,22 @@ namespace LaCaguamaSV.Configuracion
         }
 
         //Agregar ingrediente nuevo
-        public bool AgregarIngrediente(string nombreProducto, decimal cantidad, int idProveedor, int idDisponibilidad)
+        public bool AgregarIngrediente(string nombreProducto, decimal cantidad, int idProveedor, int idUnidad, int idDisponibilidad)
         {
             try
             {
                 using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
                 {
                     conexion.Open();
-                    string query = "INSERT INTO inventario (nombreProducto, cantidad, id_proveedor, id_disponibilidad) " +
-                                   "VALUES (@nombreProducto, @cantidad, @idProveedor, @idDisponibilidad)";
+                    string query = "INSERT INTO inventario (nombreProducto, cantidad, id_proveedor, id_unidad, id_disponibilidad) " +
+                                   "VALUES (@nombreProducto, @cantidad, @idProveedor, @idUnidad, @idDisponibilidad)";
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                     {
                         cmd.Parameters.AddWithValue("@nombreProducto", nombreProducto);
                         cmd.Parameters.AddWithValue("@cantidad", cantidad);
                         cmd.Parameters.AddWithValue("@idProveedor", idProveedor);
+                        cmd.Parameters.AddWithValue("@idUnidad", idUnidad);
                         cmd.Parameters.AddWithValue("@idDisponibilidad", idDisponibilidad);
 
                         int result = cmd.ExecuteNonQuery();
@@ -1099,16 +1105,24 @@ namespace LaCaguamaSV.Configuracion
             }
         }
 
+
         //Agregar un nuevo ingrediente
         // Editar un ingrediente existente
-        public bool EditarIngrediente(int idInventario, string nuevoNombre, decimal nuevaCantidad, int nuevoIdProveedor, int nuevoIdDisponibilidad)
+        public bool EditarIngrediente(int idInventario, string nuevoNombre, decimal nuevaCantidad, int nuevoIdProveedor, int nuevoIdDisponibilidad, int nuevoIdUnidad)
         {
             try
             {
                 using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
                 {
                     conexion.Open();
-                    string query = "UPDATE inventario SET nombreProducto = @nuevoNombre, cantidad = @nuevaCantidad, id_proveedor = @nuevoIdProveedor, id_disponibilidad = @nuevoIdDisponibilidad WHERE id_inventario = @idInventario";
+                    string query = @"
+                UPDATE inventario 
+                SET nombreProducto = @nuevoNombre, 
+                    cantidad = @nuevaCantidad, 
+                    id_proveedor = @nuevoIdProveedor, 
+                    id_disponibilidad = @nuevoIdDisponibilidad,
+                    id_unidad = @nuevoIdUnidad
+                WHERE id_inventario = @idInventario";
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                     {
@@ -1116,10 +1130,11 @@ namespace LaCaguamaSV.Configuracion
                         cmd.Parameters.AddWithValue("@nuevaCantidad", nuevaCantidad);
                         cmd.Parameters.AddWithValue("@nuevoIdProveedor", nuevoIdProveedor);
                         cmd.Parameters.AddWithValue("@nuevoIdDisponibilidad", nuevoIdDisponibilidad);
+                        cmd.Parameters.AddWithValue("@nuevoIdUnidad", nuevoIdUnidad); // 👈 nuevo parámetro
                         cmd.Parameters.AddWithValue("@idInventario", idInventario);
 
                         int result = cmd.ExecuteNonQuery();
-                        return result > 0; // Retorna true si se actualizó correctamente
+                        return result > 0;
                     }
                 }
             }
@@ -1129,7 +1144,6 @@ namespace LaCaguamaSV.Configuracion
                 return false;
             }
         }
-
 
         //Agregar plato:
         public bool AgregarPlato(string nombrePlato, decimal precioUnitario, string descripcion, int idCategoria)
@@ -2610,6 +2624,28 @@ namespace LaCaguamaSV.Configuracion
             }
         }
 
+        public DataTable ObtenerUnidades()
+        {
+            DataTable dt = new DataTable();
+            string query = "SELECT id_unidad, nombreUnidad FROM unidad";
+
+            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+            {
+                try
+                {
+                    conexion.Open();
+                    MySqlCommand cmd = new MySqlCommand(query, conexion);
+                    MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                    adapter.Fill(dt);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al obtener unidades: " + ex.Message);
+                }
+            }
+
+            return dt;
+        }
 
 
 
