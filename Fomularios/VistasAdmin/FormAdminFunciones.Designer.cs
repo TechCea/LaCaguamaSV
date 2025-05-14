@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.Corte_Caja = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.btnCorte_tarjetas = new System.Windows.Forms.Button();
@@ -78,6 +77,7 @@
             this.button1 = new System.Windows.Forms.Button();
             this.label10 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.btnReimprimirCorte = new System.Windows.Forms.Button();
             this.panelConfirmacion.SuspendLayout();
             this.panelIngresoMonto.SuspendLayout();
             this.panelResultadoCorte.SuspendLayout();
@@ -102,20 +102,6 @@
             this.Corte_Caja.Text = "Realizar corte de Caja";
             this.Corte_Caja.UseVisualStyleBackColor = false;
             this.Corte_Caja.Click += new System.EventHandler(this.Corte_Caja_Click);
-            // 
-            // button2
-            // 
-            this.button2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.button2.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button2.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.button2.Location = new System.Drawing.Point(112, 330);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(171, 74);
-            this.button2.TabIndex = 2;
-            this.button2.Text = "Reimprimir Corte";
-            this.button2.UseVisualStyleBackColor = false;
             // 
             // label2
             // 
@@ -750,6 +736,21 @@
             this.label1.TabIndex = 29;
             this.label1.Text = "Operaciones de Cajero";
             // 
+            // btnReimprimirCorte
+            // 
+            this.btnReimprimirCorte.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.btnReimprimirCorte.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnReimprimirCorte.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnReimprimirCorte.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnReimprimirCorte.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.btnReimprimirCorte.Location = new System.Drawing.Point(112, 341);
+            this.btnReimprimirCorte.Name = "btnReimprimirCorte";
+            this.btnReimprimirCorte.Size = new System.Drawing.Size(171, 74);
+            this.btnReimprimirCorte.TabIndex = 30;
+            this.btnReimprimirCorte.Text = "Reimprimir Corte";
+            this.btnReimprimirCorte.UseVisualStyleBackColor = false;
+            this.btnReimprimirCorte.Click += new System.EventHandler(this.btnReimprimirCorte_Click);
+            // 
             // FormAdminFunciones
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -758,6 +759,7 @@
             this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.fondo;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1240, 700);
+            this.Controls.Add(this.btnReimprimirCorte);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.button1);
@@ -779,7 +781,6 @@
             this.Controls.Add(this.btnCorte_tarjetas);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.button2);
             this.Controls.Add(this.Corte_Caja);
             this.Name = "FormAdminFunciones";
             this.Text = "Funciones";
@@ -807,7 +808,6 @@
 
         #endregion
         private System.Windows.Forms.Button Corte_Caja;
-        private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btnCorte_tarjetas;
@@ -856,5 +856,6 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button btnReimprimirCorte;
     }
 }

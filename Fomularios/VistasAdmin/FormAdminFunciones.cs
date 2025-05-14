@@ -29,6 +29,11 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         private int idCaja;
         public string nombreUsuarioActual;
         private int usuarioId;
+        // Constantes ESC/POS
+        private const string ESC = "\x1B";
+        private const string GS = "\x1D";
+        private const string LF = "\x0A";
+        private decimal montoContadoActual = 0;
 
 
         public FormAdminFunciones(int usuarioId)
@@ -120,21 +125,23 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         private void btnConfirmarMonto_Click(object sender, EventArgs e)
         {
             // Convertir el monto ingresado en el TextBox a decimal
-            decimal montoContado;
-            if (!decimal.TryParse(txtMontoContado.Text, out montoContado))
+            if (!decimal.TryParse(txtMontoContado.Text, out decimal montoContado))
             {
                 MessageBox.Show("Ingrese un monto válido.");
                 return;
             }
 
+            // Guardar el monto en la variable de clase
+            montoContadoActual = montoContado;
+
             // Obtener el ID de la caja actual (esta caja debe haber sido inicializada previamente)
-            int idCajaActual = conexion.ObtenerUltimoIdCajaInicializada(this.idUsuario); // Este método ya lo tienes
+            int idCajaActual = conexion.ObtenerUltimoIdCajaInicializada(this.idUsuario);
             if (idCajaActual == -1)
             {
-
                 MessageBox.Show("No se encontró una caja inicial activa.");
                 return;
             }
+
             btnCajaInicial.Enabled = true;
             btnCajaInicial.BackColor = ColorTranslator.FromHtml("#e74719");
 
@@ -144,7 +151,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 return;
             }
 
-            // Guardar el corte de caja
+            // Guardar el corte de caja (usando montoContado que es la variable local)
             conexion.GuardarCorteCaja(montoContado, this.idUsuario, idCajaActual);
 
             // Obtener los valores necesarios para mostrar en el corte
@@ -163,11 +170,11 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             // Calcular la diferencia
             decimal diferencia = montoContado - totalEsperado;
 
-            // Mostrar el resultado en los labels
+            // Mostrar el resultado en los labels (usando montoContadoActual)
             labelResultado.Text = $"Fecha: {fechaActual}\n\n" +
                                   $"Cajero: {nombreCajero}\n\n" +
-                                  
-                                  $"Dinero Ingresado: {montoContado:C}\n" +
+
+                                  $"Dinero Ingresado: {montoContadoActual:C}\n" +
                                   $"Caja Inicial: {cajaInicial:C}\n" +
                                   $"Cantidad Contada : {cantidadContada:C}\n" +
                                   $"Efectivo Generado : {totalGenerado:C}\n" +
@@ -176,15 +183,10 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                                   $"Total Esperado : {totalEsperado:C}\n" +
                                   $"Diferencia: {diferencia:C}";
 
-
-
-
             // Cambiar estados en la base de datos
             conexion.ActualizarEstadoCaja(idCajaActual, 1); // caja a NO inicializada
             int idUltimoCorte = conexion.ObtenerUltimoCortePorCaja(idCajaActual);
             conexion.ActualizarEstadoCorte(idUltimoCorte, 1); // corte a NO inicializado
-
-
 
             // Cambiar la visibilidad de los paneles
             txtMontoContado.Text = ""; // limpiar textbox después de guardar corte
@@ -195,13 +197,14 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             Corte_Caja.Enabled = false;
             Corte_Caja.BackColor = Color.Gray;
 
-
             // Encender botón de inicio de caja
             btnCajaInicial.Enabled = true;
             btnCajaInicial.BackColor = ColorTranslator.FromHtml("#e74719");
 
-            ActualizarLabelCaja();
+            // Habilitar botón de imprimir
+            btnImprimirRecibo_Click.Enabled = true;
 
+            ActualizarLabelCaja();
         }
 
         private void btnCancelarMonto_Click(object sender, EventArgs e)
@@ -228,18 +231,140 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void btnImprimirRecibo_Click_Click(object sender, EventArgs e)
         {
-            Impresion imp = new Impresion();
+            try
+            {
+                // Verificar que hay un monto contado válido
+                if (montoContadoActual <= 0)
+                {
+                    MessageBox.Show("No hay un monto contado válido para imprimir.", "Error",
+                                  MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
 
-            // Prueba con datos simulados
-            string cliente = "Juan Pérez";
-            decimal total = 120.00m;
-            decimal descuento = 10.00m;
-            decimal totalFinal = total - descuento;
+                // Obtener el ID de la caja actual
+                int idCajaActual = conexion.ObtenerUltimoIdCajaInicializada(this.idUsuario);
+                if (idCajaActual == -1)
+                {
+                    MessageBox.Show("No se encontró una caja activa.", "Error",
+                                  MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
 
-            imp.ImprimirTicket(cliente, total, descuento, totalFinal);
+                // Generar el contenido del comprobante de corte
+                string contenidoComprobante = GenerarContenidoCorteComprobante(idCajaActual, montoContadoActual);
+
+                // Método de impresión por USB
+                ImprimirPorUSB(contenidoComprobante);
+
+                MessageBox.Show("Comprobante de corte enviado a la impresora", "Éxito",
+                               MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al imprimir corte: {ex.Message}", "Error",
+                               MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
+        private string GenerarContenidoCorteComprobante(int idCaja, decimal montoContado)
+        {
+            StringBuilder sb = new StringBuilder();
 
+            // Obtener los datos necesarios para el corte
+            decimal cajaInicial = conexion.ObtenerCajaInicial(idCaja);
+            decimal totalGenerado = conexion.ObtenerTotalGenerado(idCaja);
+            decimal totalGastos = conexion.ObtenerGastos(idCaja);
+            string nombreCajero = conexion.ObtenerNombreUsuario(this.idUsuario);
+
+            // Calcular valores derivados
+            decimal cantidadContada = totalGenerado + cajaInicial;
+            decimal totalEsperado = cajaInicial + totalGenerado - totalGastos;
+            decimal diferencia = montoContado - totalEsperado;
+
+            // 1. Inicialización y encabezado
+            sb.Append(ESC + "@"); // Reset printer
+            sb.Append(ESC + "!" + "\x38"); // Fuente tamaño doble
+            sb.Append(CenterText("LA CAGUAMA RESTAURANTE"));
+            sb.Append(LF);
+            sb.Append(CenterText("CORTE DE CAJA"));
+            sb.Append(LF);
+            sb.Append(CenterText("══════════════════════"));
+            sb.Append(LF + LF);
+            sb.Append(ESC + "!" + "\x00"); // Restaurar fuente normal
+
+            // 2. Información básica del corte
+            sb.Append($"FECHA: {DateTime.Now.ToString("g")}{LF}");
+            sb.Append($"CAJERO: {nombreCajero}{LF}");
+            sb.Append($"CAJA: #{idCaja}{LF}");
+            sb.Append("──────────────────────────" + LF);
+
+            // 3. Detalles del corte
+            sb.Append(ESC + "!" + "\x08"); // Fuente enfatizada
+            sb.Append("        DETALLE DEL CORTE" + LF);
+            sb.Append(ESC + "!" + "\x00"); // Restaurar fuente
+            sb.Append("──────────────────────────" + LF);
+
+            sb.Append($"Dinero Ingresado: {montoContado.ToString("C")}{LF}");
+            sb.Append($"Caja Inicial: {cajaInicial.ToString("C")}{LF}");
+            sb.Append($"Cantidad Contada: {cantidadContada.ToString("C")}{LF}");
+            sb.Append($"Efectivo Generado: {totalGenerado.ToString("C")}{LF}");
+            sb.Append($"Gastos: {totalGastos.ToString("C")}{LF}");
+            sb.Append("──────────────────────────" + LF);
+            sb.Append($"Total Esperado: {totalEsperado.ToString("C")}{LF}");
+            sb.Append($"Diferencia: {diferencia.ToString("C")}{LF}");
+            sb.Append("──────────────────────────" + LF);
+
+            // 4. Pie de página y cortes
+            sb.Append(LF + LF);
+            sb.Append(CenterText("¡Corte realizado con éxito!"));
+            sb.Append(LF + LF);
+            sb.Append(CenterText("Firma: ___________________"));
+            sb.Append(LF + LF + LF + LF); // Espacios adicionales antes del corte
+            sb.Append(GS + "V" + "\x41" + "\x00"); // Corte completo
+
+            return sb.ToString();
+        }
+
+        // Métodos auxiliares (los mismos que en el otro formulario)
+        private string CenterText(string text)
+        {
+            int maxWidth = 32; // Ajustar según tu impresora
+            if (text.Length >= maxWidth) return text;
+
+            int spaces = (maxWidth - text.Length) / 2;
+            return new string(' ', spaces) + text;
+        }
+
+        private void ImprimirPorUSB(string contenido)
+        {
+            PrintDocument pd = new PrintDocument();
+            pd.PrinterSettings.PrinterName = ObtenerNombreImpresoraTermica();
+
+            pd.PrintPage += (sender, e) =>
+            {
+                Font font = new Font("Courier New", 9);
+                e.Graphics.DrawString(contenido, font, Brushes.Black,
+                    new RectangleF(0, 0, pd.DefaultPageSettings.PrintableArea.Width,
+                                  pd.DefaultPageSettings.PrintableArea.Height));
+            };
+
+            pd.Print();
+        }
+
+        private string ObtenerNombreImpresoraTermica()
+        {
+            // Busca la impresora por nombre
+            foreach (string printer in PrinterSettings.InstalledPrinters)
+            {
+                if (printer.Contains("PT-210") || printer.Contains("GOOJPRT") || printer.Contains("POS"))
+                {
+                    return printer;
+                }
+            }
+
+            // Si no la encuentra, usa la predeterminada
+            return new PrinterSettings().PrinterName;
+        }
 
         public class Impresion
         {
@@ -247,7 +372,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
             public void ImprimirTicket(string nombreCliente, decimal total, decimal descuento, decimal totalFinal)
             {
-            
+
             }
 
             private void PrintPage(object sender, PrintPageEventArgs e)
@@ -267,6 +392,8 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 }
             }
         }
+
+
 
 
 
@@ -537,5 +664,112 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             formhistorialcortes.ShowDialog();
         }
 
+        private void btnReimprimirCorte_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Obtener el último corte realizado por este usuario
+                int idCajaActual = conexion.ObtenerUltimoIdCajaInicializada(this.idUsuario);
+                if (idCajaActual == -1)
+                {
+                    MessageBox.Show("No se encontró una caja activa.", "Error",
+                                  MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                // Obtener el último corte de caja para esta caja
+                int idUltimoCorte = conexion.ObtenerUltimoCortePorCaja(idCajaActual);
+                if (idUltimoCorte == -1)
+                {
+                    MessageBox.Show("No se encontró un corte realizado para esta caja.", "Error",
+                                  MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                // Obtener los datos del último corte
+                var datosCorte = conexion.ObtenerDatosUltimoCorte(idUltimoCorte);
+                if (datosCorte == null)
+                {
+                    MessageBox.Show("No se pudieron obtener los datos del último corte.", "Error",
+                                  MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                // Generar el contenido del comprobante con los datos obtenidos
+                string contenidoComprobante = GenerarContenidoCorteComprobante(
+                    idCajaActual,
+                    datosCorte.MontoContado,
+                    datosCorte.CajaInicial,
+                    datosCorte.TotalGenerado,
+                    datosCorte.TotalGastos,
+                    datosCorte.NombreCajero
+                );
+
+                // Método de impresión por USB
+                ImprimirPorUSB(contenidoComprobante);
+
+                MessageBox.Show("Comprobante de corte reimpreso correctamente", "Éxito",
+                               MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al reimprimir el corte: {ex.Message}", "Error",
+                               MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private string GenerarContenidoCorteComprobante(int idCaja, decimal montoContado, decimal cajaInicial,
+                                              decimal totalGenerado, decimal totalGastos, string nombreCajero)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            // Calcular valores derivados
+            decimal cantidadContada = totalGenerado + cajaInicial;
+            decimal totalEsperado = cajaInicial + totalGenerado - totalGastos;
+            decimal diferencia = montoContado - totalEsperado;
+
+            // 1. Inicialización y encabezado
+            sb.Append(ESC + "@"); // Reset printer
+            sb.Append(ESC + "!" + "\x38"); // Fuente tamaño doble
+            sb.Append(CenterText("LA CAGUAMA RESTAURANTE"));
+            sb.Append(LF);
+            sb.Append(CenterText("REIMPRESIÓN DE CORTE"));
+            sb.Append(LF);
+            sb.Append(CenterText("══════════════════════"));
+            sb.Append(LF + LF);
+            sb.Append(ESC + "!" + "\x00"); // Restaurar fuente normal
+
+            // 2. Información básica del corte
+            sb.Append($"FECHA: {DateTime.Now.ToString("g")}{LF}");
+            sb.Append($"CAJERO: {nombreCajero}{LF}");
+            sb.Append($"CAJA: #{idCaja}{LF}");
+            sb.Append("──────────────────────────" + LF);
+            // 3. Detalles del corte
+            sb.Append(ESC + "!" + "\x08"); // Fuente enfatizada
+            sb.Append("        DETALLE DEL CORTE" + LF);
+            sb.Append(ESC + "!" + "\x00"); // Restaurar fuente
+            sb.Append("──────────────────────────" + LF);
+
+            sb.Append($"Dinero Ingresado: {montoContado.ToString("C")}{LF}");
+            sb.Append($"Caja Inicial: {cajaInicial.ToString("C")}{LF}");
+            sb.Append($"Cantidad Contada: {cantidadContada.ToString("C")}{LF}");
+            sb.Append($"Efectivo Generado: {totalGenerado.ToString("C")}{LF}");
+            sb.Append($"Gastos: {totalGastos.ToString("C")}{LF}");
+            sb.Append("──────────────────────────" + LF);
+            sb.Append($"Total Esperado: {totalEsperado.ToString("C")}{LF}");
+            sb.Append($"Diferencia: {diferencia.ToString("C")}{LF}");
+            sb.Append("──────────────────────────" + LF);
+
+            // 4. Pie de página y cortes
+            sb.Append(LF + LF);
+            sb.Append(CenterText("¡Corte realizado con éxito!"));
+            sb.Append(LF + LF);
+            sb.Append(CenterText("Firma: ___________________"));
+            sb.Append(LF + LF + LF + LF); // Espacios adicionales antes del corte
+            sb.Append(GS + "V" + "\x41" + "\x00"); // Corte completo
+
+            return sb.ToString();
+        }
     }
 }
+     

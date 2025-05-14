@@ -11,14 +11,23 @@ using MySql.Data.MySqlClient;
 
 namespace LaCaguamaSV.Configuracion
 {
+    public class DatosCorte
+    {
+        public decimal MontoContado { get; set; }
+        public decimal CajaInicial { get; set; }
+        public decimal TotalGenerado { get; set; }
+        public decimal TotalGastos { get; set; }
+        public string NombreCajero { get; set; }
+    }
+
     class Conexion
     {
         private MySqlConnection conectar = null;
         private static string usuario = "root";
-        private static string contrasenia = "180294";
+        private static string contrasenia = "root";
         private static string bd = "lacaguamabd";
         private static string ip = "localhost";
-        private static string puerto = "3306"; // 3306 o 3307 si eres javier 
+        private static string puerto = "3307"; // 3306 o 3307 si eres javier 
 
         string cadenaConexion = $"Server={ip};Port={puerto};Database={bd};User Id={usuario};Password={contrasenia};";
 
@@ -2674,7 +2683,45 @@ namespace LaCaguamaSV.Configuracion
 
             MessageBox.Show("Base de datos importada correctamente.");
         }
+        public DatosCorte ObtenerDatosUltimoCorte(int idCorte)
+        {
+            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+            {
+                conexion.Open();
+                string query = @"
+            SELECT 
+                cc.cantidad AS MontoContado,
+                c.cantidad AS CajaInicial,
+                (SELECT SUM(o.total) FROM ordenes o WHERE o.id_caja = c.id_caja AND o.tipo_pago = 1 AND o.id_estadoO = 2) AS TotalGenerado,
+                (SELECT SUM(g.cantidad) FROM gastos g WHERE g.id_caja = c.id_caja) AS TotalGastos,
+                u.nombre AS NombreCajero
+            FROM corte_de_caja cc
+            JOIN caja c ON cc.id_caja = c.id_caja
+            JOIN usuarios u ON cc.id_usuario = u.id_usuario
+            WHERE cc.id_corte = @idCorte";
 
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@idCorte", idCorte);
+
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return new DatosCorte
+                            {
+                                MontoContado = reader.GetDecimal("MontoContado"),
+                                CajaInicial = reader.GetDecimal("CajaInicial"),
+                                TotalGenerado = reader.IsDBNull(reader.GetOrdinal("TotalGenerado")) ? 0 : reader.GetDecimal("TotalGenerado"),
+                                TotalGastos = reader.IsDBNull(reader.GetOrdinal("TotalGastos")) ? 0 : reader.GetDecimal("TotalGastos"),
+                                NombreCajero = reader.GetString("NombreCajero")
+                            };
+                        }
+                    }
+                }
+            }
+            return null;
+        }
 
 
     }
