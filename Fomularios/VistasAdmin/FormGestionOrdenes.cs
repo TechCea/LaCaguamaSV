@@ -24,6 +24,8 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             InitializeComponent();
 
+
+
             // Tamaño fijo
             this.FormBorderStyle = FormBorderStyle.FixedSingle; // Evita redimensionar
             
@@ -45,7 +47,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             dataGridViewMenu.AllowUserToDeleteRows = false;
             dataGridViewMenu.AllowUserToResizeRows = false;
 
-            dataGridViewMenu.CellClick += dataGridViewMenu_CellDoubleClick;
+            dataGridViewMenu.CellDoubleClick += dataGridViewMenu_CellDoubleClick;
 
             lblTotal.Font = new Font(lblTotal.Font.FontFamily, 16);
             label5.Font = new Font(label5.Font.FontFamily, 14);

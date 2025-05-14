@@ -46,7 +46,7 @@
             this.btnMesas.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMesas.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.btnMesas.Location = new System.Drawing.Point(376, 66);
-            this.btnMesas.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnMesas.Margin = new System.Windows.Forms.Padding(2);
             this.btnMesas.Name = "btnMesas";
             this.btnMesas.Size = new System.Drawing.Size(140, 67);
             this.btnMesas.TabIndex = 20;
@@ -73,7 +73,7 @@
             this.dataGridViewOrdenesUsuario.Location = new System.Drawing.Point(46, 147);
             this.dataGridViewOrdenesUsuario.Name = "dataGridViewOrdenesUsuario";
             this.dataGridViewOrdenesUsuario.RowHeadersWidth = 51;
-            this.dataGridViewOrdenesUsuario.Size = new System.Drawing.Size(829, 402);
+            this.dataGridViewOrdenesUsuario.Size = new System.Drawing.Size(854, 402);
             this.dataGridViewOrdenesUsuario.TabIndex = 18;
             // 
             // button1
@@ -116,7 +116,7 @@
             this.BtnMenu.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BtnMenu.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.BtnMenu.Location = new System.Drawing.Point(520, 65);
-            this.BtnMenu.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.BtnMenu.Margin = new System.Windows.Forms.Padding(2);
             this.BtnMenu.Name = "BtnMenu";
             this.BtnMenu.Size = new System.Drawing.Size(140, 67);
             this.BtnMenu.TabIndex = 21;
@@ -131,7 +131,7 @@
             this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button2.ForeColor = System.Drawing.SystemColors.Control;
-            this.button2.Location = new System.Drawing.Point(758, 6);
+            this.button2.Location = new System.Drawing.Point(793, 6);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(107, 38);
             this.button2.TabIndex = 22;
@@ -146,7 +146,7 @@
             this.btnFiltrarOrdenes.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnFiltrarOrdenes.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnFiltrarOrdenes.ForeColor = System.Drawing.SystemColors.Control;
-            this.btnFiltrarOrdenes.Location = new System.Drawing.Point(758, 95);
+            this.btnFiltrarOrdenes.Location = new System.Drawing.Point(793, 94);
             this.btnFiltrarOrdenes.Name = "btnFiltrarOrdenes";
             this.btnFiltrarOrdenes.Size = new System.Drawing.Size(107, 38);
             this.btnFiltrarOrdenes.TabIndex = 23;
@@ -160,7 +160,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.fondo;
-            this.ClientSize = new System.Drawing.Size(912, 585);
+            this.ClientSize = new System.Drawing.Size(933, 585);
             this.Controls.Add(this.btnFiltrarOrdenes);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.BtnMenu);

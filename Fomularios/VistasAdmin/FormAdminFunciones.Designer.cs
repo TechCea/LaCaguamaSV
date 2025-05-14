@@ -570,7 +570,7 @@
             this.panel_cortegeneral1.Controls.Add(this.btn_cancelargeneral);
             this.panel_cortegeneral1.Controls.Add(this.btn_okgeneral);
             this.panel_cortegeneral1.Controls.Add(this.label9);
-            this.panel_cortegeneral1.Location = new System.Drawing.Point(670, 552);
+            this.panel_cortegeneral1.Location = new System.Drawing.Point(677, 613);
             this.panel_cortegeneral1.Name = "panel_cortegeneral1";
             this.panel_cortegeneral1.Size = new System.Drawing.Size(377, 203);
             this.panel_cortegeneral1.TabIndex = 22;
@@ -622,7 +622,7 @@
             this.panel_corte_general.Controls.Add(this.btn_cerrarXZ);
             this.panel_corte_general.Controls.Add(this.btn_cortegeneral);
             this.panel_corte_general.Controls.Add(this.label_general);
-            this.panel_corte_general.Location = new System.Drawing.Point(1202, 399);
+            this.panel_corte_general.Location = new System.Drawing.Point(1268, 595);
             this.panel_corte_general.Name = "panel_corte_general";
             this.panel_corte_general.Size = new System.Drawing.Size(524, 450);
             this.panel_corte_general.TabIndex = 23;
@@ -760,7 +760,7 @@
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.fondo;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(1028, 609);
+            this.ClientSize = new System.Drawing.Size(1237, 609);
             this.Controls.Add(this.btnReimprimirCorte);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.label10);

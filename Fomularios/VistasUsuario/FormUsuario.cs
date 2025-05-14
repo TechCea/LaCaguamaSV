@@ -19,19 +19,6 @@ namespace LaCaguamaSV.Fomularios.VistasUsuario
         public FormUsuario()
         {
             InitializeComponent();
-           
-
-            // Primero asignar el manejador de eventos
-            dataGridViewOrdenesUsuario.CellFormatting += dataGridViewOrdenesUsuario_CellFormatting;
-
-            CargarOrdenes(true); // Cargar solo órdenes del día por defecto
-
-            // Tamaño fijo
-            this.FormBorderStyle = FormBorderStyle.FixedSingle; // Evita redimensionar
-
-
-            // Posición fija (centrada en la pantalla)
-            this.StartPosition = FormStartPosition.CenterScreen;
 
             //Ojoooo, esto hace que pueda seleccionar toda la fila de datos, independientemente de donde le de click
             dataGridViewOrdenesUsuario.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -41,8 +28,21 @@ namespace LaCaguamaSV.Fomularios.VistasUsuario
             dataGridViewOrdenesUsuario.AllowUserToDeleteRows = false;
             dataGridViewOrdenesUsuario.AllowUserToResizeRows = false;
 
-            // 💡 Asocia el evento para permitir clic en cualquier parte de la fila
+           
+
+            // Asignar manejadores de eventos
             dataGridViewOrdenesUsuario.CellClick += dataGridViewOrdenesUsuario_CellClick;
+            dataGridViewOrdenesUsuario.CellFormatting += dataGridViewOrdenesUsuario_CellFormatting;
+
+
+            // Tamaño fijo
+            this.FormBorderStyle = FormBorderStyle.FixedSingle; // Evita redimensionar
+
+
+            // Posición fija (centrada en la pantalla)
+            this.StartPosition = FormStartPosition.CenterScreen;
+
+           
 
             // Si el usuario no es normal (rol 2), cierra el formulario
             if (SesionUsuario.Rol != 2)
@@ -52,18 +52,40 @@ namespace LaCaguamaSV.Fomularios.VistasUsuario
                 return;
             }
 
+            CargarOrdenes(true); // Cargar solo órdenes del día por defecto
         }
 
         private void CargarOrdenes(bool soloHoy = true)
         {
             try
             {
+                // Limpiar el DataSource primero
                 dataGridViewOrdenesUsuario.DataSource = null;
+
+                // Obtener los datos
                 DataTable dt = OrdenesD.ObtenerOrdenes(soloHoy);
+
+                // Asignar el DataSource
                 dataGridViewOrdenesUsuario.DataSource = dt;
 
-                // Configuración común del DataGridView
-                ConfigurarDataGridView(dataGridViewOrdenesUsuario);
+                // Configurar columnas después de asignar el DataSource
+                if (dataGridViewOrdenesUsuario.Columns.Contains("total"))
+                {
+                    dataGridViewOrdenesUsuario.Columns["total"].DefaultCellStyle.Format = "C";
+                    dataGridViewOrdenesUsuario.Columns["total"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                }
+
+                if (dataGridViewOrdenesUsuario.Columns.Contains("descuento"))
+                {
+                    dataGridViewOrdenesUsuario.Columns["descuento"].DefaultCellStyle.Format = "C";
+                    dataGridViewOrdenesUsuario.Columns["descuento"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                }
+
+                // Ajustar tamaño de columnas
+                dataGridViewOrdenesUsuario.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
+
+                // Forzar una actualización visual
+                dataGridViewOrdenesUsuario.Refresh();
             }
             catch (Exception ex)
             {
