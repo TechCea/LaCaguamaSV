@@ -502,7 +502,81 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void btnImprimir_corteX_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Simulando impresión del corte de tarjeta...", "Imprimir", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            try
+            {
+                Conexion conn = new Conexion();
+
+                // Obtener el ID de la caja actual
+                int idCaja = conn.ObtenerUltimoIdCaja();
+
+                // Obtener los datos del corte de tarjetas
+                var (totalTarjetas, cantidadVentas) = conn.ObtenerCorteTarjetasPorHorario();
+                string nombreCajero = conn.ObtenerNombreUsuario(this.idUsuario);
+                string fechaActual = DateTime.Now.ToString("dd/MM/yyyy HH:mm");
+
+                // Generar el contenido del comprobante
+                string contenidoComprobante = GenerarContenidoCorteTarjetas(
+                    idCaja,
+                    totalTarjetas,
+                    cantidadVentas,
+                    nombreCajero,
+                    fechaActual
+                );
+
+                // Método de impresión por USB
+                ImprimirPorUSB(contenidoComprobante);
+
+                MessageBox.Show("Comprobante de corte de tarjetas enviado a la impresora", "Éxito",
+                               MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al imprimir corte de tarjetas: {ex.Message}", "Error",
+                               MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private string GenerarContenidoCorteTarjetas(int idCaja, decimal totalTarjetas,
+                                                   int cantidadVentas, string nombreCajero,
+                                                   string fecha)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            // 1. Inicialización y encabezado
+            sb.Append(ESC + "@"); // Reset printer
+            sb.Append(ESC + "!" + "\x38"); // Fuente tamaño doble
+            sb.Append(CenterText("LA CAGUAMA RESTAURANTE"));
+            sb.Append(LF);
+            sb.Append(CenterText("CORTE DE TARJETAS"));
+            sb.Append(LF);
+            sb.Append(CenterText("══════════════════════"));
+            sb.Append(LF + LF);
+            sb.Append(ESC + "!" + "\x00"); // Restaurar fuente normal
+
+            // 2. Información básica del corte
+            sb.Append($"FECHA: {fecha}{LF}");
+            sb.Append($"CAJERO: {nombreCajero}{LF}");
+            sb.Append($"CAJA: #{idCaja}{LF}");
+            sb.Append("──────────────────────────" + LF);
+
+            // 3. Detalles del corte
+            sb.Append(ESC + "!" + "\x08"); // Fuente enfatizada
+            sb.Append("        DETALLE DEL CORTE" + LF);
+            sb.Append(ESC + "!" + "\x00"); // Restaurar fuente
+            sb.Append("──────────────────────────" + LF);
+
+            sb.Append($"Ventas con tarjeta: {cantidadVentas} venta(s){LF}");
+            sb.Append($"Total en tarjetas: {totalTarjetas.ToString("C")}{LF}");
+            sb.Append("──────────────────────────" + LF + LF);
+
+            // 4. Pie de página y cortes
+            sb.Append(CenterText("¡Corte realizado con éxito!"));
+            sb.Append(LF + LF);
+            sb.Append(CenterText("Firma: ___________________"));
+            sb.Append(LF + LF + LF + LF); // Espacios adicionales antes del corte
+            sb.Append(GS + "V" + "\x41" + "\x00"); // Corte completo
+
+            return sb.ToString();
         }
 
         private void btn_cerrarXZ_Click(object sender, EventArgs e)
