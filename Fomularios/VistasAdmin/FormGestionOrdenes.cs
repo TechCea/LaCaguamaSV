@@ -37,6 +37,9 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             CargarPedidosDesdeBD(); // Cargar pedidos existentes al iniciar
             ActualizarTotal(); // Sincronizar el total
             dataGridViewMenu.MultiSelect = false;
+
+            lblTotal.Font = new Font(lblTotal.Font.FontFamily, 16);
+            label5.Font = new Font(label5.Font.FontFamily, 14);
         }
 
         private List<(int idPedido, string nombre, decimal precio, string tipo, int cantidad)> pedidos = new List<(int, string, decimal, string, int)>();
@@ -961,17 +964,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             }
         }
 
-        private void btnPrecuenta_Click(object sender, EventArgs e)
-        {
-            if (string.IsNullOrEmpty(lblIdOrden.Text) || !int.TryParse(lblIdOrden.Text, out int idOrden))
-            {
-                MessageBox.Show("No hay una orden seleccionada válida");
-                return;
-            }
-
-            FormAdminPrecuenta precuentaForm = new FormAdminPrecuenta(idOrden);
-            precuentaForm.ShowDialog();
-        }
 
         public class RoundedControl
         {
@@ -1148,6 +1140,10 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             }
         }
 
+        private void label5_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 
 }

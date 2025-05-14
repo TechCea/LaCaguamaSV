@@ -15,11 +15,16 @@ namespace LaCaguamaSV.Fomularios.VistasUsuario
 {
     public partial class FormUsuario: Form
     {
+        private bool mostrarSoloHoy = true;
         public FormUsuario()
         {
             InitializeComponent();
-            CargarOrdenes();
+           
+
+            // Primero asignar el manejador de eventos
             dataGridViewOrdenesUsuario.CellFormatting += dataGridViewOrdenesUsuario_CellFormatting;
+
+            CargarOrdenes(true); // Cargar solo órdenes del día por defecto
 
             // Tamaño fijo
             this.FormBorderStyle = FormBorderStyle.FixedSingle; // Evita redimensionar
@@ -35,38 +40,42 @@ namespace LaCaguamaSV.Fomularios.VistasUsuario
                 this.Close();
                 return;
             }
+
         }
 
-        private void CargarOrdenes()
+        private void CargarOrdenes(bool soloHoy = true)
         {
             try
             {
-                // Limpiar el DataSource para forzar la actualización
                 dataGridViewOrdenesUsuario.DataSource = null;
-                dataGridViewOrdenesUsuario.DataSource = OrdenesService.ListarOrdenes();
+                DataTable dt = OrdenesD.ObtenerOrdenes(soloHoy);
+                dataGridViewOrdenesUsuario.DataSource = dt;
 
-                // Configuración del DataGridView
-                dataGridViewOrdenesUsuario.ReadOnly = true;
-                dataGridViewOrdenesUsuario.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-                dataGridViewOrdenesUsuario.MultiSelect = false;
-
-                // Formatear columnas numéricas
-                if (dataGridViewOrdenesUsuario.Columns["total"] != null)
-                {
-                    dataGridViewOrdenesUsuario.Columns["total"].DefaultCellStyle.Format = "C";
-                }
-                if (dataGridViewOrdenesUsuario.Columns["descuento"] != null)
-                {
-                    dataGridViewOrdenesUsuario.Columns["descuento"].DefaultCellStyle.Format = "C";
-                }
-
-                // Autoajustar columnas
-                dataGridViewOrdenesUsuario.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
+                // Configuración común del DataGridView
+                ConfigurarDataGridView(dataGridViewOrdenesUsuario);
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error al cargar órdenes: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void ConfigurarDataGridView(DataGridView dgv)
+        {
+            dgv.ReadOnly = true;
+            dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgv.MultiSelect = false;
+    
+            if (dgv.Columns["total"] != null)
+            {
+                dgv.Columns["total"].DefaultCellStyle.Format = "C";
+            }
+            if (dgv.Columns["descuento"] != null)
+            {
+                dgv.Columns["descuento"].DefaultCellStyle.Format = "C";
+            }
+    
+            dgv.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
         }
 
         public void RefrescarOrdenes()
@@ -346,6 +355,14 @@ namespace LaCaguamaSV.Fomularios.VistasUsuario
             this.Hide();
             loginForm.ShowDialog();
             this.Close();
+        }
+
+        private void btnFiltrarOrdenes_Click(object sender, EventArgs e)
+        {
+            mostrarSoloHoy = !mostrarSoloHoy;
+            CargarOrdenes(mostrarSoloHoy);
+            btnFiltrarOrdenes.Text = mostrarSoloHoy ? "Ver todas" : "Ver solo hoy";
+
         }
     }
 }

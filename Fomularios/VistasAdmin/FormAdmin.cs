@@ -17,12 +17,13 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 {
     public partial class FormAdmin: Form
     {
-      
+
+        private bool mostrarSoloHoy = true;
 
         public FormAdmin()
         {
             InitializeComponent();
-            CargarOrdenes();
+            CargarOrdenes(true); // Cargar solo órdenes del día por defecto
             dataGridViewOrdenesAdmin.CellFormatting += dataGridViewOrdenesAdmin_CellFormatting;
 
             // Tamaño fijo
@@ -33,6 +34,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             // Posición fija (centrada en la pantalla)
             this.StartPosition = FormStartPosition.CenterScreen;
 
+
             // Si el usuario no es administrador, cierra el formulario
             if (SesionUsuario.Rol != 1)
             {
@@ -41,41 +43,38 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             }
         }
 
-        private void CargarOrdenes()
+        private void CargarOrdenes(bool soloHoy = true)
         {
-            // Limpiar el DataSource para forzar la actualización
-            dataGridViewOrdenesAdmin.DataSource = null;
-
-            // Obtener los datos con el descuento calculado correctamente
-            DataTable dtOrdenes = OrdenesD.ObtenerOrdenes();
-            dataGridViewOrdenesAdmin.DataSource = dtOrdenes;
-
-            // Configuración del DataGridView
-            dataGridViewOrdenesAdmin.ReadOnly = true;
-            dataGridViewOrdenesAdmin.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridViewOrdenesAdmin.MultiSelect = false;
-
-            // Ocultar columnas innecesarias
-            if (dataGridViewOrdenesAdmin.Columns["descuento_formato"] != null)
+            try
             {
-                dataGridViewOrdenesAdmin.Columns["descuento_formato"].Visible = false;
+                dataGridViewOrdenesAdmin.DataSource = null;
+                DataTable dt = OrdenesD.ObtenerOrdenes(soloHoy);
+                dataGridViewOrdenesAdmin.DataSource = dt;
+
+                // Configuración común del DataGridView
+                ConfigurarDataGridView(dataGridViewOrdenesAdmin);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al cargar órdenes: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void ConfigurarDataGridView(DataGridView dgv)
+        {
+            dgv.ReadOnly = true;
+            dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgv.MultiSelect = false;
+
+            if (dgv.Columns["total"] != null)
+            {
+                dgv.Columns["total"].DefaultCellStyle.Format = "C";
+            }
+            if (dgv.Columns["descuento"] != null)
+            {
+                dgv.Columns["descuento"].DefaultCellStyle.Format = "C";
             }
 
-            // Formatear columnas numéricas
-            if (dataGridViewOrdenesAdmin.Columns["total"] != null)
-            {
-                dataGridViewOrdenesAdmin.Columns["total"].DefaultCellStyle.Format = "C";
-                dataGridViewOrdenesAdmin.Columns["total"].HeaderText = "Total";
-            }
-
-            if (dataGridViewOrdenesAdmin.Columns["descuento"] != null)
-            {
-                dataGridViewOrdenesAdmin.Columns["descuento"].DefaultCellStyle.Format = "C";
-                dataGridViewOrdenesAdmin.Columns["descuento"].HeaderText = "Descuento";
-            }
-
-            // Ajustar el ancho de las columnas
-            dataGridViewOrdenesAdmin.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
         }
 
         public void RefrescarOrdenes()
@@ -513,5 +512,11 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             }
         }
 
+        private void btnFiltrarOrdenes_Click(object sender, EventArgs e)
+        {
+            mostrarSoloHoy = !mostrarSoloHoy;
+            CargarOrdenes(mostrarSoloHoy);
+            btnFiltrarOrdenes.Text = mostrarSoloHoy ? "Ver todas" : "Ver solo hoy";
+        }
     }
 }

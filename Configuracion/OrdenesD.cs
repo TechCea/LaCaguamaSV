@@ -13,37 +13,39 @@ namespace LaCaguamaSV.Configuracion
     {
         public static DataTable ObtenerOrdenes()
         {
+            // Versión original sin filtro por fecha
+            return ObtenerOrdenes(false);
+        }
+
+        public static DataTable ObtenerOrdenes(bool soloHoy = false)
+        {
             DataTable dt = new DataTable();
             using (MySqlConnection conexion = new Conexion().EstablecerConexion())
             {
                 try
                 {
                     string query = @"SELECT 
-                        o.id_orden, 
-                        o.nombreCliente, 
-                        o.total, 
-                        CASE
-                            WHEN p.id_tipo_descuento IS NOT NULL AND td.es_porcentaje = 1 
-                            THEN (o.total / (1 - (o.descuento/100))) - o.total
-                            ELSE o.descuento
-                        END AS descuento,
-                        o.fecha_orden, 
-                        m.nombreMesa AS numero_mesa, 
-                        tp.nombrePago AS tipo_pago, 
-                        u.nombre AS nombre_usuario,
-                        eo.nombreEstadoO AS estado_orden,
-                        CASE
-                            WHEN p.id_tipo_descuento IS NOT NULL AND td.es_porcentaje = 1 
-                            THEN CONCAT(o.descuento, '%')
-                            ELSE CONCAT('$', FORMAT(o.descuento, 2))
-                        END AS descuento_formato
-                    FROM ordenes o
-                    INNER JOIN mesas m ON o.id_mesa = m.id_mesa
-                    INNER JOIN tipoPago tp ON o.tipo_pago = tp.id_pago
-                    INNER JOIN usuarios u ON o.id_usuario = u.id_usuario
-                    INNER JOIN estado_orden eo ON o.id_estadoO = eo.id_estadoO
-                    LEFT JOIN pagos p ON o.id_orden = p.id_orden
-                    LEFT JOIN tipo_descuento td ON p.id_tipo_descuento = td.id_tipo_descuento";
+                o.id_orden, 
+                o.nombreCliente, 
+                o.total, 
+                o.descuento,
+                DATE_FORMAT(o.fecha_orden, '%Y-%m-%d %H:%i') AS fecha_orden, 
+                m.nombreMesa AS numero_mesa, 
+                tp.nombrePago AS tipo_pago, 
+                u.nombre AS nombre_usuario,
+                eo.nombreEstadoO AS estado_orden
+            FROM ordenes o
+            INNER JOIN mesas m ON o.id_mesa = m.id_mesa
+            INNER JOIN tipoPago tp ON o.tipo_pago = tp.id_pago
+            INNER JOIN usuarios u ON o.id_usuario = u.id_usuario
+            INNER JOIN estado_orden eo ON o.id_estadoO = eo.id_estadoO";
+
+                    if (soloHoy)
+                    {
+                        query += " WHERE DATE(o.fecha_orden) = CURDATE()";
+                    }
+
+                    query += " ORDER BY o.fecha_orden DESC";
 
                     MySqlCommand cmd = new MySqlCommand(query, conexion);
                     MySqlDataAdapter da = new MySqlDataAdapter(cmd);
