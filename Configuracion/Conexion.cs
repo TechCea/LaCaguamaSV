@@ -20,14 +20,25 @@ namespace LaCaguamaSV.Configuracion
         public string NombreCajero { get; set; }
     }
 
+    public class DatosCorteGeneral
+    {
+        public int IdCaja { get; set; }
+        public decimal CantEfectivo { get; set; }
+        public decimal CantTarjeta { get; set; }
+        public decimal Descuento { get; set; }
+        public decimal TotalGastosGeneral { get; set; }
+        public string NombreCajero { get; set; }
+        public DateTime Fecha { get; set; }
+    }
+
     class Conexion
     {
         private MySqlConnection conectar = null;
         private static string usuario = "root";
-        private static string contrasenia = "180294";
+        private static string contrasenia = "root";
         private static string bd = "lacaguamabd";
         private static string ip = "localhost";
-        private static string puerto = "3306"; // 3306 o 3307 si eres javier 
+        private static string puerto = "3307"; // 3306 o 3307 si eres javier 
 
         string cadenaConexion = $"Server={ip};Port={puerto};Database={bd};User Id={usuario};Password={contrasenia};";
 
@@ -2721,6 +2732,51 @@ namespace LaCaguamaSV.Configuracion
             return null;
         }
 
+        public DatosCorteGeneral ObtenerUltimoCorteGeneral()
+        {
+            DatosCorteGeneral corte = null;
+
+            string query = @"
+    SELECT 
+        cg.id_caja,
+        cg.cant_efectivo,
+        cg.cant_tarjeta,
+        cg.descuento,
+        cg.total_gastos_general,
+        u.nombre AS nombre_cajero,
+        cg.fecha
+    FROM corte_general cg
+    JOIN usuarios u ON cg.id_usuario = u.id_usuario
+    ORDER BY cg.fecha DESC
+    LIMIT 1;
+";
+
+            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+            {
+                conexion.Open();
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            corte = new DatosCorteGeneral
+                            {
+                                IdCaja = reader.GetInt32("id_caja"),
+                                CantEfectivo = reader.GetDecimal("cant_efectivo"),
+                                CantTarjeta = reader.GetDecimal("cant_tarjeta"),
+                                Descuento = reader.GetDecimal("descuento"),
+                                TotalGastosGeneral = reader.GetDecimal("total_gastos_general"),
+                                NombreCajero = reader.GetString("nombre_cajero"),
+                                Fecha = reader.GetDateTime("fecha")
+                            };
+                        }
+                    }
+                }
+            }
+
+            return corte;
+        }
 
     }
 

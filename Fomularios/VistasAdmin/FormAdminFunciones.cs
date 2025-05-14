@@ -773,8 +773,192 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void btn_cortegeneral_Click(object sender, EventArgs e)
         {
+            try
+            {
+                // Obtener el ID de la caja actual
+                int idCajaActual = conexion.ObtenerUltimoIdCajaInicializada(this.idUsuario);
+                if (idCajaActual == -1)
+                {
+                    MessageBox.Show("No hay caja activa.", "Error",
+                                  MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
 
+                // Obtener los datos del corte general
+                var (totalEfectivo, totalTarjeta, descuento, gastos) = conexion.ObtenerDatosCorteGeneral();
+                string nombreCajero = conexion.ObtenerNombreUsuario(this.idUsuario);
+                string fechaActual = DateTime.Now.ToString("dd/MM/yyyy HH:mm");
+
+                // Calcular totales
+                decimal totalFinal = totalEfectivo + totalTarjeta - gastos;
+                decimal totalFinalEfectivo = totalEfectivo - gastos;
+
+                // Generar el contenido del comprobante
+                string contenidoComprobante = GenerarContenidoCorteGeneral(
+                    idCajaActual,
+                    totalEfectivo,
+                    totalTarjeta,
+                    descuento,
+                    gastos,
+                    totalFinalEfectivo,
+                    totalFinal,
+                    nombreCajero,
+                    fechaActual
+                );
+
+                // Método de impresión por USB
+                ImprimirPorUSB(contenidoComprobante);
+
+                MessageBox.Show("Comprobante de corte general enviado a la impresora", "Éxito",
+                               MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al imprimir corte general: {ex.Message}", "Error",
+                               MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private string GenerarContenidoCorteGeneral(int idCaja, decimal totalEfectivo, decimal totalTarjeta,
+                                                  decimal descuento, decimal gastos, decimal totalFinalEfectivo,
+                                                  decimal totalFinal, string nombreCajero, string fecha)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            // 1. Inicialización y encabezado
+            sb.Append(ESC + "@"); // Reset printer
+            sb.Append(ESC + "!" + "\x38"); // Fuente tamaño doble
+            sb.Append(CenterText("LA CAGUAMA RESTAURANTE"));
+            sb.Append(LF);
+            sb.Append(CenterText("CORTE GENERAL DEL DÍA"));
+            sb.Append(LF);
+            sb.Append(CenterText("══════════════════════"));
+            sb.Append(LF + LF);
+            sb.Append(ESC + "!" + "\x00"); // Restaurar fuente normal
+
+            // 2. Información básica del corte
+            sb.Append($"FECHA: {fecha}{LF}");
+            sb.Append($"CAJERO: {nombreCajero}{LF}");
+            sb.Append($"CAJA: #{idCaja}{LF}");
+            sb.Append("──────────────────────────" + LF);
+
+            // 3. Detalles del corte
+            sb.Append(ESC + "!" + "\x08"); // Fuente enfatizada
+            sb.Append("        RESUMEN DEL DÍA" + LF);
+            sb.Append(ESC + "!" + "\x00"); // Restaurar fuente
+            sb.Append("──────────────────────────" + LF);
+
+            sb.Append($"Ventas en efectivo: {totalEfectivo.ToString("C")}{LF}");
+            sb.Append($"Ventas en tarjetas: {totalTarjeta.ToString("C")}{LF}");
+            sb.Append($"Descuentos aplicados: {descuento.ToString("C")}{LF}");
+            sb.Append($"Gastos del día: {gastos.ToString("C")}{LF}");
+            sb.Append("──────────────────────────" + LF);
+            sb.Append($"Total efectivo final: {totalFinalEfectivo.ToString("C")}{LF}");
+            sb.Append($"Total general: {totalFinal.ToString("C")}{LF}");
+            sb.Append("──────────────────────────" + LF + LF);
+
+            // 4. Pie de página y cortes
+            sb.Append(CenterText("¡Corte general realizado!"));
+            sb.Append(LF + LF);
+            sb.Append(CenterText("Firma: ___________________"));
+            sb.Append(LF + LF + LF + LF); // Espacios adicionales antes del corte
+            sb.Append(GS + "V" + "\x41" + "\x00"); // Corte completo
+
+            return sb.ToString();
+        }
+
+        private void btnReimprimir_corte_general_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Obtener el último corte general realizado
+                var ultimoCorte = conexion.ObtenerUltimoCorteGeneral();
+
+                if (ultimoCorte == null)
+                {
+                    MessageBox.Show("No se encontró un corte general para reimprimir.", "Información",
+                                  MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+
+                // Calcular totales
+                decimal totalFinal = ultimoCorte.CantEfectivo + ultimoCorte.CantTarjeta - ultimoCorte.TotalGastosGeneral;
+                decimal totalFinalEfectivo = ultimoCorte.CantEfectivo - ultimoCorte.TotalGastosGeneral;
+
+                // Generar el contenido del comprobante
+                string contenidoComprobante = GenerarContenidoReimpresionCorteGeneral(
+                    ultimoCorte.IdCaja,
+                    ultimoCorte.CantEfectivo,
+                    ultimoCorte.CantTarjeta,
+                    ultimoCorte.Descuento,
+                    ultimoCorte.TotalGastosGeneral,
+                    totalFinalEfectivo,
+                    totalFinal,
+                    ultimoCorte.NombreCajero,
+                    ultimoCorte.Fecha.ToString("dd/MM/yyyy HH:mm")
+                );
+
+                // Método de impresión por USB
+                ImprimirPorUSB(contenidoComprobante);
+
+                MessageBox.Show("Comprobante de corte general reimpreso correctamente", "Éxito",
+                               MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al reimprimir corte general: {ex.Message}", "Error",
+                               MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private string GenerarContenidoReimpresionCorteGeneral(int idCaja, decimal totalEfectivo, decimal totalTarjeta,
+                                                             decimal descuento, decimal gastos, decimal totalFinalEfectivo,
+                                                             decimal totalFinal, string nombreCajero, string fecha)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            // 1. Inicialización y encabezado
+            sb.Append(ESC + "@"); // Reset printer
+            sb.Append(ESC + "!" + "\x38"); // Fuente tamaño doble
+            sb.Append(CenterText("LA CAGUAMA RESTAURANTE"));
+            sb.Append(LF);
+            sb.Append(CenterText("REIMPRESIÓN DE CORTE GENERAL"));
+            sb.Append(LF);
+            sb.Append(CenterText("══════════════════════"));
+            sb.Append(LF + LF);
+            sb.Append(ESC + "!" + "\x00"); // Restaurar fuente normal
+
+            // 2. Información básica del corte
+            sb.Append($"FECHA ORIGINAL: {fecha}{LF}");
+            sb.Append($"CAJERO: {nombreCajero}{LF}");
+            sb.Append($"CAJA: #{idCaja}{LF}");
+            sb.Append($"FECHA REIMPRESIÓN: {DateTime.Now.ToString("dd/MM/yyyy HH:mm")}{LF}");
+            sb.Append("──────────────────────────" + LF);
+
+            // 3. Detalles del corte
+            sb.Append(ESC + "!" + "\x08"); // Fuente enfatizada
+            sb.Append("        RESUMEN DEL DÍA" + LF);
+            sb.Append(ESC + "!" + "\x00"); // Restaurar fuente
+            sb.Append("──────────────────────────" + LF);
+
+            sb.Append($"Ventas en efectivo: {totalEfectivo.ToString("C")}{LF}");
+            sb.Append($"Ventas en tarjetas: {totalTarjeta.ToString("C")}{LF}");
+            sb.Append($"Descuentos aplicados: {descuento.ToString("C")}{LF}");
+            sb.Append($"Gastos del día: {gastos.ToString("C")}{LF}");
+            sb.Append("──────────────────────────" + LF);
+            sb.Append($"Total efectivo final: {totalFinalEfectivo.ToString("C")}{LF}");
+            sb.Append($"Total general: {totalFinal.ToString("C")}{LF}");
+            sb.Append("──────────────────────────" + LF + LF);
+
+            // 4. Pie de página y cortes
+            sb.Append(CenterText("¡Reimpresión de corte general!"));
+            sb.Append(LF + LF);
+            sb.Append(CenterText("Firma: ___________________"));
+            sb.Append(LF + LF + LF + LF); // Espacios adicionales antes del corte
+            sb.Append(GS + "V" + "\x41" + "\x00"); // Corte completo
+
+            return sb.ToString();
         }
     }
 }
-     
+
