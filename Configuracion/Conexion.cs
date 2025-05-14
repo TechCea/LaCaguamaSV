@@ -35,10 +35,10 @@ namespace LaCaguamaSV.Configuracion
     {
         private MySqlConnection conectar = null;
         private static string usuario = "root";
-        private static string contrasenia = "root";
+        private static string contrasenia = "180294";
         private static string bd = "lacaguamabd";
         private static string ip = "localhost";
-        private static string puerto = "3307"; // 3306 o 3307 si eres javier 
+        private static string puerto = "3306"; // 3306 o 3307 si eres javier 
 
         string cadenaConexion = $"Server={ip};Port={puerto};Database={bd};User Id={usuario};Password={contrasenia};";
 
@@ -1460,8 +1460,11 @@ namespace LaCaguamaSV.Configuracion
                 using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
                 {
                     conexion.Open();
-                    string query = "SELECT id_inventario AS 'ID', nombreProducto AS 'Nombre Producto', " +
-                                   "cantidad AS 'Cantidad Disponible' FROM inventario";
+                    string query = "SELECT i.id_inventario AS 'ID', " +
+                                   "i.nombreProducto AS 'Nombre Producto', " +
+                                   "CONCAT(i.cantidad, ' ', u.nombreUnidad) AS 'Cantidad Disponible' " +
+                                   "FROM inventario i " +
+                                   "INNER JOIN unidad u ON i.id_unidad = u.id_unidad";
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                     {
@@ -1478,6 +1481,7 @@ namespace LaCaguamaSV.Configuracion
             }
             return dt;
         }
+
 
         //Agregar ingrediente a la receta 
         public bool AgregarIngredienteAReceta(int idPlato, int idInventario, decimal cantidad)
