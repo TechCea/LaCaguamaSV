@@ -19,7 +19,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
     {
 
         private bool mostrarSoloHoy = true;
-
         public FormAdmin()
         {
             InitializeComponent();
@@ -27,21 +26,29 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             dataGridViewOrdenesAdmin.CellFormatting += dataGridViewOrdenesAdmin_CellFormatting;
 
             // Tamaño fijo
-            this.FormBorderStyle = FormBorderStyle.FixedSingle; // Evita redimensionar
-
-            this.Size = new Size(1040, 650); // Establece un tamaño fijo
-
-            // Posición fija (centrada en la pantalla)
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
+            this.Size = new Size(1040, 650);
             this.StartPosition = FormStartPosition.CenterScreen;
 
+            //Ojoooo, esto hace que pueda seleccionar toda la fila de datos, independientemente de donde le de click
+            dataGridViewOrdenesAdmin.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridViewOrdenesAdmin.MultiSelect = false;
+            dataGridViewOrdenesAdmin.ReadOnly = true;
+            dataGridViewOrdenesAdmin.AllowUserToAddRows = false;
+            dataGridViewOrdenesAdmin.AllowUserToDeleteRows = false;
+            dataGridViewOrdenesAdmin.AllowUserToResizeRows = false;
 
-            // Si el usuario no es administrador, cierra el formulario
+            // 💡 Asocia el evento para permitir clic en cualquier parte de la fila
+            dataGridViewOrdenesAdmin.CellClick += dataGridViewOrdenesAdmin_CellClick;
+
+            // 💥 Seguridad al final (por si entra un ninja sin permisos)
             if (SesionUsuario.Rol != 1)
             {
                 MessageBox.Show("Acceso denegado. No tienes permisos de administrador.", "Acceso Restringido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                this.Close(); 
             }
         }
+
 
         private void CargarOrdenes(bool soloHoy = true)
         {
@@ -127,29 +134,33 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             formFunciones.ShowDialog();
         }
 
-        private void dataGridViewOrdenesAdmin_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void dataGridViewOrdenesAdmin_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0) // Asegurar que no se haga clic en el encabezado
+            if (e.RowIndex >= 0) // Ignorar clics en encabezados
             {
                 // Obtener la fila seleccionada
                 DataGridViewRow row = dataGridViewOrdenesAdmin.Rows[e.RowIndex];
 
-                // Obtener el estado de la orden
-                string estadoOrden = row.Cells["estado_orden"].Value.ToString();
-                int idOrden = Convert.ToInt32(row.Cells["id_orden"].Value);
-
-                if (estadoOrden == "Cerrada")
+                // Validar que las celdas no sean nulas
+                if (row.Cells["estado_orden"].Value != null && row.Cells["id_orden"].Value != null)
                 {
-                    // Mostrar factura/comprobante para órdenes cerradas
-                    MostrarFacturaOrden(idOrden);
+                    string estadoOrden = row.Cells["estado_orden"].Value.ToString();
+                    int idOrden = Convert.ToInt32(row.Cells["id_orden"].Value);
+
+                    if (estadoOrden == "Cerrada")
+                    {
+                        MostrarFacturaOrden(idOrden);
+                    }
+                    else
+                    {
+                        AbrirGestionOrden(row); // Aquí podés pasar solo el ID si querés
+                    }
                 }
                 else
                 {
-                    // Abrir gestión de orden para órdenes abiertas
-                    AbrirGestionOrden(row);
+                    MessageBox.Show("La fila seleccionada no contiene datos válidos.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
-
         }
 
         private void MostrarFacturaOrden(int idOrden)

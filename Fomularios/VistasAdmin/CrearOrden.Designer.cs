@@ -92,7 +92,6 @@
             this.cmbTipoPago.Name = "cmbTipoPago";
             this.cmbTipoPago.Size = new System.Drawing.Size(160, 24);
             this.cmbTipoPago.TabIndex = 4;
-            this.cmbTipoPago.SelectedIndexChanged += new System.EventHandler(this.cmbTipoPago_SelectedIndexChanged);
             // 
             // label3
             // 
@@ -165,7 +164,6 @@
             this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "CrearOrden";
             this.Text = "Crear Orden";
-            this.Load += new System.EventHandler(this.CrearOrden_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.ResumeLayout(false);

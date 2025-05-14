@@ -40,10 +40,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             // Posición fija (centrada en la pantalla)
             this.StartPosition = FormStartPosition.CenterScreen;
 
-
-
-
-
         }
 
         private void CargarTipoPago()
@@ -239,11 +235,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             }
         }
 
-        private void cmbTipoPago_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void btnCrearOrden_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtNombreCliente.Text))
@@ -342,35 +333,10 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             return result == DialogResult.Yes;
         }
 
-
-
         private void btnCancelar_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
-        private void btnCerrar_Click_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void btnMaximizar_Click_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void btnMinimizar_Click_Click(object sender, EventArgs e)
-        {
-           
-        }
-       
-        private void CrearOrden_MouseDown(object sender, MouseEventArgs e)
-        {
-            
-        }
-
-        private void CrearOrden_Load(object sender, EventArgs e)
-        {
-
-        }
     }
 }

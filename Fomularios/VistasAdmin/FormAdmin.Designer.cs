@@ -113,7 +113,6 @@
             this.dataGridViewOrdenesAdmin.RowHeadersWidth = 51;
             this.dataGridViewOrdenesAdmin.Size = new System.Drawing.Size(956, 397);
             this.dataGridViewOrdenesAdmin.TabIndex = 8;
-            this.dataGridViewOrdenesAdmin.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewOrdenesAdmin_CellContentClick);
             // 
             // btnCrearOrden
             // 
