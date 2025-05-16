@@ -35,7 +35,7 @@ namespace LaCaguamaSV.Configuracion
     {
         private MySqlConnection conectar = null;
         private static string usuario = "root";
-        private static string contrasenia = "Caguama2025";
+        private static string contrasenia = "slenderman";
         private static string bd = "lacaguamabd";
         private static string ip = "localhost";
         private static string puerto = "3306"; // 3306 o 3307 si eres javier 
@@ -1543,27 +1543,7 @@ namespace LaCaguamaSV.Configuracion
 
         // -------------------- Gastos --------------------
        
-        public int ObtenerIdCajaReciente()
-        {
-            int idCaja = -1;
-
-            string query = "SELECT id_caja FROM caja ORDER BY fecha DESC LIMIT 1";
-
-            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
-            {
-                conexion.Open();
-                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
-                {
-                    object resultado = cmd.ExecuteScalar();
-                    if (resultado != null)
-                    {
-                        idCaja = Convert.ToInt32(resultado);
-                    }
-                }
-            }
-
-            return idCaja;
-        }
+        
 
         // Método para obtener el fondo inicial de la caja
         public decimal ObtenerFondoInicial(int idCaja)
@@ -1614,13 +1594,17 @@ namespace LaCaguamaSV.Configuracion
             try
             {
                 DataTable dt = new DataTable();
-                string query = "SELECT id_gasto, cantidad, descripcion, fecha FROM gastos WHERE DATE(fecha) = CURDATE()";
+                string query = "SELECT id_gasto, cantidad, descripcion, fecha FROM gastos WHERE DATE(fecha) = CURDATE() AND id_caja = @idCaja";
 
                 using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
                 {
-                    using (MySqlDataAdapter da = new MySqlDataAdapter(query, conexion))
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                     {
-                        da.Fill(dt);
+                        cmd.Parameters.AddWithValue("@idCaja", idCaja);
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
                     }
                 }
 
@@ -1632,27 +1616,7 @@ namespace LaCaguamaSV.Configuracion
             }
         }
 
-        // Método para obtener la caja activa más reciente del día para un usuario
-        public int ObtenerCajaActiva(int idUsuario)
-        {
-            int idCaja = -1;
-            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
-            {
-                conexion.Open();
-                string query = @"SELECT id_caja FROM caja 
-                           WHERE id_usuario = @idUsuario AND id_estado_caja = 2 
-                           ORDER BY fecha DESC LIMIT 1";
-
-                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
-                {
-                    cmd.Parameters.AddWithValue("@idUsuario", idUsuario);
-                    object resultado = cmd.ExecuteScalar();
-                    if (resultado != null)
-                        idCaja = Convert.ToInt32(resultado);
-                }
-            }
-            return idCaja;
-        }
+        
 
         //Obtener monto caja
         public decimal ObtenerMontoCaja(int idCaja)
@@ -2067,34 +2031,21 @@ namespace LaCaguamaSV.Configuracion
 
         public bool HayCajaAbiertaHoy(int idUsuario)
         {
-            bool existe = false;
-
             using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
             {
-                try
-                {
-                    conexion.Open();
+                conexion.Open();
 
-                    string consulta = @"SELECT COUNT(*) FROM caja 
-                                WHERE id_usuario = @id_usuario 
-                                  AND DATE(fecha) = CURDATE()
-                                  AND id_estado_caja = 2"; // 2 = Iniciada
+                string consulta = @"
+            SELECT COUNT(*) 
+            FROM caja c
+            WHERE DATE(c.fecha) = CURDATE()
+              AND NOT EXISTS (
+                  SELECT 1 FROM corte_de_caja cc WHERE cc.id_caja = c.id_caja
+              )";
 
-                    using (MySqlCommand cmd = new MySqlCommand(consulta, conexion))
-                    {
-                        cmd.Parameters.AddWithValue("@id_usuario", idUsuario);
-                        int cantidad = Convert.ToInt32(cmd.ExecuteScalar());
-
-                        existe = cantidad > 0;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error al verificar estado de caja: " + ex.Message);
-                }
+                int resultado = Convert.ToInt32(new MySqlCommand(consulta, conexion).ExecuteScalar());
+                return resultado > 0;
             }
-
-            return existe;
         }
 
         //Codigo modificacion de disponibilidad
@@ -2380,7 +2331,42 @@ namespace LaCaguamaSV.Configuracion
             }
         }
 
+        public bool ExisteCorteParaUltimaCaja()
+        {
+            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+            {
+                conexion.Open();
 
+                // Obtener la última caja del día (independientemente del usuario)
+                string consultaCaja = @"
+            SELECT id_caja 
+            FROM caja 
+            WHERE DATE(fecha) = CURDATE() 
+            ORDER BY fecha DESC 
+            LIMIT 1";
+
+                int idCaja = -1;
+                using (MySqlCommand cmd = new MySqlCommand(consultaCaja, conexion))
+                {
+                    object result = cmd.ExecuteScalar();
+                    if (result != null)
+                        idCaja = Convert.ToInt32(result);
+                }
+
+                if (idCaja == -1)
+                    return true; // Si no hay cajas hoy, permitimos iniciar una nueva
+
+                // Verificar si esa caja ya fue cerrada con un corte
+                string consultaCorte = "SELECT COUNT(*) FROM corte_de_caja WHERE id_caja = @idCaja";
+
+                using (MySqlCommand cmd = new MySqlCommand(consultaCorte, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@idCaja", idCaja);
+                    int conteo = Convert.ToInt32(cmd.ExecuteScalar());
+                    return conteo > 0;
+                }
+            }
+        }
 
 
         // -------------------- CORTE Tarjetas --------------------

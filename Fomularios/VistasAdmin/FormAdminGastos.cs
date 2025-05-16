@@ -32,7 +32,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
             try
             {
-                idCaja = conexion.ObtenerCajaActiva(idUsuario);
+                idCaja = conexion.ObtenerUltimaCaja();
                 // Obtenemos la caja más reciente activa
 
 
@@ -125,7 +125,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             try
             {
-                int idCaja = conexion.ObtenerIdCajaReciente(); // ya no por idUsuario
+                int idCaja = conexion.ObtenerUltimaCaja(); // ya no por idUsuario
 
                 if (idCaja == -1)
                 {
@@ -173,7 +173,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             try
             {
                 // Asegúrate de obtener el idCaja de forma segura
-                int idCaja = conexion.ObtenerCajaActiva(idUsuario); // O el método que uses para obtener el idCaja
+                int idCaja = conexion.ObtenerUltimaCaja(); // O el método que uses para obtener el idCaja
 
                 // Verificamos que idCaja sea válido antes de hacer cualquier operación
                 if (idCaja == -1)

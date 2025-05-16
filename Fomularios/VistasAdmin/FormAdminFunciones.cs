@@ -405,16 +405,16 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void btnCajaInicial_Click(object sender, EventArgs e)
         {
-            // Validar que el usuario haya hecho corte de su última caja
-            bool corteHecho = conexion.ExisteCorteParaUltimaCaja(this.idUsuario);
+            // Validar que NO haya una caja activa hoy (sin corte)
+            bool corteHecho = conexion.ExisteCorteParaUltimaCaja();
 
             if (!corteHecho)
             {
-                MessageBox.Show("Debe realizar el corte de caja antes de iniciar una nueva caja.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Ya hay una caja activa. Debe realizar el corte antes de iniciar una nueva.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            panelCaja.Visible = true; // Mostrar panel solo si se permite iniciar caja
+            panelCaja.Visible = true;
         }
 
         private void btnConfirmarCaja_Click(object sender, EventArgs e)
@@ -660,7 +660,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void ActualizarLabelCaja()
         {
-            int idCaja = conexion.ObtenerCajaActiva(this.idUsuario);
+            int idCaja = conexion.ObtenerUltimaCaja();
 
             if (idCaja > 0)
             {
