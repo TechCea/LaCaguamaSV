@@ -236,23 +236,43 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                         if (idMetodoPago == -1)
                         {
                             transaction.Rollback();
-                            MessageBox.Show("Método de pago no válido", "Error",
-                                           MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show("Método de pago no válido", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return false;
                         }
 
-                        // Calcular total con descuento
+                        // Calcular total con descuento y monto real del descuento
                         decimal totalConDescuento = CalcularTotalConDescuento();
+                        decimal montoDescuentoReal = 0;
+
+                        if (descuentoAplicado)
+                        {
+                            bool esPorcentaje = tipoDescuento.Contains("%") ||
+                                              (tiposDescuentoDisponibles != null &&
+                                               cmbTipoDescuento.SelectedIndex >= 0 &&
+                                               Convert.ToBoolean(tiposDescuentoDisponibles.Rows[cmbTipoDescuento.SelectedIndex]["es_porcentaje"]));
+
+                            if (esPorcentaje)
+                            {
+                                // Calcular el monto real del descuento (30% del total)
+                                montoDescuentoReal = totalOrden * (montoDescuento / 100);
+                            }
+                            else
+                            {
+                                // Descuento fijo, usar el monto directamente
+                                montoDescuentoReal = montoDescuento;
+                            }
+                        }
+
                         bool esEfectivo = (nombrePago == "Efectivo");
 
                         // 1. Registrar el pago
                         string queryPago = @"
-                    INSERT INTO pagos 
-                        (id_orden, monto, recibido, cambio, id_usuario, id_tipo_pago, 
-                         descuento, id_tipo_descuento) 
-                    VALUES 
-                        (@idOrden, @total, @recibido, @cambio, @idUsuarioCreador, @tipoPago, 
-                         @descuento, @idTipoDescuento)";
+                INSERT INTO pagos 
+                    (id_orden, monto, recibido, cambio, id_usuario, id_tipo_pago, 
+                     descuento, id_tipo_descuento) 
+                VALUES 
+                    (@idOrden, @total, @recibido, @cambio, @idUsuarioCreador, @tipoPago, 
+                     @descuento, @idTipoDescuento)";
 
                         using (MySqlCommand cmd = new MySqlCommand(queryPago, conexion, transaction))
                         {
@@ -262,27 +282,28 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                             cmd.Parameters.AddWithValue("@cambio", cambio);
                             cmd.Parameters.AddWithValue("@idUsuarioCreador", idUsuarioCreador);
                             cmd.Parameters.AddWithValue("@tipoPago", idMetodoPago);
-                            cmd.Parameters.AddWithValue("@descuento", descuentoAplicado ? montoDescuento : 0);
+                            // Guardar el MONTO REAL del descuento, no el porcentaje
+                            cmd.Parameters.AddWithValue("@descuento", descuentoAplicado ? montoDescuentoReal : 0);
                             cmd.Parameters.AddWithValue("@idTipoDescuento", descuentoAplicado ? idTipoDescuentoSeleccionado : (object)DBNull.Value);
 
                             cmd.ExecuteNonQuery();
                         }
 
-                        // 2. Actualizar la orden con el descuento
+                        // 2. Actualizar la orden con el descuento REAL
                         string queryUpdateOrden = @"
-                    UPDATE ordenes 
-                    SET 
-                        tipo_pago = @tipoPago,
-                        total = @total,
-                        descuento = @descuento,
-                        id_estadoO = 2 -- Estado 'Cerrada'
-                    WHERE id_orden = @idOrden";
+                        UPDATE ordenes 
+                        SET 
+                            tipo_pago = @tipoPago,
+                            total = @total,
+                            descuento = @descuento,
+                            id_estadoO = 2
+                        WHERE id_orden = @idOrden";
 
                         using (MySqlCommand cmd = new MySqlCommand(queryUpdateOrden, conexion, transaction))
                         {
                             cmd.Parameters.AddWithValue("@tipoPago", idMetodoPago);
                             cmd.Parameters.AddWithValue("@total", totalConDescuento);
-                            cmd.Parameters.AddWithValue("@descuento", descuentoAplicado ? montoDescuento : 0);
+                            cmd.Parameters.AddWithValue("@descuento", descuentoAplicado ? montoDescuentoReal : 0);
                             cmd.Parameters.AddWithValue("@idOrden", idOrden);
                             cmd.ExecuteNonQuery();
                         }

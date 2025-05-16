@@ -182,19 +182,23 @@ namespace LaCaguamaSV.Fomularios.VistasUsuario
             {
                 using (MySqlConnection conexion = new Conexion().EstablecerConexion())
                 {
-                    // Obtener información básica de la orden
+                    // Obtener información básica de la orden incluyendo tipo de descuento
                     string queryOrden = @"
-                SELECT 
-                    o.nombreCliente, o.total, o.descuento, 
-                    DATE_FORMAT(o.fecha_orden, '%Y-%m-%d %H:%i') AS fecha_orden,
-                    m.nombreMesa AS mesa,
-                    tp.nombrePago AS metodo_pago,
-                    u.nombre AS usuario_creador
-                FROM ordenes o
-                JOIN mesas m ON o.id_mesa = m.id_mesa
-                JOIN tipoPago tp ON o.tipo_pago = tp.id_pago
-                JOIN usuarios u ON o.id_usuario = u.id_usuario
-                WHERE o.id_orden = @idOrden";
+            SELECT 
+                o.id_orden, o.nombreCliente, o.total, o.descuento, 
+                DATE_FORMAT(o.fecha_orden, '%Y-%m-%d %H:%i') AS fecha_orden,
+                m.nombreMesa AS mesa,
+                tp.nombrePago AS metodo_pago,
+                u.nombre AS mesero,
+                td.nombre AS tipo_descuento_nombre,
+                td.es_porcentaje AS descuento_es_porcentaje
+            FROM ordenes o
+            JOIN mesas m ON o.id_mesa = m.id_mesa
+            JOIN tipoPago tp ON o.tipo_pago = tp.id_pago
+            JOIN usuarios u ON o.id_usuario = u.id_usuario
+            LEFT JOIN pagos p ON o.id_orden = p.id_orden
+            LEFT JOIN tipo_descuento td ON p.id_tipo_descuento = td.id_tipo_descuento
+            WHERE o.id_orden = @idOrden";
 
                     string cliente = "";
                     decimal total = 0;
@@ -202,7 +206,9 @@ namespace LaCaguamaSV.Fomularios.VistasUsuario
                     string fechaOrden = "";
                     string mesa = "";
                     string metodoPago = "";
-                    string usuarioCreador = "";
+                    string mesero = "";
+                    string tipoDescuentoNombre = "Ninguno";
+                    bool descuentoEsPorcentaje = false;
 
                     using (MySqlCommand cmd = new MySqlCommand(queryOrden, conexion))
                     {
@@ -218,30 +224,52 @@ namespace LaCaguamaSV.Fomularios.VistasUsuario
                                 fechaOrden = reader["fecha_orden"].ToString();
                                 mesa = reader["mesa"].ToString();
                                 metodoPago = reader["metodo_pago"].ToString();
-                                usuarioCreador = reader["usuario_creador"].ToString();
+                                mesero = reader["mesero"].ToString();
+
+                                if (!reader.IsDBNull(reader.GetOrdinal("tipo_descuento_nombre")))
+                                {
+                                    tipoDescuentoNombre = reader["tipo_descuento_nombre"].ToString();
+                                    descuentoEsPorcentaje = Convert.ToBoolean(reader["descuento_es_porcentaje"]);
+                                }
                             }
                         }
                     }
 
-                    // Obtener detalles de los pedidos
+
                     string queryPedidos = @"
-                SELECT 
-                    COALESCE(
-                        pl.nombrePlato,
-                        (SELECT i.nombreProducto FROM bebidas b JOIN inventario i ON b.id_inventario = i.id_inventario WHERE b.id_bebida = p.id_bebida),
-                        (SELECT i.nombreProducto FROM extras e JOIN inventario i ON e.id_inventario = i.id_inventario WHERE e.id_extra = p.id_extra)
-                    ) AS producto,
-                    p.Cantidad,
-                    COALESCE(
-                        pl.precioUnitario,
-                        (SELECT b.precioUnitario FROM bebidas b WHERE b.id_bebida = p.id_bebida),
-                        (SELECT e.precioUnitario FROM extras e WHERE e.id_extra = p.id_extra)
-                    ) AS precio_unitario
-                FROM pedidos p
-                LEFT JOIN platos pl ON p.id_plato = pl.id_plato
-                WHERE p.id_orden = @idOrden";
+                                    SELECT 
+                                        COALESCE(
+                                            pl.nombrePlato,
+                                            (SELECT i.nombreProducto FROM bebidas b JOIN inventario i ON b.id_inventario = i.id_inventario WHERE b.id_bebida = p.id_bebida),
+                                            (SELECT i.nombreProducto FROM extras e JOIN inventario i ON e.id_inventario = i.id_inventario WHERE e.id_extra = p.id_extra),
+                                            (SELECT pr.nombre FROM promociones pr WHERE pr.id_promocion = p.id_promocion)
+                                        ) AS producto,
+                                        p.Cantidad,
+                                        COALESCE(
+                                            pl.precioUnitario,
+                                            (SELECT b.precioUnitario FROM bebidas b WHERE b.id_bebida = p.id_bebida),
+                                            (SELECT e.precioUnitario FROM extras e WHERE e.id_extra = p.id_extra),
+                                            (SELECT pr.precio_especial FROM promociones pr WHERE pr.id_promocion = p.id_promocion)
+                                        ) AS precio_unitario,
+                                        (p.Cantidad * COALESCE(
+                                            pl.precioUnitario,
+                                            (SELECT b.precioUnitario FROM bebidas b WHERE b.id_bebida = p.id_bebida),
+                                            (SELECT e.precioUnitario FROM extras e WHERE e.id_extra = p.id_extra),
+                                            (SELECT pr.precio_especial FROM promociones pr WHERE pr.id_promocion = p.id_promocion)
+                                        )) AS subtotal,
+                                        CASE
+                                            WHEN p.id_promocion IS NOT NULL THEN 1
+                                            ELSE 0
+                                        END AS es_promocion,
+                                        p.id_promocion
+                                    FROM pedidos p
+                                    LEFT JOIN platos pl ON p.id_plato = pl.id_plato
+                                    LEFT JOIN promociones pr ON p.id_promocion = pr.id_promocion
+                                    WHERE p.id_orden = @idOrden
+                                    ORDER BY es_promocion DESC, producto ASC";
 
                     StringBuilder detallePedidos = new StringBuilder();
+                    decimal totalCalculado = 0;
 
                     using (MySqlCommand cmd = new MySqlCommand(queryPedidos, conexion))
                     {
@@ -254,34 +282,99 @@ namespace LaCaguamaSV.Fomularios.VistasUsuario
                                 string producto = reader["producto"].ToString();
                                 int cantidad = Convert.ToInt32(reader["Cantidad"]);
                                 decimal precioUnitario = Convert.ToDecimal(reader["precio_unitario"]);
-                                decimal subtotal = cantidad * precioUnitario;
+                                decimal subtotal = Convert.ToDecimal(reader["subtotal"]);
+                                bool esPromocion = Convert.ToInt32(reader["es_promocion"]) == 1;
+                                int? idPromocion = reader["id_promocion"] as int?;
 
                                 detallePedidos.AppendLine($"{producto} x{cantidad} - {precioUnitario.ToString("C")} = {subtotal.ToString("C")}");
+                                totalCalculado += subtotal;
+
+                                // Si es promoción, agregar sus items
+                                if (esPromocion && idPromocion.HasValue)
+                                {
+                                    detallePedidos.AppendLine(ObtenerItemsPromocion(idPromocion.Value, cantidad));
+                                }
                             }
                         }
                     }
 
-                    // Construir el comprobante
+                    // Obtener información del pago (si existe)
+                    string queryPago = @"
+                    SELECT 
+                        p.recibido, p.cambio, 
+                        DATE_FORMAT(p.fecha_pago, '%Y-%m-%d %H:%i') AS fecha_pago,
+                        u.nombre AS cajero
+                    FROM pagos p
+                    JOIN usuarios u ON p.id_usuario = u.id_usuario
+                    WHERE p.id_orden = @idOrden";
+
+                    decimal recibido = 0;
+                    decimal cambio = 0;
+                    string fechaPago = "";
+                    string cajero = "";
+
+                    using (MySqlCommand cmd = new MySqlCommand(queryPago, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@idOrden", idOrden);
+
+                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                recibido = Convert.ToDecimal(reader["recibido"]);
+                                cambio = Convert.ToDecimal(reader["cambio"]);
+                                fechaPago = reader["fecha_pago"].ToString();
+                                cajero = reader["cajero"].ToString();
+                            }
+                        }
+                    }
+
+                    // Calcular el porcentaje de descuento basado en el monto y subtotal
+                    decimal porcentajeCalculado = 0;
+                    if (totalCalculado > 0 && descuento > 0)
+                    {
+                        porcentajeCalculado = (descuento / totalCalculado) * 100;
+                    }
+
+                    // Construir el comprobante/factura
                     StringBuilder factura = new StringBuilder();
                     factura.AppendLine("══════════════════════════════════");
                     factura.AppendLine("        LA CAGUAMA RESTAURANTE    ");
                     factura.AppendLine("══════════════════════════════════");
                     factura.AppendLine($"Orden: #{idOrden}");
-                    factura.AppendLine($"Fecha: {fechaOrden}");
+                    factura.AppendLine($"Fecha orden: {fechaOrden}");
                     factura.AppendLine($"Mesa: {mesa}");
                     factura.AppendLine($"Cliente: {cliente}");
-                    factura.AppendLine($"Atendido por: {usuarioCreador}");
+                    factura.AppendLine($"Mesero: {mesero}");
                     factura.AppendLine("──────────────────────────────────");
                     factura.AppendLine("              DETALLE             ");
                     factura.AppendLine("──────────────────────────────────");
                     factura.AppendLine(detallePedidos.ToString());
                     factura.AppendLine("──────────────────────────────────");
-                    factura.AppendLine($"Subtotal: {(total + descuento).ToString("C")}");
+                    factura.AppendLine($"SUBTOTAL: {totalCalculado.ToString("C").PadLeft(20)}");
+
                     if (descuento > 0)
-                        factura.AppendLine($"Descuento: -{descuento.ToString("C")}");
-                    factura.AppendLine($"TOTAL: {total.ToString("C")}");
+                    {
+                        if (descuentoEsPorcentaje)
+                        {
+                            // Formato mejorado para descuentos porcentuales
+                            factura.AppendLine($"DESCUENTO (Porcentaje):");
+                            factura.AppendLine($"   {porcentajeCalculado.ToString("0.00")}%   -{descuento.ToString("C").PadLeft(8)}");
+                        }
+                        else
+                        {
+                            // Formato para montos fijos
+                            factura.AppendLine($"DESCUENTO (Monto fijo): -{descuento.ToString("C").PadLeft(15)}");
+                        }
+                    }
+
+                    factura.AppendLine($"TOTAL: {total.ToString("C").PadLeft(25)}");
                     factura.AppendLine("──────────────────────────────────");
                     factura.AppendLine($"Método de pago: {metodoPago}");
+
+                    // Resto del código para mostrar el pago...
+                    // (Mantén el mismo código para mostrar recibido y cambio)
+
                     factura.AppendLine("══════════════════════════════════");
                     factura.AppendLine("   ¡Gracias por su preferencia!   ");
                     factura.AppendLine("══════════════════════════════════");
@@ -318,6 +411,49 @@ namespace LaCaguamaSV.Fomularios.VistasUsuario
                 MessageBox.Show($"Error al generar factura: {ex.Message}", "Error",
                               MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private string ObtenerItemsPromocion(int idPromocion, int cantidadPromo)
+        {
+            StringBuilder items = new StringBuilder();
+            items.AppendLine("   ┌───────────────────────────────");
+            items.AppendLine("   │ Items incluidos en la promoción:");
+
+            using (MySqlConnection conexion = new Conexion().EstablecerConexion())
+            {
+                string query = @"
+        SELECT 
+            pi.tipo_item,
+            CASE
+                WHEN pi.tipo_item = 'PLATO' THEN (SELECT nombrePlato FROM platos WHERE id_plato = pi.id_item)
+                WHEN pi.tipo_item = 'BEBIDA' THEN (SELECT i.nombreProducto FROM bebidas b JOIN inventario i ON b.id_inventario = i.id_inventario WHERE b.id_bebida = pi.id_item)
+                WHEN pi.tipo_item = 'EXTRA' THEN (SELECT i.nombreProducto FROM extras e JOIN inventario i ON e.id_inventario = i.id_inventario WHERE e.id_extra = pi.id_item)
+            END AS nombre_item,
+            pi.cantidad AS cantidad_en_promo
+        FROM promocion_items pi
+        WHERE pi.id_promocion = @idPromocion";
+
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@idPromocion", idPromocion);
+
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            string tipoItem = reader["tipo_item"].ToString();
+                            string nombreItem = reader["nombre_item"].ToString();
+                            int cantidadEnPromo = Convert.ToInt32(reader["cantidad_en_promo"]);
+                            int cantidadTotal = cantidadEnPromo * cantidadPromo;
+
+                            items.AppendLine($"   ├─ {nombreItem} ({tipoItem}) x{cantidadTotal}");
+                        }
+                    }
+                }
+            }
+
+            items.AppendLine("   └───────────────────────────────");
+            return items.ToString();
         }
 
         private void AbrirGestionOrden(DataGridViewRow row)
@@ -395,6 +531,11 @@ namespace LaCaguamaSV.Fomularios.VistasUsuario
             mostrarSoloHoy = !mostrarSoloHoy;
             CargarOrdenes(mostrarSoloHoy);
             btnFiltrarOrdenes.Text = mostrarSoloHoy ? "Ver todas" : "Ver solo hoy";
+
+        }
+
+        private void dataGridViewOrdenesUsuario_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
 
         }
     }

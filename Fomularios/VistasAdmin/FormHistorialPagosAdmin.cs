@@ -90,18 +90,15 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                     p.id_orden AS 'Número Orden',
                     o.nombreCliente AS 'Cliente',
                     p.monto AS 'Total',
-                    CASE
-                        WHEN td.es_porcentaje = 1 THEN (p.monto / (1 - (p.descuento/100))) - p.monto
-                        ELSE p.descuento
-                    END AS 'Descuento',
+                    p.descuento AS 'Descuento',
                     p.recibido AS 'Recibido',
                     p.cambio AS 'Cambio',
                     tp.nombrePago AS 'Método Pago',
                     u.nombre AS 'Cajero',
                     DATE_FORMAT(p.fecha_pago, '%Y-%m-%d %H:%i') AS 'Fecha/Hora',
                     CASE
-                        WHEN td.es_porcentaje = 1 THEN CONCAT(p.descuento, '%')
-                        ELSE CONCAT('$', FORMAT(p.descuento, 2))
+                        WHEN td.es_porcentaje = 1 THEN CONCAT('Descuento (', p.descuento, '%)')
+                        ELSE 'Descuento fijo'
                     END AS 'Tipo Descuento'
                 FROM pagos p
                 JOIN ordenes o ON p.id_orden = o.id_orden
@@ -147,7 +144,16 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
                     dataGridViewHistorial.DataSource = dt;
 
-                    // Mostrar el total de registros filtrados
+                    // Configurar formato de columnas monetarias
+                    string[] columnasMonetarias = { "Total", "Descuento", "Recibido", "Cambio" };
+                    foreach (string columna in columnasMonetarias)
+                    {
+                        if (dataGridViewHistorial.Columns[columna] != null)
+                        {
+                            dataGridViewHistorial.Columns[columna].DefaultCellStyle.Format = "C";
+                        }
+                    }
+
                     lblTotalRegistros.Text = $"Total registros: {dt.Rows.Count}";
                 }
             }
@@ -337,11 +343,11 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                         }
                     }
 
-                    // Calcular el monto real del descuento
-                    decimal montoDescuento = descuento;
-                    if (descuentoEsPorcentaje)
+                    // Calcular el porcentaje de descuento basado en el monto y subtotal
+                    decimal porcentajeCalculado = 0;
+                    if (totalCalculado > 0 && descuento > 0)
                     {
-                        montoDescuento = total / (1 - (descuento / 100)) - total;
+                        porcentajeCalculado = (descuento / totalCalculado) * 100;
                     }
 
                     // Construir el comprobante/factura
@@ -359,18 +365,24 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                     factura.AppendLine("──────────────────────────────────");
                     factura.AppendLine(detallePedidos.ToString());
                     factura.AppendLine("──────────────────────────────────");
-                    factura.AppendLine($"Subtotal: {totalCalculado.ToString("C")}");
+                    factura.AppendLine($"SUBTOTAL: {totalCalculado.ToString("C").PadLeft(20)}");
 
                     if (descuento > 0)
                     {
-                        string descuentoTexto = descuentoEsPorcentaje ?
-                            $"{descuento}% ( -{montoDescuento.ToString("C")} )" :
-                            $"-{descuento.ToString("C")}";
-
-                        factura.AppendLine($"Descuento ({tipoDescuentoNombre}): {descuentoTexto}");
+                        if (descuentoEsPorcentaje)
+                        {
+                            // Formato mejorado para descuentos porcentuales
+                            factura.AppendLine($"DESCUENTO (Porcentaje):");
+                            factura.AppendLine($"   {porcentajeCalculado.ToString("0.00")}%   -{descuento.ToString("C").PadLeft(8)}");
+                        }
+                        else
+                        {
+                            // Formato para montos fijos
+                            factura.AppendLine($"DESCUENTO (Monto fijo): -{descuento.ToString("C").PadLeft(15)}");
+                        }
                     }
 
-                    factura.AppendLine($"TOTAL: {total.ToString("C")}");
+                    factura.AppendLine($"TOTAL: {total.ToString("C").PadLeft(25)}");
                     factura.AppendLine("──────────────────────────────────");
                     factura.AppendLine($"Método de pago: {metodoPago}");
 

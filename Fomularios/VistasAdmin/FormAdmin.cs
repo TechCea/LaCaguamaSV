@@ -304,11 +304,11 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                         }
                     }
 
-                    // Calcular el monto real del descuento (si fue porcentaje)
-                    decimal montoDescuento = descuento;
-                    if (descuentoEsPorcentaje)
+                    // Calcular el porcentaje de descuento basado en el monto y subtotal
+                    decimal porcentajeCalculado = 0;
+                    if (totalCalculado > 0 && descuento > 0)
                     {
-                        montoDescuento = totalCalculado * (descuento / 100);
+                        porcentajeCalculado = (descuento / totalCalculado) * 100;
                     }
 
                     // Generar comprobante con mejor formato
@@ -330,11 +330,17 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
                     if (descuento > 0)
                     {
-                        string descuentoTexto = descuentoEsPorcentaje ?
-                            $"{descuento}% ( -{montoDescuento.ToString("C")} )" :
-                            $"-{descuento.ToString("C")}";
-
-                        factura.AppendLine($"DESCUENTO ({tipoDescuentoNombre}): {descuentoTexto.PadLeft(10)}");
+                        if (descuentoEsPorcentaje)
+                        {
+                            // Formato mejorado para descuentos porcentuales
+                            factura.AppendLine($"DESCUENTO (Porcentaje):");
+                            factura.AppendLine($"   {porcentajeCalculado.ToString("0.00")}%   -{descuento.ToString("C").PadLeft(8)}");
+                        }
+                        else
+                        {
+                            // Formato para montos fijos
+                            factura.AppendLine($"DESCUENTO (Monto fijo): -{descuento.ToString("C").PadLeft(15)}");
+                        }
                     }
 
                     factura.AppendLine($"TOTAL: {total.ToString("C").PadLeft(25)}");
@@ -351,39 +357,39 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                     factura.AppendLine("   ¡GRACIAS POR SU PREFERENCIA!   ");
                     factura.AppendLine("══════════════════════════════════");
 
-                    // Mostrar en un formulario con scroll para mejor visualización
-                    using (var formFactura = new Form()
-                    {
-                        Width = 500,
-                        Height = 600,
-                        Text = $"Factura Orden #{idOrden}",
-                        StartPosition = FormStartPosition.CenterParent,
-                        FormBorderStyle = FormBorderStyle.FixedDialog,
-                        MaximizeBox = false
-                    })
-                    {
-                        var textBox = new TextBox()
-                        {
-                            Multiline = true,
-                            Dock = DockStyle.Fill,
-                            ReadOnly = true,
-                            ScrollBars = ScrollBars.Vertical,
-                            Text = factura.ToString(),
-                            Font = new Font("Consolas", 10),
-                            BackColor = Color.White
-                        };
-
-                        formFactura.Controls.Add(textBox);
-                        formFactura.ShowDialog();
-                    }
-                }
-            }
-            catch (Exception ex)
+                    // Mostrar en un formulario
+            using (var formFactura = new Form()
             {
-                MessageBox.Show($"Error al generar factura: {ex.Message}", "Error",
-                              MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Width = 500,
+                Height = 600,
+                Text = $"Factura Orden #{idOrden}",
+                StartPosition = FormStartPosition.CenterParent,
+                FormBorderStyle = FormBorderStyle.FixedDialog,
+                MaximizeBox = false
+            })
+            {
+                var textBox = new TextBox()
+                {
+                    Multiline = true,
+                    Dock = DockStyle.Fill,
+                    ReadOnly = true,
+                    ScrollBars = ScrollBars.Vertical,
+                    Text = factura.ToString(),
+                    Font = new Font("Consolas", 10),
+                    BackColor = Color.White
+                };
+
+                formFactura.Controls.Add(textBox);
+                formFactura.ShowDialog();
             }
         }
+    }
+    catch (Exception ex)
+    {
+        MessageBox.Show($"Error al generar factura: {ex.Message}", "Error",
+                      MessageBoxButtons.OK, MessageBoxIcon.Error);
+    }
+}
 
 
         private void AbrirGestionOrden(DataGridViewRow row)

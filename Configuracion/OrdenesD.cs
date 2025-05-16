@@ -444,7 +444,7 @@ namespace LaCaguamaSV.Configuracion
         FROM bebidas b
         JOIN inventario i ON b.id_inventario = i.id_inventario
         WHERE b.id_bebida = @idBebida
-        AND i.cantidad < 10"; // Umbral bajo de stock
+        AND i.cantidad < 8"; // Umbral bajo de stock
 
                 using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                 {
@@ -475,7 +475,7 @@ namespace LaCaguamaSV.Configuracion
         FROM extras e
         JOIN inventario i ON e.id_inventario = i.id_inventario
         WHERE e.id_extra = @idExtra
-        AND i.cantidad < 10"; // Umbral bajo de stock
+        AND i.cantidad < 8"; // Umbral bajo de stock
 
                 using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                 {
@@ -529,7 +529,7 @@ namespace LaCaguamaSV.Configuracion
               EXISTS (SELECT 1 FROM recetas r WHERE r.id_plato = p.id_plato AND r.id_inventario = i.id_inventario)))
         WHERE pi.id_promocion = @idPromocion
         GROUP BY i.id_inventario
-        HAVING diferencia < 0 OR i.cantidad < 10"; // Umbral de stock bajo
+        HAVING diferencia < 0 OR i.cantidad < 6"; // Umbral de stock bajo
 
                 using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                 {
@@ -616,7 +616,7 @@ LEFT JOIN inventario i ON
       EXISTS (SELECT 1 FROM recetas r WHERE r.id_plato = p.id_plato AND r.id_inventario = i.id_inventario)))
 WHERE pi.id_promocion = @idPromocion
 GROUP BY i.id_inventario, i.nombreProducto, i.cantidad
-HAVING diferencia < 0 OR i.cantidad < 10"; // Umbral de stock bajo
+HAVING diferencia < 0 OR i.cantidad < 6"; // Umbral de stock bajo
 
                 using (MySqlCommand cmd = new MySqlCommand(queryVerificarInventario, conexion))
                 {
