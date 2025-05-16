@@ -72,6 +72,13 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             panel_corte_general.BringToFront();
 
 
+            if (conexion.CorteGeneralYaRealizado())
+            {
+                btn_okgeneral.Enabled = false;
+                label_general.Text = "⚠️ El corte general ya fue realizado este turno.";
+            }
+
+
         }
         private void CentrarPanel(Panel panel)
         {
@@ -618,9 +625,9 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 
                 return;
             }
-       
 
-            int idCajaActual = conexion.ObtenerUltimoIdCajaInicializada(this.idUsuario);
+
+            int idCajaActual = conexion.ObtenerUltimaCajaRegistrada();
             ActualizarLabelCaja();
             if (idCajaActual == -1)
             {
