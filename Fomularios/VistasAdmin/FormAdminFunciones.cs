@@ -102,6 +102,24 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         private void Corte_Caja_Click(object sender, EventArgs e)
         {
             panelConfirmacion.Visible = true; // Mostrar la ventana de confirmación
+            int idCajaActual = conexion.ObtenerIdCajaActualCorte(); // sin parámetro
+
+            if (idCajaActual == -1)
+            {
+                MessageBox.Show("No se encontró una caja inicial activa.");
+                panelConfirmacion.Visible = false;
+                return;
+            }
+
+            // Verificar que el usuario actual sea el que abrió la caja
+            int usuarioDeLaCaja = conexion.ObtenerUsuarioDeCaja(idCajaActual);
+            if (usuarioDeLaCaja != this.idUsuario)
+            {
+                string nombreUsuarioCaja = conexion.ObtenerNombreUsuario(usuarioDeLaCaja);
+                MessageBox.Show($"Solo el usuario que inició la caja puede hacer el corte.\nCajero responsable: {nombreUsuarioCaja}");
+                panelConfirmacion.Visible = false;
+                return;
+            }
 
         }
 
