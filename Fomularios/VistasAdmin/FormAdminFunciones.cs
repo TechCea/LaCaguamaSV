@@ -135,19 +135,20 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             montoContadoActual = montoContado;
 
             // Obtener el ID de la caja actual (esta caja debe haber sido inicializada previamente)
-            int idCajaActual = conexion.ObtenerUltimoIdCajaInicializada(this.idUsuario);
+            int idCajaActual = conexion.ObtenerIdCajaActualCorte(); // sin parámetro
+
             if (idCajaActual == -1)
             {
                 MessageBox.Show("No se encontró una caja inicial activa.");
                 return;
             }
 
-            btnCajaInicial.Enabled = true;
-            btnCajaInicial.BackColor = ColorTranslator.FromHtml("#e74719");
-
-            if (conexion.CorteYaRealizado(idCajaActual))
+            // Verificar que el usuario actual sea el que abrió la caja
+            int usuarioDeLaCaja = conexion.ObtenerUsuarioDeCaja(idCajaActual);
+            if (usuarioDeLaCaja != this.idUsuario)
             {
-                MessageBox.Show("Ya se ha realizado un corte para esta caja. Debe iniciar una nueva caja antes de realizar otro corte.");
+                string nombreUsuarioCaja = conexion.ObtenerNombreUsuario(usuarioDeLaCaja);
+                MessageBox.Show($"Solo el usuario que inició la caja puede hacer el corte.\nCajero responsable: {nombreUsuarioCaja}");
                 return;
             }
 

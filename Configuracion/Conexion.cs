@@ -2119,25 +2119,24 @@ namespace LaCaguamaSV.Configuracion
 
 
         // Obtener el id_caja más reciente del usuario con estado inicializada
-        public int ObtenerIdCajaActualCorte(int idUsuario)
+        public int ObtenerIdCajaActualCorte()
         {
-            int idCaja = -1;
             using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
             {
                 conexion.Open();
-                string query = @"SELECT id_caja FROM caja 
-                                 WHERE id_usuario = @idUsuario AND id_estado_caja = 2 
-                                 ORDER BY fecha DESC LIMIT 1";
+                string consulta = @"
+            SELECT id_caja 
+            FROM caja 
+            WHERE id_estado_caja = 2 
+            ORDER BY fecha DESC 
+            LIMIT 1";
 
-                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                using (MySqlCommand cmd = new MySqlCommand(consulta, conexion))
                 {
-                    cmd.Parameters.AddWithValue("@idUsuario", idUsuario);
-                    object resultado = cmd.ExecuteScalar();
-                    if (resultado != null)
-                        idCaja = Convert.ToInt32(resultado);
+                    object result = cmd.ExecuteScalar();
+                    return result != null ? Convert.ToInt32(result) : -1;
                 }
             }
-            return idCaja;
         }
 
 
@@ -2150,7 +2149,7 @@ namespace LaCaguamaSV.Configuracion
                 string consulta = @"
             SELECT id_caja 
             FROM caja 
-            WHERE id_usuario = @idUsuario 
+            WHERE id_usuario = @idUsuario AND id_estado_caja = 2
             ORDER BY fecha DESC 
             LIMIT 1";
 
@@ -2339,11 +2338,11 @@ namespace LaCaguamaSV.Configuracion
 
                 // Obtener la última caja del día (independientemente del usuario)
                 string consultaCaja = @"
-            SELECT id_caja 
-            FROM caja 
-            WHERE DATE(fecha) = CURDATE() 
-            ORDER BY fecha DESC 
-            LIMIT 1";
+        SELECT id_caja 
+        FROM caja 
+        WHERE DATE(fecha) = CURDATE() 
+        ORDER BY fecha DESC 
+        LIMIT 1";
 
                 int idCaja = -1;
                 using (MySqlCommand cmd = new MySqlCommand(consultaCaja, conexion))
@@ -2367,6 +2366,41 @@ namespace LaCaguamaSV.Configuracion
                 }
             }
         }
+
+        public int ObtenerUsuarioDeCaja(int idCaja)
+        {
+            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+            {
+                conexion.Open();
+                string query = "SELECT id_usuario FROM caja WHERE id_caja = @idCaja";
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@idCaja", idCaja);
+                    object result = cmd.ExecuteScalar();
+                    return result != null ? Convert.ToInt32(result) : -1;
+                }
+            }
+        }
+
+        public bool UsuarioTieneCajaActiva(int idUsuario)
+        {
+            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+            {
+                conexion.Open();
+                string query = @"SELECT COUNT(*) 
+                         FROM caja 
+                         WHERE id_usuario = @idUsuario 
+                         AND id_estado_caja = 2"; // Estado 2 = Inicializada
+
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@idUsuario", idUsuario);
+                    int conteo = Convert.ToInt32(cmd.ExecuteScalar());
+                    return conteo > 0;
+                }
+            }
+        }
+
 
 
         // -------------------- CORTE Tarjetas --------------------
