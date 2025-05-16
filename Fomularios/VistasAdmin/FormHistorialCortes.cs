@@ -26,13 +26,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             // Posición fija (centrada en la pantalla)
             this.StartPosition = FormStartPosition.CenterScreen;
 
-            // Verificar permisos de administrador
-            if (SesionUsuario.Rol != 1)
-            {
-                MessageBox.Show("Acceso denegado. No tienes permisos de administrador.", "Acceso Restringido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                this.Close();
-                return;
-            }
 
             // Configuración inicial
             cmbTipoFiltroCortes.Items.AddRange(new[] { "Todos", "Hoy", "Esta semana", "Este mes", "Fecha específica", "Rango de fechas" });
