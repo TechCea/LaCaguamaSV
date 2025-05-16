@@ -2655,14 +2655,18 @@ namespace LaCaguamaSV.Configuracion
         public bool CorteGeneralYaRealizado()
         {
             DateTime ahora = DateTime.Now;
+            DateTime inicio, fin;
 
-            // Mismo cálculo que ObtenerDatosCorteGeneral()
-            DateTime fechaInicio = ahora.Hour >= 3
-                ? new DateTime(ahora.Year, ahora.Month, ahora.Day, 10, 0, 0)
-                : new DateTime(ahora.AddDays(-1).Year, ahora.AddDays(-1).Month, ahora.AddDays(-1).Day, 10, 0, 0);
-
-            DateTime fechaFin = fechaInicio.AddHours(17); // hasta las 3am del día siguiente
-
+            if (ahora.Hour >= 10) // De 10:00 AM a 11:59 PM
+            {
+                inicio = DateTime.Today.AddHours(10); // hoy a las 10:00 AM
+                fin = DateTime.Today.AddDays(1).AddHours(3); // mañana a las 3:00 AM
+            }
+            else // De 12:00 AM a 2:59 AM (después de medianoche pero sigue siendo el turno anterior)
+            {
+                inicio = DateTime.Today.AddDays(-1).AddHours(10); // ayer a las 10:00 AM
+                fin = DateTime.Today.AddHours(3); // hoy a las 3:00 AM
+            }
             string query = @"
         SELECT COUNT(*) 
         FROM corte_general 
@@ -2674,11 +2678,11 @@ namespace LaCaguamaSV.Configuracion
                 conexion.Open();
                 using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                 {
-                    cmd.Parameters.AddWithValue("@inicio", fechaInicio);
-                    cmd.Parameters.AddWithValue("@fin", fechaFin);
+                    cmd.Parameters.AddWithValue("@inicio", inicio);
+                    cmd.Parameters.AddWithValue("@fin", fin);
 
                     int cantidad = Convert.ToInt32(cmd.ExecuteScalar());
-                    return cantidad > 0;
+                    return cantidad > 0; // Si ya hay un corte en ese rango
                 }
             }
         }
