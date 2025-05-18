@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.gbDatosIngrediente = new System.Windows.Forms.GroupBox();
+            this.cbb_unidad = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.btn_limpiarcampos = new System.Windows.Forms.Button();
             this.cbc_disponibilidad = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
@@ -46,8 +48,6 @@
             this.dgvIngredientes = new System.Windows.Forms.DataGridView();
             this.btncrearPlato = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
-            this.cbb_unidad = new System.Windows.Forms.ComboBox();
-            this.label3 = new System.Windows.Forms.Label();
             this.gbDatosIngrediente.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvIngredientes)).BeginInit();
             this.SuspendLayout();
@@ -77,6 +77,26 @@
             this.gbDatosIngrediente.TabIndex = 11;
             this.gbDatosIngrediente.TabStop = false;
             this.gbDatosIngrediente.Text = "Datos Ingrediente";
+            // 
+            // cbb_unidad
+            // 
+            this.cbb_unidad.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.cbb_unidad.FormattingEnabled = true;
+            this.cbb_unidad.Location = new System.Drawing.Point(212, 254);
+            this.cbb_unidad.Margin = new System.Windows.Forms.Padding(4);
+            this.cbb_unidad.Name = "cbb_unidad";
+            this.cbb_unidad.Size = new System.Drawing.Size(227, 28);
+            this.cbb_unidad.TabIndex = 26;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.ForeColor = System.Drawing.SystemColors.Control;
+            this.label3.Location = new System.Drawing.Point(36, 262);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(148, 20);
+            this.label3.TabIndex = 25;
+            this.label3.Text = "Unidad de medida:";
             // 
             // btn_limpiarcampos
             // 
@@ -278,26 +298,6 @@
             this.label4.Size = new System.Drawing.Size(323, 26);
             this.label4.TabIndex = 16;
             this.label4.Text = "INVENTARIO: INGREDIENTES";
-            // 
-            // cbb_unidad
-            // 
-            this.cbb_unidad.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.cbb_unidad.FormattingEnabled = true;
-            this.cbb_unidad.Location = new System.Drawing.Point(212, 254);
-            this.cbb_unidad.Margin = new System.Windows.Forms.Padding(4);
-            this.cbb_unidad.Name = "cbb_unidad";
-            this.cbb_unidad.Size = new System.Drawing.Size(227, 28);
-            this.cbb_unidad.TabIndex = 26;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.ForeColor = System.Drawing.SystemColors.Control;
-            this.label3.Location = new System.Drawing.Point(36, 262);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(66, 20);
-            this.label3.TabIndex = 25;
-            this.label3.Text = "Unidad:";
             // 
             // FormIngredientesInv
             // 

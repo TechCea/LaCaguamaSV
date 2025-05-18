@@ -35,10 +35,10 @@ namespace LaCaguamaSV.Configuracion
     {
         private MySqlConnection conectar = null;
         private static string usuario = "root";
-        private static string contrasenia = "root";
+        private static string contrasenia = "180294";
         private static string bd = "lacaguamabd";
         private static string ip = "localhost";
-        private static string puerto = "3307"; // 3306 o 3307 si eres javier 
+        private static string puerto = "3306"; // 3306 o 3307 si eres javier 
 
         string cadenaConexion = $"Server={ip};Port={puerto};Database={bd};User Id={usuario};Password={contrasenia};";
 
@@ -1239,19 +1239,22 @@ namespace LaCaguamaSV.Configuracion
             try
             {
                 string query = @"SELECT 
-                    e.id_extra AS ID, 
-                    i.nombreProducto AS Nombre, 
-                    e.precioUnitario AS Precio, 
-                    i.cantidad AS Cantidad, 
-                    p.nombreProv AS Proveedor,
-                    i.id_proveedor AS ID_Proveedor, 
-                    e.id_inventario AS ID_Inventario,
-                    i.id_disponibilidad AS ID_Disponibilidad,  -- Traemos el ID de disponibilidad
-                    d.nombreDis AS Disponibilidad  -- Y el nombre para mostrarlo
-                FROM extras e 
-                INNER JOIN inventario i ON e.id_inventario = i.id_inventario 
-                INNER JOIN proveedores p ON i.id_proveedor = p.id_proveedor
-                INNER JOIN disponibilidad d ON i.id_disponibilidad = d.id_disponibilidad";
+                                e.id_extra AS ID, 
+                                i.nombreProducto AS Nombre, 
+                                e.precioUnitario AS Precio, 
+                                i.cantidad AS Cantidad, 
+                                p.nombreProv AS Proveedor,
+                                i.id_proveedor AS ID_Proveedor,
+                                u.nombreUnidad AS 'Unidad',  -- <<--- Aquí corregido
+                                e.id_inventario AS ID_Inventario,
+                                i.id_disponibilidad AS ID_Disponibilidad,
+                                d.nombreDis AS Disponibilidad
+                            FROM extras e 
+                            INNER JOIN inventario i ON e.id_inventario = i.id_inventario 
+                            INNER JOIN unidad u ON i.id_unidad = u.id_unidad  -- <<--- Mantén esto
+                            INNER JOIN proveedores p ON i.id_proveedor = p.id_proveedor
+                            INNER JOIN disponibilidad d ON i.id_disponibilidad = d.id_disponibilidad";
+
 
                 DataTable result = EjecutarConsulta(query);
 
@@ -1274,7 +1277,7 @@ namespace LaCaguamaSV.Configuracion
 
 
 
-        public bool AgregarExtraConInventario(string nombre, decimal precio, decimal cantidad, int idProveedor, int idDisponibilidad)
+        public bool AgregarExtraConInventario(string nombre, decimal precio, decimal cantidad, int idProveedor, int idDisponibilidad, int idUnidad)
         {
             using (MySqlConnection conn = new MySqlConnection(cadenaConexion))
             {
@@ -1283,12 +1286,12 @@ namespace LaCaguamaSV.Configuracion
 
                 try
                 {
-                    // 1. Insertar en inventario (ahora con id_disponibilidad)
+                    // 1. Insertar en inventario (incluye unidad)
                     string queryInventario = @"
-                        INSERT INTO inventario 
-                        (nombreProducto, cantidad, id_proveedor, id_disponibilidad) 
-                        VALUES (@nombre, @cantidad, @idProveedor, @idDisponibilidad);
-                        SELECT LAST_INSERT_ID();";
+                INSERT INTO inventario 
+                (nombreProducto, cantidad, id_proveedor, id_disponibilidad, id_unidad) 
+                VALUES (@nombre, @cantidad, @idProveedor, @idDisponibilidad, @idUnidad);
+                SELECT LAST_INSERT_ID();";
 
                     MySqlCommand cmdInventario = new MySqlCommand(queryInventario, conn, transaction);
 
@@ -1296,14 +1299,15 @@ namespace LaCaguamaSV.Configuracion
                     cmdInventario.Parameters.Add("@cantidad", MySqlDbType.Decimal).Value = cantidad;
                     cmdInventario.Parameters.Add("@idProveedor", MySqlDbType.Int32).Value = idProveedor;
                     cmdInventario.Parameters.Add("@idDisponibilidad", MySqlDbType.Int32).Value = idDisponibilidad;
+                    cmdInventario.Parameters.Add("@idUnidad", MySqlDbType.Int32).Value = idUnidad;
 
                     int idInventario = Convert.ToInt32(cmdInventario.ExecuteScalar());
 
                     // 2. Insertar en extras
                     string queryExtra = @"
-                        INSERT INTO extras 
-                        (precioUnitario, id_inventario) 
-                        VALUES (@precio, @idInventario)";
+                INSERT INTO extras 
+                (precioUnitario, id_inventario) 
+                VALUES (@precio, @idInventario)";
 
                     MySqlCommand cmdExtra = new MySqlCommand(queryExtra, conn, transaction);
                     cmdExtra.Parameters.Add("@precio", MySqlDbType.Decimal).Value = precio;
@@ -1324,8 +1328,9 @@ namespace LaCaguamaSV.Configuracion
 
 
 
+
         public bool ActualizarExtraConInventario(int idExtra, int idInventario, string nombre,
-                                       decimal precio, decimal cantidad, int idProveedor, int idDisponibilidad)
+                             decimal precio, decimal cantidad, int idProveedor, int idDisponibilidad, int idUnidad)
         {
             using (MySqlConnection conn = new MySqlConnection(cadenaConexion))
             {
@@ -1334,13 +1339,14 @@ namespace LaCaguamaSV.Configuracion
 
                 try
                 {
-                    // 1. Actualizar inventario (ahora también id_disponibilidad)
+                    // 1. Actualizar inventario (incluye unidad)
                     string queryInventario = @"
                 UPDATE inventario SET 
                     nombreProducto = @nombre,
                     cantidad = @cantidad,
                     id_proveedor = @idProveedor,
-                    id_disponibilidad = @idDisponibilidad
+                    id_disponibilidad = @idDisponibilidad,
+                    id_unidad = @idUnidad
                 WHERE id_inventario = @idInventario";
 
                     MySqlCommand cmdInventario = new MySqlCommand(queryInventario, conn, transaction);
@@ -1348,10 +1354,11 @@ namespace LaCaguamaSV.Configuracion
                     cmdInventario.Parameters.Add("@cantidad", MySqlDbType.Decimal).Value = cantidad;
                     cmdInventario.Parameters.Add("@idProveedor", MySqlDbType.Int32).Value = idProveedor;
                     cmdInventario.Parameters.Add("@idDisponibilidad", MySqlDbType.Int32).Value = idDisponibilidad;
+                    cmdInventario.Parameters.Add("@idUnidad", MySqlDbType.Int32).Value = idUnidad;
                     cmdInventario.Parameters.Add("@idInventario", MySqlDbType.Int32).Value = idInventario;
                     cmdInventario.ExecuteNonQuery();
 
-                    // 2. Actualizar extras
+                    // 2. Actualizar tabla extras
                     string queryExtra = @"
                 UPDATE extras SET 
                     precioUnitario = @precio
@@ -1373,6 +1380,7 @@ namespace LaCaguamaSV.Configuracion
                 }
             }
         }
+
 
         //CODIGO DE RECETAS POR CADA PLATO
         //Ingredientes de cada plato

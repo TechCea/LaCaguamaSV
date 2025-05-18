@@ -35,6 +35,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
             // Cargar datos al iniciar
             CargarDatosIniciales();
+            CargarUnidadesCombo();
             dgvInventarioE.SelectionChanged += dgvInventarioE_SelectionChanged;
             dgvInventarioE.MultiSelect = false;
             btnLimpiar.Click += btnLimpiar_Click;
@@ -165,6 +166,12 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                     return;
                 }
 
+                if (cbb_unidad.SelectedValue == null)
+                {
+                    MessageBox.Show("Seleccione una unidad válida", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
                 if (cbxProveedor.SelectedValue == null)
                 {
                     MessageBox.Show("Seleccione un proveedor", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -173,13 +180,15 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
                 int idProveedor = Convert.ToInt32(cbxProveedor.SelectedValue);
 
-                // Agregar nuevo extra
-                if (conexion.AgregarExtraConInventario(txtNombre.Text, precio, cantidad, idProveedor, Convert.ToInt32(cbxDisponibilidad.SelectedValue)))
+                int idUnidad = Convert.ToInt32(cbb_unidad.SelectedValue);
+
+                if (conexion.AgregarExtraConInventario(txtNombre.Text, precio, cantidad, idProveedor, Convert.ToInt32(cbxDisponibilidad.SelectedValue), idUnidad))
                 {
                     MessageBox.Show("Extra agregado correctamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     LimpiarCampos();
                     CargarDatosIniciales();
                 }
+
             }
             catch (Exception ex)
             {
@@ -222,7 +231,21 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                     return;
                 }
 
+                if (cbxDisponibilidad.SelectedValue == null)
+                {
+                    MessageBox.Show("Seleccione una disponibilidad", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                if (cbb_unidad.SelectedValue == null)
+                {
+                    MessageBox.Show("Seleccione una unidad", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
                 int idProveedor = Convert.ToInt32(cbxProveedor.SelectedValue);
+                int idDisponibilidad = Convert.ToInt32(cbxDisponibilidad.SelectedValue);
+                int idUnidad = Convert.ToInt32(cbb_unidad.SelectedValue);
 
                 if (conexion.ActualizarExtraConInventario(
                     idExtraSeleccionado,
@@ -231,7 +254,8 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                     precio,
                     cantidad,
                     idProveedor,
-                    Convert.ToInt32(cbxDisponibilidad.SelectedValue)))
+                    idDisponibilidad,
+                    idUnidad)) // <<--- Este es el nuevo parámetro
                 {
                     MessageBox.Show("Extra actualizado correctamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     CargarDatosIniciales();
@@ -242,6 +266,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 MessageBox.Show($"Error al actualizar: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
         private void CargarDisponibilidad()
         {
@@ -321,6 +346,15 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             idInventarioSeleccionado = -1;
             dgvInventarioE.ClearSelection();
             btnAgregar.Enabled = true;
+        }
+
+
+        private void CargarUnidadesCombo()
+        {
+            DataTable dtUnidades = conexion.ObtenerUnidades();
+            cbb_unidad.DataSource = dtUnidades;
+            cbb_unidad.DisplayMember = "nombreUnidad"; // Lo que el usuario verá
+            cbb_unidad.ValueMember = "id_unidad"; // El valor real usado internamente
         }
 
         private void btnRegresar_Click(object sender, EventArgs e)

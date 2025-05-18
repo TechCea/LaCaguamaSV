@@ -46,6 +46,8 @@
             this.lblSeleccionExtra = new System.Windows.Forms.Label();
             this.dgvInventarioE = new System.Windows.Forms.DataGridView();
             this.label5 = new System.Windows.Forms.Label();
+            this.cbb_unidad = new System.Windows.Forms.ComboBox();
+            this.label6 = new System.Windows.Forms.Label();
             this.gbDatosExtras.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvInventarioE)).BeginInit();
             this.SuspendLayout();
@@ -57,7 +59,7 @@
             this.btnAgregar.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnAgregar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAgregar.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btnAgregar.Location = new System.Drawing.Point(1014, 568);
+            this.btnAgregar.Location = new System.Drawing.Point(1054, 572);
             this.btnAgregar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnAgregar.Name = "btnAgregar";
             this.btnAgregar.Size = new System.Drawing.Size(141, 54);
@@ -73,7 +75,7 @@
             this.btnActualizar.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnActualizar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnActualizar.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btnActualizar.Location = new System.Drawing.Point(1189, 571);
+            this.btnActualizar.Location = new System.Drawing.Point(1229, 575);
             this.btnActualizar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnActualizar.Name = "btnActualizar";
             this.btnActualizar.Size = new System.Drawing.Size(141, 54);
@@ -101,6 +103,8 @@
             // gbDatosExtras
             // 
             this.gbDatosExtras.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.gbDatosExtras.Controls.Add(this.cbb_unidad);
+            this.gbDatosExtras.Controls.Add(this.label6);
             this.gbDatosExtras.Controls.Add(this.btnLimpiar);
             this.gbDatosExtras.Controls.Add(this.cbxDisponibilidad);
             this.gbDatosExtras.Controls.Add(this.label3);
@@ -119,7 +123,7 @@
             this.gbDatosExtras.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.gbDatosExtras.Name = "gbDatosExtras";
             this.gbDatosExtras.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.gbDatosExtras.Size = new System.Drawing.Size(521, 458);
+            this.gbDatosExtras.Size = new System.Drawing.Size(561, 458);
             this.gbDatosExtras.TabIndex = 19;
             this.gbDatosExtras.TabStop = false;
             this.gbDatosExtras.Text = "Datos extras";
@@ -131,7 +135,7 @@
             this.btnLimpiar.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnLimpiar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnLimpiar.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btnLimpiar.Location = new System.Drawing.Point(311, 388);
+            this.btnLimpiar.Location = new System.Drawing.Point(358, 388);
             this.btnLimpiar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnLimpiar.Name = "btnLimpiar";
             this.btnLimpiar.Size = new System.Drawing.Size(177, 47);
@@ -143,7 +147,7 @@
             // 
             this.cbxDisponibilidad.Cursor = System.Windows.Forms.Cursors.Hand;
             this.cbxDisponibilidad.FormattingEnabled = true;
-            this.cbxDisponibilidad.Location = new System.Drawing.Point(235, 338);
+            this.cbxDisponibilidad.Location = new System.Drawing.Point(282, 328);
             this.cbxDisponibilidad.Margin = new System.Windows.Forms.Padding(4);
             this.cbxDisponibilidad.Name = "cbxDisponibilidad";
             this.cbxDisponibilidad.Size = new System.Drawing.Size(253, 28);
@@ -153,7 +157,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.ForeColor = System.Drawing.SystemColors.Control;
-            this.label3.Location = new System.Drawing.Point(35, 341);
+            this.label3.Location = new System.Drawing.Point(35, 328);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(119, 20);
             this.label3.TabIndex = 20;
@@ -163,7 +167,7 @@
             // 
             this.cbxProveedor.Cursor = System.Windows.Forms.Cursors.Hand;
             this.cbxProveedor.FormattingEnabled = true;
-            this.cbxProveedor.Location = new System.Drawing.Point(235, 281);
+            this.cbxProveedor.Location = new System.Drawing.Point(282, 280);
             this.cbxProveedor.Margin = new System.Windows.Forms.Padding(4);
             this.cbxProveedor.Name = "cbxProveedor";
             this.cbxProveedor.Size = new System.Drawing.Size(253, 28);
@@ -174,7 +178,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.ForeColor = System.Drawing.SystemColors.Control;
-            this.label4.Location = new System.Drawing.Point(35, 104);
+            this.label4.Location = new System.Drawing.Point(35, 95);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(137, 20);
             this.label4.TabIndex = 18;
@@ -184,7 +188,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.ForeColor = System.Drawing.SystemColors.Control;
-            this.label2.Location = new System.Drawing.Point(35, 284);
+            this.label2.Location = new System.Drawing.Point(35, 280);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(90, 20);
             this.label2.TabIndex = 16;
@@ -192,7 +196,7 @@
             // 
             // txtPrecio
             // 
-            this.txtPrecio.Location = new System.Drawing.Point(235, 219);
+            this.txtPrecio.Location = new System.Drawing.Point(282, 185);
             this.txtPrecio.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtPrecio.Name = "txtPrecio";
             this.txtPrecio.Size = new System.Drawing.Size(253, 26);
@@ -203,7 +207,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.ForeColor = System.Drawing.SystemColors.Control;
-            this.label1.Location = new System.Drawing.Point(35, 222);
+            this.label1.Location = new System.Drawing.Point(35, 185);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(62, 20);
             this.label1.TabIndex = 14;
@@ -211,7 +215,7 @@
             // 
             // txtCantida
             // 
-            this.txtCantida.Location = new System.Drawing.Point(235, 160);
+            this.txtCantida.Location = new System.Drawing.Point(282, 141);
             this.txtCantida.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtCantida.Name = "txtCantida";
             this.txtCantida.Size = new System.Drawing.Size(253, 26);
@@ -220,7 +224,7 @@
             // 
             // txtNombre
             // 
-            this.txtNombre.Location = new System.Drawing.Point(235, 104);
+            this.txtNombre.Location = new System.Drawing.Point(282, 98);
             this.txtNombre.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtNombre.Name = "txtNombre";
             this.txtNombre.Size = new System.Drawing.Size(253, 26);
@@ -231,18 +235,18 @@
             // 
             this.lblPrecioExtraU.AutoSize = true;
             this.lblPrecioExtraU.ForeColor = System.Drawing.SystemColors.Control;
-            this.lblPrecioExtraU.Location = new System.Drawing.Point(35, 163);
+            this.lblPrecioExtraU.Location = new System.Drawing.Point(35, 141);
             this.lblPrecioExtraU.Name = "lblPrecioExtraU";
-            this.lblPrecioExtraU.Size = new System.Drawing.Size(80, 20);
+            this.lblPrecioExtraU.Size = new System.Drawing.Size(232, 20);
             this.lblPrecioExtraU.TabIndex = 11;
-            this.lblPrecioExtraU.Text = "Cantidad:";
+            this.lblPrecioExtraU.Text = "Cantidad dentro de inventario:";
             // 
             // lblSeleccionExtra
             // 
             this.lblSeleccionExtra.AutoSize = true;
             this.lblSeleccionExtra.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.lblSeleccionExtra.ForeColor = System.Drawing.SystemColors.Control;
-            this.lblSeleccionExtra.Location = new System.Drawing.Point(35, 50);
+            this.lblSeleccionExtra.Location = new System.Drawing.Point(35, 41);
             this.lblSeleccionExtra.Name = "lblSeleccionExtra";
             this.lblSeleccionExtra.Size = new System.Drawing.Size(287, 20);
             this.lblSeleccionExtra.TabIndex = 8;
@@ -273,13 +277,33 @@
             this.label5.TabIndex = 23;
             this.label5.Text = "INVENTARIO: EXTRAS";
             // 
+            // cbb_unidad
+            // 
+            this.cbb_unidad.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.cbb_unidad.FormattingEnabled = true;
+            this.cbb_unidad.Location = new System.Drawing.Point(282, 229);
+            this.cbb_unidad.Margin = new System.Windows.Forms.Padding(4);
+            this.cbb_unidad.Name = "cbb_unidad";
+            this.cbb_unidad.Size = new System.Drawing.Size(253, 28);
+            this.cbb_unidad.TabIndex = 25;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.ForeColor = System.Drawing.SystemColors.Control;
+            this.label6.Location = new System.Drawing.Point(35, 229);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(148, 20);
+            this.label6.TabIndex = 24;
+            this.label6.Text = "Unidad de medida:";
+            // 
             // FormInventarioExtrasAdmin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.fondo;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(1363, 663);
+            this.ClientSize = new System.Drawing.Size(1403, 663);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.btnAgregar);
             this.Controls.Add(this.btnActualizar);
@@ -316,5 +340,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btnLimpiar;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.ComboBox cbb_unidad;
+        private System.Windows.Forms.Label label6;
     }
 }
