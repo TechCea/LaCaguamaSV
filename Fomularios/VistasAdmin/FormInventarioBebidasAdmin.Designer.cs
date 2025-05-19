@@ -224,9 +224,9 @@
             this.lblPrecioExtraU.ForeColor = System.Drawing.SystemColors.Control;
             this.lblPrecioExtraU.Location = new System.Drawing.Point(33, 158);
             this.lblPrecioExtraU.Name = "lblPrecioExtraU";
-            this.lblPrecioExtraU.Size = new System.Drawing.Size(80, 20);
+            this.lblPrecioExtraU.Size = new System.Drawing.Size(161, 20);
             this.lblPrecioExtraU.TabIndex = 11;
-            this.lblPrecioExtraU.Text = "Cantidad:";
+            this.lblPrecioExtraU.Text = "Cantidad a agregar: ";
             // 
             // lblSeleccionExtra
             // 

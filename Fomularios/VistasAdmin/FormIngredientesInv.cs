@@ -132,12 +132,13 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
                 // Asignar valores a los controles
                 txtNombreC.Text = nombreIngrediente;
-                txtCantidad.Text = cantidad;
+                txtCantidad.Text = null;
                 cbProveedores.SelectedItem = proveedor;
                 cbc_disponibilidad.SelectedIndex = cbc_disponibilidad.FindStringExact(disponibilidad);
                 cbb_unidad.SelectedIndex = cbb_unidad.FindStringExact(unidad); // 👈 Nuevo
 
                 lblSeleccion.Text = $"Se ha seleccionado el ingrediente: {nombreIngrediente}";
+                label1.Text = "Cantidad a sumar: ";
 
                 // Control de botones
                 btnActualizarB.Enabled = true;
@@ -151,6 +152,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 cbProveedores.SelectedIndex = -1;
                 cbb_unidad.SelectedIndex = -1;
                 cbc_disponibilidad.SelectedIndex = -1;
+                label1.Text = "Cantidad a agregar: ";
 
                 btnActualizarB.Enabled = false;
                 btnAgregarIng.Enabled = true;
@@ -320,7 +322,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 nuevaCantidad,
                 nuevoIdProveedor,
                 nuevoIdDisponibilidad,
-                nuevoIdUnidad // 👈 agregado
+                nuevoIdUnidad 
             );
 
             if (resultado)

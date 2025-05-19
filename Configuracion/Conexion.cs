@@ -961,8 +961,15 @@ namespace LaCaguamaSV.Configuracion
                 using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
                 {
                     conexion.Open();
-                    string queryInventario = "UPDATE inventario SET nombreProducto = @nombre, cantidad = @cantidad, id_proveedor = @idProveedor, id_disponibilidad = @idDisponibilidad " +
-                                             "WHERE id_inventario = @idInventario";
+
+                    string queryInventario = @"
+                UPDATE inventario 
+                SET nombreProducto = @nombre, 
+                    cantidad = cantidad + @cantidad, 
+                    id_proveedor = @idProveedor, 
+                    id_disponibilidad = @idDisponibilidad
+                WHERE id_inventario = @idInventario";
+
                     using (MySqlCommand cmd = new MySqlCommand(queryInventario, conexion))
                     {
                         cmd.Parameters.AddWithValue("@nombre", nombre);
@@ -972,9 +979,13 @@ namespace LaCaguamaSV.Configuracion
                         cmd.Parameters.AddWithValue("@idInventario", idInventario);
                         cmd.ExecuteNonQuery();
                     }
-                    // Actualización en bebidas (esto sigue igual)
-                    string queryBebidas = "UPDATE bebidas SET precioUnitario = @precio, id_categoria = @idCategoria " +
-                                          "WHERE id_inventario = @idInventario";
+
+                    string queryBebidas = @"
+                UPDATE bebidas 
+                SET precioUnitario = @precio, 
+                    id_categoria = @idCategoria 
+                WHERE id_inventario = @idInventario";
+
                     using (MySqlCommand cmd = new MySqlCommand(queryBebidas, conexion))
                     {
                         cmd.Parameters.AddWithValue("@precio", precio);
@@ -983,6 +994,7 @@ namespace LaCaguamaSV.Configuracion
                         cmd.ExecuteNonQuery();
                     }
                 }
+
                 return true;
             }
             catch (Exception ex)
@@ -991,6 +1003,7 @@ namespace LaCaguamaSV.Configuracion
                 return false;
             }
         }
+
 
 
         //CODIGO DE TODO LO DE INVENTARIO:
@@ -1135,7 +1148,7 @@ namespace LaCaguamaSV.Configuracion
 
         //Agregar un nuevo ingrediente
         // Editar un ingrediente existente
-        public bool EditarIngrediente(int idInventario, string nuevoNombre, decimal nuevaCantidad, int nuevoIdProveedor, int nuevoIdDisponibilidad, int nuevoIdUnidad)
+        public bool EditarIngrediente(int idInventario, string nuevoNombre, decimal cantidadASumar, int nuevoIdProveedor, int nuevoIdDisponibilidad, int nuevoIdUnidad)
         {
             try
             {
@@ -1145,7 +1158,7 @@ namespace LaCaguamaSV.Configuracion
                     string query = @"
                 UPDATE inventario 
                 SET nombreProducto = @nuevoNombre, 
-                    cantidad = @nuevaCantidad, 
+                    cantidad = cantidad + @cantidadASumar, 
                     id_proveedor = @nuevoIdProveedor, 
                     id_disponibilidad = @nuevoIdDisponibilidad,
                     id_unidad = @nuevoIdUnidad
@@ -1154,10 +1167,10 @@ namespace LaCaguamaSV.Configuracion
                     using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                     {
                         cmd.Parameters.AddWithValue("@nuevoNombre", nuevoNombre);
-                        cmd.Parameters.AddWithValue("@nuevaCantidad", nuevaCantidad);
+                        cmd.Parameters.AddWithValue("@cantidadASumar", cantidadASumar);
                         cmd.Parameters.AddWithValue("@nuevoIdProveedor", nuevoIdProveedor);
                         cmd.Parameters.AddWithValue("@nuevoIdDisponibilidad", nuevoIdDisponibilidad);
-                        cmd.Parameters.AddWithValue("@nuevoIdUnidad", nuevoIdUnidad); // 👈 nuevo parámetro
+                        cmd.Parameters.AddWithValue("@nuevoIdUnidad", nuevoIdUnidad);
                         cmd.Parameters.AddWithValue("@idInventario", idInventario);
 
                         int result = cmd.ExecuteNonQuery();
@@ -1171,6 +1184,7 @@ namespace LaCaguamaSV.Configuracion
                 return false;
             }
         }
+
 
         //Agregar plato:
         public bool AgregarPlato(string nombrePlato, decimal precioUnitario, string descripcion, int idCategoria)
@@ -1339,7 +1353,7 @@ namespace LaCaguamaSV.Configuracion
 
 
         public bool ActualizarExtraConInventario(int idExtra, int idInventario, string nombre,
-                             decimal precio, decimal cantidad, int idProveedor, int idDisponibilidad, int idUnidad)
+                              decimal precio, decimal cantidad, int idProveedor, int idDisponibilidad, int idUnidad)
         {
             using (MySqlConnection conn = new MySqlConnection(cadenaConexion))
             {
@@ -1348,11 +1362,11 @@ namespace LaCaguamaSV.Configuracion
 
                 try
                 {
-                    // 1. Actualizar inventario (incluye unidad)
+                    // 1. Actualizar inventario (SUMANDO cantidad)
                     string queryInventario = @"
                 UPDATE inventario SET 
                     nombreProducto = @nombre,
-                    cantidad = @cantidad,
+                    cantidad = cantidad + @cantidad,
                     id_proveedor = @idProveedor,
                     id_disponibilidad = @idDisponibilidad,
                     id_unidad = @idUnidad
@@ -1389,7 +1403,6 @@ namespace LaCaguamaSV.Configuracion
                 }
             }
         }
-
 
         //CODIGO DE RECETAS POR CADA PLATO
         //Ingredientes de cada plato

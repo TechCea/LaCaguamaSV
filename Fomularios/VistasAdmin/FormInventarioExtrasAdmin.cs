@@ -100,18 +100,9 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                         txtNombre.Text = row["Nombre"]?.ToString() ?? "";
                         txtCantida.Text = row["Cantidad"]?.ToString() ?? "0.00";
                         txtPrecio.Text = row["Precio"]?.ToString() ?? "0.00";
+                        txtCantida.Text = null; 
 
                         // Cargar proveedor en ComboBox
-                        if (row["ID_Proveedor"] != null && row["ID_Proveedor"] != DBNull.Value)
-                        {
-                            cbxProveedor.SelectedValue = Convert.ToInt32(row["ID_Proveedor"]);
-
-                        }
-                        else
-                        {
-                            cbxProveedor.SelectedIndex = -1;
-                        }
-
                         if (row["ID_Proveedor"] != null && row["ID_Proveedor"] != DBNull.Value)
                         {
                             cbxProveedor.SelectedValue = Convert.ToInt32(row["ID_Proveedor"]);
@@ -128,11 +119,15 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                         else
                         {
                             cbxDisponibilidad.SelectedIndex = -1;
+                            lblPrecioExtraU.Text = "Cantidad a agregar: ";
                         }
 
                         // Guardar IDs para operaciones
                         idExtraSeleccionado = row["ID"] != DBNull.Value ? Convert.ToInt32(row["ID"]) : -1;
                         idInventarioSeleccionado = row["ID_Inventario"] != DBNull.Value ? Convert.ToInt32(row["ID_Inventario"]) : -1;
+
+                        // CAMBIO: Actualizar el texto del label al seleccionar un extra
+                        lblPrecioExtraU.Text = "Cantidad a sumar";
                     }
                 }
                 catch (Exception ex)
@@ -255,7 +250,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                     cantidad,
                     idProveedor,
                     idDisponibilidad,
-                    idUnidad)) // <<--- Este es el nuevo parámetro
+                    idUnidad)) 
                 {
                     MessageBox.Show("Extra actualizado correctamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     CargarDatosIniciales();

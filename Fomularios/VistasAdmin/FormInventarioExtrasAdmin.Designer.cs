@@ -32,6 +32,8 @@
             this.btnActualizar = new System.Windows.Forms.Button();
             this.btnRegresar = new System.Windows.Forms.Button();
             this.gbDatosExtras = new System.Windows.Forms.GroupBox();
+            this.cbb_unidad = new System.Windows.Forms.ComboBox();
+            this.label6 = new System.Windows.Forms.Label();
             this.btnLimpiar = new System.Windows.Forms.Button();
             this.cbxDisponibilidad = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -46,8 +48,6 @@
             this.lblSeleccionExtra = new System.Windows.Forms.Label();
             this.dgvInventarioE = new System.Windows.Forms.DataGridView();
             this.label5 = new System.Windows.Forms.Label();
-            this.cbb_unidad = new System.Windows.Forms.ComboBox();
-            this.label6 = new System.Windows.Forms.Label();
             this.gbDatosExtras.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvInventarioE)).BeginInit();
             this.SuspendLayout();
@@ -127,6 +127,26 @@
             this.gbDatosExtras.TabIndex = 19;
             this.gbDatosExtras.TabStop = false;
             this.gbDatosExtras.Text = "Datos extras";
+            // 
+            // cbb_unidad
+            // 
+            this.cbb_unidad.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.cbb_unidad.FormattingEnabled = true;
+            this.cbb_unidad.Location = new System.Drawing.Point(282, 229);
+            this.cbb_unidad.Margin = new System.Windows.Forms.Padding(4);
+            this.cbb_unidad.Name = "cbb_unidad";
+            this.cbb_unidad.Size = new System.Drawing.Size(253, 28);
+            this.cbb_unidad.TabIndex = 25;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.ForeColor = System.Drawing.SystemColors.Control;
+            this.label6.Location = new System.Drawing.Point(35, 229);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(148, 20);
+            this.label6.TabIndex = 24;
+            this.label6.Text = "Unidad de medida:";
             // 
             // btnLimpiar
             // 
@@ -237,9 +257,9 @@
             this.lblPrecioExtraU.ForeColor = System.Drawing.SystemColors.Control;
             this.lblPrecioExtraU.Location = new System.Drawing.Point(35, 141);
             this.lblPrecioExtraU.Name = "lblPrecioExtraU";
-            this.lblPrecioExtraU.Size = new System.Drawing.Size(232, 20);
+            this.lblPrecioExtraU.Size = new System.Drawing.Size(180, 20);
             this.lblPrecioExtraU.TabIndex = 11;
-            this.lblPrecioExtraU.Text = "Cantidad dentro de inventario:";
+            this.lblPrecioExtraU.Text = "Cantidad en inventario:";
             // 
             // lblSeleccionExtra
             // 
@@ -276,26 +296,6 @@
             this.label5.Size = new System.Drawing.Size(246, 26);
             this.label5.TabIndex = 23;
             this.label5.Text = "INVENTARIO: EXTRAS";
-            // 
-            // cbb_unidad
-            // 
-            this.cbb_unidad.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.cbb_unidad.FormattingEnabled = true;
-            this.cbb_unidad.Location = new System.Drawing.Point(282, 229);
-            this.cbb_unidad.Margin = new System.Windows.Forms.Padding(4);
-            this.cbb_unidad.Name = "cbb_unidad";
-            this.cbb_unidad.Size = new System.Drawing.Size(253, 28);
-            this.cbb_unidad.TabIndex = 25;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.ForeColor = System.Drawing.SystemColors.Control;
-            this.label6.Location = new System.Drawing.Point(35, 229);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(148, 20);
-            this.label6.TabIndex = 24;
-            this.label6.Text = "Unidad de medida:";
             // 
             // FormInventarioExtrasAdmin
             // 

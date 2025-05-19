@@ -165,9 +165,12 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                     txtNombre.Text = row["Nombre"].ToString();
                     txtCantida.Text = row["Cantidad"].ToString();
                     txtPrecio.Text = row["Precio"].ToString();
-                    cbxProveedor.SelectedValue = row["ID_Proveedor"]; 
-                    cbxCategoria.SelectedValue = row["ID_Categoria"];   
+                    cbxProveedor.SelectedValue = row["ID_Proveedor"];
+                    cbxCategoria.SelectedValue = row["ID_Categoria"];
                     cbc_disponibilidad.SelectedValue = row["ID_Disponibilidad"];
+
+                    txtCantida.Text = null;
+                    lblPrecioExtraU.Text = "Cantidad a sumar"; // 👈 Aquí el cambio
 
                     btnAgregar.Enabled = false;
                 }
