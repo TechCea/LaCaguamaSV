@@ -79,10 +79,10 @@
             // dgvGastos
             // 
             this.dgvGastos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvGastos.Location = new System.Drawing.Point(379, 200);
+            this.dgvGastos.Location = new System.Drawing.Point(667, 167);
             this.dgvGastos.Name = "dgvGastos";
             this.dgvGastos.RowHeadersWidth = 51;
-            this.dgvGastos.Size = new System.Drawing.Size(476, 208);
+            this.dgvGastos.Size = new System.Drawing.Size(583, 372);
             this.dgvGastos.TabIndex = 4;
             // 
             // btnAgregarGasto
@@ -92,9 +92,9 @@
             this.btnAgregarGasto.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnAgregarGasto.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAgregarGasto.ForeColor = System.Drawing.SystemColors.Control;
-            this.btnAgregarGasto.Location = new System.Drawing.Point(38, 500);
+            this.btnAgregarGasto.Location = new System.Drawing.Point(135, 618);
             this.btnAgregarGasto.Name = "btnAgregarGasto";
-            this.btnAgregarGasto.Size = new System.Drawing.Size(80, 48);
+            this.btnAgregarGasto.Size = new System.Drawing.Size(103, 47);
             this.btnAgregarGasto.TabIndex = 5;
             this.btnAgregarGasto.Text = "Agregar";
             this.btnAgregarGasto.UseVisualStyleBackColor = false;
@@ -118,7 +118,7 @@
             this.panel2.Controls.Add(this.label4);
             this.panel2.Controls.Add(this.txtFondoInicial);
             this.panel2.Controls.Add(this.label3);
-            this.panel2.Location = new System.Drawing.Point(22, 21);
+            this.panel2.Location = new System.Drawing.Point(132, 82);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(285, 457);
             this.panel2.TabIndex = 12;
@@ -278,9 +278,9 @@
             this.btnEditarGasto.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnEditarGasto.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnEditarGasto.ForeColor = System.Drawing.SystemColors.Control;
-            this.btnEditarGasto.Location = new System.Drawing.Point(139, 500);
+            this.btnEditarGasto.Location = new System.Drawing.Point(248, 618);
             this.btnEditarGasto.Name = "btnEditarGasto";
-            this.btnEditarGasto.Size = new System.Drawing.Size(89, 48);
+            this.btnEditarGasto.Size = new System.Drawing.Size(112, 47);
             this.btnEditarGasto.TabIndex = 19;
             this.btnEditarGasto.Text = "Actualizar";
             this.btnEditarGasto.UseVisualStyleBackColor = false;
@@ -288,7 +288,7 @@
             // 
             // dtpFechaInicioGasto
             // 
-            this.dtpFechaInicioGasto.Location = new System.Drawing.Point(502, 48);
+            this.dtpFechaInicioGasto.Location = new System.Drawing.Point(667, 106);
             this.dtpFechaInicioGasto.Name = "dtpFechaInicioGasto";
             this.dtpFechaInicioGasto.Size = new System.Drawing.Size(200, 20);
             this.dtpFechaInicioGasto.TabIndex = 23;
@@ -300,9 +300,9 @@
             this.btnFiltrar.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnFiltrar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnFiltrar.ForeColor = System.Drawing.SystemColors.Control;
-            this.btnFiltrar.Location = new System.Drawing.Point(253, 500);
+            this.btnFiltrar.Location = new System.Drawing.Point(371, 618);
             this.btnFiltrar.Name = "btnFiltrar";
-            this.btnFiltrar.Size = new System.Drawing.Size(89, 48);
+            this.btnFiltrar.Size = new System.Drawing.Size(112, 47);
             this.btnFiltrar.TabIndex = 24;
             this.btnFiltrar.Text = "Filtrar";
             this.btnFiltrar.UseVisualStyleBackColor = false;
@@ -310,7 +310,7 @@
             // 
             // dtpFechaFinGasto
             // 
-            this.dtpFechaFinGasto.Location = new System.Drawing.Point(723, 48);
+            this.dtpFechaFinGasto.Location = new System.Drawing.Point(1050, 106);
             this.dtpFechaFinGasto.Name = "dtpFechaFinGasto";
             this.dtpFechaFinGasto.Size = new System.Drawing.Size(200, 20);
             this.dtpFechaFinGasto.TabIndex = 25;
@@ -318,7 +318,7 @@
             // cmbTipoFiltroGasto
             // 
             this.cmbTipoFiltroGasto.FormattingEnabled = true;
-            this.cmbTipoFiltroGasto.Location = new System.Drawing.Point(337, 48);
+            this.cmbTipoFiltroGasto.Location = new System.Drawing.Point(470, 102);
             this.cmbTipoFiltroGasto.Name = "cmbTipoFiltroGasto";
             this.cmbTipoFiltroGasto.Size = new System.Drawing.Size(148, 21);
             this.cmbTipoFiltroGasto.TabIndex = 41;
@@ -327,7 +327,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(793, 21);
+            this.label10.Location = new System.Drawing.Point(1186, 75);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(62, 13);
             this.label10.TabIndex = 45;
@@ -336,7 +336,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(554, 21);
+            this.label11.Location = new System.Drawing.Point(664, 75);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(80, 13);
             this.label11.TabIndex = 44;
@@ -349,9 +349,9 @@
             this.btnResetearFiltro.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnResetearFiltro.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnResetearFiltro.ForeColor = System.Drawing.SystemColors.Control;
-            this.btnResetearFiltro.Location = new System.Drawing.Point(364, 500);
+            this.btnResetearFiltro.Location = new System.Drawing.Point(496, 618);
             this.btnResetearFiltro.Name = "btnResetearFiltro";
-            this.btnResetearFiltro.Size = new System.Drawing.Size(89, 48);
+            this.btnResetearFiltro.Size = new System.Drawing.Size(112, 47);
             this.btnResetearFiltro.TabIndex = 46;
             this.btnResetearFiltro.Text = "Reiniciar";
             this.btnResetearFiltro.UseVisualStyleBackColor = false;
@@ -363,7 +363,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.fondo;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(950, 588);
+            this.ClientSize = new System.Drawing.Size(1370, 711);
             this.Controls.Add(this.btnResetearFiltro);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.label11);
@@ -377,6 +377,7 @@
             this.Controls.Add(this.dgvGastos);
             this.Name = "FormAdminGastos";
             this.Text = "Gastos de la caja";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.FormAdminGastos_Load_1);
             ((System.ComponentModel.ISupportInitialize)(this.dgvGastos)).EndInit();
             this.panel2.ResumeLayout(false);
