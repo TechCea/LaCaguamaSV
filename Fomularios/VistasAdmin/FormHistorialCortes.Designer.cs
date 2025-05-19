@@ -48,7 +48,7 @@
             // lblTotalRegistrosCortes
             // 
             this.lblTotalRegistrosCortes.AutoSize = true;
-            this.lblTotalRegistrosCortes.Location = new System.Drawing.Point(688, 38);
+            this.lblTotalRegistrosCortes.Location = new System.Drawing.Point(1081, 180);
             this.lblTotalRegistrosCortes.Name = "lblTotalRegistrosCortes";
             this.lblTotalRegistrosCortes.Size = new System.Drawing.Size(35, 13);
             this.lblTotalRegistrosCortes.TabIndex = 36;
@@ -57,7 +57,7 @@
             // lblACortes
             // 
             this.lblACortes.AutoSize = true;
-            this.lblACortes.Location = new System.Drawing.Point(80, 71);
+            this.lblACortes.Location = new System.Drawing.Point(177, 180);
             this.lblACortes.Name = "lblACortes";
             this.lblACortes.Size = new System.Drawing.Size(35, 13);
             this.lblACortes.TabIndex = 35;
@@ -67,7 +67,7 @@
             // btnFiltrarCortes
             // 
             this.btnFiltrarCortes.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.btnFiltrarCortes.Location = new System.Drawing.Point(507, 80);
+            this.btnFiltrarCortes.Location = new System.Drawing.Point(916, 236);
             this.btnFiltrarCortes.Name = "btnFiltrarCortes";
             this.btnFiltrarCortes.Size = new System.Drawing.Size(114, 46);
             this.btnFiltrarCortes.TabIndex = 33;
@@ -77,7 +77,7 @@
             // 
             // dtpFechaFinCortes
             // 
-            this.dtpFechaFinCortes.Location = new System.Drawing.Point(466, 32);
+            this.dtpFechaFinCortes.Location = new System.Drawing.Point(956, 131);
             this.dtpFechaFinCortes.Name = "dtpFechaFinCortes";
             this.dtpFechaFinCortes.Size = new System.Drawing.Size(200, 20);
             this.dtpFechaFinCortes.TabIndex = 32;
@@ -85,7 +85,7 @@
             // 
             // dtpFechaInicioCortes
             // 
-            this.dtpFechaInicioCortes.Location = new System.Drawing.Point(227, 32);
+            this.dtpFechaInicioCortes.Location = new System.Drawing.Point(440, 131);
             this.dtpFechaInicioCortes.Name = "dtpFechaInicioCortes";
             this.dtpFechaInicioCortes.Size = new System.Drawing.Size(200, 20);
             this.dtpFechaInicioCortes.TabIndex = 31;
@@ -94,7 +94,7 @@
             // lblFiltro
             // 
             this.lblFiltro.AutoSize = true;
-            this.lblFiltro.Location = new System.Drawing.Point(32, 11);
+            this.lblFiltro.Location = new System.Drawing.Point(177, 103);
             this.lblFiltro.Name = "lblFiltro";
             this.lblFiltro.Size = new System.Drawing.Size(35, 13);
             this.lblFiltro.TabIndex = 29;
@@ -104,17 +104,17 @@
             // dataGridViewCortes
             // 
             this.dataGridViewCortes.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewCortes.Location = new System.Drawing.Point(12, 147);
+            this.dataGridViewCortes.Location = new System.Drawing.Point(180, 288);
             this.dataGridViewCortes.Name = "dataGridViewCortes";
             this.dataGridViewCortes.RowHeadersWidth = 51;
-            this.dataGridViewCortes.Size = new System.Drawing.Size(776, 291);
+            this.dataGridViewCortes.Size = new System.Drawing.Size(976, 380);
             this.dataGridViewCortes.TabIndex = 28;
             this.dataGridViewCortes.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewCortes_CellContentClick_1);
             // 
             // btnCorteGeneral
             // 
             this.btnCorteGeneral.BackColor = System.Drawing.Color.Coral;
-            this.btnCorteGeneral.Location = new System.Drawing.Point(35, 109);
+            this.btnCorteGeneral.Location = new System.Drawing.Point(180, 250);
             this.btnCorteGeneral.Name = "btnCorteGeneral";
             this.btnCorteGeneral.Size = new System.Drawing.Size(111, 32);
             this.btnCorteGeneral.TabIndex = 37;
@@ -125,7 +125,7 @@
             // btnCorteTarjetas
             // 
             this.btnCorteTarjetas.BackColor = System.Drawing.Color.Coral;
-            this.btnCorteTarjetas.Location = new System.Drawing.Point(199, 109);
+            this.btnCorteTarjetas.Location = new System.Drawing.Point(320, 250);
             this.btnCorteTarjetas.Name = "btnCorteTarjetas";
             this.btnCorteTarjetas.Size = new System.Drawing.Size(105, 32);
             this.btnCorteTarjetas.TabIndex = 38;
@@ -136,7 +136,7 @@
             // btnCorteCaja
             // 
             this.btnCorteCaja.BackColor = System.Drawing.Color.Coral;
-            this.btnCorteCaja.Location = new System.Drawing.Point(346, 109);
+            this.btnCorteCaja.Location = new System.Drawing.Point(457, 250);
             this.btnCorteCaja.Name = "btnCorteCaja";
             this.btnCorteCaja.Size = new System.Drawing.Size(106, 32);
             this.btnCorteCaja.TabIndex = 39;
@@ -147,7 +147,7 @@
             // cmbTipoFiltroCortes
             // 
             this.cmbTipoFiltroCortes.FormattingEnabled = true;
-            this.cmbTipoFiltroCortes.Location = new System.Drawing.Point(35, 31);
+            this.cmbTipoFiltroCortes.Location = new System.Drawing.Point(171, 130);
             this.cmbTipoFiltroCortes.Name = "cmbTipoFiltroCortes";
             this.cmbTipoFiltroCortes.Size = new System.Drawing.Size(148, 21);
             this.cmbTipoFiltroCortes.TabIndex = 40;
@@ -156,7 +156,7 @@
             // btnResetearCortes
             // 
             this.btnResetearCortes.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
-            this.btnResetearCortes.Location = new System.Drawing.Point(686, 80);
+            this.btnResetearCortes.Location = new System.Drawing.Point(1054, 236);
             this.btnResetearCortes.Name = "btnResetearCortes";
             this.btnResetearCortes.Size = new System.Drawing.Size(102, 46);
             this.btnResetearCortes.TabIndex = 41;
@@ -167,7 +167,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(463, 11);
+            this.label3.Location = new System.Drawing.Point(1094, 103);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(62, 13);
             this.label3.TabIndex = 43;
@@ -176,7 +176,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(224, 11);
+            this.label2.Location = new System.Drawing.Point(437, 103);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(80, 13);
             this.label2.TabIndex = 42;
@@ -187,7 +187,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.fondo;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(1370, 749);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.btnResetearCortes);
@@ -204,6 +204,7 @@
             this.Controls.Add(this.dataGridViewCortes);
             this.Name = "FormHistorialCortes";
             this.Text = "Historial de cortes";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.FormHistorialCortes_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCortes)).EndInit();
             this.ResumeLayout(false);
