@@ -50,11 +50,15 @@
             this.btnGestionUsuarios.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnGestionUsuarios.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnGestionUsuarios.ForeColor = System.Drawing.SystemColors.Control;
-            this.btnGestionUsuarios.Location = new System.Drawing.Point(179, 75);
+            this.btnGestionUsuarios.Image = global::LaCaguamaSV.Properties.Resources.usuario;
+            this.btnGestionUsuarios.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnGestionUsuarios.Location = new System.Drawing.Point(239, 92);
+            this.btnGestionUsuarios.Margin = new System.Windows.Forms.Padding(4);
             this.btnGestionUsuarios.Name = "btnGestionUsuarios";
-            this.btnGestionUsuarios.Size = new System.Drawing.Size(164, 64);
+            this.btnGestionUsuarios.Size = new System.Drawing.Size(341, 79);
             this.btnGestionUsuarios.TabIndex = 2;
             this.btnGestionUsuarios.Text = "Administrar Usuarios";
+            this.btnGestionUsuarios.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnGestionUsuarios.UseVisualStyleBackColor = false;
             this.btnGestionUsuarios.Click += new System.EventHandler(this.btnGestionUsuarios_Click);
             // 
@@ -65,9 +69,10 @@
             this.btnCerrarSesion.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnCerrarSesion.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCerrarSesion.ForeColor = System.Drawing.SystemColors.Control;
-            this.btnCerrarSesion.Location = new System.Drawing.Point(1215, 56);
+            this.btnCerrarSesion.Location = new System.Drawing.Point(1620, 69);
+            this.btnCerrarSesion.Margin = new System.Windows.Forms.Padding(4);
             this.btnCerrarSesion.Name = "btnCerrarSesion";
-            this.btnCerrarSesion.Size = new System.Drawing.Size(107, 38);
+            this.btnCerrarSesion.Size = new System.Drawing.Size(143, 47);
             this.btnCerrarSesion.TabIndex = 3;
             this.btnCerrarSesion.Text = "Cerrar sesión";
             this.btnCerrarSesion.UseVisualStyleBackColor = false;
@@ -80,12 +85,15 @@
             this.btnMenu.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnMenu.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMenu.ForeColor = System.Drawing.SystemColors.Control;
-            this.btnMenu.Location = new System.Drawing.Point(554, 75);
-            this.btnMenu.Margin = new System.Windows.Forms.Padding(2);
+            this.btnMenu.Image = global::LaCaguamaSV.Properties.Resources.menu;
+            this.btnMenu.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnMenu.Location = new System.Drawing.Point(948, 92);
+            this.btnMenu.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnMenu.Name = "btnMenu";
-            this.btnMenu.Size = new System.Drawing.Size(164, 64);
+            this.btnMenu.Size = new System.Drawing.Size(290, 79);
             this.btnMenu.TabIndex = 5;
             this.btnMenu.Text = "Gestionar Menú";
+            this.btnMenu.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnMenu.UseVisualStyleBackColor = false;
             this.btnMenu.Click += new System.EventHandler(this.btnMenu_Click);
             // 
@@ -96,9 +104,12 @@
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button1.ForeColor = System.Drawing.SystemColors.Control;
-            this.button1.Location = new System.Drawing.Point(368, 157);
+            this.button1.Image = global::LaCaguamaSV.Properties.Resources.innovacion;
+            this.button1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.button1.Location = new System.Drawing.Point(1257, 94);
+            this.button1.Margin = new System.Windows.Forms.Padding(4);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(164, 54);
+            this.button1.Size = new System.Drawing.Size(329, 77);
             this.button1.TabIndex = 7;
             this.button1.Text = "Funciones";
             this.button1.UseVisualStyleBackColor = false;
@@ -108,10 +119,11 @@
             // 
             this.dataGridViewOrdenesAdmin.BackgroundColor = System.Drawing.SystemColors.ControlDarkDark;
             this.dataGridViewOrdenesAdmin.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewOrdenesAdmin.Location = new System.Drawing.Point(179, 228);
+            this.dataGridViewOrdenesAdmin.Location = new System.Drawing.Point(239, 281);
+            this.dataGridViewOrdenesAdmin.Margin = new System.Windows.Forms.Padding(4);
             this.dataGridViewOrdenesAdmin.Name = "dataGridViewOrdenesAdmin";
             this.dataGridViewOrdenesAdmin.RowHeadersWidth = 51;
-            this.dataGridViewOrdenesAdmin.Size = new System.Drawing.Size(943, 397);
+            this.dataGridViewOrdenesAdmin.Size = new System.Drawing.Size(1374, 489);
             this.dataGridViewOrdenesAdmin.TabIndex = 8;
             // 
             // btnCrearOrden
@@ -121,9 +133,12 @@
             this.btnCrearOrden.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnCrearOrden.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCrearOrden.ForeColor = System.Drawing.SystemColors.Control;
-            this.btnCrearOrden.Location = new System.Drawing.Point(179, 157);
+            this.btnCrearOrden.Image = global::LaCaguamaSV.Properties.Resources.cuenta__1_;
+            this.btnCrearOrden.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnCrearOrden.Location = new System.Drawing.Point(239, 193);
+            this.btnCrearOrden.Margin = new System.Windows.Forms.Padding(4);
             this.btnCrearOrden.Name = "btnCrearOrden";
-            this.btnCrearOrden.Size = new System.Drawing.Size(164, 54);
+            this.btnCrearOrden.Size = new System.Drawing.Size(341, 66);
             this.btnCrearOrden.TabIndex = 9;
             this.btnCrearOrden.Text = "Crear Orden";
             this.btnCrearOrden.UseVisualStyleBackColor = false;
@@ -136,12 +151,15 @@
             this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button2.ForeColor = System.Drawing.SystemColors.Control;
-            this.button2.Location = new System.Drawing.Point(555, 157);
-            this.button2.Margin = new System.Windows.Forms.Padding(2);
+            this.button2.Image = global::LaCaguamaSV.Properties.Resources.mesa_de_comedor__1_;
+            this.button2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.button2.Location = new System.Drawing.Point(949, 193);
+            this.button2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(164, 56);
+            this.button2.Size = new System.Drawing.Size(290, 69);
             this.button2.TabIndex = 10;
             this.button2.Text = "Gestionar mesas";
+            this.button2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.button2.UseVisualStyleBackColor = false;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
@@ -152,12 +170,15 @@
             this.btnInventario.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnInventario.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnInventario.ForeColor = System.Drawing.SystemColors.Control;
-            this.btnInventario.Location = new System.Drawing.Point(367, 75);
-            this.btnInventario.Margin = new System.Windows.Forms.Padding(2);
+            this.btnInventario.Image = global::LaCaguamaSV.Properties.Resources.inventario_disponible;
+            this.btnInventario.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnInventario.Location = new System.Drawing.Point(596, 95);
+            this.btnInventario.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnInventario.Name = "btnInventario";
-            this.btnInventario.Size = new System.Drawing.Size(164, 62);
+            this.btnInventario.Size = new System.Drawing.Size(333, 76);
             this.btnInventario.TabIndex = 11;
             this.btnInventario.Text = "Gestionar inventario";
+            this.btnInventario.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnInventario.UseVisualStyleBackColor = false;
             this.btnInventario.Click += new System.EventHandler(this.btnInventario_Click);
             // 
@@ -168,9 +189,12 @@
             this.BtnHistorialPagos.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.BtnHistorialPagos.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BtnHistorialPagos.ForeColor = System.Drawing.SystemColors.Control;
-            this.BtnHistorialPagos.Location = new System.Drawing.Point(742, 74);
+            this.BtnHistorialPagos.Image = global::LaCaguamaSV.Properties.Resources.historial_de_transacciones1;
+            this.BtnHistorialPagos.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.BtnHistorialPagos.Location = new System.Drawing.Point(596, 194);
+            this.BtnHistorialPagos.Margin = new System.Windows.Forms.Padding(4);
             this.BtnHistorialPagos.Name = "BtnHistorialPagos";
-            this.BtnHistorialPagos.Size = new System.Drawing.Size(164, 63);
+            this.BtnHistorialPagos.Size = new System.Drawing.Size(333, 69);
             this.BtnHistorialPagos.TabIndex = 12;
             this.BtnHistorialPagos.Text = "Historial Pagos";
             this.BtnHistorialPagos.UseVisualStyleBackColor = false;
@@ -183,10 +207,12 @@
             this.buttonPromociones.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.buttonPromociones.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonPromociones.ForeColor = System.Drawing.SystemColors.Control;
-            this.buttonPromociones.Location = new System.Drawing.Point(744, 153);
-            this.buttonPromociones.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonPromociones.Image = global::LaCaguamaSV.Properties.Resources.promocion;
+            this.buttonPromociones.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.buttonPromociones.Location = new System.Drawing.Point(1257, 190);
+            this.buttonPromociones.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonPromociones.Name = "buttonPromociones";
-            this.buttonPromociones.Size = new System.Drawing.Size(164, 56);
+            this.buttonPromociones.Size = new System.Drawing.Size(329, 69);
             this.buttonPromociones.TabIndex = 13;
             this.buttonPromociones.Text = "Promociones";
             this.buttonPromociones.UseVisualStyleBackColor = false;
@@ -197,22 +223,24 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.label1.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label1.Location = new System.Drawing.Point(27, 32);
+            this.label1.Location = new System.Drawing.Point(235, 46);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(169, 17);
+            this.label1.Size = new System.Drawing.Size(200, 20);
             this.label1.TabIndex = 15;
             this.label1.Text = "Bienvenido Administrador";
             // 
             // btnFiltrarOrdenes
             // 
-            this.btnFiltrarOrdenes.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(236)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
+            this.btnFiltrarOrdenes.BackColor = System.Drawing.Color.Gold;
             this.btnFiltrarOrdenes.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnFiltrarOrdenes.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnFiltrarOrdenes.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnFiltrarOrdenes.ForeColor = System.Drawing.SystemColors.Control;
-            this.btnFiltrarOrdenes.Location = new System.Drawing.Point(1015, 168);
+            this.btnFiltrarOrdenes.Location = new System.Drawing.Point(1620, 212);
+            this.btnFiltrarOrdenes.Margin = new System.Windows.Forms.Padding(4);
             this.btnFiltrarOrdenes.Name = "btnFiltrarOrdenes";
-            this.btnFiltrarOrdenes.Size = new System.Drawing.Size(107, 38);
+            this.btnFiltrarOrdenes.Size = new System.Drawing.Size(143, 47);
             this.btnFiltrarOrdenes.TabIndex = 16;
             this.btnFiltrarOrdenes.Text = "Filtrar";
             this.btnFiltrarOrdenes.UseVisualStyleBackColor = false;
@@ -220,12 +248,12 @@
             // 
             // FormAdmin
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.fondo;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(1354, 609);
+            this.ClientSize = new System.Drawing.Size(1805, 750);
             this.Controls.Add(this.btnFiltrarOrdenes);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.buttonPromociones);
@@ -238,6 +266,7 @@
             this.Controls.Add(this.btnMenu);
             this.Controls.Add(this.btnCerrarSesion);
             this.Controls.Add(this.btnGestionUsuarios);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FormAdmin";
             this.Text = "Menú principal Administración";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;

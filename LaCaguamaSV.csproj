@@ -237,6 +237,12 @@
     <Compile Include="Fomularios\VistasAdmin\FormAgregarCategoriaPlato.Designer.cs">
       <DependentUpon>FormAgregarCategoriaPlato.cs</DependentUpon>
     </Compile>
+    <Compile Include="Fomularios\VistasAdmin\FormAgregarUnidades.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Fomularios\VistasAdmin\FormAgregarUnidades.Designer.cs">
+      <DependentUpon>FormAgregarUnidades.cs</DependentUpon>
+    </Compile>
     <Compile Include="Fomularios\VistasAdmin\FormBebidasMenuAdmin.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -407,6 +413,9 @@
     <EmbeddedResource Include="Fomularios\VistasAdmin\FormAgregarCategoriaPlato.resx">
       <DependentUpon>FormAgregarCategoriaPlato.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Fomularios\VistasAdmin\FormAgregarUnidades.resx">
+      <DependentUpon>FormAgregarUnidades.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Fomularios\VistasAdmin\FormBebidasMenuAdmin.resx">
       <DependentUpon>FormBebidasMenuAdmin.cs</DependentUpon>
     </EmbeddedResource>
@@ -533,6 +542,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Picsart_25-05-11_20-50-59-725.ico" />
+    <None Include="Resources\promocion.png" />
+    <None Include="Resources\usuario.png" />
+    <None Include="Resources\historial-de-transacciones1.png" />
+    <None Include="Resources\inventario-disponible.png" />
+    <None Include="Resources\menu.png" />
+    <None Include="Resources\mesa-de-comedor %281%29.png" />
+    <None Include="Resources\innovacion.png" />
+    <None Include="Resources\cuenta %281%29.png" />
+    <None Include="Resources\cuenta.png" />
     <None Include="Resources\cuenta-bancaria.png" />
     <None Include="Resources\actualizar.png" />
     <None Include="Resources\filtrar.png" />
