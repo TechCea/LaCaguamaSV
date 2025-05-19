@@ -1171,16 +1171,24 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 // 1. Generar el contenido de la comanda
                 string contenidoComanda = GenerarContenidoComanda();
 
-                // 2. Enviar a imprimir
-                ImprimirComanda(contenidoComanda);
+                // 2. Mostrar vista previa en un MessageBox
+                DialogResult previewResult = MessageBox.Show(
+                    $"Vista previa de la comanda:\n\n{contenidoComanda}\n\n¿Desea imprimir esta comanda?",
+                    "Vista Previa de Comanda",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Information,
+                    MessageBoxDefaultButton.Button1);
 
-                MessageBox.Show("Comanda enviada a cocina", "Éxito",
-                              MessageBoxButtons.OK, MessageBoxIcon.Information);
+                // 3. Si el usuario confirma, proceder con la impresión
+                if (previewResult == DialogResult.Yes)
+                {
+                    ImprimirComanda(contenidoComanda);
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al imprimir comanda: {ex.Message}", "Error",
-                               MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error al generar la comanda: {ex.Message}", "Error",
+                              MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -1188,76 +1196,104 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             StringBuilder sb = new StringBuilder();
 
-            // Configuración inicial de la impresora
-            sb.Append(ESC + "@"); // Reset printer
-            sb.Append(ESC + "!" + "\x38"); // Fuente tamaño doble
-
             // Encabezado
-            sb.Append(CenterText("LA CAGUAMA RESTAURANTE"));
-            sb.Append(LF);
-            sb.Append(CenterText("══════════════════════"));
-            sb.Append(LF);
-            sb.Append(ESC + "!" + "\x00"); // Restaurar fuente normal
+            sb.AppendLine("════════════ COMANDA ════════════");
+            sb.AppendLine($"ORDEN: #{lblIdOrden.Text}");
+            sb.AppendLine($"MESA: {comboBoxMesas.Text}");
+            sb.AppendLine($"FECHA: {DateTime.Now.ToString("g")}");
+            sb.AppendLine("═════════════════════════════════");
+            sb.AppendLine();
 
-            // Información básica
-            sb.Append($"COMANDA PARA COCINA{LF}");
-            sb.Append($"Orden: #{lblIdOrden.Text}{LF}");
-            sb.Append($"Mesa: {comboBoxMesas.Text}{LF}");
-            sb.Append($"Hora: {DateTime.Now.ToString("HH:mm")}{LF}");
-            sb.Append("──────────────────────────" + LF);
-
-            // Sección de platos
-            sb.Append(ESC + "!" + "\x08"); // Fuente enfatizada
-            sb.Append("PLATOS A PREPARAR:" + LF);
-            sb.Append(ESC + "!" + "\x00"); // Restaurar fuente
-            sb.Append("──────────────────────────" + LF);
-
-            // Obtener solo los platos (no bebidas ni extras)
-            var platos = ObtenerPlatosParaCocina();
-
+            // Detalle de platos
+            sb.AppendLine("PLATOS:");
+            var platos = ObtenerItemsParaComanda("PLATO");
             foreach (var plato in platos)
             {
-                sb.Append($"{plato.Cantidad}x {plato.Nombre}{LF}");
-
-                // Mostrar ingredientes especiales o notas si las hay
+                sb.AppendLine($"• {plato.Cantidad}x {plato.Nombre}");
                 if (!string.IsNullOrEmpty(plato.Notas))
                 {
-                    sb.Append($"  Notas: {plato.Notas}{LF}");
+                    sb.AppendLine($"  ({plato.Notas})");
                 }
             }
 
-            // Pie de página
-            sb.Append("──────────────────────────" + LF);
-            sb.Append($"Total platos: {platos.Sum(p => p.Cantidad)}{LF}");
-            sb.Append(LF);
-            sb.Append(CenterText("¡Gracias por su trabajo!"));
-            sb.Append(LF + LF);
+            // Detalle de bebidas
+            sb.AppendLine();
+            sb.AppendLine("BEBIDAS:");
+            var bebidas = ObtenerItemsParaComanda("BEBIDA");
+            foreach (var bebida in bebidas)
+            {
+                sb.AppendLine($"• {bebida.Cantidad}x {bebida.Nombre}");
+            }
 
-            // Comandos de corte de papel
-            sb.Append(LF + LF + LF + LF); // Espacios adicionales
-            sb.Append(GS + "V" + "\x41" + "\x00"); // Corte completo
+            // Detalle de extras
+            sb.AppendLine();
+            sb.AppendLine("EXTRAS:");
+            var extras = ObtenerItemsParaComanda("EXTRA");
+            foreach (var extra in extras)
+            {
+                sb.AppendLine($"• {extra.Cantidad}x {extra.Nombre}");
+            }
+
+            // Pie
+            sb.AppendLine();
+            sb.AppendLine("═════════════════════════════════");
+            sb.AppendLine($"Total platos: {platos.Sum(p => p.Cantidad)}");
+            sb.AppendLine($"Total bebidas: {bebidas.Sum(b => b.Cantidad)}");
+            sb.AppendLine($"Total extras: {extras.Sum(e => e.Cantidad)}");
+            sb.AppendLine("Gracias por su trabajo!");
 
             return sb.ToString();
         }
 
-        private List<(string Nombre, int Cantidad, string Notas)> ObtenerPlatosParaCocina()
+        private List<(string Nombre, int Cantidad, string Notas)> ObtenerItemsParaComanda(string tipoItem)
         {
-            var platos = new List<(string, int, string)>();
+            var items = new List<(string, int, string)>();
+
+            string query = "";
+
+            switch (tipoItem)
+            {
+                case "PLATO":
+                    query = @"
+                SELECT 
+                    pl.nombrePlato AS Nombre,
+                    p.Cantidad,
+                    GROUP_CONCAT(DISTINCT i.nombreProducto SEPARATOR ', ') AS Notas
+                FROM pedidos p
+                JOIN platos pl ON p.id_plato = pl.id_plato
+                LEFT JOIN recetas r ON pl.id_plato = r.id_plato
+                LEFT JOIN inventario i ON r.id_inventario = i.id_inventario
+                WHERE p.id_orden = @idOrden
+                GROUP BY pl.nombrePlato, p.Cantidad";
+                    break;
+
+                case "BEBIDA":
+                    query = @"
+                SELECT 
+                    i.nombreProducto AS Nombre,
+                    p.Cantidad,
+                    '' AS Notas
+                FROM pedidos p
+                JOIN bebidas b ON p.id_bebida = b.id_bebida
+                JOIN inventario i ON b.id_inventario = i.id_inventario
+                WHERE p.id_orden = @idOrden";
+                    break;
+
+                case "EXTRA":
+                    query = @"
+                SELECT 
+                    i.nombreProducto AS Nombre,
+                    p.Cantidad,
+                    '' AS Notas
+                FROM pedidos p
+                JOIN extras e ON p.id_extra = e.id_extra
+                JOIN inventario i ON e.id_inventario = i.id_inventario
+                WHERE p.id_orden = @idOrden";
+                    break;
+            }
 
             using (MySqlConnection conexion = new Conexion().EstablecerConexion())
             {
-                string query = @"
-            SELECT 
-                pl.nombrePlato AS Nombre,
-                p.Cantidad,
-                GROUP_CONCAT(DISTINCT i.nombreProducto SEPARATOR ', ') AS Ingredientes
-            FROM pedidos p
-            JOIN platos pl ON p.id_plato = pl.id_plato
-            LEFT JOIN recetas r ON pl.id_plato = r.id_plato
-            LEFT JOIN inventario i ON r.id_inventario = i.id_inventario
-            WHERE p.id_orden = @idOrden
-            GROUP BY pl.nombrePlato, p.Cantidad";
-
                 using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                 {
                     cmd.Parameters.AddWithValue("@idOrden", Convert.ToInt32(lblIdOrden.Text));
@@ -1268,52 +1304,46 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                         {
                             string nombre = reader["Nombre"].ToString();
                             int cantidad = Convert.ToInt32(reader["Cantidad"]);
-                            string ingredientes = reader["Ingredientes"].ToString();
+                            string notas = reader["Notas"].ToString();
 
-                            // Puedes personalizar las notas según necesites
-                            string notas = $"Ingredientes: {ingredientes}";
-
-                            platos.Add((nombre, cantidad, notas));
+                            items.Add((nombre, cantidad, notas));
                         }
                     }
                 }
             }
 
-            return platos;
+            return items;
         }
 
         private void ImprimirComanda(string contenido)
         {
-            // Usar la misma lógica de impresión que en el comprobante
-            PrintDocument pd = new PrintDocument();
-            pd.PrinterSettings.PrinterName = ObtenerNombreImpresoraTermica();
-
-            pd.PrintPage += (sender, e) =>
+            try
             {
-                Font font = new Font("Courier New", 9);
-                e.Graphics.DrawString(contenido, font, Brushes.Black,
-                    new RectangleF(0, 0, pd.DefaultPageSettings.PrintableArea.Width,
-                                  pd.DefaultPageSettings.PrintableArea.Height));
-            };
+                PrintDocument pd = new PrintDocument();
+                pd.PrinterSettings.PrinterName = ObtenerNombreImpresoraTermica();
 
-            pd.Print();
-        }
+                pd.PrintPage += (sender, e) =>
+                {
+                    Font font = new Font("Courier New", 10);
+                    e.Graphics.DrawString(contenido, font, Brushes.Black,
+                        new RectangleF(0, 0, pd.DefaultPageSettings.PrintableArea.Width,
+                                      pd.DefaultPageSettings.PrintableArea.Height));
+                };
 
-        // Métodos auxiliares (los mismos que en el comprobante)
-        private string CenterText(string text)
-        {
-            int maxWidth = 32;
-            if (text.Length >= maxWidth) return text;
-
-            int spaces = (maxWidth - text.Length) / 2;
-            return new string(' ', spaces) + text;
+                pd.Print();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al imprimir: {ex.Message}", "Error de Impresión",
+                              MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private string ObtenerNombreImpresoraTermica()
         {
             foreach (string printer in PrinterSettings.InstalledPrinters)
             {
-                if (printer.Contains("PT-210") || printer.Contains("GOOJPRT") || printer.Contains("POS"))
+                if (printer.Contains("POS") || printer.Contains("Receipt"))
                 {
                     return printer;
                 }
