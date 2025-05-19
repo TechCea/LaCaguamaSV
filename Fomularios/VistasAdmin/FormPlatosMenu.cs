@@ -37,8 +37,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             CargarComidas();
             cbCategoriaC.SelectedIndexChanged += cbCategoriaC_SelectedIndexChanged;
             dgvComidas.CellClick += dgvComidas_CellClick;
-            dgvComidas.MultiSelect = false;
-
         }
 
         private void CargarComidas()
@@ -158,5 +156,11 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             this.Close();
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            FormAgregarCategoriaPlato formCat = new FormAgregarCategoriaPlato();
+            formCat.ShowDialog();
+            this.Hide();
+        }
     }
 }

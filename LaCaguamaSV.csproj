@@ -225,6 +225,12 @@
     <Compile Include="Fomularios\VistasAdmin\FormAdminPrecuenta.Designer.cs">
       <DependentUpon>FormAdminPrecuenta.cs</DependentUpon>
     </Compile>
+    <Compile Include="Fomularios\VistasAdmin\FormAgregarCategoriaPlato.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Fomularios\VistasAdmin\FormAgregarCategoriaPlato.Designer.cs">
+      <DependentUpon>FormAgregarCategoriaPlato.cs</DependentUpon>
+    </Compile>
     <Compile Include="Fomularios\VistasAdmin\FormBebidasMenuAdmin.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -388,6 +394,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Fomularios\VistasAdmin\FormAdminPrecuenta.resx">
       <DependentUpon>FormAdminPrecuenta.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fomularios\VistasAdmin\FormAgregarCategoriaPlato.resx">
+      <DependentUpon>FormAgregarCategoriaPlato.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fomularios\VistasAdmin\FormBebidasMenuAdmin.resx">
       <DependentUpon>FormBebidasMenuAdmin.cs</DependentUpon>

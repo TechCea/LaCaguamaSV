@@ -2811,19 +2811,19 @@ namespace LaCaguamaSV.Configuracion
             DatosCorteGeneral corte = null;
 
             string query = @"
-    SELECT 
-        cg.id_caja,
-        cg.cant_efectivo,
-        cg.cant_tarjeta,
-        cg.descuento,
-        cg.total_gastos_general,
-        u.nombre AS nombre_cajero,
-        cg.fecha
-    FROM corte_general cg
-    JOIN usuarios u ON cg.id_usuario = u.id_usuario
-    ORDER BY cg.fecha DESC
-    LIMIT 1;
-";
+                            SELECT 
+                                cg.id_caja,
+                                cg.cant_efectivo,
+                                cg.cant_tarjeta,
+                                cg.descuento,
+                                cg.total_gastos_general,
+                                u.nombre AS nombre_cajero,
+                                cg.fecha
+                            FROM corte_general cg
+                            JOIN usuarios u ON cg.id_usuario = u.id_usuario
+                            ORDER BY cg.fecha DESC
+                            LIMIT 1;
+                        ";
 
             using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
             {
@@ -2850,6 +2850,81 @@ namespace LaCaguamaSV.Configuracion
             }
 
             return corte;
+        }
+
+        //CODIGO DE AGREGAR CATEGORIA PARA PLATOS
+        public DataTable ObtenerCategoriasPlatos()
+        {
+            DataTable dt = new DataTable();
+
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(cadenaConexion))
+                {
+                    conn.Open();
+                    string query = "SELECT id_categoriaP, tipo FROM categoria_platos";
+                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                    {
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al obtener categorías: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            return dt;
+        }
+
+        public bool AgregarCategoriaPlato(string tipo)
+        {
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(cadenaConexion))
+                {
+                    conn.Open();
+                    string query = "INSERT INTO categoria_platos (tipo) VALUES (@tipo)";
+                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@tipo", tipo);
+                        int filasAfectadas = cmd.ExecuteNonQuery();
+                        return filasAfectadas > 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al agregar la categoría: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+        }
+
+        public bool ActualizarCategoriaPlato(int idCategoria, string nuevoTipo)
+        {
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(cadenaConexion))
+                {
+                    conn.Open();
+                    string query = "UPDATE categoria_platos SET tipo = @tipo WHERE id_categoriaP = @id";
+                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@tipo", nuevoTipo);
+                        cmd.Parameters.AddWithValue("@id", idCategoria);
+                        int filasAfectadas = cmd.ExecuteNonQuery();
+                        return filasAfectadas > 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al actualizar la categoría: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
         }
 
     }

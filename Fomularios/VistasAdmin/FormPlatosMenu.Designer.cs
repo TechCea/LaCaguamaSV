@@ -44,6 +44,8 @@
             this.btnEliminarC = new System.Windows.Forms.Button();
             this.btnCrearPlato = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
             this.gbDatosBebida.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvComidas)).BeginInit();
             this.SuspendLayout();
@@ -66,7 +68,7 @@
             this.gbDatosBebida.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.gbDatosBebida.Name = "gbDatosBebida";
             this.gbDatosBebida.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.gbDatosBebida.Size = new System.Drawing.Size(439, 412);
+            this.gbDatosBebida.Size = new System.Drawing.Size(442, 450);
             this.gbDatosBebida.TabIndex = 11;
             this.gbDatosBebida.TabStop = false;
             this.gbDatosBebida.Text = "Datos Plato";
@@ -164,7 +166,7 @@
             this.btnRegresarInv.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnRegresarInv.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnRegresarInv.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btnRegresarInv.Location = new System.Drawing.Point(23, 526);
+            this.btnRegresarInv.Location = new System.Drawing.Point(22, 571);
             this.btnRegresarInv.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnRegresarInv.Name = "btnRegresarInv";
             this.btnRegresarInv.Size = new System.Drawing.Size(184, 58);
@@ -177,10 +179,10 @@
             // 
             this.cbCategoriaC.Cursor = System.Windows.Forms.Cursors.Hand;
             this.cbCategoriaC.FormattingEnabled = true;
-            this.cbCategoriaC.Location = new System.Drawing.Point(643, 55);
+            this.cbCategoriaC.Location = new System.Drawing.Point(628, 55);
             this.cbCategoriaC.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cbCategoriaC.Name = "cbCategoriaC";
-            this.cbCategoriaC.Size = new System.Drawing.Size(121, 24);
+            this.cbCategoriaC.Size = new System.Drawing.Size(136, 24);
             this.cbCategoriaC.TabIndex = 9;
             // 
             // dgvComidas
@@ -192,7 +194,7 @@
             this.dgvComidas.Name = "dgvComidas";
             this.dgvComidas.RowHeadersWidth = 51;
             this.dgvComidas.RowTemplate.Height = 24;
-            this.dgvComidas.Size = new System.Drawing.Size(741, 412);
+            this.dgvComidas.Size = new System.Drawing.Size(743, 460);
             this.dgvComidas.TabIndex = 8;
             // 
             // btnEliminarC
@@ -202,7 +204,7 @@
             this.btnEliminarC.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnEliminarC.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnEliminarC.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.btnEliminarC.Location = new System.Drawing.Point(1012, 526);
+            this.btnEliminarC.Location = new System.Drawing.Point(1011, 571);
             this.btnEliminarC.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnEliminarC.Name = "btnEliminarC";
             this.btnEliminarC.Size = new System.Drawing.Size(199, 58);
@@ -218,7 +220,7 @@
             this.btnCrearPlato.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnCrearPlato.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCrearPlato.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.btnCrearPlato.Location = new System.Drawing.Point(823, 526);
+            this.btnCrearPlato.Location = new System.Drawing.Point(822, 571);
             this.btnCrearPlato.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnCrearPlato.Name = "btnCrearPlato";
             this.btnCrearPlato.Size = new System.Drawing.Size(139, 58);
@@ -239,6 +241,32 @@
             this.label4.TabIndex = 14;
             this.label4.Text = "Selecciona un plato para desplegar su receta";
             // 
+            // button1
+            // 
+            this.button1.BackColor = System.Drawing.Color.Snow;
+            this.button1.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.button1.Location = new System.Drawing.Point(528, 571);
+            this.button1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(236, 58);
+            this.button1.TabIndex = 15;
+            this.button1.Text = "Agregar una nueva categoría de platos";
+            this.button1.UseVisualStyleBackColor = false;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.ForeColor = System.Drawing.SystemColors.Control;
+            this.label5.Location = new System.Drawing.Point(525, 58);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(69, 16);
+            this.label5.TabIndex = 12;
+            this.label5.Text = "Categoría:";
+            // 
             // FormPlatosMenu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -246,6 +274,8 @@
             this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.fondo;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1280, 661);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.gbDatosBebida);
             this.Controls.Add(this.btnRegresarInv);
@@ -282,5 +312,7 @@
         private System.Windows.Forms.Button btnEliminarC;
         private System.Windows.Forms.Button btnCrearPlato;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Label label5;
     }
 }

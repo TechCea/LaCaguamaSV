@@ -49,7 +49,7 @@
             this.btnComidas.Location = new System.Drawing.Point(453, 77);
             this.btnComidas.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnComidas.Name = "btnComidas";
-            this.btnComidas.Size = new System.Drawing.Size(177, 80);
+            this.btnComidas.Size = new System.Drawing.Size(242, 80);
             this.btnComidas.TabIndex = 5;
             this.btnComidas.Text = "Gestionar ingredientes y platos";
             this.btnComidas.UseVisualStyleBackColor = false;
@@ -113,7 +113,7 @@
             this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.groupBox1.Size = new System.Drawing.Size(688, 126);
+            this.groupBox1.Size = new System.Drawing.Size(741, 126);
             this.groupBox1.TabIndex = 7;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Proveedores";
@@ -130,7 +130,7 @@
             this.groupBox2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.groupBox2.Size = new System.Drawing.Size(688, 229);
+            this.groupBox2.Size = new System.Drawing.Size(741, 229);
             this.groupBox2.TabIndex = 8;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Inventario";
@@ -141,7 +141,7 @@
             this.btnCerrar_Click.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnCerrar_Click.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnCerrar_Click.ForeColor = System.Drawing.SystemColors.Control;
-            this.btnCerrar_Click.Location = new System.Drawing.Point(727, 15);
+            this.btnCerrar_Click.Location = new System.Drawing.Point(842, 13);
             this.btnCerrar_Click.Margin = new System.Windows.Forms.Padding(4);
             this.btnCerrar_Click.Name = "btnCerrar_Click";
             this.btnCerrar_Click.Size = new System.Drawing.Size(57, 28);
@@ -157,7 +157,7 @@
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.fondo;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(922, 450);
             this.Controls.Add(this.btnCerrar_Click);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);

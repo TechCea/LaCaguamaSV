@@ -220,7 +220,7 @@
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(98, 26);
             this.label4.TabIndex = 16;
-            this.label4.Text = "PALTOS";
+            this.label4.Text = "PLATOS";
             // 
             // FormComidasMenuAdmin
             // 
