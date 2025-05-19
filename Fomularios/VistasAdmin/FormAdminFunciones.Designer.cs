@@ -95,7 +95,7 @@
             this.Corte_Caja.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.Corte_Caja.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Corte_Caja.ForeColor = System.Drawing.SystemColors.Control;
-            this.Corte_Caja.Location = new System.Drawing.Point(112, 239);
+            this.Corte_Caja.Location = new System.Drawing.Point(115, 318);
             this.Corte_Caja.Name = "Corte_Caja";
             this.Corte_Caja.Size = new System.Drawing.Size(171, 74);
             this.Corte_Caja.TabIndex = 1;
@@ -109,7 +109,7 @@
             this.label2.BackColor = System.Drawing.Color.Transparent;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.label2.Location = new System.Drawing.Point(66, 93);
+            this.label2.Location = new System.Drawing.Point(69, 172);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(254, 25);
             this.label2.TabIndex = 3;
@@ -121,7 +121,7 @@
             this.label3.BackColor = System.Drawing.Color.Transparent;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.label3.Location = new System.Drawing.Point(934, 262);
+            this.label3.Location = new System.Drawing.Point(1025, 339);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(107, 25);
             this.label3.TabIndex = 4;
@@ -134,7 +134,7 @@
             this.btnCorte_tarjetas.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCorte_tarjetas.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCorte_tarjetas.ForeColor = System.Drawing.SystemColors.Control;
-            this.btnCorte_tarjetas.Location = new System.Drawing.Point(453, 137);
+            this.btnCorte_tarjetas.Location = new System.Drawing.Point(456, 216);
             this.btnCorte_tarjetas.Name = "btnCorte_tarjetas";
             this.btnCorte_tarjetas.Size = new System.Drawing.Size(171, 74);
             this.btnCorte_tarjetas.TabIndex = 5;
@@ -150,7 +150,7 @@
             this.btnCorte_general.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCorte_general.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCorte_general.ForeColor = System.Drawing.SystemColors.Control;
-            this.btnCorte_general.Location = new System.Drawing.Point(453, 239);
+            this.btnCorte_general.Location = new System.Drawing.Point(456, 318);
             this.btnCorte_general.Name = "btnCorte_general";
             this.btnCorte_general.Size = new System.Drawing.Size(171, 74);
             this.btnCorte_general.TabIndex = 6;
@@ -165,7 +165,7 @@
             this.btnReimprimir_corte_general.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnReimprimir_corte_general.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnReimprimir_corte_general.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btnReimprimir_corte_general.Location = new System.Drawing.Point(453, 341);
+            this.btnReimprimir_corte_general.Location = new System.Drawing.Point(456, 420);
             this.btnReimprimir_corte_general.Name = "btnReimprimir_corte_general";
             this.btnReimprimir_corte_general.Size = new System.Drawing.Size(171, 74);
             this.btnReimprimir_corte_general.TabIndex = 7;
@@ -180,7 +180,7 @@
             this.button9.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button9.ForeColor = System.Drawing.Color.White;
-            this.button9.Location = new System.Drawing.Point(1116, 637);
+            this.button9.Location = new System.Drawing.Point(1235, 12);
             this.button9.Name = "button9";
             this.button9.Size = new System.Drawing.Size(80, 32);
             this.button9.TabIndex = 11;
@@ -436,7 +436,7 @@
             this.btnCajaInicial.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnCajaInicial.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCajaInicial.ForeColor = System.Drawing.SystemColors.Control;
-            this.btnCajaInicial.Location = new System.Drawing.Point(112, 137);
+            this.btnCajaInicial.Location = new System.Drawing.Point(115, 216);
             this.btnCajaInicial.Name = "btnCajaInicial";
             this.btnCajaInicial.Size = new System.Drawing.Size(171, 74);
             this.btnCajaInicial.TabIndex = 15;
@@ -451,7 +451,7 @@
             this.Gastos.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.Gastos.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Gastos.ForeColor = System.Drawing.SystemColors.Control;
-            this.Gastos.Location = new System.Drawing.Point(800, 330);
+            this.Gastos.Location = new System.Drawing.Point(891, 407);
             this.Gastos.Name = "Gastos";
             this.Gastos.Size = new System.Drawing.Size(171, 74);
             this.Gastos.TabIndex = 16;
@@ -677,7 +677,7 @@
             this.lbl_caja.AutoSize = true;
             this.lbl_caja.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
             this.lbl_caja.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.lbl_caja.Location = new System.Drawing.Point(76, 30);
+            this.lbl_caja.Location = new System.Drawing.Point(79, 72);
             this.lbl_caja.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbl_caja.Name = "lbl_caja";
             this.lbl_caja.Size = new System.Drawing.Size(109, 24);
@@ -691,7 +691,7 @@
             this.btnRespaldarBD.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnRespaldarBD.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnRespaldarBD.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btnRespaldarBD.Location = new System.Drawing.Point(919, 148);
+            this.btnRespaldarBD.Location = new System.Drawing.Point(1010, 225);
             this.btnRespaldarBD.Name = "btnRespaldarBD";
             this.btnRespaldarBD.Size = new System.Drawing.Size(171, 74);
             this.btnRespaldarBD.TabIndex = 25;
@@ -706,7 +706,7 @@
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.button1.Location = new System.Drawing.Point(1025, 330);
+            this.button1.Location = new System.Drawing.Point(1116, 407);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(171, 74);
             this.button1.TabIndex = 27;
@@ -720,7 +720,7 @@
             this.label10.BackColor = System.Drawing.Color.Transparent;
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label10.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.label10.Location = new System.Drawing.Point(885, 93);
+            this.label10.Location = new System.Drawing.Point(976, 170);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(217, 25);
             this.label10.TabIndex = 28;
@@ -732,7 +732,7 @@
             this.label1.BackColor = System.Drawing.Color.Transparent;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.label1.Location = new System.Drawing.Point(417, 93);
+            this.label1.Location = new System.Drawing.Point(420, 172);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(254, 25);
             this.label1.TabIndex = 29;
@@ -745,7 +745,7 @@
             this.btnReimprimirCorte.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnReimprimirCorte.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnReimprimirCorte.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btnReimprimirCorte.Location = new System.Drawing.Point(112, 341);
+            this.btnReimprimirCorte.Location = new System.Drawing.Point(115, 420);
             this.btnReimprimirCorte.Name = "btnReimprimirCorte";
             this.btnReimprimirCorte.Size = new System.Drawing.Size(171, 74);
             this.btnReimprimirCorte.TabIndex = 30;
@@ -760,7 +760,7 @@
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.fondo;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(1237, 609);
+            this.ClientSize = new System.Drawing.Size(1313, 702);
             this.Controls.Add(this.btnReimprimirCorte);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.label10);
@@ -786,6 +786,7 @@
             this.Controls.Add(this.Corte_Caja);
             this.Name = "FormAdminFunciones";
             this.Text = "Funciones";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.FormAdminFunciones_Load);
             this.panelConfirmacion.ResumeLayout(false);
             this.panelConfirmacion.PerformLayout();
