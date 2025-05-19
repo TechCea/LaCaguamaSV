@@ -45,7 +45,6 @@
             this.btnCrearPlato = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
-            this.label5 = new System.Windows.Forms.Label();
             this.gbDatosBebida.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvComidas)).BeginInit();
             this.SuspendLayout();
@@ -60,6 +59,7 @@
             this.gbDatosBebida.Controls.Add(this.txtPrecioU);
             this.gbDatosBebida.Controls.Add(this.label2);
             this.gbDatosBebida.Controls.Add(this.label1);
+            this.gbDatosBebida.Controls.Add(this.btnCrearPlato);
             this.gbDatosBebida.Controls.Add(this.txtNombreC);
             this.gbDatosBebida.Controls.Add(this.lbNombreBebida);
             this.gbDatosBebida.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -199,15 +199,15 @@
             // 
             // btnEliminarC
             // 
-            this.btnEliminarC.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
+            this.btnEliminarC.BackColor = System.Drawing.Color.Gold;
             this.btnEliminarC.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnEliminarC.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnEliminarC.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnEliminarC.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.btnEliminarC.Location = new System.Drawing.Point(1011, 571);
+            this.btnEliminarC.Location = new System.Drawing.Point(951, 571);
             this.btnEliminarC.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnEliminarC.Name = "btnEliminarC";
-            this.btnEliminarC.Size = new System.Drawing.Size(199, 58);
+            this.btnEliminarC.Size = new System.Drawing.Size(294, 58);
             this.btnEliminarC.TabIndex = 13;
             this.btnEliminarC.Text = "Editar datos de los platos";
             this.btnEliminarC.UseVisualStyleBackColor = false;
@@ -220,7 +220,7 @@
             this.btnCrearPlato.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnCrearPlato.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCrearPlato.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.btnCrearPlato.Location = new System.Drawing.Point(822, 571);
+            this.btnCrearPlato.Location = new System.Drawing.Point(256, 371);
             this.btnCrearPlato.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnCrearPlato.Name = "btnCrearPlato";
             this.btnCrearPlato.Size = new System.Drawing.Size(139, 58);
@@ -257,16 +257,6 @@
             this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.ForeColor = System.Drawing.SystemColors.Control;
-            this.label5.Location = new System.Drawing.Point(525, 58);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(69, 16);
-            this.label5.TabIndex = 12;
-            this.label5.Text = "Categoría:";
-            // 
             // FormPlatosMenu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -274,7 +264,6 @@
             this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.fondo;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1280, 661);
-            this.Controls.Add(this.label5);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.gbDatosBebida);
@@ -282,7 +271,6 @@
             this.Controls.Add(this.cbCategoriaC);
             this.Controls.Add(this.dgvComidas);
             this.Controls.Add(this.btnEliminarC);
-            this.Controls.Add(this.btnCrearPlato);
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "FormPlatosMenu";
             this.Text = "Platos del inventario";
@@ -313,6 +301,5 @@
         private System.Windows.Forms.Button btnCrearPlato;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Label label5;
     }
 }
