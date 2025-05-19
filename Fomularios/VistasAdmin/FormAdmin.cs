@@ -530,5 +530,10 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             CargarOrdenes(mostrarSoloHoy);
             btnFiltrarOrdenes.Text = mostrarSoloHoy ? "Ver todas" : "Ver solo hoy";
         }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
