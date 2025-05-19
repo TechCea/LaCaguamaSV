@@ -79,7 +79,9 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void button2_Click(object sender, EventArgs e)
         {
-
+            FormAgregarUnidades formUnidades = new FormAgregarUnidades();
+            formUnidades.ShowDialog();
+            this.Show(); // Vuelve a mostrar el menú cuando el formulario de proveedore se cierra
         }
     }
 }

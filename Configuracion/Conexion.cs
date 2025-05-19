@@ -2717,6 +2717,7 @@ namespace LaCaguamaSV.Configuracion
             }
         }
 
+        //UNIDADES
         public DataTable ObtenerUnidades()
         {
             DataTable dt = new DataTable();
@@ -2739,6 +2740,91 @@ namespace LaCaguamaSV.Configuracion
 
             return dt;
         }
+
+        public bool CrearUnidad(string nombreUnidad)
+        {
+            string queryVerificar = "SELECT COUNT(*) FROM unidad WHERE nombreUnidad = @nombreUnidad";
+            string queryInsertar = "INSERT INTO unidad (nombreUnidad) VALUES (@nombreUnidad)";
+
+            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+            {
+                try
+                {
+                    conexion.Open();
+
+                    // Verificar si ya existe
+                    using (MySqlCommand cmdVerificar = new MySqlCommand(queryVerificar, conexion))
+                    {
+                        cmdVerificar.Parameters.AddWithValue("@nombreUnidad", nombreUnidad);
+                        long existe = (long)cmdVerificar.ExecuteScalar();
+
+                        if (existe > 0)
+                        {
+                            MessageBox.Show("La unidad ya existe.", "Duplicado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return false;
+                        }
+                    }
+
+                    // Insertar nueva unidad
+                    using (MySqlCommand cmdInsertar = new MySqlCommand(queryInsertar, conexion))
+                    {
+                        cmdInsertar.Parameters.AddWithValue("@nombreUnidad", nombreUnidad);
+                        int filasAfectadas = cmdInsertar.ExecuteNonQuery();
+                        return filasAfectadas > 0;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al crear la unidad: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+            }
+        }
+
+        public bool ActualizarUnidad(int idUnidad, string nuevoNombre)
+        {
+            string queryVerificar = "SELECT COUNT(*) FROM unidad WHERE nombreUnidad = @nombreUnidad AND id_unidad != @id";
+            string queryActualizar = "UPDATE unidad SET nombreUnidad = @nombreUnidad WHERE id_unidad = @id";
+
+            using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+            {
+                try
+                {
+                    conexion.Open();
+
+                    // Verifica si ya existe otra unidad con el mismo nombre
+                    using (MySqlCommand cmdVerificar = new MySqlCommand(queryVerificar, conexion))
+                    {
+                        cmdVerificar.Parameters.AddWithValue("@nombreUnidad", nuevoNombre);
+                        cmdVerificar.Parameters.AddWithValue("@id", idUnidad);
+                        long existe = (long)cmdVerificar.ExecuteScalar();
+
+                        if (existe > 0)
+                        {
+                            MessageBox.Show("Ya existe otra unidad con ese nombre.", "Duplicado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return false;
+                        }
+                    }
+
+                    // Actualiza el nombre
+                    using (MySqlCommand cmdActualizar = new MySqlCommand(queryActualizar, conexion))
+                    {
+                        cmdActualizar.Parameters.AddWithValue("@nombreUnidad", nuevoNombre);
+                        cmdActualizar.Parameters.AddWithValue("@id", idUnidad);
+                        int filas = cmdActualizar.ExecuteNonQuery();
+                        return filas > 0;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al actualizar la unidad: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+            }
+        }
+
+
+        //MAS FUNCIONES DE CAJA
         public int ObtenerUltimaCajaInicializada()
         {
             using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
@@ -3059,6 +3145,7 @@ namespace LaCaguamaSV.Configuracion
                 return false;
             }
         }
+
 
     }
 
