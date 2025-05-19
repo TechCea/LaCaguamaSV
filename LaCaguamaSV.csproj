@@ -533,6 +533,29 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Picsart_25-05-11_20-50-59-725.ico" />
+    <None Include="Resources\cuenta-bancaria.png" />
+    <None Include="Resources\actualizar.png" />
+    <None Include="Resources\filtrar.png" />
+    <None Include="Resources\carpeta.png" />
+    <None Include="Resources\Picsart_25-05-19_02-40-33-453.png" />
+    <None Include="Resources\cajero-automatico %281%29.png" />
+    <None Include="Resources\cajero-automatico %282%29.png" />
+    <None Include="Resources\tarjeta-de-fidelidad.png" />
+    <None Include="Resources\cajero-automatico.png" />
+    <None Include="Resources\imprimir %281%29.png" />
+    <None Include="Resources\historial-de-transacciones.png" />
+    <None Include="Resources\respaldo.png" />
+    <None Include="Resources\gasto.png" />
+    <None Include="Resources\gasto2.png" />
+    <None Include="Resources\imprimir2.png" />
+    <None Include="Resources\cancelar2.png" />
+    <None Include="Resources\confirmar2.png" />
+    <None Include="Resources\cancelar.png" />
+    <None Include="Resources\signo-de-interrogacion.png" />
+    <None Include="Resources\advertencia.png" />
+    <None Include="Resources\presupuesto.png" />
+    <None Include="Resources\confirmar.png" />
+    <None Include="Resources\caja-registradora.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

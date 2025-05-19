@@ -35,7 +35,7 @@ namespace LaCaguamaSV.Configuracion
     {
         private MySqlConnection conectar = null;
         private static string usuario = "root";
-        private static string contrasenia = "1234";
+        private static string contrasenia = "slenderman";
         private static string bd = "lacaguamabd";
         private static string ip = "localhost";
         private static string puerto = "3306"; // 3306 o 3307 si eres javier 
@@ -2482,7 +2482,7 @@ namespace LaCaguamaSV.Configuracion
 
             // Obtener el rango de fechas desde hoy a las 10:00 hasta mañana a las 3:00 AM
             DateTime fechaInicio = DateTime.Today.AddHours(10);       // Hoy 10:00 AM
-            DateTime fechaFin = DateTime.Today.AddDays(1).AddHours(3); // Mañana 3:00 AM
+            DateTime fechaFin = DateTime.Today.AddDays(1).AddHours(6); // Mañana 3:00 AM
 
             string query = @"
         SELECT 
@@ -2575,12 +2575,12 @@ namespace LaCaguamaSV.Configuracion
             if (ahora.Hour >= 10) // De 10:00 AM a 11:59 PM
             {
                 inicio = DateTime.Today.AddHours(10); // hoy a las 10:00 AM
-                fin = DateTime.Today.AddDays(1).AddHours(3); // mañana a las 3:00 AM
+                fin = DateTime.Today.AddDays(1).AddHours(6); // mañana a las 3:00 AM
             }
             else // De 12:00 AM a 2:59 AM (después de medianoche pero sigue siendo el turno anterior)
             {
                 inicio = DateTime.Today.AddDays(-1).AddHours(10); // ayer a las 10:00 AM
-                fin = DateTime.Today.AddHours(3); // hoy a las 3:00 AM
+                fin = DateTime.Today.AddHours(6); // hoy a las 3:00 AM
             }
 
             string query = @"
@@ -2642,8 +2642,8 @@ namespace LaCaguamaSV.Configuracion
                 conexion.Open();
 
                 DateTime ahora = DateTime.Now;
-                DateTime fechaInicio = ahora.Hour >= 3 ? new DateTime(ahora.Year, ahora.Month, ahora.Day, 10, 0, 0) : new DateTime(ahora.AddDays(-1).Year, ahora.AddDays(-1).Month, ahora.AddDays(-1).Day, 10, 0, 0);
-                DateTime fechaFin = fechaInicio.AddHours(17); // Hasta las 3am del día siguiente
+                DateTime fechaInicio = ahora.Hour >= 6 ? new DateTime(ahora.Year, ahora.Month, ahora.Day, 10, 0, 0) : new DateTime(ahora.AddDays(-1).Year, ahora.AddDays(-1).Month, ahora.AddDays(-1).Day, 10, 0, 0);
+                DateTime fechaFin = fechaInicio.AddHours(20); // 10 AM + 20 horas = 6 AM del día siguiente
 
                 string consulta = @"
             SELECT 
@@ -2690,12 +2690,12 @@ namespace LaCaguamaSV.Configuracion
             if (ahora.Hour >= 10) // De 10:00 AM a 11:59 PM
             {
                 inicio = DateTime.Today.AddHours(10); // hoy a las 10:00 AM
-                fin = DateTime.Today.AddDays(1).AddHours(3); // mañana a las 3:00 AM
+                fin = DateTime.Today.AddDays(1).AddHours(6); // mañana a las 6:00 AM
             }
             else // De 12:00 AM a 2:59 AM (después de medianoche pero sigue siendo el turno anterior)
             {
                 inicio = DateTime.Today.AddDays(-1).AddHours(10); // ayer a las 10:00 AM
-                fin = DateTime.Today.AddHours(3); // hoy a las 3:00 AM
+                fin = DateTime.Today.AddHours(6); // hoy a las 6:00 AM
             }
             string query = @"
         SELECT COUNT(*) 

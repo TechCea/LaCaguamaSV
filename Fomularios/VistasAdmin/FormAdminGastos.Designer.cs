@@ -33,6 +33,7 @@
             this.dgvGastos = new System.Windows.Forms.DataGridView();
             this.btnAgregarGasto = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.label9 = new System.Windows.Forms.Label();
             this.txtUtilidad = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -56,6 +57,7 @@
             this.btnResetearFiltro = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvGastos)).BeginInit();
             this.panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // txtCantidad
@@ -79,7 +81,7 @@
             // dgvGastos
             // 
             this.dgvGastos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvGastos.Location = new System.Drawing.Point(667, 167);
+            this.dgvGastos.Location = new System.Drawing.Point(605, 195);
             this.dgvGastos.Name = "dgvGastos";
             this.dgvGastos.RowHeadersWidth = 51;
             this.dgvGastos.Size = new System.Drawing.Size(583, 372);
@@ -92,9 +94,11 @@
             this.btnAgregarGasto.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnAgregarGasto.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAgregarGasto.ForeColor = System.Drawing.SystemColors.Control;
-            this.btnAgregarGasto.Location = new System.Drawing.Point(135, 618);
+            this.btnAgregarGasto.Image = global::LaCaguamaSV.Properties.Resources.confirmar2;
+            this.btnAgregarGasto.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnAgregarGasto.Location = new System.Drawing.Point(135, 583);
             this.btnAgregarGasto.Name = "btnAgregarGasto";
-            this.btnAgregarGasto.Size = new System.Drawing.Size(103, 47);
+            this.btnAgregarGasto.Size = new System.Drawing.Size(128, 47);
             this.btnAgregarGasto.TabIndex = 5;
             this.btnAgregarGasto.Text = "Agregar";
             this.btnAgregarGasto.UseVisualStyleBackColor = false;
@@ -103,6 +107,7 @@
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.SystemColors.GrayText;
+            this.panel2.Controls.Add(this.pictureBox1);
             this.panel2.Controls.Add(this.label9);
             this.panel2.Controls.Add(this.txtUtilidad);
             this.panel2.Controls.Add(this.label2);
@@ -123,13 +128,24 @@
             this.panel2.Size = new System.Drawing.Size(285, 457);
             this.panel2.TabIndex = 12;
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.BackgroundImage = global::LaCaguamaSV.Properties.Resources.cuenta_bancaria;
+            this.pictureBox1.Image = global::LaCaguamaSV.Properties.Resources.cuenta_bancaria;
+            this.pictureBox1.Location = new System.Drawing.Point(92, 189);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(82, 61);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.TabIndex = 47;
+            this.pictureBox1.TabStop = false;
+            // 
             // label9
             // 
             this.label9.AutoSize = true;
             this.label9.BackColor = System.Drawing.Color.Transparent;
             this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label9.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label9.Location = new System.Drawing.Point(19, 240);
+            this.label9.Location = new System.Drawing.Point(60, 253);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(156, 16);
             this.label9.TabIndex = 22;
@@ -278,9 +294,11 @@
             this.btnEditarGasto.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnEditarGasto.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnEditarGasto.ForeColor = System.Drawing.SystemColors.Control;
-            this.btnEditarGasto.Location = new System.Drawing.Point(248, 618);
+            this.btnEditarGasto.Image = global::LaCaguamaSV.Properties.Resources.carpeta;
+            this.btnEditarGasto.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnEditarGasto.Location = new System.Drawing.Point(310, 583);
             this.btnEditarGasto.Name = "btnEditarGasto";
-            this.btnEditarGasto.Size = new System.Drawing.Size(112, 47);
+            this.btnEditarGasto.Size = new System.Drawing.Size(138, 47);
             this.btnEditarGasto.TabIndex = 19;
             this.btnEditarGasto.Text = "Actualizar";
             this.btnEditarGasto.UseVisualStyleBackColor = false;
@@ -288,7 +306,7 @@
             // 
             // dtpFechaInicioGasto
             // 
-            this.dtpFechaInicioGasto.Location = new System.Drawing.Point(667, 106);
+            this.dtpFechaInicioGasto.Location = new System.Drawing.Point(665, 82);
             this.dtpFechaInicioGasto.Name = "dtpFechaInicioGasto";
             this.dtpFechaInicioGasto.Size = new System.Drawing.Size(200, 20);
             this.dtpFechaInicioGasto.TabIndex = 23;
@@ -300,9 +318,11 @@
             this.btnFiltrar.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnFiltrar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnFiltrar.ForeColor = System.Drawing.SystemColors.Control;
-            this.btnFiltrar.Location = new System.Drawing.Point(371, 618);
+            this.btnFiltrar.Image = global::LaCaguamaSV.Properties.Resources.filtrar;
+            this.btnFiltrar.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnFiltrar.Location = new System.Drawing.Point(1180, 71);
             this.btnFiltrar.Name = "btnFiltrar";
-            this.btnFiltrar.Size = new System.Drawing.Size(112, 47);
+            this.btnFiltrar.Size = new System.Drawing.Size(103, 47);
             this.btnFiltrar.TabIndex = 24;
             this.btnFiltrar.Text = "Filtrar";
             this.btnFiltrar.UseVisualStyleBackColor = false;
@@ -310,7 +330,7 @@
             // 
             // dtpFechaFinGasto
             // 
-            this.dtpFechaFinGasto.Location = new System.Drawing.Point(1050, 106);
+            this.dtpFechaFinGasto.Location = new System.Drawing.Point(913, 82);
             this.dtpFechaFinGasto.Name = "dtpFechaFinGasto";
             this.dtpFechaFinGasto.Size = new System.Drawing.Size(200, 20);
             this.dtpFechaFinGasto.TabIndex = 25;
@@ -318,7 +338,7 @@
             // cmbTipoFiltroGasto
             // 
             this.cmbTipoFiltroGasto.FormattingEnabled = true;
-            this.cmbTipoFiltroGasto.Location = new System.Drawing.Point(470, 102);
+            this.cmbTipoFiltroGasto.Location = new System.Drawing.Point(472, 41);
             this.cmbTipoFiltroGasto.Name = "cmbTipoFiltroGasto";
             this.cmbTipoFiltroGasto.Size = new System.Drawing.Size(148, 21);
             this.cmbTipoFiltroGasto.TabIndex = 41;
@@ -327,7 +347,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(1186, 75);
+            this.label10.Location = new System.Drawing.Point(962, 44);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(62, 13);
             this.label10.TabIndex = 45;
@@ -336,7 +356,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(664, 75);
+            this.label11.Location = new System.Drawing.Point(704, 44);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(80, 13);
             this.label11.TabIndex = 44;
@@ -349,9 +369,11 @@
             this.btnResetearFiltro.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnResetearFiltro.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnResetearFiltro.ForeColor = System.Drawing.SystemColors.Control;
-            this.btnResetearFiltro.Location = new System.Drawing.Point(496, 618);
+            this.btnResetearFiltro.Image = global::LaCaguamaSV.Properties.Resources.actualizar;
+            this.btnResetearFiltro.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnResetearFiltro.Location = new System.Drawing.Point(1048, 583);
             this.btnResetearFiltro.Name = "btnResetearFiltro";
-            this.btnResetearFiltro.Size = new System.Drawing.Size(112, 47);
+            this.btnResetearFiltro.Size = new System.Drawing.Size(128, 47);
             this.btnResetearFiltro.TabIndex = 46;
             this.btnResetearFiltro.Text = "Reiniciar";
             this.btnResetearFiltro.UseVisualStyleBackColor = false;
@@ -382,6 +404,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvGastos)).EndInit();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -415,5 +438,6 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Button btnResetearFiltro;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }

@@ -200,13 +200,14 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             labelResultado.Text = $"Fecha: {fechaActual}\n\n" +
                                   $"Cajero: {nombreCajero}\n\n" +
 
-                                  $"Dinero Ingresado: {montoContadoActual:C}\n" +
                                   $"Caja Inicial: {cajaInicial:C}\n" +
-                                  $"Cantidad Contada : {cantidadContada:C}\n" +
+                                  $"Dinero Ingresado: {montoContadoActual:C}\n" +
+                                  
+                                  $"Dinero Contado : {cantidadContada:C}\n" +
                                   $"Efectivo Generado : {totalGenerado:C}\n" +
-                                  $"Gastos: {totalGastos:C}\n\n" +
+                                  $"Gastos del turno: {totalGastos:C}\n\n" +
 
-                                  $"Total Esperado : {totalEsperado:C}\n" +
+                                  $"Total Esperado: {totalEsperado:C}\n" +
                                   $"Diferencia: {diferencia:C}";
 
             // Cambiar estados en la base de datos
@@ -246,12 +247,28 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         private void button3_Click(object sender, EventArgs e)
         {
             Panerl_corteX.Visible = true;
+            Conexion conn = new Conexion();
+
+            if (conn.CorteTarjetasYaRealizado())
+            {
+                MessageBox.Show("El corte de tarjetas ya fue realizado en este turno.");
+                Panerl_corteX.Visible = false;
+                return;
+            }
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
             panel_cortegeneral1.Visible = true;
             panel_corte_general.Visible = false;
+
+            if (conexion.CorteGeneralYaRealizado())
+            {
+                MessageBox.Show("El corte general ya fue realizado en este turno.");
+                panel_cortegeneral1.Visible = false;
+
+                return;
+            }
         }
 
 
@@ -447,6 +464,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             decimal monto;
 
+
             // Intentamos convertir el monto ingresado
             if (decimal.TryParse(txtMontoCaja.Text, out monto))
             {
@@ -504,7 +522,14 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 
                 return;
             }
-    
+
+            int idCajaActual = conexion.ObtenerUltimaCajaRegistrada();
+            ActualizarLabelCaja();
+            if (idCajaActual == -1)
+            {
+                MessageBox.Show("No hay caja activa.");
+                return;
+            }
 
             int idCaja = conn.ObtenerUltimoIdCaja();
 
@@ -635,7 +660,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 return;
             }
 
-            // Obtener datos por horario (10am - 3am)
+            // Obtener datos por horario (10am - 6am)
             var (totalEfectivo, totalTarjeta, descuento, gastos) = conexion.ObtenerDatosCorteGeneral();
 
             // Calcular total final
@@ -671,8 +696,8 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 $"Gastos del dia : {gastos:C}\n\n" +
 
 
-                $"Total Efectivo Final: {totalFinalEfectivo:C}\n" +
-                $"Total de Venta Generada: {totalFinal:C}\n";
+                $"Efectivo Final Generado: {totalFinalEfectivo:C}\n" +
+                $"Total de Ventas Generadas: {totalFinal:C}\n";
 
             // Cambiar visibilidad de paneles
             panel_cortegeneral1.Visible = false;
@@ -1058,6 +1083,16 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             sb.Append(GS + "V" + "\x41" + "\x00"); // Corte completo
 
             return sb.ToString();
+        }
+
+        private void lbl_caja_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label7_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
