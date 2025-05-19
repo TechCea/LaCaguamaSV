@@ -735,7 +735,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             {
                 string rutaRespaldo = sfd.FileName;
                 string usuario = "root";
-                string contraseña = "slenderman"; // Reemplaza por tu contraseña real
+                string contraseña = "root"; // Reemplaza por tu contraseña real
                 string baseDeDatos = "lacaguamabd"; // Reemplaza por el nombre real de tu base de datos
                 string mysqldumpPath = @"C:\Program Files\MySQL\MySQL Server 8.0\bin";
 

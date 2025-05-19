@@ -161,18 +161,19 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 using (MySqlConnection conexion = new Conexion().EstablecerConexion())
                 {
                     string query = @"
-            SELECT 
-                cg.id_corte_general AS 'ID Corte',
-                DATE_FORMAT(cg.fecha, '%Y-%m-%d %H:%i') AS 'Fecha/Hora',
-                u.nombre AS 'Responsable',
-                cg.cant_efectivo AS 'Ventas Efectivo',
-                cg.cant_tarjeta AS 'Ventas Tarjeta',
-                cg.descuento AS 'Descuentos',
-                cg.total_gastos_general AS 'Total Gastos',
-                cg.total_final_dia AS 'Total Final'
-            FROM corte_general cg
-            JOIN usuarios u ON cg.id_usuario = u.id_usuario
-            JOIN caja c ON cg.id_caja = c.id_caja";
+        SELECT 
+            cg.id_corte_general AS 'ID Corte',
+            DATE_FORMAT(cg.fecha, '%Y-%m-%d %H:%i') AS 'Fecha/Hora',
+            u.nombre AS 'Responsable',
+            cg.id_caja AS 'ID Caja',
+            cg.cant_efectivo AS 'Ventas Efectivo',
+            cg.cant_tarjeta AS 'Ventas Tarjeta',
+            cg.descuento AS 'Descuentos',
+            cg.total_gastos_general AS 'Total Gastos',
+            cg.total_final_dia AS 'Total Final'
+        FROM corte_general cg
+        JOIN usuarios u ON cg.id_usuario = u.id_usuario
+        JOIN caja c ON cg.id_caja = c.id_caja";
 
                     query = AplicarFiltros(query, tipoFiltro, fechaInicio, fechaFin);
                     query += " ORDER BY cg.fecha DESC";
@@ -199,22 +200,23 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 using (MySqlConnection conexion = new Conexion().EstablecerConexion())
                 {
                     string query = @"
-            SELECT 
-                ct.id_corte_tarjetas AS 'ID Corte',
-                DATE_FORMAT(ct.fecha, '%Y-%m-%d %H:%i') AS 'Fecha/Hora',
-                u.nombre AS 'Responsable',
-                ct.cantidad AS 'Monto Tarjetas',
-                (SELECT IFNULL(SUM(p.descuento), 0) 
-                 FROM pagos p 
-                 WHERE p.id_tipo_pago = 2 
-                 AND DATE(p.fecha_pago) = DATE(ct.fecha)) AS 'Descuentos Tarjetas',
-                (ct.cantidad - (SELECT IFNULL(SUM(p.descuento), 0)
-                              FROM pagos p 
-                              WHERE p.id_tipo_pago = 2 
-                              AND DATE(p.fecha_pago) = DATE(ct.fecha))) AS 'Neto Tarjetas'
-            FROM corte_tarjetas ct
-            JOIN usuarios u ON ct.id_usuario = u.id_usuario
-            JOIN caja c ON ct.id_caja = c.id_caja";
+        SELECT 
+            ct.id_corte_tarjetas AS 'ID Corte',
+            DATE_FORMAT(ct.fecha, '%Y-%m-%d %H:%i') AS 'Fecha/Hora',
+            u.nombre AS 'Responsable',
+            ct.id_caja AS 'ID Caja',
+            ct.cantidad AS 'Monto Tarjetas',
+            (SELECT IFNULL(SUM(p.descuento), 0) 
+             FROM pagos p 
+             WHERE p.id_tipo_pago = 2 
+             AND DATE(p.fecha_pago) = DATE(ct.fecha)) AS 'Descuentos Tarjetas',
+            (ct.cantidad - (SELECT IFNULL(SUM(p.descuento), 0)
+                          FROM pagos p 
+                          WHERE p.id_tipo_pago = 2 
+                          AND DATE(p.fecha_pago) = DATE(ct.fecha))) AS 'Neto Tarjetas'
+        FROM corte_tarjetas ct
+        JOIN usuarios u ON ct.id_usuario = u.id_usuario
+        JOIN caja c ON ct.id_caja = c.id_caja";
 
                     query = AplicarFiltros(query, tipoFiltro, fechaInicio, fechaFin);
                     query += " ORDER BY ct.fecha DESC";
@@ -241,19 +243,20 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 using (MySqlConnection conexion = new Conexion().EstablecerConexion())
                 {
                     string query = @"
-            SELECT 
-                cc.id_corte AS 'ID Corte',
-                DATE_FORMAT(cc.fecha, '%Y-%m-%d %H:%i') AS 'Fecha/Hora',
-                u.nombre AS 'Responsable',
-                c.cantidad AS 'Caja Inicial',
-                cc.cantidad AS 'Caja Final',
-                (cc.cantidad - c.cantidad) AS 'Diferencia',
-                (SELECT IFNULL(SUM(g.cantidad), 0) 
-                 FROM gastos g 
-                 WHERE g.id_caja = cc.id_caja) AS 'Total Gastos'
-            FROM corte_de_caja cc
-            JOIN usuarios u ON cc.id_usuario = u.id_usuario
-            JOIN caja c ON cc.id_caja = c.id_caja";
+        SELECT 
+            cc.id_corte AS 'ID Corte',
+            DATE_FORMAT(cc.fecha, '%Y-%m-%d %H:%i') AS 'Fecha/Hora',
+            u.nombre AS 'Responsable',
+            cc.id_caja AS 'ID Caja',
+            c.cantidad AS 'Caja Inicial',
+            cc.cantidad AS 'Caja Final',
+            (cc.cantidad - c.cantidad) AS 'Diferencia',
+            (SELECT IFNULL(SUM(g.cantidad), 0) 
+             FROM gastos g 
+             WHERE g.id_caja = cc.id_caja) AS 'Total Gastos'
+        FROM corte_de_caja cc
+        JOIN usuarios u ON cc.id_usuario = u.id_usuario
+        JOIN caja c ON cc.id_caja = c.id_caja";
 
                     query = AplicarFiltros(query, tipoFiltro, fechaInicio, fechaFin);
                     query += " ORDER BY cc.fecha DESC";
@@ -282,10 +285,10 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
             // Formato de columnas monetarias
             string[] columnasMonetarias = {
-                "Ventas Efectivo", "Ventas Tarjeta", "Descuentos", "Total Gastos", "Total Final", // General
-                "Monto Tarjetas", "Descuentos Tarjetas", "Neto Tarjetas", // Tarjetas
-                "Caja Inicial", "Caja Final", "Diferencia", "Total Gastos" // Caja
-            };
+        "Ventas Efectivo", "Ventas Tarjeta", "Descuentos", "Total Gastos", "Total Final", // General
+        "Monto Tarjetas", "Descuentos Tarjetas", "Neto Tarjetas", // Tarjetas
+        "Caja Inicial", "Caja Final", "Diferencia", "Total Gastos" // Caja
+    };
 
             foreach (DataGridViewColumn columna in dataGridViewCortes.Columns)
             {
@@ -293,6 +296,10 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 {
                     columna.DefaultCellStyle.Format = "C";
                     columna.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                }
+                else if (columna.HeaderText == "ID Caja")
+                {
+                    columna.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
                 }
             }
         }
@@ -312,18 +319,19 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                     {
                         // Detalle para corte general
                         string query = @"
-                        SELECT 
-                            cg.id_corte_general,
-                            DATE_FORMAT(cg.fecha, '%Y-%m-%d %H:%i') AS fecha,
-                            u.nombre AS responsable,
-                            cg.cant_efectivo,
-                            cg.cant_tarjeta,
-                            cg.descuento,
-                            cg.total_gastos_general,
-                            cg.total_final_dia
-                        FROM corte_general cg
-                        JOIN usuarios u ON cg.id_usuario = u.id_usuario
-                        WHERE cg.id_corte_general = @idCorte";
+                SELECT 
+                    cg.id_corte_general,
+                    DATE_FORMAT(cg.fecha, '%Y-%m-%d %H:%i') AS fecha,
+                    u.nombre AS responsable,
+                    cg.id_caja,
+                    cg.cant_efectivo,
+                    cg.cant_tarjeta,
+                    cg.descuento,
+                    cg.total_gastos_general,
+                    cg.total_final_dia
+                FROM corte_general cg
+                JOIN usuarios u ON cg.id_usuario = u.id_usuario
+                WHERE cg.id_corte_general = @idCorte";
 
                         using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                         {
@@ -336,6 +344,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                                     detalle.AppendLine($"Corte General: #{reader["id_corte_general"]}");
                                     detalle.AppendLine($"Fecha: {reader["fecha"]}");
                                     detalle.AppendLine($"Responsable: {reader["responsable"]}");
+                                    detalle.AppendLine($"ID Caja: {reader["id_caja"]}");
                                     detalle.AppendLine("──────────────────────────────────");
                                     detalle.AppendLine($"Ventas en efectivo: {Convert.ToDecimal(reader["cant_efectivo"]).ToString("C")}");
                                     detalle.AppendLine($"Ventas con tarjeta: {Convert.ToDecimal(reader["cant_tarjeta"]).ToString("C")}");
@@ -350,18 +359,19 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                     {
                         // Detalle para corte de tarjetas
                         string query = @"
-                        SELECT 
-                            ct.id_corte_tarjetas,
-                            DATE_FORMAT(ct.fecha, '%Y-%m-%d %H:%i') AS fecha,
-                            u.nombre AS responsable,
-                            ct.cantidad AS monto_tarjetas,
-                            (SELECT SUM(p.descuento) 
-                             FROM pagos p 
-                             WHERE p.id_tipo_pago = 2 
-                             AND DATE(p.fecha_pago) = DATE(ct.fecha)) AS descuentos
-                        FROM corte_tarjetas ct
-                        JOIN usuarios u ON ct.id_usuario = u.id_usuario
-                        WHERE ct.id_corte_tarjetas = @idCorte";
+                SELECT 
+                    ct.id_corte_tarjetas,
+                    DATE_FORMAT(ct.fecha, '%Y-%m-%d %H:%i') AS fecha,
+                    u.nombre AS responsable,
+                    ct.id_caja,
+                    ct.cantidad AS monto_tarjetas,
+                    (SELECT SUM(p.descuento) 
+                     FROM pagos p 
+                     WHERE p.id_tipo_pago = 2 
+                     AND DATE(p.fecha_pago) = DATE(ct.fecha)) AS descuentos
+                FROM corte_tarjetas ct
+                JOIN usuarios u ON ct.id_usuario = u.id_usuario
+                WHERE ct.id_corte_tarjetas = @idCorte";
 
                         using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                         {
@@ -377,6 +387,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                                     detalle.AppendLine($"Corte de Tarjetas: #{reader["id_corte_tarjetas"]}");
                                     detalle.AppendLine($"Fecha: {reader["fecha"]}");
                                     detalle.AppendLine($"Responsable: {reader["responsable"]}");
+                                    detalle.AppendLine($"ID Caja: {reader["id_caja"]}");
                                     detalle.AppendLine("──────────────────────────────────");
                                     detalle.AppendLine($"Monto total tarjetas: {monto.ToString("C")}");
                                     detalle.AppendLine($"Descuentos aplicados: {descuentos.ToString("C")}");
@@ -389,21 +400,22 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                     {
                         // Detalle para corte de caja
                         string query = @"
-                        SELECT 
-                            cc.id_corte,
-                            DATE_FORMAT(cc.fecha, '%Y-%m-%d %H:%i') AS fecha,
-                            u.nombre AS responsable,
-                            c.cantidad AS caja_inicial,
-                            cc.cantidad AS caja_final,
-                            (SELECT SUM(g.cantidad) 
-                             FROM gastos g 
-                             WHERE g.id_caja = cc.id_caja) AS total_gastos,
-                            ec.nombreEstadoCorte AS estado
-                        FROM corte_de_caja cc
-                        JOIN usuarios u ON cc.id_usuario = u.id_usuario
-                        JOIN caja c ON cc.id_caja = c.id_caja
-                        JOIN estado_corte ec ON cc.id_estado_corte = ec.id_estado_corte
-                        WHERE cc.id_corte = @idCorte";
+                SELECT 
+                    cc.id_corte,
+                    DATE_FORMAT(cc.fecha, '%Y-%m-%d %H:%i') AS fecha,
+                    u.nombre AS responsable,
+                    cc.id_caja,
+                    c.cantidad AS caja_inicial,
+                    cc.cantidad AS caja_final,
+                    (SELECT SUM(g.cantidad) 
+                     FROM gastos g 
+                     WHERE g.id_caja = cc.id_caja) AS total_gastos,
+                    ec.nombreEstadoCorte AS estado
+                FROM corte_de_caja cc
+                JOIN usuarios u ON cc.id_usuario = u.id_usuario
+                JOIN caja c ON cc.id_caja = c.id_caja
+                JOIN estado_corte ec ON cc.id_estado_corte = ec.id_estado_corte
+                WHERE cc.id_corte = @idCorte";
 
                         using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                         {
@@ -420,6 +432,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                                     detalle.AppendLine($"Corte de Caja: #{reader["id_corte"]}");
                                     detalle.AppendLine($"Fecha: {reader["fecha"]}");
                                     detalle.AppendLine($"Responsable: {reader["responsable"]}");
+                                    detalle.AppendLine($"ID Caja: {reader["id_caja"]}");
                                     detalle.AppendLine($"Estado: {reader["estado"]}");
                                     detalle.AppendLine("──────────────────────────────────");
                                     detalle.AppendLine($"Caja inicial: {inicial.ToString("C")}");
