@@ -46,9 +46,9 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             this.panel3 = new System.Windows.Forms.Panel();
             this.label4 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label5 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.btnCargarExtras = new System.Windows.Forms.Button();
             this.btnCargarPlatos = new System.Windows.Forms.Button();
@@ -57,6 +57,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             this.flowLayoutPanelPedidos = new System.Windows.Forms.FlowLayoutPanel();
             this.btnPagos = new System.Windows.Forms.Button();
             this.btnPromociones = new System.Windows.Forms.Button();
+            this.btnImprimirComanda = new System.Windows.Forms.Button();
             this.panel5.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -237,6 +238,17 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             this.panel1.Size = new System.Drawing.Size(363, 173);
             this.panel1.TabIndex = 12;
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.ForeColor = System.Drawing.SystemColors.ButtonFace;
+            this.label5.Location = new System.Drawing.Point(66, 132);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(46, 13);
+            this.label5.TabIndex = 7;
+            this.label5.Text = "Subtotal";
+            this.label5.Click += new System.EventHandler(this.label5_Click);
+            // 
             // label7
             // 
             this.label7.AutoSize = true;
@@ -258,17 +270,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             this.label6.TabIndex = 10;
             this.label6.Text = "Descuentos";
             this.label6.Visible = false;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label5.Location = new System.Drawing.Point(66, 132);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(46, 13);
-            this.label5.TabIndex = 7;
-            this.label5.Text = "Subtotal";
-            this.label5.Click += new System.EventHandler(this.label5_Click);
             // 
             // label1
             // 
@@ -381,6 +382,21 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             this.btnPromociones.UseVisualStyleBackColor = false;
             this.btnPromociones.Click += new System.EventHandler(this.btnPromociones_Click);
             // 
+            // btnImprimirComanda
+            // 
+            this.btnImprimirComanda.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
+            this.btnImprimirComanda.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnImprimirComanda.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnImprimirComanda.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnImprimirComanda.ForeColor = System.Drawing.Color.White;
+            this.btnImprimirComanda.Location = new System.Drawing.Point(748, 406);
+            this.btnImprimirComanda.Name = "btnImprimirComanda";
+            this.btnImprimirComanda.Size = new System.Drawing.Size(200, 41);
+            this.btnImprimirComanda.TabIndex = 37;
+            this.btnImprimirComanda.Text = "Imprimir Comanda";
+            this.btnImprimirComanda.UseVisualStyleBackColor = false;
+            this.btnImprimirComanda.Click += new System.EventHandler(this.btnImprimirComanda_Click);
+            // 
             // FormGestionOrdenes
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -389,6 +405,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.fondo;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(960, 450);
+            this.Controls.Add(this.btnImprimirComanda);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.btnPromociones);
             this.Controls.Add(this.label6);
@@ -458,5 +475,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         private System.Windows.Forms.Button btnCerrar_Click;
         private System.Windows.Forms.Button btnPagos;
         private System.Windows.Forms.Button btnPromociones;
+        private System.Windows.Forms.Button btnImprimirComanda;
     }
 }

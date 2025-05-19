@@ -4,13 +4,16 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using LaCaguamaSV.Configuracion;
+using System.IO.Ports;
 using MySql.Data.MySqlClient;
+using System.Drawing.Printing;
 
 
 namespace LaCaguamaSV.Fomularios.VistasAdmin
@@ -20,6 +23,10 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
      
 
         private int idMesaActual; // Almacenar el ID de la mesa actual
+        // Constantes ESC/POS
+        private const string ESC = "\x1B";
+        private const string GS = "\x1D";
+        private const string LF = "\x0A";
         public FormGestionOrdenes(int idOrden, string nombreCliente, decimal total, decimal descuento, string fechaOrden, string numeroMesa, string tipoPago, string nombreUsuario, string estadoOrden)
         {
             InitializeComponent();
@@ -48,6 +55,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             dataGridViewMenu.AllowUserToResizeRows = false;
 
             dataGridViewMenu.CellDoubleClick += dataGridViewMenu_CellDoubleClick;
+            btnImprimirComanda.Click += btnImprimirComanda_Click;
 
             lblTotal.Font = new Font(lblTotal.Font.FontFamily, 16);
             label5.Font = new Font(label5.Font.FontFamily, 14);
@@ -1155,6 +1163,163 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
 
         }
-    }
 
+        private void btnImprimirComanda_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // 1. Generar el contenido de la comanda
+                string contenidoComanda = GenerarContenidoComanda();
+
+                // 2. Enviar a imprimir
+                ImprimirComanda(contenidoComanda);
+
+                MessageBox.Show("Comanda enviada a cocina", "Éxito",
+                              MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al imprimir comanda: {ex.Message}", "Error",
+                               MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private string GenerarContenidoComanda()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            // Configuración inicial de la impresora
+            sb.Append(ESC + "@"); // Reset printer
+            sb.Append(ESC + "!" + "\x38"); // Fuente tamaño doble
+
+            // Encabezado
+            sb.Append(CenterText("LA CAGUAMA RESTAURANTE"));
+            sb.Append(LF);
+            sb.Append(CenterText("══════════════════════"));
+            sb.Append(LF);
+            sb.Append(ESC + "!" + "\x00"); // Restaurar fuente normal
+
+            // Información básica
+            sb.Append($"COMANDA PARA COCINA{LF}");
+            sb.Append($"Orden: #{lblIdOrden.Text}{LF}");
+            sb.Append($"Mesa: {comboBoxMesas.Text}{LF}");
+            sb.Append($"Hora: {DateTime.Now.ToString("HH:mm")}{LF}");
+            sb.Append("──────────────────────────" + LF);
+
+            // Sección de platos
+            sb.Append(ESC + "!" + "\x08"); // Fuente enfatizada
+            sb.Append("PLATOS A PREPARAR:" + LF);
+            sb.Append(ESC + "!" + "\x00"); // Restaurar fuente
+            sb.Append("──────────────────────────" + LF);
+
+            // Obtener solo los platos (no bebidas ni extras)
+            var platos = ObtenerPlatosParaCocina();
+
+            foreach (var plato in platos)
+            {
+                sb.Append($"{plato.Cantidad}x {plato.Nombre}{LF}");
+
+                // Mostrar ingredientes especiales o notas si las hay
+                if (!string.IsNullOrEmpty(plato.Notas))
+                {
+                    sb.Append($"  Notas: {plato.Notas}{LF}");
+                }
+            }
+
+            // Pie de página
+            sb.Append("──────────────────────────" + LF);
+            sb.Append($"Total platos: {platos.Sum(p => p.Cantidad)}{LF}");
+            sb.Append(LF);
+            sb.Append(CenterText("¡Gracias por su trabajo!"));
+            sb.Append(LF + LF);
+
+            // Comandos de corte de papel
+            sb.Append(LF + LF + LF + LF); // Espacios adicionales
+            sb.Append(GS + "V" + "\x41" + "\x00"); // Corte completo
+
+            return sb.ToString();
+        }
+
+        private List<(string Nombre, int Cantidad, string Notas)> ObtenerPlatosParaCocina()
+        {
+            var platos = new List<(string, int, string)>();
+
+            using (MySqlConnection conexion = new Conexion().EstablecerConexion())
+            {
+                string query = @"
+            SELECT 
+                pl.nombrePlato AS Nombre,
+                p.Cantidad,
+                GROUP_CONCAT(DISTINCT i.nombreProducto SEPARATOR ', ') AS Ingredientes
+            FROM pedidos p
+            JOIN platos pl ON p.id_plato = pl.id_plato
+            LEFT JOIN recetas r ON pl.id_plato = r.id_plato
+            LEFT JOIN inventario i ON r.id_inventario = i.id_inventario
+            WHERE p.id_orden = @idOrden
+            GROUP BY pl.nombrePlato, p.Cantidad";
+
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@idOrden", Convert.ToInt32(lblIdOrden.Text));
+
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            string nombre = reader["Nombre"].ToString();
+                            int cantidad = Convert.ToInt32(reader["Cantidad"]);
+                            string ingredientes = reader["Ingredientes"].ToString();
+
+                            // Puedes personalizar las notas según necesites
+                            string notas = $"Ingredientes: {ingredientes}";
+
+                            platos.Add((nombre, cantidad, notas));
+                        }
+                    }
+                }
+            }
+
+            return platos;
+        }
+
+        private void ImprimirComanda(string contenido)
+        {
+            // Usar la misma lógica de impresión que en el comprobante
+            PrintDocument pd = new PrintDocument();
+            pd.PrinterSettings.PrinterName = ObtenerNombreImpresoraTermica();
+
+            pd.PrintPage += (sender, e) =>
+            {
+                Font font = new Font("Courier New", 9);
+                e.Graphics.DrawString(contenido, font, Brushes.Black,
+                    new RectangleF(0, 0, pd.DefaultPageSettings.PrintableArea.Width,
+                                  pd.DefaultPageSettings.PrintableArea.Height));
+            };
+
+            pd.Print();
+        }
+
+        // Métodos auxiliares (los mismos que en el comprobante)
+        private string CenterText(string text)
+        {
+            int maxWidth = 32;
+            if (text.Length >= maxWidth) return text;
+
+            int spaces = (maxWidth - text.Length) / 2;
+            return new string(' ', spaces) + text;
+        }
+
+        private string ObtenerNombreImpresoraTermica()
+        {
+            foreach (string printer in PrinterSettings.InstalledPrinters)
+            {
+                if (printer.Contains("PT-210") || printer.Contains("GOOJPRT") || printer.Contains("POS"))
+                {
+                    return printer;
+                }
+            }
+            return new PrinterSettings().PrinterName;
+        }
+    }
 }
+
