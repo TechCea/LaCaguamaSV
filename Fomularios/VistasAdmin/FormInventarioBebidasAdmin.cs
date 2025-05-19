@@ -353,5 +353,12 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
             dgvInventarioB.ClearSelection();
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            FormAgregarCategoriaBebida formCat = new FormAgregarCategoriaBebida();
+            formCat.ShowDialog();
+            this.Hide();
+        }
     }
 }

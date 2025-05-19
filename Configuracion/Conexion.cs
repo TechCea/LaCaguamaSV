@@ -1559,8 +1559,8 @@ namespace LaCaguamaSV.Configuracion
         }
 
         // -------------------- Gastos --------------------
-       
-        
+
+
 
         // Método para obtener el fondo inicial de la caja
         public decimal ObtenerFondoInicial(int idCaja)
@@ -1633,7 +1633,7 @@ namespace LaCaguamaSV.Configuracion
             }
         }
 
-        
+
 
         //Obtener monto caja
         public decimal ObtenerMontoCaja(int idCaja)
@@ -2896,11 +2896,27 @@ namespace LaCaguamaSV.Configuracion
                 using (MySqlConnection conn = new MySqlConnection(cadenaConexion))
                 {
                     conn.Open();
-                    string query = "INSERT INTO categoria_platos (tipo) VALUES (@tipo)";
-                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+
+                    // Validar si ya existe la categoría (ignorando mayúsculas)
+                    string queryVerificar = "SELECT COUNT(*) FROM categoria_platos WHERE LOWER(tipo) = LOWER(@tipo)";
+                    using (MySqlCommand cmdVerificar = new MySqlCommand(queryVerificar, conn))
                     {
-                        cmd.Parameters.AddWithValue("@tipo", tipo);
-                        int filasAfectadas = cmd.ExecuteNonQuery();
+                        cmdVerificar.Parameters.AddWithValue("@tipo", tipo);
+                        int existe = Convert.ToInt32(cmdVerificar.ExecuteScalar());
+
+                        if (existe > 0)
+                        {
+                            MessageBox.Show("Ya existe una categoría de plato con ese nombre.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return false;
+                        }
+                    }
+
+                    // Si no existe, insertar
+                    string queryInsertar = "INSERT INTO categoria_platos (tipo) VALUES (@tipo)";
+                    using (MySqlCommand cmdInsertar = new MySqlCommand(queryInsertar, conn))
+                    {
+                        cmdInsertar.Parameters.AddWithValue("@tipo", tipo);
+                        int filasAfectadas = cmdInsertar.ExecuteNonQuery();
                         return filasAfectadas > 0;
                     }
                 }
@@ -2936,11 +2952,102 @@ namespace LaCaguamaSV.Configuracion
             }
         }
 
+        // CODIGO DE AGREGAR CATEGORÍAS
+        public DataTable ObtenerCategoriasBebidas()
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    string query = "SELECT id_categoria AS 'ID', tipo AS 'Categoría' FROM categorias";
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al obtener categorías de bebidas: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return dt;
+        }
+
+        public bool AgregarCategoriaBebida(string nombreCategoria)
+        {
+            bool exito = false;
+
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+
+                    // Validar si ya existe (ignorando mayúsculas)
+                    string queryVerificar = "SELECT COUNT(*) FROM categorias WHERE LOWER(tipo) = LOWER(@tipo)";
+                    using (MySqlCommand cmdVerificar = new MySqlCommand(queryVerificar, conexion))
+                    {
+                        cmdVerificar.Parameters.AddWithValue("@tipo", nombreCategoria);
+                        int count = Convert.ToInt32(cmdVerificar.ExecuteScalar());
+
+                        if (count > 0)
+                        {
+                            MessageBox.Show("Ya existe una categoría con ese nombre.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return false;
+                        }
+                    }
+
+                    // Si no existe, insertar
+                    string queryInsertar = "INSERT INTO categorias (tipo) VALUES (@tipo)";
+                    using (MySqlCommand cmdInsertar = new MySqlCommand(queryInsertar, conexion))
+                    {
+                        cmdInsertar.Parameters.AddWithValue("@tipo", nombreCategoria);
+                        exito = cmdInsertar.ExecuteNonQuery() > 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al agregar categoría: " + ex.Message);
+            }
+
+            return exito;
+        }
+
+
+        public bool ActualizarCategoriaBebida(int idCategoria, string nuevoNombre)
+        {
+            try
+            {
+                using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    string query = "UPDATE categorias SET tipo = @nuevoNombre WHERE id_categoria = @id";
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@nuevoNombre", nuevoNombre);
+                        cmd.Parameters.AddWithValue("@id", idCategoria);
+
+                        int filasAfectadas = cmd.ExecuteNonQuery();
+                        return filasAfectadas > 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al actualizar la categoría: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+        }
+
     }
-
-
-
-
 
 }
 
