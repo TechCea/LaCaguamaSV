@@ -40,6 +40,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
             CargarProveedores();
             CargarCategorias();
+            cbCategoria.SelectedIndexChanged += CbCategoria_SelectedIndexChanged;
             CargarDisponibilidad();
             dgvInventarioB.CellClick += dgvInventarioB_CellClick;
             dgvInventarioB.MultiSelect = false;
@@ -73,6 +74,16 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             try
             {
                 DataTable categorias = conexion.ObtenerCategorias();
+
+                DataTable dtCategorias = conexion.ObtenerCategorias();
+                cbCategoria.Items.Add("Todas"); // Opción para mostrar todas las bebidas
+
+                foreach (DataRow row in dtCategorias.Rows)
+                {
+                    cbCategoria.Items.Add(row["tipo"].ToString());
+                }
+
+                cbCategoria.SelectedIndex = 0; // Selecciona "Todas" por defecto
 
                 if (categorias == null)
                 {
@@ -122,6 +133,25 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                                MessageBoxButtons.OK,
                                MessageBoxIcon.Error);
             }
+        }
+
+        private void CbCategoria_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string categoriaSeleccionada = cbCategoria.SelectedItem.ToString();
+
+            if (categoriaSeleccionada == "Todas")
+            {
+                CargarBebidas();
+            }
+            else
+            {
+                dgvInventarioB.DataSource = conexion.ObtenerBebidasPorCategoria(categoriaSeleccionada);
+            }
+        }
+
+        private void CargarBebidas()
+        {
+            dgvInventarioB.DataSource = conexion.ObtenerBebidasDisponibles();
         }
 
         // Cuando se selecciona una fila en el DataGridView, se muestran los datos en los controles

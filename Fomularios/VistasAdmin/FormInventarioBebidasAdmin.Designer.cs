@@ -48,6 +48,7 @@
             this.btnAgregar = new System.Windows.Forms.Button();
             this.btnActualizar = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
+            this.cbCategoria = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvInventarioB)).BeginInit();
             this.gbDatosExtras.SuspendLayout();
             this.SuspendLayout();
@@ -297,6 +298,16 @@
             this.label6.TabIndex = 17;
             this.label6.Text = "INVENTARIO: BEBIDAS";
             // 
+            // cbCategoria
+            // 
+            this.cbCategoria.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.cbCategoria.FormattingEnabled = true;
+            this.cbCategoria.Location = new System.Drawing.Point(524, 25);
+            this.cbCategoria.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.cbCategoria.Name = "cbCategoria";
+            this.cbCategoria.Size = new System.Drawing.Size(184, 24);
+            this.cbCategoria.TabIndex = 18;
+            // 
             // FormInventarioBebidasAdmin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -304,6 +315,7 @@
             this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.fondo;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1348, 621);
+            this.Controls.Add(this.cbCategoria);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.btnAgregar);
             this.Controls.Add(this.btnActualizar);
@@ -343,5 +355,6 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button btn_limpiar;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.ComboBox cbCategoria;
     }
 }

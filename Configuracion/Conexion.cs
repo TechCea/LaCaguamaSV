@@ -1040,14 +1040,19 @@ namespace LaCaguamaSV.Configuracion
                 {
                     conexion.Open();
                     string query = @"
-                    SELECT i.id_inventario AS 'ID', 
-                           i.nombreProducto AS 'Nombre', 
-                           i.cantidad AS 'Cantidad', 
-                           p.nombreProv AS 'Proveedor'
-                    FROM inventario i
-                    JOIN proveedores p ON i.id_proveedor = p.id_proveedor
-                    WHERE NOT EXISTS (SELECT 1 FROM bebidas b WHERE b.id_inventario = i.id_inventario)
-                      AND (p.nombreProv = @nombreProveedor OR @nombreProveedor = 'Todos')";
+                SELECT 
+                    i.id_inventario AS 'ID', 
+                    i.nombreProducto AS 'Nombre', 
+                    i.cantidad AS 'Cantidad', 
+                    p.nombreProv AS 'Proveedor',
+                    d.nombreDis AS 'Disponibilidad'
+                FROM inventario i
+                JOIN proveedores p ON i.id_proveedor = p.id_proveedor
+                JOIN disponibilidad d ON i.id_disponibilidad = d.id_disponibilidad
+                WHERE NOT EXISTS (
+                    SELECT 1 FROM bebidas b WHERE b.id_inventario = i.id_inventario
+                )
+                AND (@nombreProveedor = 'Todos' OR p.nombreProv = @nombreProveedor);";
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                     {
@@ -1062,7 +1067,7 @@ namespace LaCaguamaSV.Configuracion
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al filtrar ingredientes: " + ex.Message);
+                MessageBox.Show("Error al filtrar ingredientes: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             return dt;
         }
