@@ -369,14 +369,18 @@ namespace LaCaguamaSV.Configuracion
                 using (MySqlConnection conexion = new MySqlConnection(cadenaConexion))
                 {
                     conexion.Open();
-                    string query = "SELECT i.nombreProducto AS 'Nombre Bebida', " + // Se ajusta al nuevo nombre del campo
-                                   "b.id_bebida AS 'ID Bebida', " +
-                                   "b.precioUnitario AS 'Precio Unitario', " +
-                                   "c.tipo AS 'Categoría' " +
-                                   "FROM bebidas b " +
-                                   "JOIN inventario i ON b.id_inventario = i.id_inventario " +
-                                   "JOIN categorias c ON b.id_categoria = c.id_categoria " +
-                                   "WHERE c.tipo = @categoria";
+                    string query = @"
+                SELECT 
+                    i.nombreProducto AS 'Nombre Bebida', 
+                    b.id_bebida AS 'ID Bebida', 
+                    b.precioUnitario AS 'Precio Unitario', 
+                    c.tipo AS 'Categoría',
+                    d.nombreDis AS 'Disponibilidad'
+                FROM bebidas b
+                JOIN inventario i ON b.id_inventario = i.id_inventario
+                JOIN categorias c ON b.id_categoria = c.id_categoria
+                JOIN disponibilidad d ON i.id_disponibilidad = d.id_disponibilidad
+                WHERE c.tipo = @categoria";
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                     {
@@ -390,7 +394,7 @@ namespace LaCaguamaSV.Configuracion
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al obtener bebidas por categoría: " + ex.Message);
+                MessageBox.Show("Error al obtener bebidas por categoría: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             return dt;
         }
