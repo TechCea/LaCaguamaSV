@@ -801,6 +801,16 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void button1_Click(object sender, EventArgs e)
         {
+            // Verificar si el usuario es administrador (rol = 1)
+            if (SesionUsuario.Rol != 1)
+            {
+                MessageBox.Show("Acceso denegado. No tienes permisos de administrador.",
+                              "Acceso Restringido",
+                              MessageBoxButtons.OK,
+                              MessageBoxIcon.Warning);
+                return;
+            }
+
             FormHistorialCortes formhistorialcortes = new FormHistorialCortes();
             formhistorialcortes.ShowDialog();
         }

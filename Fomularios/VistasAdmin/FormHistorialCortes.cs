@@ -36,6 +36,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             dtpFechaFinCortes.Visible = false;
             lblACortes.Visible = false;
 
+
             vistaActual = "General";
             btnCorteGeneral.BackColor = Color.LightGray;
             CargarVistaGeneral();
@@ -51,6 +52,14 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             btnCorteTarjetas.Click += btnCorteTarjetas_Click;
             btnCorteCaja.Click += btnCorteCaja_Click;
             dataGridViewCortes.CellContentClick += DataGridViewCortes_CellContentClick;
+
+            // Si el usuario no es administrador, cierra el formulario
+            if (SesionUsuario.Rol != 1)
+            {
+                MessageBox.Show("Acceso denegado. No tienes permisos de administrador.", "Acceso Restringido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
         }
 
         private void CmbTipoFiltroCortes_SelectedIndexChanged(object sender, EventArgs e)
