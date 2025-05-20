@@ -20,6 +20,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
     {
         Conexion conexion = new Conexion();
         private int idUsuario = 1;  // Este valor debe ser tomado del usuario logueado
+       
         private int idCaja;
         private int idGastoSeleccionado = -1;
 
@@ -62,6 +63,20 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 MessageBox.Show("Error al obtener la caja activa: " + ex.Message);
             }
 
+        }
+
+
+        public static class SesionUsuario
+        {
+            public static int IdUsuario { get; set; }
+            public static string NombreUsuario { get; set; }
+            public static int Rol { get; set; }
+
+
+            public static bool EsAdmin()
+            {
+                return Rol == 1;
+            }
         }
 
 
@@ -176,7 +191,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 int idCaja = conexion.ObtenerUltimaCaja(); // O el método que uses para obtener el idCaja
 
                 // Verificamos que idCaja sea válido antes de hacer cualquier operación
-                if (idCaja == -1)
+                if (idCaja != -1)
                 {
                     // Si idCaja es válido, obtenemos los datos
                     decimal totalGastos = conexion.ObtenerTotalGastos(idCaja);
@@ -214,8 +229,16 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void dgvGastos_CellClick(object sender, DataGridViewCellEventArgs e)
         {
+
             try
             {
+                MessageBox.Show("Rol actual: " + SesionUsuario.Rol); // <-- aquí
+                if (SesionUsuario.Rol !=1)
+                {
+                    MessageBox.Show("Solo los administradores pueden editar gastos.", "Acceso denegado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
                 if (e.RowIndex >= 0)
                 {
                     DataGridViewRow fila = dgvGastos.Rows[e.RowIndex];
@@ -259,7 +282,20 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                     MessageBox.Show("⚠️ No hay una caja inicializada.");
                     return;
                 }
+                // 👉 Validar que el gasto no supere la utilidad
+                decimal fondoInicial = conexion.ObtenerFondoInicial(idCaja);
+                decimal efectivoRecolectado = conexion.ObtenerEfectivoRecolectado(idCaja);
+                decimal totalGastos = conexion.ObtenerTotalGastosDelDia(idCaja);
 
+                decimal utilidad = fondoInicial + efectivoRecolectado - totalGastos;
+
+                if (cantidad >= utilidad)
+                {
+                    MessageBox.Show("⚠️ El gasto excede el Efectivo disponible. No se puede registrar.");
+                    return;
+                }
+
+                // Insertar gasto si todo está bien
                 conexion.InsertarGasto(cantidad, descripcion, idCaja);
                 CargarGastosDelDia();
                 MostrarTotales();
@@ -277,6 +313,8 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void btnEditarGasto_Click(object sender, EventArgs e)
         {
+           
+
             try
             {
                 if (idGastoSeleccionado != -1)
@@ -413,6 +451,21 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 MessageBox.Show("No hay una caja reciente registrada.");
                 dgvGastos.DataSource = null;
             }
+        }
+
+        private void txtCantidad_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtUtilidad_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dgvGastos_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }

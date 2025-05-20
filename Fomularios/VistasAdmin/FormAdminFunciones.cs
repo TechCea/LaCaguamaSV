@@ -177,6 +177,22 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 return;
             }
 
+
+            decimal montoCorte;
+            if (!decimal.TryParse(txtMontoContado.Text, out montoCorte))
+            {
+                MessageBox.Show("Ingresa un número válido.");
+                return;
+            }
+
+            if (montoCorte < 0)
+            {
+                MessageBox.Show("El monto del corte de caja no puede ser negativo.");
+                return;
+            }
+
+
+
             // Guardar el corte de caja (usando montoContado que es la variable local)
             conexion.GuardarCorteCaja(montoContado, this.idUsuario, idCajaActual);
 

@@ -68,6 +68,7 @@
             this.txtCantidad.Name = "txtCantidad";
             this.txtCantidad.Size = new System.Drawing.Size(76, 24);
             this.txtCantidad.TabIndex = 0;
+            this.txtCantidad.TextChanged += new System.EventHandler(this.txtCantidad_TextChanged);
             // 
             // txtDescripcion
             // 
@@ -86,6 +87,7 @@
             this.dgvGastos.RowHeadersWidth = 51;
             this.dgvGastos.Size = new System.Drawing.Size(583, 372);
             this.dgvGastos.TabIndex = 4;
+            this.dgvGastos.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvGastos_CellContentClick);
             // 
             // btnAgregarGasto
             // 
@@ -160,6 +162,7 @@
             this.txtUtilidad.Size = new System.Drawing.Size(76, 24);
             this.txtUtilidad.TabIndex = 21;
             this.txtUtilidad.Text = "$0.00";
+            this.txtUtilidad.TextChanged += new System.EventHandler(this.txtUtilidad_TextChanged);
             // 
             // label2
             // 

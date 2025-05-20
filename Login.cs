@@ -110,6 +110,9 @@ namespace LaCaguamaSV
                 txtUsuario.Clear();
                 txtContrasena.Clear();
             }
+
+
+
         }
 
         private void Login_Load(object sender, EventArgs e)

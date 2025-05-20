@@ -80,12 +80,12 @@
             this.btn_cerrarXZ = new System.Windows.Forms.Button();
             this.btn_cortegeneral = new System.Windows.Forms.Button();
             this.label_general = new System.Windows.Forms.Label();
-            this.lbl_caja = new System.Windows.Forms.Label();
             this.btnRespaldarBD = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.label10 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.btnReimprimirCorte = new System.Windows.Forms.Button();
+            this.lbl_caja = new System.Windows.Forms.Label();
             this.panelConfirmacion.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -820,19 +820,6 @@
             this.label_general.Text = "Corte General\r\n\r\nCaja inicial:\r\nVentas en tarjetas:\r\nVentas en efectivo:\r\nPromoci" +
     "ones:\r\nGastos:\r\n\r\nTotal Generado: \r\nFecha: \r\nCajero:\r\n\r\n";
             // 
-            // lbl_caja
-            // 
-            this.lbl_caja.AutoSize = true;
-            this.lbl_caja.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
-            this.lbl_caja.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.lbl_caja.Location = new System.Drawing.Point(100, 55);
-            this.lbl_caja.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lbl_caja.Name = "lbl_caja";
-            this.lbl_caja.Size = new System.Drawing.Size(109, 24);
-            this.lbl_caja.TabIndex = 24;
-            this.lbl_caja.Text = "Caja activa: ";
-            this.lbl_caja.Click += new System.EventHandler(this.lbl_caja_Click);
-            // 
             // btnRespaldarBD
             // 
             this.btnRespaldarBD.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
@@ -910,6 +897,19 @@
             this.btnReimprimirCorte.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnReimprimirCorte.UseVisualStyleBackColor = false;
             this.btnReimprimirCorte.Click += new System.EventHandler(this.btnReimprimirCorte_Click);
+            // 
+            // lbl_caja
+            // 
+            this.lbl_caja.AutoSize = true;
+            this.lbl_caja.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
+            this.lbl_caja.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.lbl_caja.Location = new System.Drawing.Point(100, 55);
+            this.lbl_caja.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lbl_caja.Name = "lbl_caja";
+            this.lbl_caja.Size = new System.Drawing.Size(109, 24);
+            this.lbl_caja.TabIndex = 24;
+            this.lbl_caja.Text = "Caja activa: ";
+            this.lbl_caja.Click += new System.EventHandler(this.lbl_caja_Click);
             // 
             // FormAdminFunciones
             // 
@@ -1018,7 +1018,6 @@
         public System.Windows.Forms.Label label_general;
         private System.Windows.Forms.Button btn_cerrarXZ;
         private System.Windows.Forms.Button btn_cortegeneral;
-        private System.Windows.Forms.Label lbl_caja;
         private System.Windows.Forms.Button btnRespaldarBD;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label10;
@@ -1031,5 +1030,6 @@
         private System.Windows.Forms.PictureBox pictureBox3;
         private System.Windows.Forms.PictureBox pictureBox5;
         private System.Windows.Forms.PictureBox pictureBox4;
+        private System.Windows.Forms.Label lbl_caja;
     }
 }
