@@ -700,6 +700,84 @@ HAVING diferencia < 0 OR i.cantidad < 6"; // Umbral de stock bajo
         }
 
 
+        public static bool GuardarNotaPedido(int idPedido, string nota, MySqlTransaction transaction = null)
+        {
+            bool usarTransaccionExterna = transaction != null;
+            MySqlConnection conexion = null;
+            MySqlTransaction transaccionLocal = null;
+
+            try
+            {
+                if (!usarTransaccionExterna)
+                {
+                    conexion = new Conexion().EstablecerConexion();
+                    transaccionLocal = conexion.BeginTransaction();
+                }
+
+                // Eliminar nota existente si hay
+                string queryEliminar = "DELETE FROM notas_pedidos WHERE id_pedido = @idPedido";
+                using (MySqlCommand cmdEliminar = new MySqlCommand(queryEliminar,
+                       usarTransaccionExterna ? transaction.Connection : conexion,
+                       usarTransaccionExterna ? transaction : transaccionLocal))
+                {
+                    cmdEliminar.Parameters.AddWithValue("@idPedido", idPedido);
+                    cmdEliminar.ExecuteNonQuery();
+                }
+
+                // Insertar nueva nota si se proporcionó
+                if (!string.IsNullOrWhiteSpace(nota))
+                {
+                    string queryInsertar = "INSERT INTO notas_pedidos (id_pedido, nota) VALUES (@idPedido, @nota)";
+                    using (MySqlCommand cmdInsertar = new MySqlCommand(queryInsertar,
+                           usarTransaccionExterna ? transaction.Connection : conexion,
+                           usarTransaccionExterna ? transaction : transaccionLocal))
+                    {
+                        cmdInsertar.Parameters.AddWithValue("@idPedido", idPedido);
+                        cmdInsertar.Parameters.AddWithValue("@nota", nota);
+                        cmdInsertar.ExecuteNonQuery();
+                    }
+                }
+
+                if (!usarTransaccionExterna)
+                {
+                    transaccionLocal.Commit();
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                if (!usarTransaccionExterna && transaccionLocal != null)
+                {
+                    transaccionLocal.Rollback();
+                }
+                MessageBox.Show($"Error al guardar nota: {ex.Message}");
+                return false;
+            }
+            finally
+            {
+                if (!usarTransaccionExterna && conexion != null)
+                {
+                    conexion.Close();
+                }
+            }
+        }
+
+        public static string ObtenerNotaPedido(int idPedido)
+        {
+            using (MySqlConnection conexion = new Conexion().EstablecerConexion())
+            {
+                string query = "SELECT nota FROM notas_pedidos WHERE id_pedido = @idPedido";
+
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@idPedido", idPedido);
+                    object result = cmd.ExecuteScalar();
+                    return result?.ToString() ?? string.Empty;
+                }
+            }
+        }
+
+
         public static bool AgregarPromocionAOrdenForzado(int idOrden, int idPromocion, int cantidad)
         {
             using (MySqlConnection conexion = new Conexion().EstablecerConexion())
