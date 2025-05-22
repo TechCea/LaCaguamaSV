@@ -189,19 +189,43 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         private void btnAgregar_Click(object sender, EventArgs e)
         {
             string nombre = txtNombre.Text.Trim();
+
             if (!decimal.TryParse(txtCantida.Text.Trim(), out decimal cantidad))
             {
                 MessageBox.Show("Ingrese una cantidad válida.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+
+            if (cantidad < 0)
+            {
+                DialogResult respuesta = MessageBox.Show(
+                    "Estás ingresando una cantidad negativa. ¿Estás seguro que deseas continuar?",
+                    "Confirmar cantidad negativa",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning
+                );
+
+                if (respuesta == DialogResult.No)
+                {
+                    return;
+                }
+            }
+
             if (!decimal.TryParse(txtPrecio.Text.Trim(), out decimal precio))
             {
                 MessageBox.Show("Ingrese un precio válido.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+
+            if (precio <= 0)
+            {
+                MessageBox.Show("No se permiten precios negativos o cero.", "Precio inválido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             int idProveedor = Convert.ToInt32(cbxProveedor.SelectedValue);
             int idCategoria = Convert.ToInt32(cbxCategoria.SelectedValue);
-            int idDisponibilidad = Convert.ToInt32(cbc_disponibilidad.SelectedValue); 
+            int idDisponibilidad = Convert.ToInt32(cbc_disponibilidad.SelectedValue);
 
             if (conexion.AgregarInventarioBebida(nombre, cantidad, precio, idProveedor, idCategoria, idDisponibilidad))
             {
@@ -213,7 +237,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             {
                 MessageBox.Show("Error al agregar la bebida al inventario.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
 
         // Actualizar el registro seleccionado
@@ -227,19 +250,43 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
             int idInventario = Convert.ToInt32(dgvInventarioB.SelectedRows[0].Cells["ID"].Value);
             string nombre = txtNombre.Text.Trim();
+
             if (!decimal.TryParse(txtCantida.Text.Trim(), out decimal cantidad))
             {
                 MessageBox.Show("Ingrese una cantidad válida.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+
+            if (cantidad < 0)
+            {
+                DialogResult respuesta = MessageBox.Show(
+                    "Estás ingresando una cantidad negativa. Esto restará al inventario ¿Estás seguro que deseas continuar?",
+                    "Confirmar cantidad negativa",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning
+                );
+
+                if (respuesta == DialogResult.No)
+                {
+                    return;
+                }
+            }
+
             if (!decimal.TryParse(txtPrecio.Text.Trim(), out decimal precio))
             {
                 MessageBox.Show("Ingrese un precio válido.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+
+            if (precio <= 0)
+            {
+                MessageBox.Show("No se permiten precios negativos o cero en el precio", "Precio inválido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             int idProveedor = Convert.ToInt32(cbxProveedor.SelectedValue);
             int idCategoria = Convert.ToInt32(cbxCategoria.SelectedValue);
-            int idDisponibilidad = Convert.ToInt32(cbc_disponibilidad.SelectedValue); 
+            int idDisponibilidad = Convert.ToInt32(cbc_disponibilidad.SelectedValue);
 
             if (conexion.ActualizarInventarioBebida(idInventario, nombre, cantidad, precio, idProveedor, idCategoria, idDisponibilidad))
             {

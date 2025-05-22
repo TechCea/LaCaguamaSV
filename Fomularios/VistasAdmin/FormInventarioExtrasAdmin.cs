@@ -149,15 +149,38 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                     return;
                 }
 
-                if (!decimal.TryParse(txtCantida.Text, out decimal cantidad) || cantidad <= 0)
+                if (!decimal.TryParse(txtCantida.Text, out decimal cantidad))
                 {
                     MessageBox.Show("Ingrese una cantidad válida (ejemplo: 5.00)", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                if (!decimal.TryParse(txtPrecio.Text, out decimal precio) || precio <= 0)
+                // Si la cantidad es negativa, preguntar si está seguro
+                if (cantidad < 0)
+                {
+                    DialogResult confirmacion = MessageBox.Show(
+                        "Está ingresando una cantidad negativa. ¿Está seguro de continuar?",
+                        "Advertencia",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Warning
+                    );
+
+                    if (confirmacion != DialogResult.Yes)
+                    {
+                        return;
+                    }
+                }
+
+                if (!decimal.TryParse(txtPrecio.Text, out decimal precio))
                 {
                     MessageBox.Show("Ingrese un precio válido (ejemplo: 12.50)", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // No permitir precios negativos
+                if (precio < 0)
+                {
+                    MessageBox.Show("No se permiten precios negativos.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
@@ -174,16 +197,15 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 }
 
                 int idProveedor = Convert.ToInt32(cbxProveedor.SelectedValue);
-
                 int idUnidad = Convert.ToInt32(cbb_unidad.SelectedValue);
+                int idDisponibilidad = Convert.ToInt32(cbxDisponibilidad.SelectedValue);
 
-                if (conexion.AgregarExtraConInventario(txtNombre.Text, precio, cantidad, idProveedor, Convert.ToInt32(cbxDisponibilidad.SelectedValue), idUnidad))
+                if (conexion.AgregarExtraConInventario(txtNombre.Text, precio, cantidad, idProveedor, idDisponibilidad, idUnidad))
                 {
                     MessageBox.Show("Extra agregado correctamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     LimpiarCampos();
                     CargarDatosIniciales();
                 }
-
             }
             catch (Exception ex)
             {
@@ -201,40 +223,49 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
             try
             {
-                // Validaciones
                 if (string.IsNullOrWhiteSpace(txtNombre.Text))
                 {
                     MessageBox.Show("Ingrese un nombre válido", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                if (!decimal.TryParse(txtCantida.Text, out decimal cantidad) || cantidad <= 0)
+                if (!decimal.TryParse(txtCantida.Text, out decimal cantidad))
                 {
                     MessageBox.Show("Ingrese una cantidad válida (ejemplo: 5.00)", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                if (!decimal.TryParse(txtPrecio.Text, out decimal precio) || precio <= 0)
+                // Confirmar si es negativa
+                if (cantidad < 0)
+                {
+                    DialogResult confirmacion = MessageBox.Show(
+                        "Está ingresando una cantidad negativa. ¿Está seguro de continuar?",
+                        "Advertencia",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Warning
+                    );
+
+                    if (confirmacion != DialogResult.Yes)
+                    {
+                        return;
+                    }
+                }
+
+                if (!decimal.TryParse(txtPrecio.Text, out decimal precio))
                 {
                     MessageBox.Show("Ingrese un precio válido (ejemplo: 12.50)", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                if (cbxProveedor.SelectedValue == null)
+                if (precio < 0)
                 {
-                    MessageBox.Show("Seleccione un proveedor", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("No se permiten precios negativos.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                if (cbxDisponibilidad.SelectedValue == null)
+                if (cbxProveedor.SelectedValue == null || cbxDisponibilidad.SelectedValue == null || cbb_unidad.SelectedValue == null)
                 {
-                    MessageBox.Show("Seleccione una disponibilidad", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
-                if (cbb_unidad.SelectedValue == null)
-                {
-                    MessageBox.Show("Seleccione una unidad", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Verifique proveedor, disponibilidad y unidad.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
@@ -250,7 +281,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                     cantidad,
                     idProveedor,
                     idDisponibilidad,
-                    idUnidad)) 
+                    idUnidad))
                 {
                     MessageBox.Show("Extra actualizado correctamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     CargarDatosIniciales();

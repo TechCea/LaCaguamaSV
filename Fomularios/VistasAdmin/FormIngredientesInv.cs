@@ -235,16 +235,30 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             }
 
             string nombreProducto = txtNombreC.Text;
-            decimal cantidad;
-            if (!decimal.TryParse(txtCantidad.Text, out cantidad) || cantidad <= 0)
+            if (!decimal.TryParse(txtCantidad.Text, out decimal cantidad))
             {
-                MessageBox.Show("Por favor, ingrese una cantidad válida y mayor a cero.");
+                MessageBox.Show("Por favor, ingrese una cantidad válida.");
                 return;
+            }
+
+            // Si la cantidad es negativa, advertencia
+            if (cantidad < 0)
+            {
+                DialogResult confirmacion = MessageBox.Show(
+                    "Estás ingresando una cantidad negativa. Esto reducirá la cantidad en inventario ¿Estás seguro de continuar?",
+                    "Advertencia",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning
+                );
+
+                if (confirmacion != DialogResult.Yes)
+                {
+                    return;
+                }
             }
 
             string proveedorSeleccionado = cbProveedores.SelectedItem.ToString();
             int idProveedor = ObtenerIdProveedor(proveedorSeleccionado);
-
             if (idProveedor == -1)
             {
                 MessageBox.Show("Proveedor no encontrado.");
@@ -265,7 +279,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             {
                 MessageBox.Show("Error al agregar el ingrediente.");
             }
-
         }
 
         private void btnActualizarB_Click(object sender, EventArgs e)
@@ -277,12 +290,27 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             }
 
             string nuevoNombre = txtNombreC.Text;
-            decimal nuevaCantidad;
 
-            if (!decimal.TryParse(txtCantidad.Text, out nuevaCantidad))
+            if (!decimal.TryParse(txtCantidad.Text, out decimal nuevaCantidad))
             {
                 MessageBox.Show("Por favor ingresa una cantidad válida.");
                 return;
+            }
+
+            // Si es negativa, confirmación
+            if (nuevaCantidad < 0)
+            {
+                DialogResult confirmacion = MessageBox.Show(
+                    "Estás ingresando una cantidad negativa. Esto reducirá la cantidad dentro del inventario ¿Estás seguro de continuar?",
+                    "Advertencia",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning
+                );
+
+                if (confirmacion != DialogResult.Yes)
+                {
+                    return;
+                }
             }
 
             string proveedorSeleccionado = cbProveedores.SelectedItem?.ToString();
@@ -313,16 +341,15 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 return;
             }
 
-            int nuevoIdUnidad = Convert.ToInt32(cbb_unidad.SelectedValue); // 👈 nuevo dato
+            int nuevoIdUnidad = Convert.ToInt32(cbb_unidad.SelectedValue);
 
-            // Llama la función con el nuevo parámetro
             bool resultado = conexion.EditarIngrediente(
                 idIngredienteSeleccionado,
                 nuevoNombre,
                 nuevaCantidad,
                 nuevoIdProveedor,
                 nuevoIdDisponibilidad,
-                nuevoIdUnidad 
+                nuevoIdUnidad
             );
 
             if (resultado)

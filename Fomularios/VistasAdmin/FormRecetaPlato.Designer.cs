@@ -52,7 +52,7 @@
             this.flowLayoutPanelReceta.AutoScroll = true;
             this.flowLayoutPanelReceta.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.flowLayoutPanelReceta.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flowLayoutPanelReceta.Location = new System.Drawing.Point(13, 138);
+            this.flowLayoutPanelReceta.Location = new System.Drawing.Point(39, 175);
             this.flowLayoutPanelReceta.Margin = new System.Windows.Forms.Padding(4);
             this.flowLayoutPanelReceta.Name = "flowLayoutPanelReceta";
             this.flowLayoutPanelReceta.Size = new System.Drawing.Size(316, 416);
@@ -63,7 +63,7 @@
             // 
             this.dataGridViewReceta.BackgroundColor = System.Drawing.SystemColors.ControlDarkDark;
             this.dataGridViewReceta.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewReceta.Location = new System.Drawing.Point(350, 138);
+            this.dataGridViewReceta.Location = new System.Drawing.Point(378, 176);
             this.dataGridViewReceta.Margin = new System.Windows.Forms.Padding(4);
             this.dataGridViewReceta.MultiSelect = false;
             this.dataGridViewReceta.Name = "dataGridViewReceta";
@@ -78,7 +78,7 @@
             this.panel5.Controls.Add(this.lblIDPLATO);
             this.panel5.Controls.Add(this.lblPlato);
             this.panel5.Controls.Add(this.btnCerrar_Click);
-            this.panel5.Location = new System.Drawing.Point(350, 6);
+            this.panel5.Location = new System.Drawing.Point(378, 28);
             this.panel5.Margin = new System.Windows.Forms.Padding(4);
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(746, 67);
@@ -127,7 +127,7 @@
             // 
             this.panel3.BackColor = System.Drawing.Color.Gray;
             this.panel3.Controls.Add(this.lblReceta);
-            this.panel3.Location = new System.Drawing.Point(13, 7);
+            this.panel3.Location = new System.Drawing.Point(39, 28);
             this.panel3.Margin = new System.Windows.Forms.Padding(4);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(316, 66);
@@ -149,7 +149,7 @@
             // 
             this.panel1.BackColor = System.Drawing.Color.Gray;
             this.panel1.Controls.Add(this.label1);
-            this.panel1.Location = new System.Drawing.Point(350, 81);
+            this.panel1.Location = new System.Drawing.Point(378, 113);
             this.panel1.Margin = new System.Windows.Forms.Padding(4);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(746, 39);
@@ -171,7 +171,7 @@
             // 
             this.panel2.BackColor = System.Drawing.Color.Gray;
             this.panel2.Controls.Add(this.label2);
-            this.panel2.Location = new System.Drawing.Point(13, 81);
+            this.panel2.Location = new System.Drawing.Point(39, 112);
             this.panel2.Margin = new System.Windows.Forms.Padding(4);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(316, 39);
@@ -195,7 +195,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.fondo;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(1114, 574);
+            this.ClientSize = new System.Drawing.Size(1152, 614);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.flowLayoutPanelReceta);

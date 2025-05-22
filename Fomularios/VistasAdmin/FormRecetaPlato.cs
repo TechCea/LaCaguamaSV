@@ -147,9 +147,10 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
                 NumericUpDown numericUpDown = new NumericUpDown()
                 {
-                    Minimum = 1,
+                    DecimalPlaces = 2,
+                    Increment = 0.10M,
                     Maximum = 1000,
-                    Value = cantidadActual,  // Mostrar la cantidad actual
+                    Value = cantidadActual < 0.01M ? 0.01M : cantidadActual,
                     Dock = DockStyle.Top,
                     TextAlign = HorizontalAlignment.Center,
                     Font = new Font("Arial", 12, FontStyle.Bold)
@@ -172,6 +173,11 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 if (inputDialog.ShowDialog() == DialogResult.OK)
                 {
                     decimal nuevaCantidad = numericUpDown.Value;
+                    if (nuevaCantidad <= 0)
+                    {
+                        MessageBox.Show("No se permiten cantidades negativas o cero. Ingresa un valor válido.", "Cantidad inválida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
                     if (conexion.EditarCantidadIngrediente(idPlato, nombreIngrediente, nuevaCantidad))
                     {
                         MessageBox.Show("Cantidad actualizada correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -215,9 +221,10 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
                     NumericUpDown numericUpDown = new NumericUpDown()
                     {
-                        Minimum = 1,
+                        DecimalPlaces = 2,
+                        Increment = 0.10M,
                         Maximum = 100,
-                        Value = 1,
+                        Value = 1.00M,
                         Dock = DockStyle.Top,
                         TextAlign = HorizontalAlignment.Center,
                         Font = new Font("Arial", 12, FontStyle.Bold)
@@ -241,6 +248,12 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                     {
                         decimal cantidad = numericUpDown.Value;
                         int idPlato = Convert.ToInt32(lblIDPLATO.Text);
+
+                        if (cantidad <= 0)
+                        {
+                            MessageBox.Show("No se permiten cantidades negativas o cero. Ingresa un valor válido.", "Cantidad inválida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
 
                         // Insertar en la base de datos
                         if (conexion.AgregarIngredienteAReceta(idPlato, idInventario, cantidad))
