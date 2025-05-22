@@ -89,6 +89,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 txtDescripcionC.Text = fila.Cells["Descripción"].Value.ToString();
                 txtPrecioU.Text = fila.Cells["Precio Unitario"].Value.ToString();
                 cbCategoriaB.SelectedItem = fila.Cells["Categoría"].Value.ToString();
+                btnCrearPlato.Enabled = false;
             }
         }
 
@@ -144,21 +145,46 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             txtDescripcionC.Clear();
             txtPrecioU.Clear();
             if (cbCategoriaB.Items.Count > 0) cbCategoriaB.SelectedIndex = 0;
+            btnCrearPlato.Enabled = true;
         }
 
-        private void btnRegresarMenu_Click(object sender, EventArgs e)
+        private void btnCrearPlato_Click(object sender, EventArgs e)
         {
-            this.Close();
-            FormMenuAdmin FormMenuAdmin = new FormMenuAdmin();
-            FormMenuAdmin.Show();
-        }
+            string nombrePlato = txtNombreC.Text.Trim();
+            string descripcion = txtDescripcionC.Text.Trim();
+            decimal precioUnitario;
 
-        public class RoundedControl
-        {
-            public static void ApplyRoundedCorners(Control control, int radius)
+            if (!decimal.TryParse(txtPrecioU.Text, out precioUnitario) || precioUnitario <= 0)
             {
-          
+                MessageBox.Show("Ingrese un precio válido mayor a 0.");
+                return;
             }
+
+            if (cbCategoriaB.SelectedItem == null)
+            {
+                MessageBox.Show("Seleccione una categoría.");
+                return;
+            }
+
+            int idCategoria = cbCategoriaB.SelectedIndex + 1; // Asegúrate de que el índice coincide con la base de datos
+
+            bool exito = conexion.AgregarPlato(nombrePlato, precioUnitario, descripcion, idCategoria);
+
+            if (exito)
+            {
+                MessageBox.Show("Plato agregado exitosamente.");
+                LimpiarCampos();
+                CargarComidas(); // Para actualizar la tabla
+            }
+            else
+            {
+                MessageBox.Show("No se pudo agregar el plato.");
+            }
+        }
+
+        private void btn_limpiarcampos_Click(object sender, EventArgs e)
+        {
+            LimpiarCampos();
         }
     }
 }

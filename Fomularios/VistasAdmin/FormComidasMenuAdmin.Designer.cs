@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.btnRegresarMenu = new System.Windows.Forms.Button();
             this.cbCategoriaC = new System.Windows.Forms.ComboBox();
             this.dgvComidas = new System.Windows.Forms.DataGridView();
             this.gbDatosBebida = new System.Windows.Forms.GroupBox();
@@ -43,25 +42,11 @@
             this.lbNombreBebida = new System.Windows.Forms.Label();
             this.btnActualizarC = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
+            this.btnCrearPlato = new System.Windows.Forms.Button();
+            this.btn_limpiarcampos = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvComidas)).BeginInit();
             this.gbDatosBebida.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // btnRegresarMenu
-            // 
-            this.btnRegresarMenu.BackColor = System.Drawing.Color.White;
-            this.btnRegresarMenu.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnRegresarMenu.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnRegresarMenu.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnRegresarMenu.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btnRegresarMenu.Location = new System.Drawing.Point(71, 497);
-            this.btnRegresarMenu.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.btnRegresarMenu.Name = "btnRegresarMenu";
-            this.btnRegresarMenu.Size = new System.Drawing.Size(184, 58);
-            this.btnRegresarMenu.TabIndex = 5;
-            this.btnRegresarMenu.Text = "Regresar Menú";
-            this.btnRegresarMenu.UseVisualStyleBackColor = false;
-            this.btnRegresarMenu.Click += new System.EventHandler(this.btnRegresarMenu_Click);
             // 
             // cbCategoriaC
             // 
@@ -89,6 +74,7 @@
             // gbDatosBebida
             // 
             this.gbDatosBebida.BackColor = System.Drawing.Color.Gray;
+            this.gbDatosBebida.Controls.Add(this.btn_limpiarcampos);
             this.gbDatosBebida.Controls.Add(this.txtDescripcionC);
             this.gbDatosBebida.Controls.Add(this.label3);
             this.gbDatosBebida.Controls.Add(this.lblSeleccionBebida);
@@ -111,7 +97,7 @@
             // 
             // txtDescripcionC
             // 
-            this.txtDescripcionC.Location = new System.Drawing.Point(168, 225);
+            this.txtDescripcionC.Location = new System.Drawing.Point(168, 181);
             this.txtDescripcionC.Margin = new System.Windows.Forms.Padding(4);
             this.txtDescripcionC.Name = "txtDescripcionC";
             this.txtDescripcionC.Size = new System.Drawing.Size(227, 26);
@@ -121,7 +107,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.ForeColor = System.Drawing.SystemColors.Control;
-            this.label3.Location = new System.Drawing.Point(29, 231);
+            this.label3.Location = new System.Drawing.Point(29, 187);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(104, 20);
             this.label3.TabIndex = 10;
@@ -142,7 +128,7 @@
             // 
             this.cbCategoriaB.Cursor = System.Windows.Forms.Cursors.Hand;
             this.cbCategoriaB.FormattingEnabled = true;
-            this.cbCategoriaB.Location = new System.Drawing.Point(168, 149);
+            this.cbCategoriaB.Location = new System.Drawing.Point(168, 131);
             this.cbCategoriaB.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cbCategoriaB.Name = "cbCategoriaB";
             this.cbCategoriaB.Size = new System.Drawing.Size(225, 28);
@@ -150,7 +136,7 @@
             // 
             // txtPrecioU
             // 
-            this.txtPrecioU.Location = new System.Drawing.Point(168, 311);
+            this.txtPrecioU.Location = new System.Drawing.Point(168, 231);
             this.txtPrecioU.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtPrecioU.Name = "txtPrecioU";
             this.txtPrecioU.Size = new System.Drawing.Size(227, 26);
@@ -160,7 +146,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.ForeColor = System.Drawing.SystemColors.Control;
-            this.label2.Location = new System.Drawing.Point(29, 318);
+            this.label2.Location = new System.Drawing.Point(29, 238);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(122, 20);
             this.label2.TabIndex = 3;
@@ -170,7 +156,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.ForeColor = System.Drawing.SystemColors.Control;
-            this.label1.Location = new System.Drawing.Point(29, 149);
+            this.label1.Location = new System.Drawing.Point(29, 131);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(86, 20);
             this.label1.TabIndex = 2;
@@ -222,6 +208,38 @@
             this.label4.TabIndex = 16;
             this.label4.Text = "PLATOS";
             // 
+            // btnCrearPlato
+            // 
+            this.btnCrearPlato.BackColor = System.Drawing.Color.ForestGreen;
+            this.btnCrearPlato.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnCrearPlato.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnCrearPlato.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCrearPlato.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.btnCrearPlato.Location = new System.Drawing.Point(961, 497);
+            this.btnCrearPlato.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnCrearPlato.Name = "btnCrearPlato";
+            this.btnCrearPlato.Size = new System.Drawing.Size(139, 58);
+            this.btnCrearPlato.TabIndex = 17;
+            this.btnCrearPlato.Text = "Agregar plato";
+            this.btnCrearPlato.UseVisualStyleBackColor = false;
+            this.btnCrearPlato.Click += new System.EventHandler(this.btnCrearPlato_Click);
+            // 
+            // btn_limpiarcampos
+            // 
+            this.btn_limpiarcampos.BackColor = System.Drawing.Color.White;
+            this.btn_limpiarcampos.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btn_limpiarcampos.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btn_limpiarcampos.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_limpiarcampos.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btn_limpiarcampos.Location = new System.Drawing.Point(187, 323);
+            this.btn_limpiarcampos.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btn_limpiarcampos.Name = "btn_limpiarcampos";
+            this.btn_limpiarcampos.Size = new System.Drawing.Size(208, 42);
+            this.btn_limpiarcampos.TabIndex = 18;
+            this.btn_limpiarcampos.Text = "Limpiar campos";
+            this.btn_limpiarcampos.UseVisualStyleBackColor = false;
+            this.btn_limpiarcampos.Click += new System.EventHandler(this.btn_limpiarcampos_Click);
+            // 
             // FormComidasMenuAdmin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -230,9 +248,9 @@
             this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.fondo;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1321, 598);
+            this.Controls.Add(this.btnCrearPlato);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.gbDatosBebida);
-            this.Controls.Add(this.btnRegresarMenu);
             this.Controls.Add(this.cbCategoriaC);
             this.Controls.Add(this.dgvComidas);
             this.Controls.Add(this.btnActualizarC);
@@ -248,8 +266,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Button btnRegresarMenu;
         private System.Windows.Forms.ComboBox cbCategoriaC;
         private System.Windows.Forms.DataGridView dgvComidas;
         private System.Windows.Forms.GroupBox gbDatosBebida;
@@ -264,5 +280,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox txtDescripcionC;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button btnCrearPlato;
+        private System.Windows.Forms.Button btn_limpiarcampos;
     }
 }

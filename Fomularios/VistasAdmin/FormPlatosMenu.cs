@@ -50,16 +50,13 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             DataTable dtCategorias = conexion.ObtenerCategoriasComida();
             cbCategoriaC.Items.Add("Todas");
-            cbCategoriaB.Items.Clear();
 
             foreach (DataRow row in dtCategorias.Rows)
             {
                 cbCategoriaC.Items.Add(row["tipo"].ToString());
-                cbCategoriaB.Items.Add(row["tipo"].ToString());
             }
 
             cbCategoriaC.SelectedIndex = 0;
-            if (cbCategoriaB.Items.Count > 0) cbCategoriaB.SelectedIndex = 0;
         }
 
         private void cbCategoriaC_SelectedIndexChanged(object sender, EventArgs e)
@@ -71,13 +68,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             dgvComidas.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
         }
 
-        private void LimpiarCampos()
-        {
-            txtNombreC.Clear();
-            txtDescripcionC.Clear();
-            txtPrecioU.Clear();
-            if (cbCategoriaB.Items.Count > 0) cbCategoriaB.SelectedIndex = 0;
-        }
 
         private void dgvComidas_CellClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -110,47 +100,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         }
 
-        private void btnCrearPlato_Click(object sender, EventArgs e)
-        {
-            string nombrePlato = txtNombreC.Text.Trim();
-            string descripcion = txtDescripcionC.Text.Trim();
-            decimal precioUnitario;
-
-            if (!decimal.TryParse(txtPrecioU.Text, out precioUnitario) || precioUnitario <= 0)
-            {
-                MessageBox.Show("Ingrese un precio válido mayor a 0.");
-                return;
-            }
-
-            if (cbCategoriaB.SelectedItem == null)
-            {
-                MessageBox.Show("Seleccione una categoría.");
-                return;
-            }
-
-            int idCategoria = cbCategoriaB.SelectedIndex + 1; // Asegúrate de que el índice coincide con la base de datos
-
-            bool exito = conexion.AgregarPlato(nombrePlato, precioUnitario, descripcion, idCategoria);
-
-            if (exito)
-            {
-                MessageBox.Show("Plato agregado exitosamente.");
-                LimpiarCampos();
-                CargarComidas(); // Para actualizar la tabla
-            }
-            else
-            {
-                MessageBox.Show("No se pudo agregar el plato.");
-            }
-        }
-
-        private void btnEliminarC_Click(object sender, EventArgs e)
-        {
-            this.Hide();
-            FormComidasMenuAdmin formplatos = new FormComidasMenuAdmin();
-            formplatos.ShowDialog();
-        }
-
         private void btnRegresarInv_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -159,6 +108,13 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         private void button1_Click(object sender, EventArgs e)
         {
             FormAgregarCategoriaPlato formCat = new FormAgregarCategoriaPlato();
+            formCat.ShowDialog();
+            this.Hide();
+        }
+
+        private void btnCrearEditarPlatos_Click(object sender, EventArgs e)
+        {
+            FormComidasMenuAdmin formCat = new FormComidasMenuAdmin();
             formCat.ShowDialog();
             this.Hide();
         }
