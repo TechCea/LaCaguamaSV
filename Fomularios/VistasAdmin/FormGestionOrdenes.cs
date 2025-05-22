@@ -447,6 +447,9 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                         // Solo verificar pedidos existentes si es un plato SIN nota
                         if (tipoItem.ToUpper() == "PLATO" && string.IsNullOrWhiteSpace(nota))
                         {
+                            // Primero obtenemos todos los pedidos sin nota en una lista
+                            List<(int idPedido, int cantidad)> pedidosSinNota = new List<(int, int)>();
+
                             string queryVerificar = @"SELECT p.id_pedido, p.Cantidad 
                         FROM pedidos p
                         LEFT JOIN notas_pedidos np ON p.id_pedido = np.id_pedido
@@ -459,36 +462,44 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                                 cmdVerificar.Parameters.AddWithValue("@idOrden", Convert.ToInt32(lblIdOrden.Text));
                                 cmdVerificar.Parameters.AddWithValue("@idPlato", idItem);
 
-                                using (MySqlDataReader reader = cmdVerificar.ExecuteReader())
+                                using (var reader = cmdVerificar.ExecuteReader())
                                 {
-                                    if (reader.Read())
+                                    while (reader.Read())
                                     {
-                                        int idPedidoExistente = reader.GetInt32("id_pedido");
-                                        int cantidadExistente = reader.GetInt32("Cantidad");
-
-                                        string queryActualizar = @"UPDATE pedidos 
-                                        SET Cantidad = @nuevaCantidad 
-                                        WHERE id_pedido = @idPedido";
-
-                                        using (MySqlCommand cmdActualizar = new MySqlCommand(queryActualizar, conexion, transaction))
-                                        {
-                                            cmdActualizar.Parameters.AddWithValue("@idPedido", idPedidoExistente);
-                                            cmdActualizar.Parameters.AddWithValue("@nuevaCantidad", cantidadExistente + cantidad);
-                                            cmdActualizar.ExecuteNonQuery();
-                                        }
-
-                                        crearNuevoPedido = false;
+                                        pedidosSinNota.Add((
+                                            reader.GetInt32("id_pedido"),
+                                            reader.GetInt32("Cantidad")
+                                        ));
                                     }
+                                } // El reader se cierra automáticamente aquí
+                            }
+
+                            // Si encontramos pedidos sin nota, actualizamos el primero
+                            if (pedidosSinNota.Count > 0)
+                            {
+                                var primerPedido = pedidosSinNota[0];
+
+                                string queryActualizar = @"UPDATE pedidos 
+                                SET Cantidad = @nuevaCantidad 
+                                WHERE id_pedido = @idPedido";
+
+                                using (MySqlCommand cmdActualizar = new MySqlCommand(queryActualizar, conexion, transaction))
+                                {
+                                    cmdActualizar.Parameters.AddWithValue("@idPedido", primerPedido.idPedido);
+                                    cmdActualizar.Parameters.AddWithValue("@nuevaCantidad", primerPedido.cantidad + cantidad);
+                                    cmdActualizar.ExecuteNonQuery();
                                 }
+
+                                crearNuevoPedido = false;
                             }
                         }
 
                         if (crearNuevoPedido)
                         {
                             string queryInsertar = @"INSERT INTO pedidos 
-                               (id_orden, id_estadoP, id_plato, id_bebida, id_extra, id_promocion, Cantidad) 
-                               VALUES (@idOrden, 1, @idPlato, @idBebida, @idExtra, @idPromocion, @cantidad);
-                               SELECT LAST_INSERT_ID();";
+                           (id_orden, id_estadoP, id_plato, id_bebida, id_extra, id_promocion, Cantidad) 
+                           VALUES (@idOrden, 1, @idPlato, @idBebida, @idExtra, @idPromocion, @cantidad);
+                           SELECT LAST_INSERT_ID();";
 
                             using (MySqlCommand cmdInsertar = new MySqlCommand(queryInsertar, conexion, transaction))
                             {
@@ -982,34 +993,29 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
             using (MySqlConnection conexion = new Conexion().EstablecerConexion())
             {
-                // Consulta principal de pedidos con información de notas
+                // Primero cargamos todos los pedidos
                 string queryPedidos = @"SELECT 
-                            p.id_pedido,
-                            COALESCE(
-                                pl.nombrePlato,
-                                (SELECT i.nombreProducto FROM bebidas b JOIN inventario i ON b.id_inventario = i.id_inventario WHERE b.id_bebida = p.id_bebida),
-                                (SELECT i.nombreProducto FROM extras e JOIN inventario i ON e.id_inventario = i.id_inventario WHERE e.id_extra = p.id_extra),
-                                (SELECT pr.nombre FROM promociones pr WHERE pr.id_promocion = p.id_promocion)
-                            ) AS nombre,
-                            COALESCE(
-                                pl.precioUnitario,
-                                (SELECT b.precioUnitario FROM bebidas b WHERE b.id_bebida = p.id_bebida),
-                                (SELECT e.precioUnitario FROM extras e WHERE e.id_extra = p.id_extra),
-                                (SELECT pr.precio_especial FROM promociones pr WHERE pr.id_promocion = p.id_promocion)
-                            ) AS precio,
-                            p.Cantidad,
-                            CASE
-                                WHEN p.id_plato IS NOT NULL THEN 'PLATO'
-                                WHEN p.id_bebida IS NOT NULL THEN 'BEBIDA'
-                                WHEN p.id_extra IS NOT NULL THEN 'EXTRA'
-                                WHEN p.id_promocion IS NOT NULL THEN 'PROMOCION'
-                                ELSE 'DESCONOCIDO'
-                            END AS tipo,
-                            np.nota
-                        FROM pedidos p
-                        LEFT JOIN platos pl ON p.id_plato = pl.id_plato
-                        LEFT JOIN notas_pedidos np ON p.id_pedido = np.id_pedido
-                        WHERE p.id_orden = @idOrden";
+                        p.id_pedido,
+                        COALESCE(
+                            pl.nombrePlato,
+                            (SELECT i.nombreProducto FROM bebidas b JOIN inventario i ON b.id_inventario = i.id_inventario WHERE b.id_bebida = p.id_bebida),
+                            (SELECT i.nombreProducto FROM extras e JOIN inventario i ON e.id_inventario = i.id_inventario WHERE e.id_extra = p.id_extra)
+                        ) AS nombre,
+                        COALESCE(
+                            pl.precioUnitario,
+                            (SELECT b.precioUnitario FROM bebidas b WHERE b.id_bebida = p.id_bebida),
+                            (SELECT e.precioUnitario FROM extras e WHERE e.id_extra = p.id_extra)
+                        ) AS precio,
+                        p.Cantidad,
+                        CASE
+                            WHEN p.id_plato IS NOT NULL THEN 'PLATO'
+                            WHEN p.id_bebida IS NOT NULL THEN 'BEBIDA'
+                            WHEN p.id_extra IS NOT NULL THEN 'EXTRA'
+                            ELSE 'DESCONOCIDO'
+                        END AS tipo
+                    FROM pedidos p
+                    LEFT JOIN platos pl ON p.id_plato = pl.id_plato
+                    WHERE p.id_orden = @idOrden";
 
                 using (MySqlCommand cmdPedidos = new MySqlCommand(queryPedidos, conexion))
                 {
@@ -1024,14 +1030,29 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                             string nombre = reader["nombre"].ToString();
                             decimal precio = Convert.ToDecimal(reader["precio"]);
                             int cantidad = Convert.ToInt32(reader["Cantidad"]);
-                            string nota = reader.IsDBNull(reader.GetOrdinal("nota")) ? null : reader.GetString("nota");
 
                             pedidos.Add((idPedido, nombre, precio, tipo, cantidad));
+                        }
+                    }
+                }
 
-                            if (!string.IsNullOrEmpty(nota))
-                            {
-                                notasPedidos[idPedido] = nota;
-                            }
+                // Luego cargamos todas las notas en una consulta separada
+                string queryNotas = @"SELECT id_pedido, nota FROM notas_pedidos 
+                      WHERE id_pedido IN (
+                          SELECT id_pedido FROM pedidos WHERE id_orden = @idOrden
+                      )";
+
+                using (MySqlCommand cmdNotas = new MySqlCommand(queryNotas, conexion))
+                {
+                    cmdNotas.Parameters.AddWithValue("@idOrden", Convert.ToInt32(lblIdOrden.Text));
+
+                    using (MySqlDataReader reader = cmdNotas.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            int idPedido = reader.GetInt32("id_pedido");
+                            string nota = reader.IsDBNull(1) ? string.Empty : reader.GetString("nota");
+                            notasPedidos[idPedido] = nota;
                         }
                     }
                 }

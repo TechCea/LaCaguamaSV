@@ -714,7 +714,7 @@ HAVING diferencia < 0 OR i.cantidad < 6"; // Umbral de stock bajo
                     transaccionLocal = conexion.BeginTransaction();
                 }
 
-                // Eliminar nota existente si hay
+                // Primero eliminar cualquier nota existente
                 string queryEliminar = "DELETE FROM notas_pedidos WHERE id_pedido = @idPedido";
                 using (MySqlCommand cmdEliminar = new MySqlCommand(queryEliminar,
                        usarTransaccionExterna ? transaction.Connection : conexion,
@@ -724,7 +724,7 @@ HAVING diferencia < 0 OR i.cantidad < 6"; // Umbral de stock bajo
                     cmdEliminar.ExecuteNonQuery();
                 }
 
-                // Insertar nueva nota si se proporcionó
+                // Si hay una nota para insertar, la insertamos
                 if (!string.IsNullOrWhiteSpace(nota))
                 {
                     string queryInsertar = "INSERT INTO notas_pedidos (id_pedido, nota) VALUES (@idPedido, @nota)";
