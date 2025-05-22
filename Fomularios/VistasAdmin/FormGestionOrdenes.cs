@@ -645,7 +645,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
             try
             {
-                // Agrupar pedidos por: tipo + idItem + nota
                 var pedidosAgrupados = pedidos
                     .GroupBy(p => new {
                         Tipo = p.tipo,
@@ -664,11 +663,21 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
                 foreach (var pedido in pedidosAgrupados)
                 {
-                    // Crear panel para cada pedido agrupado
+                    // Obtener color base según el tipo
+                    Color colorBase = GetColorPorTipo(pedido.Tipo);
+
+                    // Aclarar el color si tiene nota
+                    Color colorFinal = !string.IsNullOrEmpty(pedido.Nota)
+                        ? Color.FromArgb(
+                            Math.Min(255, colorBase.R + 40),
+                            Math.Min(255, colorBase.G + 40),
+                            Math.Min(255, colorBase.B + 40))
+                        : colorBase;
+
                     Panel panelPedido = new Panel
                     {
                         BorderStyle = BorderStyle.FixedSingle,
-                        BackColor = GetColorPorTipo(pedido.Tipo),
+                        BackColor = colorFinal,
                         Margin = new Padding(5),
                         Padding = new Padding(5),
                         Width = flowLayoutPanelPedidos.ClientSize.Width - 25,
@@ -677,11 +686,11 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                         Cursor = Cursors.Hand
                     };
 
-                    // Label con información del pedido
+                    // Resto del código permanece igual...
                     Label lblPedido = new Label
                     {
                         Text = $"{pedido.Nombre}\n{pedido.Precio:C} x{pedido.Cantidad}",
-                        ForeColor = Color.White,
+                        ForeColor = !string.IsNullOrEmpty(pedido.Nota) ? Color.Black : Color.White,
                         Dock = DockStyle.Fill,
                         TextAlign = ContentAlignment.MiddleLeft,
                         Font = new Font("Arial", 9, FontStyle.Bold),
@@ -694,7 +703,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                         lblPedido.Text += $"\nNota: {pedido.Nota}";
                     }
 
-                    // Botones de acción
+                    // Resto de la implementación...
                     Button btnEliminar = new Button
                     {
                         Text = "X",
@@ -724,15 +733,14 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                         Visible = pedido.Tipo == "PLATO"
                     };
 
-                    // Eventos
+                    // Eventos y agregado de controles...
                     lblPedido.Click += (s, e) => MostrarOpcionesPedido(pedido.IdPedido, pedido.Nombre, pedido.Cantidad);
                     btnEliminar.Click += (s, e) => MostrarOpcionesPedido(pedido.IdPedido, pedido.Nombre, pedido.Cantidad);
                     btnEditarNota.Click += (s, e) => EditarNotaPedido(pedido.IdPedido);
                     panelPedido.Click += (s, e) => MostrarOpcionesPedido(pedido.IdPedido, pedido.Nombre, pedido.Cantidad);
 
-                    // Agregar controles al panel
                     panelPedido.Controls.Add(lblPedido);
-                    panelPedido.Controls.Add(btnEditarNota);
+                    if (pedido.Tipo == "PLATO") panelPedido.Controls.Add(btnEditarNota);
                     panelPedido.Controls.Add(btnEliminar);
 
                     flowLayoutPanelPedidos.Controls.Add(panelPedido);
