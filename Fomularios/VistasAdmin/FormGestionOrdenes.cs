@@ -27,6 +27,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         private const string ESC = "\x1B";
         private const string GS = "\x1D";
         private const string LF = "\x0A";
+        private bool comandaImpresa = false; // Variable de control para evitar impresión duplicada
         private Dictionary<int, string> notasPedidos = new Dictionary<int, string>();
         public FormGestionOrdenes(int idOrden, string nombreCliente, decimal total, decimal descuento, string fechaOrden, string numeroMesa, string tipoPago, string nombreUsuario, string estadoOrden)
         {
@@ -1333,27 +1334,31 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             try
             {
-                // 1. Generar el contenido de la comanda
+                // Verificar si ya se imprimió para evitar duplicados
+                if (comandaImpresa)
+                {
+                    comandaImpresa = false; // Resetear para futuras impresiones
+                    return;
+                }
+
+                // 1. Generar el contenido de la comanda con formato mejorado
                 string contenidoComanda = GenerarContenidoComanda();
 
-                // 2. Mostrar vista previa en un MessageBox
-                DialogResult previewResult = MessageBox.Show(
-                    $"Vista previa de la comanda:\n\n{contenidoComanda}\n\n¿Desea imprimir esta comanda?",
-                    "Vista Previa de Comanda",
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Information,
-                    MessageBoxDefaultButton.Button1);
+                // 2. Método de impresión por USB con manejo de errores
+                ImprimirPorUSB(contenidoComanda);
 
-                // 3. Si el usuario confirma, proceder con la impresión
-                if (previewResult == DialogResult.Yes)
-                {
-                    ImprimirComanda(contenidoComanda);
-                }
+                // Marcar como impresa antes de mostrar el mensaje
+                comandaImpresa = true;
+
+                // Mostrar mensaje con botón OK solamente (sin botones Sí/No)
+                MessageBox.Show("Comanda enviada a la impresora", "Éxito",
+                               MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al generar la comanda: {ex.Message}", "Error",
-                              MessageBoxButtons.OK, MessageBoxIcon.Error);
+                comandaImpresa = false; // Resetear en caso de error
+                MessageBox.Show($"Error al imprimir comanda: {ex.Message}", "Error",
+                               MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -1361,71 +1366,137 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             StringBuilder sb = new StringBuilder();
 
-            // Encabezado mejorado
-            sb.AppendLine("╔════════════════════════════════╗");
-            sb.AppendLine($"║          COMANDA #{lblIdOrden.Text.PadRight(10)}        ║");
-            sb.AppendLine("╠════════════════════════════════╣");
-            sb.AppendLine($"║ Mesa: {comboBoxMesas.Text.PadRight(22)} ║");
-            sb.AppendLine($"║ Fecha: {DateTime.Now.ToString("g").PadRight(21)} ║");
-            sb.AppendLine("╚════════════════════════════════╝");
-            sb.AppendLine();
+            // 1. Inicialización y encabezado con formato mejorado
+            sb.Append(ESC + "@"); // Reset printer
+            sb.Append(ESC + "!" + "\x18"); // Fuente tamaño mediano (no tan grande como el comprobante)
+            sb.Append(CenterText("LA CAGUAMA RESTAURANTE"));
+            sb.Append(LF);
+            sb.Append(CenterText("══════════════════════"));
+            sb.Append(LF);
+            sb.Append(ESC + "!" + "\x00"); // Restaurar fuente normal
 
-            // Obtener todos los ítems de la orden
-            var todosItems = ObtenerItemsParaComanda("PLATO")
-                .Concat(ObtenerItemsParaComanda("BEBIDA"))
-                .Concat(ObtenerItemsParaComanda("EXTRA"))
-                .ToList();
+            // 2. Información básica de la comanda
+            sb.Append($"ORDEN: #{lblIdOrden.Text}{LF}");
+            sb.Append($"MESA: {comboBoxMesas.Text}{LF}");
+            sb.Append($"FECHA: {DateTime.Now.ToString("g")}{LF}");
+            sb.Append($"CLIENTE: {lblNombreCliente.Text}{LF}");
+            sb.Append("──────────────────────────" + LF);
 
-            // Sección de Platos
-            var platos = todosItems.Where(i => i.Nombre != null && i.Nombre.StartsWith("PLATO"));
+            // 3. Detalle de productos (solo platos y extras)
+            sb.Append(ESC + "!" + "\x08"); // Fuente enfatizada
+            sb.Append("          COMANDA" + LF);
+            sb.Append(ESC + "!" + "\x00"); // Restaurar fuente
+            sb.Append("──────────────────────────" + LF);
+
+            // Obtener detalles de los pedidos agrupados por tipo
+            var platos = ObtenerItemsParaComanda("PLATO");
+            var extras = ObtenerItemsParaComanda("EXTRA");
+
+            // Sección de PLATOS
             if (platos.Any())
             {
-                sb.AppendLine("────────────── PLATOS ──────────────");
+                sb.Append(ESC + "!" + "\x08"); // Fuente enfatizada
+                sb.Append("PLATOS:" + LF);
+                sb.Append(ESC + "!" + "\x00"); // Restaurar fuente
+
                 foreach (var plato in platos)
                 {
-                    sb.AppendLine($" ▪ {plato.Cantidad}x {plato.Nombre.Replace("PLATO", "").Trim()}");
+                    sb.Append($"{plato.Cantidad}x {plato.Nombre.Replace("PLATO", "").Trim()}{LF}");
                     if (!string.IsNullOrWhiteSpace(plato.Notas))
                     {
-                        sb.AppendLine($"   → Nota: {plato.Notas}");
+                        sb.Append($"  Nota: {plato.Notas}{LF}");
                     }
                 }
-                sb.AppendLine();
+                sb.Append(LF);
             }
 
-            // Sección de Bebidas
-            var bebidas = todosItems.Where(i => i.Nombre != null && i.Nombre.StartsWith("BEBIDA"));
-            if (bebidas.Any())
-            {
-                sb.AppendLine("───────────── BEBIDAS ──────────────");
-                foreach (var bebida in bebidas)
-                {
-                    sb.AppendLine($" ▪ {bebida.Cantidad}x {bebida.Nombre.Replace("BEBIDA", "").Trim()}");
-                }
-                sb.AppendLine();
-            }
-
-            // Sección de Extras
-            var extras = todosItems.Where(i => i.Nombre != null && i.Nombre.StartsWith("EXTRA"));
+            // Sección de EXTRAS
             if (extras.Any())
             {
-                sb.AppendLine("───────────── EXTRAS ───────────────");
+                sb.Append(ESC + "!" + "\x08"); // Fuente enfatizada
+                sb.Append("EXTRAS:" + LF);
+                sb.Append(ESC + "!" + "\x00"); // Restaurar fuente
+
                 foreach (var extra in extras)
                 {
-                    sb.AppendLine($" ▪ {extra.Cantidad}x {extra.Nombre.Replace("EXTRA", "").Trim()}");
+                    sb.Append($"{extra.Cantidad}x {extra.Nombre.Replace("EXTRA", "").Trim()}{LF}");
                 }
-                sb.AppendLine();
+                sb.Append(LF);
             }
 
-            // Resumen
-            sb.AppendLine("═════════════════════════════════");
-            sb.AppendLine($"Total platos: {platos.Sum(p => p.Cantidad)}");
-            sb.AppendLine($"Total bebidas: {bebidas.Sum(b => b.Cantidad)}");
-            sb.AppendLine($"Total extras: {extras.Sum(e => e.Cantidad)}");
-            sb.AppendLine();
-            sb.AppendLine("        ¡Gracias por su trabajo!");
-            sb.AppendLine("═════════════════════════════════");
+            // 4. Totales resumidos
+            sb.Append("──────────────────────────" + LF);
+            sb.Append($"TOTAL PLATOS: {platos.Sum(p => p.Cantidad)}{LF}");
+            sb.Append($"TOTAL EXTRAS: {extras.Sum(e => e.Cantidad)}{LF}");
+            sb.Append("──────────────────────────" + LF);
+
+            // 5. Pie de página y cortes
+            sb.Append(LF);
+            sb.Append(CenterText("¡LISTO PARA PREPARAR!"));
+            sb.Append(LF + LF);
+            sb.Append(LF + LF + LF); // Espacios adicionales antes del corte
+            sb.Append(GS + "V" + "\x41" + "\x00"); // Corte completo
 
             return sb.ToString();
+        }
+
+        private void ImprimirPorUSB(string contenido)
+        {
+            // Opción 1: Usando PrintDocument (recomendado para Windows)
+            PrintDocument pd = new PrintDocument();
+            pd.PrinterSettings.PrinterName = ObtenerNombreImpresoraTermica();
+
+            pd.PrintPage += (sender, e) =>
+            {
+                // Usar fuente monoespaciada para mejor alineación
+                Font font = new Font("Courier New", 9);
+                e.Graphics.DrawString(contenido, font, Brushes.Black,
+                    new RectangleF(0, 0, pd.DefaultPageSettings.PrintableArea.Width,
+                                  pd.DefaultPageSettings.PrintableArea.Height));
+            };
+
+            try
+            {
+                pd.Print();
+            }
+            catch (Exception ex)
+            {
+                // Intentar con impresora predeterminada si falla
+                try
+                {
+                    pd.PrinterSettings.PrinterName = new PrinterSettings().PrinterName;
+                    pd.Print();
+                }
+                catch
+                {
+                    throw new Exception("No se pudo imprimir. Verifique la conexión con la impresora.");
+                }
+            }
+        }
+
+        private string CenterText(string text)
+        {
+            int maxWidth = 32; // Ajustar según tu impresora
+            if (text.Length >= maxWidth) return text;
+
+            int spaces = (maxWidth - text.Length) / 2;
+            return new string(' ', spaces) + text;
+        }
+
+        private string ObtenerNombreImpresoraTermica()
+        {
+            // Busca la impresora por nombre
+            foreach (string printer in PrinterSettings.InstalledPrinters)
+            {
+                if (printer.Contains("PT-210") || printer.Contains("GOOJPRT") || printer.Contains("POS") ||
+                    printer.Contains("Receipt") || printer.Contains("Termica"))
+                {
+                    return printer;
+                }
+            }
+
+            // Si no la encuentra, usa la predeterminada
+            return new PrinterSettings().PrinterName;
         }
 
         private List<(string Nombre, int Cantidad, string Notas)> ObtenerItemsParaComanda(string tipoItem)
@@ -1437,31 +1508,16 @@ SELECT
     p.id_pedido,
     CASE
         WHEN p.id_plato IS NOT NULL THEN CONCAT('PLATO ', pl.nombrePlato)
-        WHEN p.id_bebida IS NOT NULL THEN CONCAT('BEBIDA ', i.nombreProducto)
         WHEN p.id_extra IS NOT NULL THEN CONCAT('EXTRA ', i.nombreProducto)
     END AS Nombre,
     p.Cantidad
 FROM pedidos p
 LEFT JOIN platos pl ON p.id_plato = pl.id_plato
-LEFT JOIN bebidas b ON p.id_bebida = b.id_bebida
 LEFT JOIN extras e ON p.id_extra = e.id_extra
-LEFT JOIN inventario i ON 
-    (b.id_inventario = i.id_inventario OR 
-     e.id_inventario = i.id_inventario)
+LEFT JOIN inventario i ON e.id_inventario = i.id_inventario
 WHERE p.id_orden = @idOrden AND ";
 
-            switch (tipoItem)
-            {
-                case "PLATO":
-                    query += "p.id_plato IS NOT NULL";
-                    break;
-                case "BEBIDA":
-                    query += "p.id_bebida IS NOT NULL";
-                    break;
-                case "EXTRA":
-                    query += "p.id_extra IS NOT NULL";
-                    break;
-            }
+            query += tipoItem == "PLATO" ? "p.id_plato IS NOT NULL" : "p.id_extra IS NOT NULL";
 
             using (MySqlConnection conexion = new Conexion().EstablecerConexion())
             {
@@ -1485,42 +1541,6 @@ WHERE p.id_orden = @idOrden AND ";
             }
 
             return items;
-        }
-
-        private void ImprimirComanda(string contenido)
-        {
-            try
-            {
-                PrintDocument pd = new PrintDocument();
-                pd.PrinterSettings.PrinterName = ObtenerNombreImpresoraTermica();
-
-                pd.PrintPage += (sender, e) =>
-                {
-                    Font font = new Font("Courier New", 10);
-                    e.Graphics.DrawString(contenido, font, Brushes.Black,
-                        new RectangleF(0, 0, pd.DefaultPageSettings.PrintableArea.Width,
-                                      pd.DefaultPageSettings.PrintableArea.Height));
-                };
-
-                pd.Print();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error al imprimir: {ex.Message}", "Error de Impresión",
-                              MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private string ObtenerNombreImpresoraTermica()
-        {
-            foreach (string printer in PrinterSettings.InstalledPrinters)
-            {
-                if (printer.Contains("POS") || printer.Contains("Receipt"))
-                {
-                    return printer;
-                }
-            }
-            return new PrinterSettings().PrinterName;
         }
 
     }
