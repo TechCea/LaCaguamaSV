@@ -17,43 +17,75 @@ namespace LaCaguamaSV.Configuracion
             return ObtenerOrdenes(false);
         }
 
-        public static DataTable ObtenerOrdenes(bool soloHoy = false)
+        public static DataTable ObtenerOrdenes(bool soloHoy = true)
         {
             DataTable dt = new DataTable();
             using (MySqlConnection conexion = new Conexion().EstablecerConexion())
             {
-                try
+                string query;
+
+                if (soloHoy)
                 {
-                    string query = @"SELECT 
-                o.id_orden, 
-                o.nombreCliente, 
-                o.total, 
+                    // Nuevo rango de horas: 9am a 7am del día siguiente
+                    query = @"
+            SELECT 
+                o.id_orden,
+                o.nombreCliente,
+                o.total,
                 o.descuento,
-                DATE_FORMAT(o.fecha_orden, '%Y-%m-%d %H:%i') AS fecha_orden, 
-                m.nombreMesa AS numero_mesa, 
-                tp.nombrePago AS tipo_pago, 
+                DATE_FORMAT(o.fecha_orden, '%Y-%m-%d %H:%i') AS fecha_orden,
+                m.nombreMesa AS numero_mesa,
+                tp.nombrePago AS tipo_pago,
                 u.nombre AS nombre_usuario,
                 eo.nombreEstadoO AS estado_orden
             FROM ordenes o
-            INNER JOIN mesas m ON o.id_mesa = m.id_mesa
-            INNER JOIN tipoPago tp ON o.tipo_pago = tp.id_pago
-            INNER JOIN usuarios u ON o.id_usuario = u.id_usuario
-            INNER JOIN estado_orden eo ON o.id_estadoO = eo.id_estadoO";
-
-                    if (soloHoy)
-                    {
-                        query += " WHERE DATE(o.fecha_orden) = CURDATE()";
-                    }
-
-                    query += " ORDER BY o.fecha_orden DESC";
-
-                    MySqlCommand cmd = new MySqlCommand(query, conexion);
-                    MySqlDataAdapter da = new MySqlDataAdapter(cmd);
-                    da.Fill(dt);
+            JOIN mesas m ON o.id_mesa = m.id_mesa
+            JOIN tipoPago tp ON o.tipo_pago = tp.id_pago
+            JOIN usuarios u ON o.id_usuario = u.id_usuario
+            JOIN estado_orden eo ON o.id_estadoO = eo.id_estadoO
+            WHERE o.fecha_orden BETWEEN 
+                CASE 
+                    WHEN TIME(NOW()) < '07:00:00' THEN 
+                        CONCAT(DATE_SUB(CURDATE(), INTERVAL 1 DAY), ' 09:00:00')
+                    ELSE 
+                        CONCAT(CURDATE(), ' 09:00:00')
+                END
+                AND
+                CASE 
+                    WHEN TIME(NOW()) < '07:00:00' THEN 
+                        CONCAT(CURDATE(), ' 07:00:00')
+                    ELSE 
+                        CONCAT(DATE_ADD(CURDATE(), INTERVAL 1 DAY), ' 07:00:00')
+                END
+            ORDER BY o.fecha_orden DESC";
                 }
-                catch (Exception ex)
+                else
                 {
-                    Console.WriteLine("Error al obtener órdenes: " + ex.Message);
+                    query = @"
+            SELECT 
+                o.id_orden,
+                o.nombreCliente,
+                o.total,
+                o.descuento,
+                DATE_FORMAT(o.fecha_orden, '%Y-%m-%d %H:%i') AS fecha_orden,
+                m.nombreMesa AS numero_mesa,
+                tp.nombrePago AS tipo_pago,
+                u.nombre AS nombre_usuario,
+                eo.nombreEstadoO AS estado_orden
+            FROM ordenes o
+            JOIN mesas m ON o.id_mesa = m.id_mesa
+            JOIN tipoPago tp ON o.tipo_pago = tp.id_pago
+            JOIN usuarios u ON o.id_usuario = u.id_usuario
+            JOIN estado_orden eo ON o.id_estadoO = eo.id_estadoO
+            ORDER BY o.fecha_orden DESC";
+                }
+
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                    {
+                        da.Fill(dt);
+                    }
                 }
             }
             return dt;

@@ -528,10 +528,15 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             mostrarSoloHoy = !mostrarSoloHoy;
             CargarOrdenes(mostrarSoloHoy);
-            btnFiltrarOrdenes.Text = mostrarSoloHoy ? "Ver todas" : "Ver solo hoy";
+            btnFiltrarOrdenes.Text = mostrarSoloHoy ? "Ver todas" : "Ver turno actual (9am-7am)";
         }
 
         private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dataGridViewOrdenesAdmin_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
         }

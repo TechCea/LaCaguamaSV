@@ -86,6 +86,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.btnReimprimirCorte = new System.Windows.Forms.Button();
             this.lbl_caja = new System.Windows.Forms.Label();
+            this.Btn_Vendasday = new System.Windows.Forms.Button();
             this.panelConfirmacion.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -541,9 +542,9 @@
             this.Gastos.ForeColor = System.Drawing.SystemColors.Control;
             this.Gastos.Image = global::LaCaguamaSV.Properties.Resources.gasto;
             this.Gastos.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.Gastos.Location = new System.Drawing.Point(897, 405);
+            this.Gastos.Location = new System.Drawing.Point(870, 405);
             this.Gastos.Name = "Gastos";
-            this.Gastos.Size = new System.Drawing.Size(144, 74);
+            this.Gastos.Size = new System.Drawing.Size(171, 74);
             this.Gastos.TabIndex = 16;
             this.Gastos.Text = "Gastos";
             this.Gastos.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -829,7 +830,7 @@
             this.btnRespaldarBD.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.btnRespaldarBD.Image = global::LaCaguamaSV.Properties.Resources.respaldo;
             this.btnRespaldarBD.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnRespaldarBD.Location = new System.Drawing.Point(1010, 225);
+            this.btnRespaldarBD.Location = new System.Drawing.Point(870, 226);
             this.btnRespaldarBD.Name = "btnRespaldarBD";
             this.btnRespaldarBD.Size = new System.Drawing.Size(171, 74);
             this.btnRespaldarBD.TabIndex = 25;
@@ -862,7 +863,7 @@
             this.label10.BackColor = System.Drawing.Color.Transparent;
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label10.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.label10.Location = new System.Drawing.Point(976, 170);
+            this.label10.Location = new System.Drawing.Point(836, 171);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(217, 25);
             this.label10.TabIndex = 28;
@@ -911,6 +912,24 @@
             this.lbl_caja.Text = "Caja activa: ";
             this.lbl_caja.Click += new System.EventHandler(this.lbl_caja_Click);
             // 
+            // Btn_Vendasday
+            // 
+            this.Btn_Vendasday.BackColor = System.Drawing.Color.Lime;
+            this.Btn_Vendasday.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.Btn_Vendasday.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Btn_Vendasday.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Btn_Vendasday.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.Btn_Vendasday.Image = global::LaCaguamaSV.Properties.Resources.historial_de_transacciones;
+            this.Btn_Vendasday.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.Btn_Vendasday.Location = new System.Drawing.Point(1116, 226);
+            this.Btn_Vendasday.Name = "Btn_Vendasday";
+            this.Btn_Vendasday.Size = new System.Drawing.Size(216, 74);
+            this.Btn_Vendasday.TabIndex = 31;
+            this.Btn_Vendasday.Text = "Ventas del Dia";
+            this.Btn_Vendasday.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.Btn_Vendasday.UseVisualStyleBackColor = false;
+            this.Btn_Vendasday.Click += new System.EventHandler(this.Btn_Vendasday_Click);
+            // 
             // FormAdminFunciones
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -918,7 +937,8 @@
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.fondo;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(1395, 724);
+            this.ClientSize = new System.Drawing.Size(1386, 724);
+            this.Controls.Add(this.Btn_Vendasday);
             this.Controls.Add(this.btnReimprimirCorte);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.label10);
@@ -1031,5 +1051,6 @@
         private System.Windows.Forms.PictureBox pictureBox5;
         private System.Windows.Forms.PictureBox pictureBox4;
         private System.Windows.Forms.Label lbl_caja;
+        private System.Windows.Forms.Button Btn_Vendasday;
     }
 }

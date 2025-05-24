@@ -38,7 +38,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             // Tamaño fijo
             this.FormBorderStyle = FormBorderStyle.FixedSingle; // Evita redimensionar
             
-            this.Size = new Size(1000, 500); // Establece un tamaño fijo
+            
 
             // Posición fija (centrada en la pantalla)
             this.StartPosition = FormStartPosition.CenterScreen;
@@ -1368,11 +1368,11 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
             // 1. Inicialización y encabezado con formato mejorado
             sb.Append(ESC + "@"); // Reset printer
-            sb.Append(ESC + "!" + "\x18"); // Fuente tamaño mediano (no tan grande como el comprobante)
+            sb.Append(ESC + "!" + "\x18"); // Fuente tamaño mediano
             sb.Append(CenterText("LA CAGUAMA RESTAURANTE"));
-            sb.Append(LF);
+            sb.Append(LF + LF); // Doble espacio después del título
             sb.Append(CenterText("══════════════════════"));
-            sb.Append(LF);
+            sb.Append(LF + LF); // Doble espacio después de la línea
             sb.Append(ESC + "!" + "\x00"); // Restaurar fuente normal
 
             // 2. Información básica de la comanda
@@ -1380,13 +1380,16 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             sb.Append($"MESA: {comboBoxMesas.Text}{LF}");
             sb.Append($"FECHA: {DateTime.Now.ToString("g")}{LF}");
             sb.Append($"CLIENTE: {lblNombreCliente.Text}{LF}");
+            sb.Append(LF); // Espacio antes de la línea separadora
             sb.Append("──────────────────────────" + LF);
+            sb.Append(LF); // Espacio después de la línea separadora
 
             // 3. Detalle de productos (solo platos y extras)
             sb.Append(ESC + "!" + "\x08"); // Fuente enfatizada
             sb.Append("          COMANDA" + LF);
             sb.Append(ESC + "!" + "\x00"); // Restaurar fuente
             sb.Append("──────────────────────────" + LF);
+            sb.Append(LF); // Espacio después del encabezado
 
             // Obtener detalles de los pedidos agrupados por tipo
             var platos = ObtenerItemsParaComanda("PLATO");
@@ -1395,45 +1398,44 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             // Sección de PLATOS
             if (platos.Any())
             {
+                sb.Append(LF); // Espacio antes de la sección
                 sb.Append(ESC + "!" + "\x08"); // Fuente enfatizada
-                sb.Append("PLATOS:" + LF);
+                sb.Append("PLATOS:" + LF + LF); // Doble salto de línea después del título
                 sb.Append(ESC + "!" + "\x00"); // Restaurar fuente
+                sb.Append(LF);
 
                 foreach (var plato in platos)
                 {
+                    sb.Append(LF);
                     sb.Append($"{plato.Cantidad}x {plato.Nombre.Replace("PLATO", "").Trim()}{LF}");
                     if (!string.IsNullOrWhiteSpace(plato.Notas))
                     {
                         sb.Append($"  Nota: {plato.Notas}{LF}");
                     }
+                    sb.Append(LF); // Espacio entre cada plato
                 }
-                sb.Append(LF);
             }
 
             // Sección de EXTRAS
             if (extras.Any())
             {
+                sb.Append(LF); // Espacio antes de la sección
                 sb.Append(ESC + "!" + "\x08"); // Fuente enfatizada
-                sb.Append("EXTRAS:" + LF);
+                sb.Append("EXTRAS:" + LF + LF); // Doble salto de línea después del título
                 sb.Append(ESC + "!" + "\x00"); // Restaurar fuente
+                sb.Append(LF);
 
                 foreach (var extra in extras)
                 {
+                    sb.Append(LF); // Espacio entre cada extra
                     sb.Append($"{extra.Cantidad}x {extra.Nombre.Replace("EXTRA", "").Trim()}{LF}");
+                    sb.Append(LF); // Espacio entre cada extra
                 }
-                sb.Append(LF);
             }
 
-            // 4. Totales resumidos
-            sb.Append("──────────────────────────" + LF);
-            sb.Append($"TOTAL PLATOS: {platos.Sum(p => p.Cantidad)}{LF}");
-            sb.Append($"TOTAL EXTRAS: {extras.Sum(e => e.Cantidad)}{LF}");
-            sb.Append("──────────────────────────" + LF);
-
             // 5. Pie de página y cortes
-            sb.Append(LF);
+            sb.Append(LF + LF); // Doble espacio antes del mensaje final
             sb.Append(CenterText("¡LISTO PARA PREPARAR!"));
-            sb.Append(LF + LF);
             sb.Append(LF + LF + LF); // Espacios adicionales antes del corte
             sb.Append(GS + "V" + "\x41" + "\x00"); // Corte completo
 

@@ -86,7 +86,7 @@
             this.btnMenu.Image = global::LaCaguamaSV.Properties.Resources.menu;
             this.btnMenu.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnMenu.Location = new System.Drawing.Point(683, 115);
-            this.btnMenu.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnMenu.Margin = new System.Windows.Forms.Padding(2);
             this.btnMenu.Name = "btnMenu";
             this.btnMenu.Size = new System.Drawing.Size(218, 64);
             this.btnMenu.TabIndex = 5;
@@ -121,6 +121,7 @@
             this.dataGridViewOrdenesAdmin.RowHeadersWidth = 51;
             this.dataGridViewOrdenesAdmin.Size = new System.Drawing.Size(1012, 397);
             this.dataGridViewOrdenesAdmin.TabIndex = 8;
+            this.dataGridViewOrdenesAdmin.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewOrdenesAdmin_CellContentClick);
             // 
             // btnCrearOrden
             // 
@@ -149,7 +150,7 @@
             this.button2.Image = global::LaCaguamaSV.Properties.Resources.mesa_de_comedor__1_;
             this.button2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.button2.Location = new System.Drawing.Point(683, 198);
-            this.button2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button2.Margin = new System.Windows.Forms.Padding(2);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(218, 56);
             this.button2.TabIndex = 10;
@@ -168,7 +169,7 @@
             this.btnInventario.Image = global::LaCaguamaSV.Properties.Resources.inventario_disponible;
             this.btnInventario.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnInventario.Location = new System.Drawing.Point(419, 117);
-            this.btnInventario.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnInventario.Margin = new System.Windows.Forms.Padding(2);
             this.btnInventario.Name = "btnInventario";
             this.btnInventario.Size = new System.Drawing.Size(250, 62);
             this.btnInventario.TabIndex = 11;
@@ -204,7 +205,7 @@
             this.buttonPromociones.Image = global::LaCaguamaSV.Properties.Resources.promocion;
             this.buttonPromociones.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.buttonPromociones.Location = new System.Drawing.Point(915, 197);
-            this.buttonPromociones.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonPromociones.Margin = new System.Windows.Forms.Padding(2);
             this.buttonPromociones.Name = "buttonPromociones";
             this.buttonPromociones.Size = new System.Drawing.Size(247, 56);
             this.buttonPromociones.TabIndex = 13;
