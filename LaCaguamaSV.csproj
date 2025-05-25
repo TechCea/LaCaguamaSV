@@ -7,7 +7,7 @@
     <ProjectGuid>{ECE6778F-5BC6-4FD3-9BF6-2A31EE2469CC}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>LaCaguamaSV</RootNamespace>
-    <AssemblyName>LaCaguamaSV 2.16.3</AssemblyName>
+    <AssemblyName>LaCaguamaSV 2.18.4</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -23,7 +23,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>6</ApplicationRevision>
+    <ApplicationRevision>8</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>

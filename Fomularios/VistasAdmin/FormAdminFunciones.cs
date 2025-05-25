@@ -745,42 +745,55 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
             SaveFileDialog sfd = new SaveFileDialog();
             sfd.Filter = "Archivo SQL (*.sql)|*.sql";
-            sfd.FileName = "respaldo_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".sql";
+            sfd.FileName = $"respaldo_lacaguama_{DateTime.Now:yyyyMMdd_HHmmss}.sql";
 
             if (sfd.ShowDialog() == DialogResult.OK)
             {
-                string rutaRespaldo = sfd.FileName;
-                string usuario = "root";
-                string contraseña = "root"; // Reemplaza por tu contraseña real
-                string baseDeDatos = "lacaguamabd"; // Reemplaza por el nombre real de tu base de datos
-                string mysqldumpPath = @"C:\Program Files\MySQL\MySQL Server 8.0\bin";
-
-                ProcessStartInfo psi = new ProcessStartInfo();
-                psi.FileName = mysqldumpPath;
-                psi.RedirectStandardInput = false;
-                psi.RedirectStandardOutput = true;
-                psi.UseShellExecute = false;
-                psi.CreateNoWindow = true;
-
-                psi.Arguments = $"-u {usuario} -p{contraseña} {baseDeDatos}";
-
                 try
                 {
-                    using (Process process = Process.Start(psi))
+                    string rutaRespaldo = sfd.FileName;
+                    string usuario = "root";
+                    string contraseña = "root"; // Cambia por tu contraseña real
+                    string baseDeDatos = "lacaguamabd";
+                    string servidor = "localhost";
+                    int puerto = 3307; // Especificamos el puerto 3307 aquí
+
+                    string mysqldumpPath = @"C:\Program Files\MySQL\MySQL Server 8.0\bin\mysqldump.exe";
+
+                    ProcessStartInfo psi = new ProcessStartInfo
                     {
-                        using (StreamReader reader = process.StandardOutput)
-                        {
-                            string result = reader.ReadToEnd();
-                            File.WriteAllText(rutaRespaldo, result);
-                        }
+                        FileName = mysqldumpPath,
+                        Arguments = $"--host={servidor} --port={puerto} -u {usuario} -p{contraseña} {baseDeDatos} --routines --triggers --single-transaction",
+                        RedirectStandardOutput = true,
+                        UseShellExecute = false,
+                        CreateNoWindow = true,
+                        RedirectStandardError = true
+                    };
+
+                    using (Process process = new Process())
+                    {
+                        process.StartInfo = psi;
+                        process.Start();
+
+                        string output = process.StandardOutput.ReadToEnd();
+                        string error = process.StandardError.ReadToEnd();
 
                         process.WaitForExit();
-                        MessageBox.Show("Respaldo creado correctamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        if (!string.IsNullOrEmpty(error) && !error.Contains("[Warning] Using a password"))
+                        {
+                            throw new Exception($"Error en mysqldump: {error}");
+                        }
+
+                        File.WriteAllText(rutaRespaldo, output);
+                        MessageBox.Show($"Respaldo creado exitosamente en:\n{rutaRespaldo}", "Éxito",
+                                      MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error al respaldar la base de datos:\n" + ex.Message);
+                    MessageBox.Show($"Error al crear respaldo:\n{ex.Message}", "Error",
+                                  MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -1284,6 +1297,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                                MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
     }
 }
 
