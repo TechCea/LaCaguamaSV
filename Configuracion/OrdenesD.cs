@@ -26,7 +26,7 @@ namespace LaCaguamaSV.Configuracion
 
                 if (soloHoy)
                 {
-                    // Nuevo rango de horas: 9am a 7am del día siguiente
+                    // Nuevo rango de horas: 10am a 6am del día siguiente
                     query = @"
             SELECT 
                 o.id_orden,
@@ -45,17 +45,17 @@ namespace LaCaguamaSV.Configuracion
             JOIN estado_orden eo ON o.id_estadoO = eo.id_estadoO
             WHERE o.fecha_orden BETWEEN 
                 CASE 
-                    WHEN TIME(NOW()) < '07:00:00' THEN 
-                        CONCAT(DATE_SUB(CURDATE(), INTERVAL 1 DAY), ' 09:00:00')
+                    WHEN TIME(NOW()) < '06:00:00' THEN 
+                        CONCAT(DATE_SUB(CURDATE(), INTERVAL 1 DAY), ' 10:00:00')
                     ELSE 
-                        CONCAT(CURDATE(), ' 09:00:00')
+                        CONCAT(CURDATE(), ' 10:00:00')
                 END
                 AND
                 CASE 
-                    WHEN TIME(NOW()) < '07:00:00' THEN 
-                        CONCAT(CURDATE(), ' 07:00:00')
+                    WHEN TIME(NOW()) < '06:00:00' THEN 
+                        CONCAT(CURDATE(), ' 06:00:00')
                     ELSE 
-                        CONCAT(DATE_ADD(CURDATE(), INTERVAL 1 DAY), ' 07:00:00')
+                        CONCAT(DATE_ADD(CURDATE(), INTERVAL 1 DAY), ' 06:00:00')
                 END
             ORDER BY o.fecha_orden DESC";
                 }

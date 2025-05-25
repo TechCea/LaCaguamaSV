@@ -47,7 +47,6 @@
             this.label4 = new System.Windows.Forms.Label();
             this.txtFondoInicial = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.btnEditarGasto = new System.Windows.Forms.Button();
             this.dtpFechaInicioGasto = new System.Windows.Forms.DateTimePicker();
             this.btnFiltrar = new System.Windows.Forms.Button();
             this.dtpFechaFinGasto = new System.Windows.Forms.DateTimePicker();
@@ -290,23 +289,6 @@
             this.label3.TabIndex = 11;
             this.label3.Text = "Fondo inicial";
             // 
-            // btnEditarGasto
-            // 
-            this.btnEditarGasto.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(71)))), ((int)(((byte)(25)))));
-            this.btnEditarGasto.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnEditarGasto.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnEditarGasto.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnEditarGasto.ForeColor = System.Drawing.SystemColors.Control;
-            this.btnEditarGasto.Image = global::LaCaguamaSV.Properties.Resources.carpeta;
-            this.btnEditarGasto.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnEditarGasto.Location = new System.Drawing.Point(310, 583);
-            this.btnEditarGasto.Name = "btnEditarGasto";
-            this.btnEditarGasto.Size = new System.Drawing.Size(138, 47);
-            this.btnEditarGasto.TabIndex = 19;
-            this.btnEditarGasto.Text = "Actualizar";
-            this.btnEditarGasto.UseVisualStyleBackColor = false;
-            this.btnEditarGasto.Click += new System.EventHandler(this.btnEditarGasto_Click);
-            // 
             // dtpFechaInicioGasto
             // 
             this.dtpFechaInicioGasto.Location = new System.Drawing.Point(665, 82);
@@ -396,7 +378,6 @@
             this.Controls.Add(this.dtpFechaFinGasto);
             this.Controls.Add(this.btnFiltrar);
             this.Controls.Add(this.dtpFechaInicioGasto);
-            this.Controls.Add(this.btnEditarGasto);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.btnAgregarGasto);
             this.Controls.Add(this.dgvGastos);
@@ -422,7 +403,6 @@
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button btnEditarGasto;
         private System.Windows.Forms.DateTimePicker dtpFechaInicioGasto;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Button btnFiltrar;

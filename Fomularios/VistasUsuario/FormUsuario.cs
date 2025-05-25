@@ -530,8 +530,7 @@ namespace LaCaguamaSV.Fomularios.VistasUsuario
         {
             mostrarSoloHoy = !mostrarSoloHoy;
             CargarOrdenes(mostrarSoloHoy);
-            btnFiltrarOrdenes.Text = mostrarSoloHoy ? "Ver todas" : "Ver solo hoy";
-
+            btnFiltrarOrdenes.Text = mostrarSoloHoy ? "Ver todas" : "Ver turno actual (10am-6am)";
         }
 
         private void dataGridViewOrdenesUsuario_CellContentClick(object sender, DataGridViewCellEventArgs e)
