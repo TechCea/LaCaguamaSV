@@ -87,6 +87,7 @@
             this.btnReimprimirCorte = new System.Windows.Forms.Button();
             this.lbl_caja = new System.Windows.Forms.Label();
             this.Btn_Vendasday = new System.Windows.Forms.Button();
+            this.btnImportarBD = new System.Windows.Forms.Button();
             this.panelConfirmacion.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -930,6 +931,24 @@
             this.Btn_Vendasday.UseVisualStyleBackColor = false;
             this.Btn_Vendasday.Click += new System.EventHandler(this.Btn_Vendasday_Click);
             // 
+            // btnImportarBD
+            // 
+            this.btnImportarBD.BackColor = System.Drawing.Color.DarkCyan;
+            this.btnImportarBD.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnImportarBD.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnImportarBD.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnImportarBD.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.btnImportarBD.Image = global::LaCaguamaSV.Properties.Resources.respaldo;
+            this.btnImportarBD.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnImportarBD.Location = new System.Drawing.Point(870, 42);
+            this.btnImportarBD.Name = "btnImportarBD";
+            this.btnImportarBD.Size = new System.Drawing.Size(171, 74);
+            this.btnImportarBD.TabIndex = 32;
+            this.btnImportarBD.Text = "Importar BD";
+            this.btnImportarBD.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnImportarBD.UseVisualStyleBackColor = false;
+            this.btnImportarBD.Click += new System.EventHandler(this.btnImportarBD_Click_1);
+            // 
             // FormAdminFunciones
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -938,6 +957,7 @@
             this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.fondo;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1386, 724);
+            this.Controls.Add(this.btnImportarBD);
             this.Controls.Add(this.Btn_Vendasday);
             this.Controls.Add(this.btnReimprimirCorte);
             this.Controls.Add(this.label1);
@@ -1052,5 +1072,6 @@
         private System.Windows.Forms.PictureBox pictureBox4;
         private System.Windows.Forms.Label lbl_caja;
         private System.Windows.Forms.Button Btn_Vendasday;
+        private System.Windows.Forms.Button btnImportarBD;
     }
 }

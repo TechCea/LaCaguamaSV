@@ -800,16 +800,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void btnImportarBD_Click(object sender, EventArgs e)
         {
-            using (OpenFileDialog dialog = new OpenFileDialog())
-            {
-                dialog.Filter = "Archivo SQL (*.sql)|*.sql";
-                if (dialog.ShowDialog() == DialogResult.OK)
-                {
-                    string rutaArchivo = dialog.FileName;
-                    Conexion conexion = new Conexion();
-                    conexion.ImportarBaseDeDatos(rutaArchivo);
-                }
-            }
+            
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -1298,6 +1289,70 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             }
         }
 
+        private void btnImportarBD_Click_1(object sender, EventArgs e)
+        {
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Filter = "Archivo SQL (*.sql)|*.sql";
+            dialog.Title = "Seleccionar archivo de respaldo";
+
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    string rutaArchivo = dialog.FileName;
+                    string usuario = "root";
+                    string contraseña = "root"; // Cambia por tu contraseña real
+                    string baseDeDatos = "lacaguamabd";
+                    string servidor = "localhost";
+                    int puerto = 3307; // Especificamos el puerto 3307 aquí
+                    string mysqlPath = @"C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe";
+
+                    string sqlContent = File.ReadAllText(rutaArchivo);
+
+                    ProcessStartInfo psi = new ProcessStartInfo
+                    {
+                        FileName = mysqlPath,
+                        Arguments = $"--host={servidor} --port={puerto} -u {usuario} -p{contraseña} {baseDeDatos}",
+                        RedirectStandardInput = true,
+                        UseShellExecute = false,
+                        CreateNoWindow = true,
+                        RedirectStandardError = true
+                    };
+
+                    using (Process process = new Process())
+                    {
+                        process.StartInfo = psi;
+                        process.Start();
+
+                        using (StreamWriter sw = process.StandardInput)
+                        {
+                            if (sw.BaseStream.CanWrite)
+                            {
+                                sw.WriteLine("SET FOREIGN_KEY_CHECKS=0;");
+                                sw.Write(sqlContent);
+                                sw.WriteLine("SET FOREIGN_KEY_CHECKS=1;");
+                            }
+                        }
+
+                        string error = process.StandardError.ReadToEnd();
+                        process.WaitForExit();
+
+                        if (!string.IsNullOrEmpty(error) && !error.Contains("[Warning] Using a password"))
+                        {
+                            throw new Exception($"Error en mysql: {error}");
+                        }
+
+                        MessageBox.Show("Base de datos importada correctamente.", "Éxito",
+                                      MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error al importar la base de datos:\n{ex.Message}", "Error",
+                                  MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
     }
 }
 
