@@ -17,6 +17,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 {
     public partial class CrearOrden: Form
     {
+        public int OrdenCreadaId { get; private set; } = -1;
         public CrearOrden()
         {
             InitializeComponent();
@@ -261,13 +262,11 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
                 if (idOrden > 0)
                 {
-                    MessageBox.Show($"Orden #{idOrden} creada exitosamente", "Éxito",
-                                  MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                    // Cerrar este formulario
-                    this.DialogResult = DialogResult.OK;
+                    OrdenCreadaId = idOrden;
+                    this.DialogResult = DialogResult.OK; // Cambiar a OK para indicar éxito
                     this.Close();
                 }
+
                 else
                 {
                     MessageBox.Show("Error al crear la orden", "Error",
@@ -279,6 +278,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 MessageBox.Show($"Error al crear la orden: {ex.Message}", "Error",
                                MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
         }
 
         private bool MesaDisponible(int idMesa)
@@ -296,18 +296,16 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                             if (reader.Read())
                             {
                                 string nombreMesa = reader.GetString("nombreMesa");
+                                int estado = reader.GetInt32("id_estadoM");
 
                                 // "Para Llevar" siempre está disponible
-                                if (nombreMesa == "Para Llevar")
+                                if (nombreMesa.Equals("PARA LLEVAR", StringComparison.OrdinalIgnoreCase))
                                     return true;
-
-                                int estado = reader.GetInt32("id_estadoM");
 
                                 // Si la mesa está ocupada, preguntar al usuario
                                 if (estado != 1) // 1 = Disponible
-                                {
                                     return MostrarConfirmacionMesaOcupada(nombreMesa);
-                                }
+
                                 return true;
                             }
                             return false;
@@ -324,6 +322,10 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private bool MostrarConfirmacionMesaOcupada(string nombreMesa)
         {
+            // No mostrar confirmación si es "Para Llevar"
+            if (nombreMesa == "PARA LLEVAR" || nombreMesa == "Para Llevar")
+                return true;
+
             DialogResult result = MessageBox.Show(
                 $"La mesa {nombreMesa} está ocupada. ¿Desea agregar otra orden a esta mesa?",
                 "Mesa Ocupada",

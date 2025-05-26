@@ -417,12 +417,44 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void btnCrearOrden_Click(object sender, EventArgs e)
         {
-            using (CrearOrden formOrden = new CrearOrden())
+            using (CrearOrden formCrearOrden = new CrearOrden())
             {
-                formOrden.ShowDialog(); // Mostrar como modal
-                CargarOrdenes(); // Refrescar lista de órdenes después de cerrar
-            }
+                // Mostrar el formulario de creación de orden como diálogo
+                if (formCrearOrden.ShowDialog() == DialogResult.OK)
+                {
+                    // Obtener los datos de la orden recién creada
+                    int idOrden = formCrearOrden.OrdenCreadaId;
 
+                    if (idOrden > 0)
+                    {
+                        // Consultar los detalles completos de la orden
+                        DataTable dtOrden = OrdenesD.ObtenerDetallesOrdenPorId(idOrden);
+
+                        if (dtOrden.Rows.Count > 0)
+                        {
+                            DataRow row = dtOrden.Rows[0];
+
+                            // Abrir el formulario de gestión de órdenes con los datos
+                            FormGestionOrdenes formGestion = new FormGestionOrdenes(
+                                idOrden,
+                                row["nombreCliente"].ToString(),
+                                Convert.ToDecimal(row["total"]),
+                                Convert.ToDecimal(row["descuento"]),
+                                row["fecha_orden"].ToString(),
+                                row["numero_mesa"].ToString(),
+                                row["tipo_pago"].ToString(),
+                                row["nombre_usuario"].ToString(),
+                                row["estado_orden"].ToString()
+                            );
+
+                            formGestion.ShowDialog();
+
+                            // Refrescar la lista de órdenes después de cerrar
+                            CargarOrdenes(mostrarSoloHoy);
+                        }
+                    }
+                }
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)

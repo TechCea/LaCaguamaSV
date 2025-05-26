@@ -336,6 +336,45 @@ namespace LaCaguamaSV.Configuracion
             return dt;
         }
 
+        public static DataTable ObtenerDetallesOrdenPorId(int idOrden)
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                using (MySqlConnection conexion = new Conexion().EstablecerConexion())
+                {
+                    string query = @"
+                SELECT 
+                    o.id_orden,
+                    o.nombreCliente,
+                    o.total,
+                    o.descuento,
+                    DATE_FORMAT(o.fecha_orden, '%Y-%m-%d %H:%i') AS fecha_orden,
+                    m.nombreMesa AS numero_mesa,
+                    tp.nombrePago AS tipo_pago,
+                    u.nombre AS nombre_usuario,
+                    eo.nombreEstadoO AS estado_orden
+                FROM ordenes o
+                JOIN mesas m ON o.id_mesa = m.id_mesa
+                JOIN tipoPago tp ON o.tipo_pago = tp.id_pago
+                JOIN usuarios u ON o.id_usuario = u.id_usuario
+                JOIN estado_orden eo ON o.id_estadoO = eo.id_estadoO
+                WHERE o.id_orden = @idOrden";
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@idOrden", idOrden);
+                        MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                        da.Fill(dt);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al obtener detalles de orden: {ex.Message}");
+            }
+            return dt;
+        }
 
         public static DataTable ObtenerMesasDisponibles(int idMesaActual)
         {
