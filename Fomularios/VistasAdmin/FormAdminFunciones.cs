@@ -754,9 +754,9 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                     string rutaRespaldo = sfd.FileName;
                     string usuario = "root";
                     string contraseña = "Caguama2025";
-                    string baseDeDatos = "lacaguamabd";
+                    string baseDeDatos = "LaCaguamaBD";
                     string servidor = "localhost";
-                    int puerto = 3307; // Especificamos el puerto 3307 aquí
+                    int puerto = 3306; // Especificamos el puerto 3307 aquí
 
                     string mysqldumpPath = @"C:\Program Files\MySQL\MySQL Server 9.3\bin\mysqldump.exe";
 
@@ -1302,7 +1302,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                     string rutaArchivo = dialog.FileName;
                     string usuario = "root";
                     string contraseña = "Caguama2025";
-                    string baseDeDatos = "lacaguamabd";
+                    string baseDeDatos = "LaCaguamaBD";
                     string servidor = "localhost";
                     int puerto = 3306; // Especificamos el puerto 3307 aquí
                     string mysqlPath = @"C:\Program Files\MySQL\MySQL Server 9.3\bin\mysql.exe";

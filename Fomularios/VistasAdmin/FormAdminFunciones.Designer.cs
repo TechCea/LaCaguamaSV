@@ -864,7 +864,7 @@
             this.label10.BackColor = System.Drawing.Color.Transparent;
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label10.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.label10.Location = new System.Drawing.Point(836, 171);
+            this.label10.Location = new System.Drawing.Point(992, 172);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(217, 25);
             this.label10.TabIndex = 28;
@@ -922,7 +922,7 @@
             this.Btn_Vendasday.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.Btn_Vendasday.Image = global::LaCaguamaSV.Properties.Resources.historial_de_transacciones;
             this.Btn_Vendasday.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.Btn_Vendasday.Location = new System.Drawing.Point(1116, 226);
+            this.Btn_Vendasday.Location = new System.Drawing.Point(988, 583);
             this.Btn_Vendasday.Name = "Btn_Vendasday";
             this.Btn_Vendasday.Size = new System.Drawing.Size(216, 74);
             this.Btn_Vendasday.TabIndex = 31;
@@ -940,7 +940,7 @@
             this.btnImportarBD.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.btnImportarBD.Image = global::LaCaguamaSV.Properties.Resources.respaldo;
             this.btnImportarBD.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnImportarBD.Location = new System.Drawing.Point(870, 42);
+            this.btnImportarBD.Location = new System.Drawing.Point(1151, 226);
             this.btnImportarBD.Name = "btnImportarBD";
             this.btnImportarBD.Size = new System.Drawing.Size(171, 74);
             this.btnImportarBD.TabIndex = 32;
