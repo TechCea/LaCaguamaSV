@@ -1161,21 +1161,22 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
                 using (MySqlConnection conn = conexion.EstablecerConexion())
                 {
-                    // 1. Obtener platos vendidos en órdenes cerradas
+                    // 1. Obtener platos vendidos en órdenes cerradas (MODIFICADO)
                     string queryPlatos = @"
-                SELECT 
-                    'Plato' AS Tipo,
-                    p.nombrePlato AS Nombre,
-                    COUNT(pd.id_pedido) AS Cantidad,
-                    SUM(p.precioUnitario) AS Total
-                FROM pedidos pd
-                JOIN platos p ON pd.id_plato = p.id_plato
-                JOIN ordenes o ON pd.id_orden = o.id_orden
-                WHERE o.fecha_orden >= @inicio 
-                  AND o.fecha_orden < @fin
-                  AND o.id_estadoO = 2 -- Solo órdenes cerradas (pagadas)
-                GROUP BY p.nombrePlato
-                ORDER BY Cantidad DESC";
+                    SELECT 
+                        'Plato' AS Tipo,
+                        p.nombrePlato AS Nombre,
+                        SUM(pd.Cantidad) AS Cantidad,  -- Cambiado de COUNT a SUM
+                        SUM(p.precioUnitario * pd.Cantidad) AS Total  -- Multiplicar precio por cantidad
+                    FROM pedidos pd
+                    JOIN platos p ON pd.id_plato = p.id_plato
+                    JOIN ordenes o ON pd.id_orden = o.id_orden
+                    WHERE o.fecha_orden >= @inicio 
+                      AND o.fecha_orden < @fin
+                      AND o.id_estadoO = 2
+                    GROUP BY p.nombrePlato
+                    ORDER BY Cantidad DESC";
+
 
                     using (MySqlCommand cmd = new MySqlCommand(queryPlatos, conn))
                     {
@@ -1196,20 +1197,20 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                         }
                     }
 
-                    // 2. Obtener bebidas vendidas en órdenes cerradas
+                    // 2. Obtener bebidas vendidas en órdenes cerradas (MODIFICADO)
                     string queryBebidas = @"
                 SELECT 
                     'Bebida' AS Tipo,
                     i.nombreProducto AS Nombre,
-                    COUNT(pd.id_pedido) AS Cantidad,
-                    SUM(b.precioUnitario) AS Total
+                    SUM(pd.Cantidad) AS Cantidad,  -- Cambiado de COUNT a SUM
+                    SUM(b.precioUnitario * pd.Cantidad) AS Total  -- Multiplicar precio por cantidad
                 FROM pedidos pd
                 JOIN bebidas b ON pd.id_bebida = b.id_bebida
                 JOIN inventario i ON b.id_inventario = i.id_inventario
                 JOIN ordenes o ON pd.id_orden = o.id_orden
                 WHERE o.fecha_orden >= @inicio 
                   AND o.fecha_orden < @fin
-                  AND o.id_estadoO = 2 -- Solo órdenes cerradas (pagadas)
+                  AND o.id_estadoO = 2
                 GROUP BY i.nombreProducto
                 ORDER BY Cantidad DESC";
 
@@ -1232,22 +1233,23 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                         }
                     }
 
-                    // 3. Obtener extras vendidos en órdenes cerradas
+                    // 3. Obtener extras vendidos en órdenes cerradas (MODIFICADO)
                     string queryExtras = @"
                 SELECT 
                     'Extra' AS Tipo,
                     i.nombreProducto AS Nombre,
-                    COUNT(pd.id_pedido) AS Cantidad,
-                    SUM(e.precioUnitario) AS Total
+                    SUM(pd.Cantidad) AS Cantidad,  -- Cambiado de COUNT a SUM
+                    SUM(e.precioUnitario * pd.Cantidad) AS Total  -- Multiplicar precio por cantidad
                 FROM pedidos pd
                 JOIN extras e ON pd.id_extra = e.id_extra
                 JOIN inventario i ON e.id_inventario = i.id_inventario
                 JOIN ordenes o ON pd.id_orden = o.id_orden
                 WHERE o.fecha_orden >= @inicio 
                   AND o.fecha_orden < @fin
-                  AND o.id_estadoO = 2 -- Solo órdenes cerradas (pagadas)
+                  AND o.id_estadoO = 2
                 GROUP BY i.nombreProducto
                 ORDER BY Cantidad DESC";
+
 
                     using (MySqlCommand cmd = new MySqlCommand(queryExtras, conn))
                     {
