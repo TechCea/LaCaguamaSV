@@ -77,6 +77,7 @@
             this.txtDescripcion.Name = "txtDescripcion";
             this.txtDescripcion.Size = new System.Drawing.Size(245, 76);
             this.txtDescripcion.TabIndex = 1;
+            this.txtDescripcion.TextChanged += new System.EventHandler(this.txtDescripcion_TextChanged);
             // 
             // dgvGastos
             // 
@@ -97,7 +98,7 @@
             this.btnAgregarGasto.ForeColor = System.Drawing.SystemColors.Control;
             this.btnAgregarGasto.Image = global::LaCaguamaSV.Properties.Resources.confirmar2;
             this.btnAgregarGasto.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnAgregarGasto.Location = new System.Drawing.Point(135, 583);
+            this.btnAgregarGasto.Location = new System.Drawing.Point(195, 560);
             this.btnAgregarGasto.Name = "btnAgregarGasto";
             this.btnAgregarGasto.Size = new System.Drawing.Size(128, 47);
             this.btnAgregarGasto.TabIndex = 5;
@@ -356,7 +357,7 @@
             this.btnResetearFiltro.ForeColor = System.Drawing.SystemColors.Control;
             this.btnResetearFiltro.Image = global::LaCaguamaSV.Properties.Resources.actualizar;
             this.btnResetearFiltro.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnResetearFiltro.Location = new System.Drawing.Point(1048, 583);
+            this.btnResetearFiltro.Location = new System.Drawing.Point(1060, 573);
             this.btnResetearFiltro.Name = "btnResetearFiltro";
             this.btnResetearFiltro.Size = new System.Drawing.Size(128, 47);
             this.btnResetearFiltro.TabIndex = 46;

@@ -258,6 +258,15 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         // Evento para agregar un nuevo gasto
         private void btnAgregarGasto_Click(object sender, EventArgs e)
         {
+
+
+            if (string.IsNullOrWhiteSpace(txtCantidad.Text) || string.IsNullOrWhiteSpace(txtDescripcion.Text))
+            {
+                MessageBox.Show("Por favor completa todos los campos.");
+                return;
+            }
+
+
             try
             {
                 // Validar campos vacíos
@@ -464,6 +473,11 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         }
 
         private void dgvGastos_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void txtDescripcion_TextChanged(object sender, EventArgs e)
         {
 
         }

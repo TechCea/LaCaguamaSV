@@ -149,6 +149,14 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
         private void btnConfirmarMonto_Click(object sender, EventArgs e)
         {
+
+            if (!decimal.TryParse(txtMontoContado.Text, out decimal cantidad) || cantidad <= 0)
+            {
+                MessageBox.Show("Ingresa una cantidad válida y mayor a cero.");
+                return;
+            }
+
+
             // Convertir el monto ingresado en el TextBox a decimal
             if (!decimal.TryParse(txtMontoContado.Text, out decimal montoContado))
             {
@@ -480,6 +488,14 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             decimal monto;
 
+
+
+
+            if (!decimal.TryParse(txtMontoCaja.Text, out decimal cantidad) || cantidad <= 0)
+            {
+                MessageBox.Show("Ingresa una cantidad válida y mayor a cero.");
+                return;
+            }
 
             // Intentamos convertir el monto ingresado
             if (decimal.TryParse(txtMontoCaja.Text, out monto))

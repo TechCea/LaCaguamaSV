@@ -542,6 +542,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Picsart_25-05-11_20-50-59-725.ico" />
+    <None Include="Resources\reporte %281%29.png" />
+    <None Include="Resources\reporte.png" />
     <None Include="Resources\promocion.png" />
     <None Include="Resources\usuario.png" />
     <None Include="Resources\historial-de-transacciones1.png" />

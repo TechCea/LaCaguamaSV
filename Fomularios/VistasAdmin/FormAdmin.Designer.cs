@@ -227,7 +227,7 @@
             // 
             // btnFiltrarOrdenes
             // 
-            this.btnFiltrarOrdenes.BackColor = System.Drawing.Color.Gold;
+            this.btnFiltrarOrdenes.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
             this.btnFiltrarOrdenes.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnFiltrarOrdenes.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnFiltrarOrdenes.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));

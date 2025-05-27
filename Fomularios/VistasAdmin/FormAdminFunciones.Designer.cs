@@ -112,7 +112,7 @@
             this.Corte_Caja.ForeColor = System.Drawing.SystemColors.Control;
             this.Corte_Caja.Image = global::LaCaguamaSV.Properties.Resources.cajero_automatico__2_;
             this.Corte_Caja.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.Corte_Caja.Location = new System.Drawing.Point(115, 318);
+            this.Corte_Caja.Location = new System.Drawing.Point(110, 274);
             this.Corte_Caja.Name = "Corte_Caja";
             this.Corte_Caja.Size = new System.Drawing.Size(195, 74);
             this.Corte_Caja.TabIndex = 1;
@@ -126,7 +126,7 @@
             this.label2.BackColor = System.Drawing.Color.Transparent;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.label2.Location = new System.Drawing.Point(89, 172);
+            this.label2.Location = new System.Drawing.Point(84, 128);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(254, 25);
             this.label2.TabIndex = 3;
@@ -138,7 +138,7 @@
             this.label3.BackColor = System.Drawing.Color.Transparent;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.label3.Location = new System.Drawing.Point(1025, 339);
+            this.label3.Location = new System.Drawing.Point(994, 296);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(107, 25);
             this.label3.TabIndex = 4;
@@ -153,7 +153,7 @@
             this.btnCorte_tarjetas.ForeColor = System.Drawing.SystemColors.Control;
             this.btnCorte_tarjetas.Image = global::LaCaguamaSV.Properties.Resources.tarjeta_de_fidelidad;
             this.btnCorte_tarjetas.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnCorte_tarjetas.Location = new System.Drawing.Point(456, 216);
+            this.btnCorte_tarjetas.Location = new System.Drawing.Point(451, 172);
             this.btnCorte_tarjetas.Name = "btnCorte_tarjetas";
             this.btnCorte_tarjetas.Size = new System.Drawing.Size(209, 74);
             this.btnCorte_tarjetas.TabIndex = 5;
@@ -172,7 +172,7 @@
             this.btnCorte_general.ForeColor = System.Drawing.SystemColors.Control;
             this.btnCorte_general.Image = global::LaCaguamaSV.Properties.Resources.cajero_automatico__1_;
             this.btnCorte_general.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnCorte_general.Location = new System.Drawing.Point(456, 318);
+            this.btnCorte_general.Location = new System.Drawing.Point(451, 274);
             this.btnCorte_general.Name = "btnCorte_general";
             this.btnCorte_general.Size = new System.Drawing.Size(209, 74);
             this.btnCorte_general.TabIndex = 6;
@@ -182,18 +182,19 @@
             // 
             // btnReimprimir_corte_general
             // 
-            this.btnReimprimir_corte_general.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.btnReimprimir_corte_general.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
             this.btnReimprimir_corte_general.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnReimprimir_corte_general.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnReimprimir_corte_general.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnReimprimir_corte_general.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.btnReimprimir_corte_general.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.btnReimprimir_corte_general.Image = ((System.Drawing.Image)(resources.GetObject("btnReimprimir_corte_general.Image")));
             this.btnReimprimir_corte_general.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnReimprimir_corte_general.Location = new System.Drawing.Point(456, 420);
+            this.btnReimprimir_corte_general.Location = new System.Drawing.Point(451, 376);
             this.btnReimprimir_corte_general.Name = "btnReimprimir_corte_general";
+            this.btnReimprimir_corte_general.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.btnReimprimir_corte_general.Size = new System.Drawing.Size(209, 74);
             this.btnReimprimir_corte_general.TabIndex = 7;
-            this.btnReimprimir_corte_general.Text = "Reimprimir Corte\r\n General";
+            this.btnReimprimir_corte_general.Text = "Reimprimir Corte\r\n      General";
             this.btnReimprimir_corte_general.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnReimprimir_corte_general.UseVisualStyleBackColor = false;
             this.btnReimprimir_corte_general.Click += new System.EventHandler(this.btnReimprimir_corte_general_Click);
@@ -205,7 +206,7 @@
             this.button9.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button9.ForeColor = System.Drawing.Color.White;
-            this.button9.Location = new System.Drawing.Point(1235, 64);
+            this.button9.Location = new System.Drawing.Point(1347, 12);
             this.button9.Name = "button9";
             this.button9.Size = new System.Drawing.Size(80, 32);
             this.button9.TabIndex = 11;
@@ -525,7 +526,7 @@
             this.btnCajaInicial.ForeColor = System.Drawing.SystemColors.Control;
             this.btnCajaInicial.Image = global::LaCaguamaSV.Properties.Resources.cajero_automatico;
             this.btnCajaInicial.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnCajaInicial.Location = new System.Drawing.Point(115, 216);
+            this.btnCajaInicial.Location = new System.Drawing.Point(110, 172);
             this.btnCajaInicial.Name = "btnCajaInicial";
             this.btnCajaInicial.Size = new System.Drawing.Size(195, 74);
             this.btnCajaInicial.TabIndex = 15;
@@ -543,7 +544,7 @@
             this.Gastos.ForeColor = System.Drawing.SystemColors.Control;
             this.Gastos.Image = global::LaCaguamaSV.Properties.Resources.gasto;
             this.Gastos.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.Gastos.Location = new System.Drawing.Point(870, 405);
+            this.Gastos.Location = new System.Drawing.Point(839, 362);
             this.Gastos.Name = "Gastos";
             this.Gastos.Size = new System.Drawing.Size(171, 74);
             this.Gastos.TabIndex = 16;
@@ -831,7 +832,7 @@
             this.btnRespaldarBD.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.btnRespaldarBD.Image = global::LaCaguamaSV.Properties.Resources.respaldo;
             this.btnRespaldarBD.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnRespaldarBD.Location = new System.Drawing.Point(870, 226);
+            this.btnRespaldarBD.Location = new System.Drawing.Point(839, 183);
             this.btnRespaldarBD.Name = "btnRespaldarBD";
             this.btnRespaldarBD.Size = new System.Drawing.Size(171, 74);
             this.btnRespaldarBD.TabIndex = 25;
@@ -842,14 +843,14 @@
             // 
             // button1
             // 
-            this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.button1.BackColor = System.Drawing.Color.DarkCyan;
             this.button1.Cursor = System.Windows.Forms.Cursors.Hand;
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.button1.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.button1.Image = global::LaCaguamaSV.Properties.Resources.historial_de_transacciones;
             this.button1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button1.Location = new System.Drawing.Point(1116, 407);
+            this.button1.Location = new System.Drawing.Point(1085, 364);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(216, 74);
             this.button1.TabIndex = 27;
@@ -864,7 +865,7 @@
             this.label10.BackColor = System.Drawing.Color.Transparent;
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label10.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.label10.Location = new System.Drawing.Point(992, 172);
+            this.label10.Location = new System.Drawing.Point(961, 129);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(217, 25);
             this.label10.TabIndex = 28;
@@ -876,7 +877,7 @@
             this.label1.BackColor = System.Drawing.Color.Transparent;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.label1.Location = new System.Drawing.Point(420, 172);
+            this.label1.Location = new System.Drawing.Point(415, 128);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(245, 25);
             this.label1.TabIndex = 29;
@@ -884,15 +885,16 @@
             // 
             // btnReimprimirCorte
             // 
-            this.btnReimprimirCorte.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.btnReimprimirCorte.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
             this.btnReimprimirCorte.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnReimprimirCorte.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnReimprimirCorte.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnReimprimirCorte.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.btnReimprimirCorte.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.btnReimprimirCorte.Image = ((System.Drawing.Image)(resources.GetObject("btnReimprimirCorte.Image")));
             this.btnReimprimirCorte.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnReimprimirCorte.Location = new System.Drawing.Point(115, 420);
+            this.btnReimprimirCorte.Location = new System.Drawing.Point(110, 376);
             this.btnReimprimirCorte.Name = "btnReimprimirCorte";
+            this.btnReimprimirCorte.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.btnReimprimirCorte.Size = new System.Drawing.Size(195, 74);
             this.btnReimprimirCorte.TabIndex = 30;
             this.btnReimprimirCorte.Text = "Reimprimir Corte";
@@ -905,24 +907,25 @@
             this.lbl_caja.AutoSize = true;
             this.lbl_caja.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
             this.lbl_caja.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.lbl_caja.Location = new System.Drawing.Point(100, 55);
+            this.lbl_caja.Location = new System.Drawing.Point(100, 64);
             this.lbl_caja.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbl_caja.Name = "lbl_caja";
             this.lbl_caja.Size = new System.Drawing.Size(109, 24);
             this.lbl_caja.TabIndex = 24;
             this.lbl_caja.Text = "Caja activa: ";
+            this.lbl_caja.Visible = false;
             this.lbl_caja.Click += new System.EventHandler(this.lbl_caja_Click);
             // 
             // Btn_Vendasday
             // 
-            this.Btn_Vendasday.BackColor = System.Drawing.Color.Lime;
+            this.Btn_Vendasday.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
             this.Btn_Vendasday.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Btn_Vendasday.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Btn_Vendasday.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Btn_Vendasday.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.Btn_Vendasday.Image = global::LaCaguamaSV.Properties.Resources.historial_de_transacciones;
+            this.Btn_Vendasday.ForeColor = System.Drawing.SystemColors.ButtonFace;
+            this.Btn_Vendasday.Image = global::LaCaguamaSV.Properties.Resources.reporte__1_;
             this.Btn_Vendasday.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.Btn_Vendasday.Location = new System.Drawing.Point(988, 583);
+            this.Btn_Vendasday.Location = new System.Drawing.Point(942, 460);
             this.Btn_Vendasday.Name = "Btn_Vendasday";
             this.Btn_Vendasday.Size = new System.Drawing.Size(216, 74);
             this.Btn_Vendasday.TabIndex = 31;
@@ -940,7 +943,7 @@
             this.btnImportarBD.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.btnImportarBD.Image = global::LaCaguamaSV.Properties.Resources.respaldo;
             this.btnImportarBD.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnImportarBD.Location = new System.Drawing.Point(1151, 226);
+            this.btnImportarBD.Location = new System.Drawing.Point(1120, 183);
             this.btnImportarBD.Name = "btnImportarBD";
             this.btnImportarBD.Size = new System.Drawing.Size(171, 74);
             this.btnImportarBD.TabIndex = 32;
@@ -956,7 +959,7 @@
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.fondo;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(1386, 724);
+            this.ClientSize = new System.Drawing.Size(1456, 662);
             this.Controls.Add(this.btnImportarBD);
             this.Controls.Add(this.Btn_Vendasday);
             this.Controls.Add(this.btnReimprimirCorte);
