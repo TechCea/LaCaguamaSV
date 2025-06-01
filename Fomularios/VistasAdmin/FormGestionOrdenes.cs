@@ -284,6 +284,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             string nombre = row.Cells["nombre"].Value.ToString();
             decimal precio = Convert.ToDecimal(row.Cells["precioUnitario"].Value);
 
+
             // Mostrar formulario de cantidad con notas solo para platos
             var cantidadForm = new Form()
             {
@@ -386,7 +387,11 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 if (tipoActual == "PROMOCION")
                 {
                     string mensajeInventario;
-                    resultado = OrdenesD.AgregarPromocionAOrden(Convert.ToInt32(lblIdOrden.Text), idItem, cantidad, out mensajeInventario);
+                    resultado = OrdenesD.AgregarPromocionAOrden(
+                        Convert.ToInt32(lblIdOrden.Text),
+                        idItem,
+                        cantidad,
+                        out mensajeInventario);
 
                     if (!string.IsNullOrEmpty(mensajeInventario))
                     {
@@ -397,11 +402,10 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
                         if (result == DialogResult.Yes)
                         {
-                            resultado = OrdenesD.AgregarPromocionAOrdenForzado(Convert.ToInt32(lblIdOrden.Text), idItem, cantidad);
-                        }
-                        else
-                        {
-                            resultado = false;
+                            resultado = OrdenesD.AgregarPromocionAOrdenForzado(
+                                Convert.ToInt32(lblIdOrden.Text),
+                                idItem,
+                                cantidad);
                         }
                     }
                 }
@@ -445,68 +449,66 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                     {
                         bool crearNuevoPedido = true;
 
-                        // Solo verificar pedidos existentes si es un plato SIN nota
-                        if (tipoItem.ToUpper() == "PLATO" && string.IsNullOrWhiteSpace(nota))
+                        // Solo verificar pedidos existentes si es un plato SIN nota o una promoción
+                        if ((tipoItem.ToUpper() == "PLATO" && string.IsNullOrWhiteSpace(nota)) ||
+                            tipoItem.ToUpper() == "PROMOCION")
                         {
-                            // Primero obtenemos todos los pedidos sin nota en una lista
-                            List<(int idPedido, int cantidad)> pedidosSinNota = new List<(int, int)>();
-
-                            string queryVerificar = @"SELECT p.id_pedido, p.Cantidad 
-                        FROM pedidos p
-                        LEFT JOIN notas_pedidos np ON p.id_pedido = np.id_pedido
-                        WHERE p.id_orden = @idOrden AND 
-                              p.id_plato = @idPlato AND
-                              (np.nota IS NULL OR np.nota = '')";
+                            string queryVerificar = tipoItem.ToUpper() == "PLATO" ?
+                                @"SELECT p.id_pedido, p.Cantidad 
+                          FROM pedidos p
+                          LEFT JOIN notas_pedidos np ON p.id_pedido = np.id_pedido
+                          WHERE p.id_orden = @idOrden AND 
+                                p.id_plato = @idItem AND
+                                (np.nota IS NULL OR np.nota = '')" :
+                                @"SELECT p.id_pedido, p.Cantidad 
+                          FROM pedidos p
+                          WHERE p.id_orden = @idOrden AND 
+                                p.id_promocion = @idItem";
 
                             using (MySqlCommand cmdVerificar = new MySqlCommand(queryVerificar, conexion, transaction))
                             {
                                 cmdVerificar.Parameters.AddWithValue("@idOrden", Convert.ToInt32(lblIdOrden.Text));
-                                cmdVerificar.Parameters.AddWithValue("@idPlato", idItem);
+                                cmdVerificar.Parameters.AddWithValue("@idItem", idItem);
 
                                 using (var reader = cmdVerificar.ExecuteReader())
                                 {
-                                    while (reader.Read())
+                                    if (reader.Read())
                                     {
-                                        pedidosSinNota.Add((
-                                            reader.GetInt32("id_pedido"),
-                                            reader.GetInt32("Cantidad")
-                                        ));
+                                        int idPedidoExistente = reader.GetInt32("id_pedido");
+                                        int cantidadExistente = reader.GetInt32("Cantidad");
+
+                                        string queryActualizar = @"UPDATE pedidos 
+                                    SET Cantidad = @nuevaCantidad 
+                                    WHERE id_pedido = @idPedido";
+
+                                        reader.Close(); // Cerrar el reader antes de ejecutar otro comando
+
+                                        using (MySqlCommand cmdActualizar = new MySqlCommand(queryActualizar, conexion, transaction))
+                                        {
+                                            cmdActualizar.Parameters.AddWithValue("@idPedido", idPedidoExistente);
+                                            cmdActualizar.Parameters.AddWithValue("@nuevaCantidad", cantidadExistente + cantidad);
+                                            cmdActualizar.ExecuteNonQuery();
+                                        }
+
+                                        crearNuevoPedido = false;
                                     }
-                                } // El reader se cierra automáticamente aquí
-                            }
-
-                            // Si encontramos pedidos sin nota, actualizamos el primero
-                            if (pedidosSinNota.Count > 0)
-                            {
-                                var primerPedido = pedidosSinNota[0];
-
-                                string queryActualizar = @"UPDATE pedidos 
-                                SET Cantidad = @nuevaCantidad 
-                                WHERE id_pedido = @idPedido";
-
-                                using (MySqlCommand cmdActualizar = new MySqlCommand(queryActualizar, conexion, transaction))
-                                {
-                                    cmdActualizar.Parameters.AddWithValue("@idPedido", primerPedido.idPedido);
-                                    cmdActualizar.Parameters.AddWithValue("@nuevaCantidad", primerPedido.cantidad + cantidad);
-                                    cmdActualizar.ExecuteNonQuery();
                                 }
-
-                                crearNuevoPedido = false;
                             }
                         }
 
                         if (crearNuevoPedido)
                         {
                             string queryInsertar = @"INSERT INTO pedidos 
-                           (id_orden, id_estadoP, id_plato, id_bebida, id_extra, id_promocion, Cantidad) 
-                           VALUES (@idOrden, 1, @idPlato, @idBebida, @idExtra, @idPromocion, @cantidad);
-                           SELECT LAST_INSERT_ID();";
+                       (id_orden, id_estadoP, id_plato, id_bebida, id_extra, id_promocion, Cantidad) 
+                       VALUES (@idOrden, 1, @idPlato, @idBebida, @idExtra, @idPromocion, @cantidad);
+                       SELECT LAST_INSERT_ID();";
 
                             using (MySqlCommand cmdInsertar = new MySqlCommand(queryInsertar, conexion, transaction))
                             {
                                 cmdInsertar.Parameters.AddWithValue("@idOrden", Convert.ToInt32(lblIdOrden.Text));
                                 cmdInsertar.Parameters.AddWithValue("@cantidad", cantidad);
 
+                                // Configurar parámetros según el tipo de ítem
                                 switch (tipoItem.ToUpper())
                                 {
                                     case "PLATO":
@@ -527,11 +529,17 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                                         cmdInsertar.Parameters.AddWithValue("@idExtra", idItem);
                                         cmdInsertar.Parameters.AddWithValue("@idPromocion", DBNull.Value);
                                         break;
+                                    case "PROMOCION":
+                                        cmdInsertar.Parameters.AddWithValue("@idPlato", DBNull.Value);
+                                        cmdInsertar.Parameters.AddWithValue("@idBebida", DBNull.Value);
+                                        cmdInsertar.Parameters.AddWithValue("@idExtra", DBNull.Value);
+                                        cmdInsertar.Parameters.AddWithValue("@idPromocion", idItem);
+                                        break;
                                 }
 
                                 int idPedidoInsertado = Convert.ToInt32(cmdInsertar.ExecuteScalar());
 
-                                if (!string.IsNullOrWhiteSpace(nota))
+                                if (!string.IsNullOrWhiteSpace(nota) && tipoItem.ToUpper() == "PLATO")
                                 {
                                     OrdenesD.GuardarNotaPedido(idPedidoInsertado, nota, transaction);
                                 }
@@ -962,18 +970,18 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             using (MySqlConnection conexion = new Conexion().EstablecerConexion())
             {
                 string query = @"
-        SELECT 
-            IFNULL(SUM(
-                CASE 
-                    WHEN p.id_plato IS NOT NULL THEN (SELECT pl.precioUnitario FROM platos pl WHERE pl.id_plato = p.id_plato) * p.Cantidad
-                    WHEN p.id_bebida IS NOT NULL THEN (SELECT b.precioUnitario FROM bebidas b WHERE b.id_bebida = p.id_bebida) * p.Cantidad
-                    WHEN p.id_extra IS NOT NULL THEN (SELECT e.precioUnitario FROM extras e WHERE e.id_extra = p.id_extra) * p.Cantidad
-                    WHEN p.id_promocion IS NOT NULL THEN (SELECT pr.precio_especial FROM promociones pr WHERE pr.id_promocion = p.id_promocion) * p.Cantidad
-                    ELSE 0
-                END
-            ), 0) AS Total
-        FROM pedidos p
-        WHERE p.id_orden = @idOrden";
+SELECT 
+    IFNULL(SUM(
+        CASE 
+            WHEN p.id_plato IS NOT NULL THEN (SELECT pl.precioUnitario FROM platos pl WHERE pl.id_plato = p.id_plato) * p.Cantidad
+            WHEN p.id_bebida IS NOT NULL THEN (SELECT b.precioUnitario FROM bebidas b WHERE b.id_bebida = p.id_bebida) * p.Cantidad
+            WHEN p.id_extra IS NOT NULL THEN (SELECT e.precioUnitario FROM extras e WHERE e.id_extra = p.id_extra) * p.Cantidad
+            WHEN p.id_promocion IS NOT NULL THEN (SELECT pr.precio_especial FROM promociones pr WHERE pr.id_promocion = p.id_promocion) * p.Cantidad
+            ELSE 0
+        END
+    ), 0) AS Total
+FROM pedidos p
+WHERE p.id_orden = @idOrden";
 
                 using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                 {
@@ -1002,29 +1010,33 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
             using (MySqlConnection conexion = new Conexion().EstablecerConexion())
             {
-                // Primero cargamos todos los pedidos
+                // Consulta mejorada que incluye promociones
                 string queryPedidos = @"SELECT 
-                        p.id_pedido,
-                        COALESCE(
-                            pl.nombrePlato,
-                            (SELECT i.nombreProducto FROM bebidas b JOIN inventario i ON b.id_inventario = i.id_inventario WHERE b.id_bebida = p.id_bebida),
-                            (SELECT i.nombreProducto FROM extras e JOIN inventario i ON e.id_inventario = i.id_inventario WHERE e.id_extra = p.id_extra)
-                        ) AS nombre,
-                        COALESCE(
-                            pl.precioUnitario,
-                            (SELECT b.precioUnitario FROM bebidas b WHERE b.id_bebida = p.id_bebida),
-                            (SELECT e.precioUnitario FROM extras e WHERE e.id_extra = p.id_extra)
-                        ) AS precio,
-                        p.Cantidad,
-                        CASE
-                            WHEN p.id_plato IS NOT NULL THEN 'PLATO'
-                            WHEN p.id_bebida IS NOT NULL THEN 'BEBIDA'
-                            WHEN p.id_extra IS NOT NULL THEN 'EXTRA'
-                            ELSE 'DESCONOCIDO'
-                        END AS tipo
-                    FROM pedidos p
-                    LEFT JOIN platos pl ON p.id_plato = pl.id_plato
-                    WHERE p.id_orden = @idOrden";
+                p.id_pedido,
+                COALESCE(
+                    pl.nombrePlato,
+                    (SELECT i.nombreProducto FROM bebidas b JOIN inventario i ON b.id_inventario = i.id_inventario WHERE b.id_bebida = p.id_bebida),
+                    (SELECT i.nombreProducto FROM extras e JOIN inventario i ON e.id_inventario = i.id_inventario WHERE e.id_extra = p.id_extra),
+                    pr.nombre
+                ) AS nombre,
+                COALESCE(
+                    pl.precioUnitario,
+                    (SELECT b.precioUnitario FROM bebidas b WHERE b.id_bebida = p.id_bebida),
+                    (SELECT e.precioUnitario FROM extras e WHERE e.id_extra = p.id_extra),
+                    pr.precio_especial
+                ) AS precio,
+                p.Cantidad,
+                CASE
+                    WHEN p.id_plato IS NOT NULL THEN 'PLATO'
+                    WHEN p.id_bebida IS NOT NULL THEN 'BEBIDA'
+                    WHEN p.id_extra IS NOT NULL THEN 'EXTRA'
+                    WHEN p.id_promocion IS NOT NULL THEN 'PROMOCION'
+                    ELSE 'DESCONOCIDO'
+                END AS tipo
+            FROM pedidos p
+            LEFT JOIN platos pl ON p.id_plato = pl.id_plato
+            LEFT JOIN promociones pr ON p.id_promocion = pr.id_promocion
+            WHERE p.id_orden = @idOrden";
 
                 using (MySqlCommand cmdPedidos = new MySqlCommand(queryPedidos, conexion))
                 {
@@ -1315,8 +1327,65 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             try
             {
+                dataGridViewMenu.AutoGenerateColumns = false;
+                dataGridViewMenu.Columns.Clear();
+
+                // Configurar columnas
+                dataGridViewMenu.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "ID",
+                    HeaderText = "ID",
+                    Name = "ID",
+                    Width = 50,
+                    Visible = false
+                });
+
+                dataGridViewMenu.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "nombre",
+                    HeaderText = "Nombre",
+                    Name = "nombre",
+                    Width = 200,
+                    DefaultCellStyle = new DataGridViewCellStyle
+                    {
+                        Font = new Font("Arial", 9, FontStyle.Bold),
+                        ForeColor = Color.Black
+                    }
+                });
+
+                dataGridViewMenu.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "precioUnitario",
+                    HeaderText = "Precio",
+                    Name = "precioUnitario",
+                    Width = 80,
+                    DefaultCellStyle = new DataGridViewCellStyle
+                    {
+                        Format = "C2",
+                        Font = new Font("Arial", 9),
+                        ForeColor = Color.DarkGreen,
+                        Alignment = DataGridViewContentAlignment.MiddleRight
+                    }
+                });
+
+                dataGridViewMenu.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "descripcion",
+                    HeaderText = "Descripción",
+                    Name = "descripcion",
+                    Width = 300,  // Aumentar el ancho si es necesario
+                    DefaultCellStyle = new DataGridViewCellStyle
+                    {
+                        Font = new Font("Arial", 8),
+                        ForeColor = Color.Gray,
+                        WrapMode = DataGridViewTriState.True  // Permitir múltiples líneas
+                    }
+                });
+
+                // Cargar datos
                 dataGridViewMenu.DataSource = OrdenesD.ObtenerPromocionesActivas();
-                dataGridViewMenu.Tag = "PROMOCION"; // Establecer el tipo actual
+                dataGridViewMenu.Tag = "PROMOCION";
+                tipoItemActual = "PROMOCION";
             }
             catch (Exception ex)
             {

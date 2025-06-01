@@ -600,7 +600,7 @@ namespace LaCaguamaSV.Configuracion
               EXISTS (SELECT 1 FROM recetas r WHERE r.id_plato = p.id_plato AND r.id_inventario = i.id_inventario)))
         WHERE pi.id_promocion = @idPromocion
         GROUP BY i.id_inventario
-        HAVING diferencia < 0 OR i.cantidad < 6"; // Umbral de stock bajo
+        HAVING diferencia < 0 OR i.cantidad < 2"; // Umbral de stock bajo
 
                 using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                 {
@@ -631,15 +631,16 @@ namespace LaCaguamaSV.Configuracion
             using (MySqlConnection conexion = new Conexion().EstablecerConexion())
             {
                 string query = @"
-        SELECT 
-            p.id_promocion AS ID,
-            p.nombre AS nombre,
-            p.precio_especial AS precioUnitario,
-            'PROMOCION' AS Tipo
-        FROM promociones p
-        WHERE p.activa = TRUE 
-        AND (p.fecha_fin IS NULL OR p.fecha_fin >= CURDATE())
-        AND p.fecha_inicio <= CURDATE()";
+            SELECT 
+                p.id_promocion AS ID,
+                p.nombre AS nombre,
+                p.precio_especial AS precioUnitario,
+                p.descripcion AS descripcion,
+                'PROMOCION' AS Tipo
+            FROM promociones p
+            WHERE p.activa = TRUE 
+            AND (p.fecha_fin IS NULL OR p.fecha_fin >= CURDATE())
+            AND p.fecha_inicio <= CURDATE()";
 
                 MySqlCommand cmd = new MySqlCommand(query, conexion);
                 MySqlDataAdapter da = new MySqlDataAdapter(cmd);
