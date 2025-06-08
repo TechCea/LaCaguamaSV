@@ -284,14 +284,13 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             string nombre = row.Cells["nombre"].Value.ToString();
             decimal precio = Convert.ToDecimal(row.Cells["precioUnitario"].Value);
 
-
-            // Mostrar formulario de cantidad con notas solo para platos
+            // Mostrar formulario de cantidad con notas para platos y promociones
             var cantidadForm = new Form()
             {
                 Text = $"Agregar {nombre}",
                 FormBorderStyle = FormBorderStyle.FixedDialog,
                 StartPosition = FormStartPosition.CenterParent,
-                Size = new Size(350, tipoActual == "PLATO" ? 275 : 250),
+                Size = new Size(350, (tipoActual == "PLATO" || tipoActual == "PROMOCION") ? 275 : 250),
                 BackColor = Color.FromArgb(40, 40, 40),
                 ForeColor = Color.White
             };
@@ -318,9 +317,9 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                 ForeColor = Color.White
             };
 
-            // Campo de notas solo para platos
+            // Campo de notas para platos y promociones
             TextBox txtNotas = null;
-            if (tipoActual == "PLATO")
+            if (tipoActual == "PLATO" || tipoActual == "PROMOCION")
             {
                 var lblNotas = new Label()
                 {
@@ -373,7 +372,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
             panelBotones.Controls.AddRange(new[] { btnAceptar, btnCancelar });
             panel.Controls.AddRange(new Control[] { lbl, numCantidad, panelBotones });
-            if (tipoActual == "PLATO") panel.Controls.Add(txtNotas);
+            if (tipoActual == "PLATO" || tipoActual == "PROMOCION") panel.Controls.Add(txtNotas);
             cantidadForm.Controls.Add(panel);
 
             cantidadForm.AcceptButton = btnAceptar;
@@ -391,6 +390,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                         Convert.ToInt32(lblIdOrden.Text),
                         idItem,
                         cantidad,
+                        txtNotas?.Text, // Pasar la nota a la promoción
                         out mensajeInventario);
 
                     if (!string.IsNullOrEmpty(mensajeInventario))
@@ -405,7 +405,8 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                             resultado = OrdenesD.AgregarPromocionAOrdenForzado(
                                 Convert.ToInt32(lblIdOrden.Text),
                                 idItem,
-                                cantidad);
+                                cantidad,
+                                txtNotas?.Text); // Pasar la nota a la promoción
                         }
                     }
                 }
@@ -672,10 +673,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
                 foreach (var pedido in pedidosAgrupados)
                 {
-                    // Obtener color base según el tipo
                     Color colorBase = GetColorPorTipo(pedido.Tipo);
-
-                    // Aclarar el color si tiene nota
                     Color colorFinal = !string.IsNullOrEmpty(pedido.Nota)
                         ? Color.FromArgb(
                             Math.Min(255, colorBase.R + 40),
@@ -695,7 +693,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                         Cursor = Cursors.Hand
                     };
 
-                    // Resto del código permanece igual...
                     Label lblPedido = new Label
                     {
                         Text = $"{pedido.Nombre}\n{pedido.Precio:C} x{pedido.Cantidad}",
@@ -712,7 +709,6 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                         lblPedido.Text += $"\nNota: {pedido.Nota}";
                     }
 
-                    // Resto de la implementación...
                     Button btnEliminar = new Button
                     {
                         Text = "X",
@@ -739,17 +735,16 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                         Tag = pedido.IdPedido,
                         Margin = new Padding(3),
                         Cursor = Cursors.Hand,
-                        Visible = pedido.Tipo == "PLATO"
+                        Visible = pedido.Tipo == "PLATO" || pedido.Tipo == "PROMOCION" // Mostrar para platos y promociones
                     };
 
-                    // Eventos y agregado de controles...
                     lblPedido.Click += (s, e) => MostrarOpcionesPedido(pedido.IdPedido, pedido.Nombre, pedido.Cantidad);
                     btnEliminar.Click += (s, e) => MostrarOpcionesPedido(pedido.IdPedido, pedido.Nombre, pedido.Cantidad);
                     btnEditarNota.Click += (s, e) => EditarNotaPedido(pedido.IdPedido);
                     panelPedido.Click += (s, e) => MostrarOpcionesPedido(pedido.IdPedido, pedido.Nombre, pedido.Cantidad);
 
                     panelPedido.Controls.Add(lblPedido);
-                    if (pedido.Tipo == "PLATO") panelPedido.Controls.Add(btnEditarNota);
+                    if (pedido.Tipo == "PLATO" || pedido.Tipo == "PROMOCION") panelPedido.Controls.Add(btnEditarNota);
                     panelPedido.Controls.Add(btnEliminar);
 
                     flowLayoutPanelPedidos.Controls.Add(panelPedido);
@@ -1010,33 +1005,33 @@ WHERE p.id_orden = @idOrden";
 
             using (MySqlConnection conexion = new Conexion().EstablecerConexion())
             {
-                // Consulta mejorada que incluye promociones
+                // Consulta para obtener todos los pedidos (incluyendo promociones)
                 string queryPedidos = @"SELECT 
-                p.id_pedido,
-                COALESCE(
-                    pl.nombrePlato,
-                    (SELECT i.nombreProducto FROM bebidas b JOIN inventario i ON b.id_inventario = i.id_inventario WHERE b.id_bebida = p.id_bebida),
-                    (SELECT i.nombreProducto FROM extras e JOIN inventario i ON e.id_inventario = i.id_inventario WHERE e.id_extra = p.id_extra),
-                    pr.nombre
-                ) AS nombre,
-                COALESCE(
-                    pl.precioUnitario,
-                    (SELECT b.precioUnitario FROM bebidas b WHERE b.id_bebida = p.id_bebida),
-                    (SELECT e.precioUnitario FROM extras e WHERE e.id_extra = p.id_extra),
-                    pr.precio_especial
-                ) AS precio,
-                p.Cantidad,
-                CASE
-                    WHEN p.id_plato IS NOT NULL THEN 'PLATO'
-                    WHEN p.id_bebida IS NOT NULL THEN 'BEBIDA'
-                    WHEN p.id_extra IS NOT NULL THEN 'EXTRA'
-                    WHEN p.id_promocion IS NOT NULL THEN 'PROMOCION'
-                    ELSE 'DESCONOCIDO'
-                END AS tipo
-            FROM pedidos p
-            LEFT JOIN platos pl ON p.id_plato = pl.id_plato
-            LEFT JOIN promociones pr ON p.id_promocion = pr.id_promocion
-            WHERE p.id_orden = @idOrden";
+            p.id_pedido,
+            COALESCE(
+                pl.nombrePlato,
+                (SELECT i.nombreProducto FROM bebidas b JOIN inventario i ON b.id_inventario = i.id_inventario WHERE b.id_bebida = p.id_bebida),
+                (SELECT i.nombreProducto FROM extras e JOIN inventario i ON e.id_inventario = i.id_inventario WHERE e.id_extra = p.id_extra),
+                pr.nombre
+            ) AS nombre,
+            COALESCE(
+                pl.precioUnitario,
+                (SELECT b.precioUnitario FROM bebidas b WHERE b.id_bebida = p.id_bebida),
+                (SELECT e.precioUnitario FROM extras e WHERE e.id_extra = p.id_extra),
+                pr.precio_especial
+            ) AS precio,
+            p.Cantidad,
+            CASE
+                WHEN p.id_plato IS NOT NULL THEN 'PLATO'
+                WHEN p.id_bebida IS NOT NULL THEN 'BEBIDA'
+                WHEN p.id_extra IS NOT NULL THEN 'EXTRA'
+                WHEN p.id_promocion IS NOT NULL THEN 'PROMOCION'
+                ELSE 'DESCONOCIDO'
+            END AS tipo
+        FROM pedidos p
+        LEFT JOIN platos pl ON p.id_plato = pl.id_plato
+        LEFT JOIN promociones pr ON p.id_promocion = pr.id_promocion
+        WHERE p.id_orden = @idOrden";
 
                 using (MySqlCommand cmdPedidos = new MySqlCommand(queryPedidos, conexion))
                 {
@@ -1057,11 +1052,11 @@ WHERE p.id_orden = @idOrden";
                     }
                 }
 
-                // Luego cargamos todas las notas en una consulta separada
+                // Consulta para obtener todas las notas (incluyendo las de promociones)
                 string queryNotas = @"SELECT id_pedido, nota FROM notas_pedidos 
-                      WHERE id_pedido IN (
-                          SELECT id_pedido FROM pedidos WHERE id_orden = @idOrden
-                      )";
+            WHERE id_pedido IN (
+                SELECT id_pedido FROM pedidos WHERE id_orden = @idOrden
+            )";
 
                 using (MySqlCommand cmdNotas = new MySqlCommand(queryNotas, conexion))
                 {

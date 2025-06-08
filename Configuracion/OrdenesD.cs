@@ -649,123 +649,89 @@ namespace LaCaguamaSV.Configuracion
             return dt;
         }
 
-        public static bool AgregarPromocionAOrden(int idOrden, int idPromocion, int cantidad, out string mensajeInventario)
+        public static bool AgregarPromocionAOrden(int idOrden, int idPromocion, int cantidad, string nota, out string mensajeInventario)
         {
             mensajeInventario = string.Empty;
-            StringBuilder sbAlertas = new StringBuilder();
 
-            // Primero verificar el inventario de todos los componentes de la promoción
             using (MySqlConnection conexion = new Conexion().EstablecerConexion())
             {
-                string queryVerificarInventario = @"
-SELECT 
-    i.id_inventario,
-    i.nombreProducto,
-    i.cantidad AS stock_actual,
-    MAX(CASE
-        WHEN pi.tipo_item = 'PLATO' THEN 
-            (SELECT SUM(r.cantidad_necesaria) 
-             FROM recetas r 
-             WHERE r.id_plato = pi.id_item)
-        ELSE 1
-    END) AS cantidad_necesaria_por_item,
-    MAX(pi.cantidad) AS cantidad_en_promocion,
-    (i.cantidad - (MAX(CASE
-        WHEN pi.tipo_item = 'PLATO' THEN 
-            (SELECT SUM(r.cantidad_necesaria) 
-             FROM recetas r 
-             WHERE r.id_plato = pi.id_item)
-        ELSE 1
-    END) * MAX(pi.cantidad) * @cantidadPedido)) AS diferencia
-FROM promocion_items pi
-LEFT JOIN platos p ON pi.tipo_item = 'PLATO' AND pi.id_item = p.id_plato
-LEFT JOIN bebidas b ON pi.tipo_item = 'BEBIDA' AND pi.id_item = b.id_bebida
-LEFT JOIN extras e ON pi.tipo_item = 'EXTRA' AND pi.id_item = e.id_extra
-LEFT JOIN inventario i ON 
-    (b.id_inventario = i.id_inventario OR 
-     e.id_inventario = i.id_inventario OR
-     (p.id_plato IS NOT NULL AND 
-      EXISTS (SELECT 1 FROM recetas r WHERE r.id_plato = p.id_plato AND r.id_inventario = i.id_inventario)))
-WHERE pi.id_promocion = @idPromocion
-GROUP BY i.id_inventario, i.nombreProducto, i.cantidad
-HAVING diferencia < 0 OR i.cantidad < 6"; // Umbral de stock bajo
-
-                using (MySqlCommand cmd = new MySqlCommand(queryVerificarInventario, conexion))
+                using (MySqlTransaction transaction = conexion.BeginTransaction())
                 {
-                    cmd.Parameters.AddWithValue("@idPromocion", idPromocion);
-                    cmd.Parameters.AddWithValue("@cantidadPedido", cantidad);
-
-                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    try
                     {
-                        while (reader.Read())
+                        // Verificar si ya existe esta promoción en la orden con la MISMA nota
+                        string queryVerificar = @"SELECT p.id_pedido, p.Cantidad 
+                    FROM pedidos p
+                    LEFT JOIN notas_pedidos np ON p.id_pedido = np.id_pedido
+                    WHERE p.id_orden = @idOrden 
+                    AND p.id_promocion = @idPromocion
+                    AND (np.nota = @nota OR (np.nota IS NULL AND @nota IS NULL))";
+
+                        int idPedidoExistente = -1;
+                        int cantidadExistente = 0;
+
+                        using (MySqlCommand cmdVerificar = new MySqlCommand(queryVerificar, conexion, transaction))
                         {
-                            string nombreProducto = reader["nombreProducto"].ToString();
-                            decimal stockActual = reader.GetDecimal("stock_actual");
-                            decimal cantidadNecesaria = reader.GetDecimal("cantidad_necesaria_por_item") *
-                                                      reader.GetInt32("cantidad_en_promocion") *
-                                                      cantidad;
+                            cmdVerificar.Parameters.AddWithValue("@idOrden", idOrden);
+                            cmdVerificar.Parameters.AddWithValue("@idPromocion", idPromocion);
+                            cmdVerificar.Parameters.AddWithValue("@nota", string.IsNullOrEmpty(nota) ? DBNull.Value : (object)nota);
 
-                            sbAlertas.AppendLine($"- {nombreProducto} (Stock: {stockActual}, Necesario: {cantidadNecesaria})");
+                            using (MySqlDataReader reader = cmdVerificar.ExecuteReader())
+                            {
+                                if (reader.Read())
+                                {
+                                    idPedidoExistente = reader.GetInt32("id_pedido");
+                                    cantidadExistente = reader.GetInt32("Cantidad");
+                                }
+                            }
                         }
-                    }
-                }
 
-                if (sbAlertas.Length > 0)
-                {
-                    mensajeInventario = sbAlertas.ToString();
-                    return false;
-                }
-
-                // Si el inventario está bien, proceder con la inserción/actualización
-                string queryVerificar = @"SELECT id_pedido, Cantidad 
-                        FROM pedidos 
-                        WHERE id_orden = @idOrden AND id_promocion = @idPromocion";
-
-                int idPedidoExistente = -1;
-                int cantidadExistente = 0;
-
-                using (MySqlCommand cmdVerificar = new MySqlCommand(queryVerificar, conexion))
-                {
-                    cmdVerificar.Parameters.AddWithValue("@idOrden", idOrden);
-                    cmdVerificar.Parameters.AddWithValue("@idPromocion", idPromocion);
-
-                    using (MySqlDataReader reader = cmdVerificar.ExecuteReader())
-                    {
-                        if (reader.Read())
+                        // Si ya existe, actualizar la cantidad
+                        if (idPedidoExistente > 0)
                         {
-                            idPedidoExistente = reader.GetInt32("id_pedido");
-                            cantidadExistente = reader.GetInt32("Cantidad");
+                            string queryActualizar = @"UPDATE pedidos 
+                        SET Cantidad = Cantidad + @cantidad 
+                        WHERE id_pedido = @idPedido";
+
+                            using (MySqlCommand cmdActualizar = new MySqlCommand(queryActualizar, conexion, transaction))
+                            {
+                                cmdActualizar.Parameters.AddWithValue("@idPedido", idPedidoExistente);
+                                cmdActualizar.Parameters.AddWithValue("@cantidad", cantidad);
+                                cmdActualizar.ExecuteNonQuery();
+                            }
                         }
+                        else
+                        {
+                            // Si no existe, insertar nueva promoción
+                            string queryInsertar = @"INSERT INTO pedidos 
+                        (id_orden, id_estadoP, id_promocion, Cantidad) 
+                        VALUES (@idOrden, 1, @idPromocion, @cantidad);
+                        SELECT LAST_INSERT_ID();";
+
+                            int idPedidoInsertado;
+                            using (MySqlCommand cmdInsertar = new MySqlCommand(queryInsertar, conexion, transaction))
+                            {
+                                cmdInsertar.Parameters.AddWithValue("@idOrden", idOrden);
+                                cmdInsertar.Parameters.AddWithValue("@idPromocion", idPromocion);
+                                cmdInsertar.Parameters.AddWithValue("@cantidad", cantidad);
+                                idPedidoInsertado = Convert.ToInt32(cmdInsertar.ExecuteScalar());
+                            }
+
+                            // Guardar la nota si existe
+                            if (!string.IsNullOrEmpty(nota))
+                            {
+                                GuardarNotaPedido(idPedidoInsertado, nota, transaction);
+                            }
+                        }
+
+                        transaction.Commit();
+                        return true;
                     }
-                }
-
-                // Si ya existe, actualizar la cantidad
-                if (idPedidoExistente > 0)
-                {
-                    string queryActualizar = @"UPDATE pedidos 
-                              SET Cantidad = Cantidad + @cantidad 
-                              WHERE id_pedido = @idPedido";
-
-                    using (MySqlCommand cmdActualizar = new MySqlCommand(queryActualizar, conexion))
+                    catch (Exception ex)
                     {
-                        cmdActualizar.Parameters.AddWithValue("@idPedido", idPedidoExistente);
-                        cmdActualizar.Parameters.AddWithValue("@cantidad", cantidad);
-                        return cmdActualizar.ExecuteNonQuery() > 0;
-                    }
-                }
-                else
-                {
-                    // Si no existe, insertar nueva promoción
-                    string queryInsertar = @"INSERT INTO pedidos (id_orden, id_estadoP, id_promocion, Cantidad) 
-                          VALUES (@idOrden, 1, @idPromocion, @cantidad)";
-
-                    using (MySqlCommand cmdInsertar = new MySqlCommand(queryInsertar, conexion))
-                    {
-                        cmdInsertar.Parameters.AddWithValue("@idOrden", idOrden);
-                        cmdInsertar.Parameters.AddWithValue("@idPromocion", idPromocion);
-                        cmdInsertar.Parameters.AddWithValue("@cantidad", cantidad);
-
-                        return cmdInsertar.ExecuteNonQuery() > 0;
+                        transaction.Rollback();
+                        mensajeInventario = $"Error al agregar promoción: {ex.Message}";
+                        return false;
                     }
                 }
             }
@@ -850,60 +816,84 @@ HAVING diferencia < 0 OR i.cantidad < 6"; // Umbral de stock bajo
         }
 
 
-        public static bool AgregarPromocionAOrdenForzado(int idOrden, int idPromocion, int cantidad)
+        public static bool AgregarPromocionAOrdenForzado(int idOrden, int idPromocion, int cantidad, string nota)
         {
             using (MySqlConnection conexion = new Conexion().EstablecerConexion())
             {
-                // Primero verificar si ya existe esta promoción en la orden
-                string queryVerificar = @"SELECT id_pedido, Cantidad 
-                        FROM pedidos 
-                        WHERE id_orden = @idOrden AND id_promocion = @idPromocion";
-
-                int idPedidoExistente = -1;
-                int cantidadExistente = 0;
-
-                using (MySqlCommand cmdVerificar = new MySqlCommand(queryVerificar, conexion))
+                using (MySqlTransaction transaction = conexion.BeginTransaction())
                 {
-                    cmdVerificar.Parameters.AddWithValue("@idOrden", idOrden);
-                    cmdVerificar.Parameters.AddWithValue("@idPromocion", idPromocion);
-
-                    using (MySqlDataReader reader = cmdVerificar.ExecuteReader())
+                    try
                     {
-                        if (reader.Read())
+                        // Similar a AgregarPromocionAOrden pero sin verificar inventario
+                        string queryVerificar = @"SELECT p.id_pedido, p.Cantidad 
+                    FROM pedidos p
+                    LEFT JOIN notas_pedidos np ON p.id_pedido = np.id_pedido
+                    WHERE p.id_orden = @idOrden 
+                    AND p.id_promocion = @idPromocion
+                    AND (np.nota IS NULL OR np.nota = @nota OR @nota IS NULL)";
+
+                        int idPedidoExistente = -1;
+                        int cantidadExistente = 0;
+
+                        using (MySqlCommand cmdVerificar = new MySqlCommand(queryVerificar, conexion, transaction))
                         {
-                            idPedidoExistente = reader.GetInt32("id_pedido");
-                            cantidadExistente = reader.GetInt32("Cantidad");
+                            cmdVerificar.Parameters.AddWithValue("@idOrden", idOrden);
+                            cmdVerificar.Parameters.AddWithValue("@idPromocion", idPromocion);
+                            cmdVerificar.Parameters.AddWithValue("@nota", string.IsNullOrEmpty(nota) ? DBNull.Value : (object)nota);
+
+                            using (MySqlDataReader reader = cmdVerificar.ExecuteReader())
+                            {
+                                if (reader.Read())
+                                {
+                                    idPedidoExistente = reader.GetInt32("id_pedido");
+                                    cantidadExistente = reader.GetInt32("Cantidad");
+                                }
+                            }
                         }
+
+                        if (idPedidoExistente > 0)
+                        {
+                            string queryActualizar = @"UPDATE pedidos 
+                        SET Cantidad = Cantidad + @cantidad 
+                        WHERE id_pedido = @idPedido";
+
+                            using (MySqlCommand cmdActualizar = new MySqlCommand(queryActualizar, conexion, transaction))
+                            {
+                                cmdActualizar.Parameters.AddWithValue("@idPedido", idPedidoExistente);
+                                cmdActualizar.Parameters.AddWithValue("@cantidad", cantidad);
+                                cmdActualizar.ExecuteNonQuery();
+                            }
+                        }
+                        else
+                        {
+                            string queryInsertar = @"INSERT INTO pedidos 
+                        (id_orden, id_estadoP, id_promocion, Cantidad) 
+                        VALUES (@idOrden, 1, @idPromocion, @cantidad);
+                        SELECT LAST_INSERT_ID();";
+
+                            int idPedidoInsertado;
+                            using (MySqlCommand cmdInsertar = new MySqlCommand(queryInsertar, conexion, transaction))
+                            {
+                                cmdInsertar.Parameters.AddWithValue("@idOrden", idOrden);
+                                cmdInsertar.Parameters.AddWithValue("@idPromocion", idPromocion);
+                                cmdInsertar.Parameters.AddWithValue("@cantidad", cantidad);
+                                idPedidoInsertado = Convert.ToInt32(cmdInsertar.ExecuteScalar());
+                            }
+
+                            if (!string.IsNullOrEmpty(nota))
+                            {
+                                GuardarNotaPedido(idPedidoInsertado, nota, transaction);
+                            }
+                        }
+
+                        transaction.Commit();
+                        return true;
                     }
-                }
-
-                // Si ya existe, actualizar la cantidad
-                if (idPedidoExistente > 0)
-                {
-                    string queryActualizar = @"UPDATE pedidos 
-                              SET Cantidad = Cantidad + @cantidad 
-                              WHERE id_pedido = @idPedido";
-
-                    using (MySqlCommand cmdActualizar = new MySqlCommand(queryActualizar, conexion))
+                    catch (Exception ex)
                     {
-                        cmdActualizar.Parameters.AddWithValue("@idPedido", idPedidoExistente);
-                        cmdActualizar.Parameters.AddWithValue("@cantidad", cantidad);
-                        return cmdActualizar.ExecuteNonQuery() > 0;
-                    }
-                }
-                else
-                {
-                    // Si no existe, insertar nueva promoción
-                    string queryInsertar = @"INSERT INTO pedidos (id_orden, id_estadoP, id_promocion, Cantidad) 
-                          VALUES (@idOrden, 1, @idPromocion, @cantidad)";
-
-                    using (MySqlCommand cmdInsertar = new MySqlCommand(queryInsertar, conexion))
-                    {
-                        cmdInsertar.Parameters.AddWithValue("@idOrden", idOrden);
-                        cmdInsertar.Parameters.AddWithValue("@idPromocion", idPromocion);
-                        cmdInsertar.Parameters.AddWithValue("@cantidad", cantidad);
-
-                        return cmdInsertar.ExecuteNonQuery() > 0;
+                        transaction.Rollback();
+                        MessageBox.Show($"Error al agregar promoción: {ex.Message}");
+                        return false;
                     }
                 }
             }

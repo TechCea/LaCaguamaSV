@@ -1145,30 +1145,25 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             try
             {
-                // Crear un formulario para mostrar los resultados
                 Form reporteForm = new Form();
                 reporteForm.Text = "Reporte de Ventas (10am - 6am) - Órdenes Pagadas";
                 reporteForm.Size = new Size(800, 600);
                 reporteForm.StartPosition = FormStartPosition.CenterScreen;
 
-                // Crear un DataGridView para mostrar los datos
                 DataGridView dgvReporte = new DataGridView();
                 dgvReporte.Dock = DockStyle.Fill;
                 dgvReporte.ReadOnly = true;
                 dgvReporte.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 
-                // Configurar columnas
                 dgvReporte.Columns.Add("Tipo", "Tipo");
                 dgvReporte.Columns.Add("Nombre", "Nombre");
                 dgvReporte.Columns.Add("Cantidad", "Cantidad Vendida");
                 dgvReporte.Columns.Add("Total", "Total Generado");
 
-                // Obtener la fecha actual y calcular el rango
                 DateTime fechaActual = DateTime.Now;
                 DateTime inicio = new DateTime(fechaActual.Year, fechaActual.Month, fechaActual.Day, 10, 0, 0);
-                DateTime fin = inicio.AddHours(20); // 10am + 20 horas = 6am del día siguiente
+                DateTime fin = inicio.AddHours(20);
 
-                // Si son las 6am o después, ajustamos para tomar el turno anterior
                 if (fechaActual.TimeOfDay < new TimeSpan(6, 0, 0))
                 {
                     inicio = inicio.AddDays(-1);
@@ -1177,117 +1172,131 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
                 using (MySqlConnection conn = conexion.EstablecerConexion())
                 {
-                    // 1. Obtener platos vendidos en órdenes cerradas (MODIFICADO)
+                    // 1. Platos vendidos directamente o en promociones
                     string queryPlatos = @"
-                    SELECT 
-                        'Plato' AS Tipo,
-                        p.nombrePlato AS Nombre,
-                        SUM(pd.Cantidad) AS Cantidad,  -- Cambiado de COUNT a SUM
-                        SUM(p.precioUnitario * pd.Cantidad) AS Total  -- Multiplicar precio por cantidad
-                    FROM pedidos pd
-                    JOIN platos p ON pd.id_plato = p.id_plato
-                    JOIN ordenes o ON pd.id_orden = o.id_orden
-                    WHERE o.fecha_orden >= @inicio 
-                      AND o.fecha_orden < @fin
-                      AND o.id_estadoO = 2
-                    GROUP BY p.nombrePlato
-                    ORDER BY Cantidad DESC";
+            SELECT 
+                'Plato' AS Tipo,
+                p.nombrePlato AS Nombre,
+                SUM(pd.Cantidad) AS Cantidad,
+                SUM(p.precioUnitario * pd.Cantidad) AS Total
+            FROM pedidos pd
+            JOIN platos p ON pd.id_plato = p.id_plato
+            JOIN ordenes o ON pd.id_orden = o.id_orden
+            WHERE o.fecha_orden >= @inicio 
+              AND o.fecha_orden < @fin
+              AND o.id_estadoO = 2
+              AND pd.id_promocion IS NULL
+            GROUP BY p.nombrePlato
 
+            UNION ALL
 
-                    using (MySqlCommand cmd = new MySqlCommand(queryPlatos, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@inicio", inicio);
-                        cmd.Parameters.AddWithValue("@fin", fin);
+            -- Platos vendidos como parte de promociones
+            SELECT 
+                'Plato (Promo)' AS Tipo,
+                p.nombrePlato AS Nombre,
+                SUM(pi.cantidad * pd.Cantidad) AS Cantidad,
+                SUM(p.precioUnitario * pi.cantidad * pd.Cantidad) AS Total
+            FROM pedidos pd
+            JOIN promociones pr ON pd.id_promocion = pr.id_promocion
+            JOIN promocion_items pi ON pr.id_promocion = pi.id_promocion
+            JOIN platos p ON pi.id_item = p.id_plato AND pi.tipo_item = 'PLATO'
+            JOIN ordenes o ON pd.id_orden = o.id_orden
+            WHERE o.fecha_orden >= @inicio 
+              AND o.fecha_orden < @fin
+              AND o.id_estadoO = 2
+            GROUP BY p.nombrePlato";
 
-                        using (MySqlDataReader reader = cmd.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                dgvReporte.Rows.Add(
-                                    reader["Tipo"],
-                                    reader["Nombre"],
-                                    reader["Cantidad"],
-                                    $"${Convert.ToDecimal(reader["Total"]):N2}"
-                                );
-                            }
-                        }
-                    }
-
-                    // 2. Obtener bebidas vendidas en órdenes cerradas (MODIFICADO)
+                    // 2. Bebidas vendidas directamente o en promociones
                     string queryBebidas = @"
-                SELECT 
-                    'Bebida' AS Tipo,
-                    i.nombreProducto AS Nombre,
-                    SUM(pd.Cantidad) AS Cantidad,  -- Cambiado de COUNT a SUM
-                    SUM(b.precioUnitario * pd.Cantidad) AS Total  -- Multiplicar precio por cantidad
-                FROM pedidos pd
-                JOIN bebidas b ON pd.id_bebida = b.id_bebida
-                JOIN inventario i ON b.id_inventario = i.id_inventario
-                JOIN ordenes o ON pd.id_orden = o.id_orden
-                WHERE o.fecha_orden >= @inicio 
-                  AND o.fecha_orden < @fin
-                  AND o.id_estadoO = 2
-                GROUP BY i.nombreProducto
-                ORDER BY Cantidad DESC";
+            SELECT 
+                'Bebida' AS Tipo,
+                i.nombreProducto AS Nombre,
+                SUM(pd.Cantidad) AS Cantidad,
+                SUM(b.precioUnitario * pd.Cantidad) AS Total
+            FROM pedidos pd
+            JOIN bebidas b ON pd.id_bebida = b.id_bebida
+            JOIN inventario i ON b.id_inventario = i.id_inventario
+            JOIN ordenes o ON pd.id_orden = o.id_orden
+            WHERE o.fecha_orden >= @inicio 
+              AND o.fecha_orden < @fin
+              AND o.id_estadoO = 2
+              AND pd.id_promocion IS NULL
+            GROUP BY i.nombreProducto
 
-                    using (MySqlCommand cmd = new MySqlCommand(queryBebidas, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@inicio", inicio);
-                        cmd.Parameters.AddWithValue("@fin", fin);
+            UNION ALL
 
-                        using (MySqlDataReader reader = cmd.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                dgvReporte.Rows.Add(
-                                    reader["Tipo"],
-                                    reader["Nombre"],
-                                    reader["Cantidad"],
-                                    $"${Convert.ToDecimal(reader["Total"]):N2}"
-                                );
-                            }
-                        }
-                    }
+            -- Bebidas vendidas como parte de promociones
+            SELECT 
+                'Bebida (Promo)' AS Tipo,
+                i.nombreProducto AS Nombre,
+                SUM(pi.cantidad * pd.Cantidad) AS Cantidad,
+                SUM(b.precioUnitario * pi.cantidad * pd.Cantidad) AS Total
+            FROM pedidos pd
+            JOIN promociones pr ON pd.id_promocion = pr.id_promocion
+            JOIN promocion_items pi ON pr.id_promocion = pi.id_promocion
+            JOIN bebidas b ON pi.id_item = b.id_bebida AND pi.tipo_item = 'BEBIDA'
+            JOIN inventario i ON b.id_inventario = i.id_inventario
+            JOIN ordenes o ON pd.id_orden = o.id_orden
+            WHERE o.fecha_orden >= @inicio 
+              AND o.fecha_orden < @fin
+              AND o.id_estadoO = 2
+            GROUP BY i.nombreProducto";
 
-                    // 3. Obtener extras vendidos en órdenes cerradas (MODIFICADO)
+                    // 3. Extras vendidos directamente o en promociones
                     string queryExtras = @"
-                SELECT 
-                    'Extra' AS Tipo,
-                    i.nombreProducto AS Nombre,
-                    SUM(pd.Cantidad) AS Cantidad,  -- Cambiado de COUNT a SUM
-                    SUM(e.precioUnitario * pd.Cantidad) AS Total  -- Multiplicar precio por cantidad
-                FROM pedidos pd
-                JOIN extras e ON pd.id_extra = e.id_extra
-                JOIN inventario i ON e.id_inventario = i.id_inventario
-                JOIN ordenes o ON pd.id_orden = o.id_orden
-                WHERE o.fecha_orden >= @inicio 
-                  AND o.fecha_orden < @fin
-                  AND o.id_estadoO = 2
-                GROUP BY i.nombreProducto
-                ORDER BY Cantidad DESC";
+            SELECT 
+                'Extra' AS Tipo,
+                i.nombreProducto AS Nombre,
+                SUM(pd.Cantidad) AS Cantidad,
+                SUM(e.precioUnitario * pd.Cantidad) AS Total
+            FROM pedidos pd
+            JOIN extras e ON pd.id_extra = e.id_extra
+            JOIN inventario i ON e.id_inventario = i.id_inventario
+            JOIN ordenes o ON pd.id_orden = o.id_orden
+            WHERE o.fecha_orden >= @inicio 
+              AND o.fecha_orden < @fin
+              AND o.id_estadoO = 2
+              AND pd.id_promocion IS NULL
+            GROUP BY i.nombreProducto
 
+            UNION ALL
 
-                    using (MySqlCommand cmd = new MySqlCommand(queryExtras, conn))
+            -- Extras vendidos como parte de promociones
+            SELECT 
+                'Extra (Promo)' AS Tipo,
+                i.nombreProducto AS Nombre,
+                SUM(pi.cantidad * pd.Cantidad) AS Cantidad,
+                SUM(e.precioUnitario * pi.cantidad * pd.Cantidad) AS Total
+            FROM pedidos pd
+            JOIN promociones pr ON pd.id_promocion = pr.id_promocion
+            JOIN promocion_items pi ON pr.id_promocion = pi.id_promocion
+            JOIN extras e ON pi.id_item = e.id_extra AND pi.tipo_item = 'EXTRA'
+            JOIN inventario i ON e.id_inventario = i.id_inventario
+            JOIN ordenes o ON pd.id_orden = o.id_orden
+            WHERE o.fecha_orden >= @inicio 
+              AND o.fecha_orden < @fin
+              AND o.id_estadoO = 2
+            GROUP BY i.nombreProducto";
+
+                    // Ejecutar las consultas y llenar el DataGridView
+                    EjecutarConsultaYAgregarFilas(queryPlatos, conn, dgvReporte, inicio, fin);
+                    EjecutarConsultaYAgregarFilas(queryBebidas, conn, dgvReporte, inicio, fin);
+                    EjecutarConsultaYAgregarFilas(queryExtras, conn, dgvReporte, inicio, fin);
+                }
+
+                // Agregar totales
+                decimal totalGeneral = 0;
+                foreach (DataGridViewRow row in dgvReporte.Rows)
+                {
+                    if (row.Cells["Total"].Value != null)
                     {
-                        cmd.Parameters.AddWithValue("@inicio", inicio);
-                        cmd.Parameters.AddWithValue("@fin", fin);
-
-                        using (MySqlDataReader reader = cmd.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                dgvReporte.Rows.Add(
-                                    reader["Tipo"],
-                                    reader["Nombre"],
-                                    reader["Cantidad"],
-                                    $"${Convert.ToDecimal(reader["Total"]):N2}"
-                                );
-                            }
-                        }
+                        decimal valor = decimal.Parse(row.Cells["Total"].Value.ToString().Replace("$", ""));
+                        totalGeneral += valor;
                     }
                 }
 
-                // Agregar controles al formulario
+                dgvReporte.Rows.Add("", "TOTAL GENERAL", "", $"${totalGeneral:N2}");
+
                 Label lblTitulo = new Label();
                 lblTitulo.Text = $"Ventas desde {inicio.ToString("g")} hasta {fin.ToString("g")} (Solo órdenes pagadas)";
                 lblTitulo.Dock = DockStyle.Top;
@@ -1296,14 +1305,34 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
                 reporteForm.Controls.Add(dgvReporte);
                 reporteForm.Controls.Add(lblTitulo);
-
-                // Mostrar el formulario
                 reporteForm.ShowDialog();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error al generar el reporte: {ex.Message}", "Error",
                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void EjecutarConsultaYAgregarFilas(string query, MySqlConnection conn, DataGridView dgv, DateTime inicio, DateTime fin)
+        {
+            using (MySqlCommand cmd = new MySqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@inicio", inicio);
+                cmd.Parameters.AddWithValue("@fin", fin);
+
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        dgv.Rows.Add(
+                            reader["Tipo"],
+                            reader["Nombre"],
+                            reader["Cantidad"],
+                            $"${Convert.ToDecimal(reader["Total"]):N2}"
+                        );
+                    }
+                }
             }
         }
 
