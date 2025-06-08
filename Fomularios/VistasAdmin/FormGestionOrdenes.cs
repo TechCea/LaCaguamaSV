@@ -1430,7 +1430,7 @@ WHERE p.id_orden = @idOrden";
         {
             StringBuilder sb = new StringBuilder();
 
-            // 1. Inicialización y encabezado con formato mejorado
+            // 1. Encabezado con formato mejorado
             sb.Append(ESC + "@"); // Reset printer
             sb.Append(ESC + "!" + "\x18"); // Fuente tamaño mediano
             sb.Append(CenterText("LA CAGUAMA RESTAURANTE"));
@@ -1448,7 +1448,7 @@ WHERE p.id_orden = @idOrden";
             sb.Append("──────────────────────────" + LF);
             sb.Append(LF); // Espacio después de la línea separadora
 
-            // 3. Detalle de productos (solo platos y extras)
+            // 3. Detalle de productos (solo platos, promociones y extras)
             sb.Append(ESC + "!" + "\x08"); // Fuente enfatizada
             sb.Append("          COMANDA" + LF);
             sb.Append(ESC + "!" + "\x00"); // Restaurar fuente
@@ -1457,14 +1457,15 @@ WHERE p.id_orden = @idOrden";
 
             // Obtener detalles de los pedidos agrupados por tipo
             var platos = ObtenerItemsParaComanda("PLATO");
+            var promociones = ObtenerPromocionesParaComanda();
             var extras = ObtenerItemsParaComanda("EXTRA");
 
             // Sección de PLATOS
             if (platos.Any())
             {
-                sb.Append(LF); // Espacio antes de la sección
+                sb.Append(LF);
                 sb.Append(ESC + "!" + "\x08"); // Fuente enfatizada
-                sb.Append("PLATOS:" + LF + LF); // Doble salto de línea después del título
+                sb.Append("PLATOS:" + LF + LF);
                 sb.Append(ESC + "!" + "\x00"); // Restaurar fuente
                 sb.Append(LF);
 
@@ -1476,35 +1477,68 @@ WHERE p.id_orden = @idOrden";
                     {
                         sb.Append($"  Nota: {plato.Notas}{LF}");
                     }
-                    sb.Append(LF); // Espacio entre cada plato
+                    sb.Append(LF); // Espacio entre platos
+                }
+            }
+
+            // Sección de PROMOCIONES
+            if (promociones.Any())
+            {
+                sb.Append(LF);
+                sb.Append(ESC + "!" + "\x08"); // Fuente enfatizada
+                sb.Append("PROMOCIONES:" + LF + LF);
+                sb.Append(ESC + "!" + "\x00"); // Restaurar fuente
+                sb.Append(LF);
+
+                foreach (var promo in promociones)
+                {
+                    sb.Append(LF);
+                    sb.Append($"{promo.Cantidad}x {promo.Nombre.Replace("PROMOCION", "").Trim()}{LF}");
+                    if (!string.IsNullOrWhiteSpace(promo.Notas))
+                    {
+                        sb.Append($"  Nota: {promo.Notas}{LF}");
+                    }
+
+                    // Obtener componentes de la promoción (solo platos y extras)
+                    var componentes = ObtenerComponentesPromocion(promo.IdPedido);
+                    if (componentes.Any())
+                    {
+                        sb.Append("  Incluye:" + LF);
+                        foreach (var comp in componentes)
+                        {
+                            sb.Append($"  - {comp.Cantidad}x {comp.Nombre}{LF}");
+                        }
+                    }
+                    sb.Append(LF); // Espacio entre promociones
                 }
             }
 
             // Sección de EXTRAS
             if (extras.Any())
             {
-                sb.Append(LF); // Espacio antes de la sección
+                sb.Append(LF);
                 sb.Append(ESC + "!" + "\x08"); // Fuente enfatizada
-                sb.Append("EXTRAS:" + LF + LF); // Doble salto de línea después del título
+                sb.Append("EXTRAS:" + LF + LF);
                 sb.Append(ESC + "!" + "\x00"); // Restaurar fuente
                 sb.Append(LF);
 
                 foreach (var extra in extras)
                 {
-                    sb.Append(LF); // Espacio entre cada extra
+                    sb.Append(LF);
                     sb.Append($"{extra.Cantidad}x {extra.Nombre.Replace("EXTRA", "").Trim()}{LF}");
-                    sb.Append(LF); // Espacio entre cada extra
+                    sb.Append(LF); // Espacio entre extras
                 }
             }
 
-            // 5. Pie de página y cortes
-            sb.Append(LF + LF); // Doble espacio antes del mensaje final
+            // Pie de página y cortes
+            sb.Append(LF + LF);
             sb.Append(CenterText("¡LISTO PARA PREPARAR!"));
-            sb.Append(LF + LF + LF); // Espacios adicionales antes del corte
+            sb.Append(LF + LF + LF);
             sb.Append(GS + "V" + "\x41" + "\x00"); // Corte completo
 
             return sb.ToString();
         }
+
 
         private void ImprimirPorUSB(string contenido)
         {
@@ -1608,7 +1642,87 @@ WHERE p.id_orden = @idOrden AND ";
 
             return items;
         }
+        // Nuevo método para obtener promociones
+        private List<(string Nombre, int Cantidad, string Notas, int IdPedido)> ObtenerPromocionesParaComanda()
+        {
+            var promociones = new List<(string, int, string, int)>();
 
+            string query = @"
+SELECT 
+    p.id_pedido,
+    CONCAT('PROMOCION ', pr.nombre) AS Nombre,
+    p.Cantidad,
+    np.nota AS Notas
+FROM pedidos p
+JOIN promociones pr ON p.id_promocion = pr.id_promocion
+LEFT JOIN notas_pedidos np ON p.id_pedido = np.id_pedido
+WHERE p.id_orden = @idOrden AND p.id_promocion IS NOT NULL";
+
+            using (MySqlConnection conexion = new Conexion().EstablecerConexion())
+            {
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@idOrden", Convert.ToInt32(lblIdOrden.Text));
+
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            string nombre = reader["Nombre"].ToString();
+                            int cantidad = Convert.ToInt32(reader["Cantidad"]);
+                            int idPedido = Convert.ToInt32(reader["id_pedido"]);
+                            string notas = reader.IsDBNull(reader.GetOrdinal("Notas")) ? "" : reader["Notas"].ToString();
+
+                            promociones.Add((nombre, cantidad, notas, idPedido));
+                        }
+                    }
+                }
+            }
+
+            return promociones;
+        }
+
+        // Nuevo método para obtener componentes de promoción (solo platos y extras)
+        private List<(string Nombre, int Cantidad)> ObtenerComponentesPromocion(int idPedidoPromocion)
+        {
+            var componentes = new List<(string, int)>();
+
+            string query = @"
+SELECT 
+    CASE
+        WHEN pi.tipo_item = 'PLATO' THEN pl.nombrePlato
+        WHEN pi.tipo_item = 'EXTRA' THEN i.nombreProducto
+    END AS Nombre,
+    pi.cantidad AS Cantidad
+FROM promocion_items pi
+LEFT JOIN platos pl ON pi.tipo_item = 'PLATO' AND pi.id_item = pl.id_plato
+LEFT JOIN extras e ON pi.tipo_item = 'EXTRA' AND pi.id_item = e.id_extra
+LEFT JOIN inventario i ON e.id_inventario = i.id_inventario
+WHERE pi.id_promocion = (
+    SELECT id_promocion FROM pedidos WHERE id_pedido = @idPedidoPromocion
+) AND pi.tipo_item IN ('PLATO', 'EXTRA')";
+
+            using (MySqlConnection conexion = new Conexion().EstablecerConexion())
+            {
+                using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@idPedidoPromocion", idPedidoPromocion);
+
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            string nombre = reader["Nombre"].ToString();
+                            int cantidad = Convert.ToInt32(reader["Cantidad"]);
+
+                            componentes.Add((nombre, cantidad));
+                        }
+                    }
+                }
+            }
+
+            return componentes;
+        }
     }
 }
 
