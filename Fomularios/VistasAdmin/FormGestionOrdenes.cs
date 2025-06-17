@@ -385,33 +385,46 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
                 if (tipoActual == "PROMOCION")
                 {
-                    string mensajeInventario;
-                    resultado = OrdenesD.AgregarPromocionAOrden(
+                    // Verificar inventario para todos los items de la promoción
+                    string mensajePromoInventario = VerificarInventarioPromocion(idItem, cantidad);
+
+                    if (!string.IsNullOrEmpty(mensajePromoInventario))
+                    {
+                        DialogResult result = MessageBox.Show(
+                            $"Advertencia de inventario para la promoción:\n\n{mensajePromoInventario}\n\n" +
+                            "¿Desea continuar con el pedido de todas formas?",
+                            "Inventario Bajo", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+                        if (result == DialogResult.No)
+                        {
+                            return; // No continuar si el usuario cancela
+                        }
+                    }
+
+                    resultado = OrdenesD.AgregarPromocionAOrdenForzado(
                         Convert.ToInt32(lblIdOrden.Text),
                         idItem,
                         cantidad,
-                        txtNotas?.Text, // Pasar la nota a la promoción
-                        out mensajeInventario);
+                        txtNotas?.Text);
+                }
+                else
+                {
+                    // Verificar inventario para items individuales
+                    string mensajeInventario = VerificarStockItem(idItem, tipoActual, cantidad);
 
                     if (!string.IsNullOrEmpty(mensajeInventario))
                     {
                         DialogResult result = MessageBox.Show(
-                            $"Advertencia de inventario para la promoción:\n\n{mensajeInventario}\n\n" +
+                            $"Advertencia de inventario:\n\n{mensajeInventario}\n\n" +
                             "¿Desea continuar con el pedido de todas formas?",
                             "Inventario Bajo", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
-                        if (result == DialogResult.Yes)
+                        if (result == DialogResult.No)
                         {
-                            resultado = OrdenesD.AgregarPromocionAOrdenForzado(
-                                Convert.ToInt32(lblIdOrden.Text),
-                                idItem,
-                                cantidad,
-                                txtNotas?.Text); // Pasar la nota a la promoción
+                            return; // No continuar si el usuario cancela
                         }
                     }
-                }
-                else
-                {
+
                     resultado = AgregarPedido(idItem, cantidad, tipoActual, txtNotas?.Text);
                 }
 
@@ -421,6 +434,132 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                     ActualizarTotal();
                 }
             }
+        }
+
+        // Método actualizado para verificar stock con cantidad
+        private string VerificarStockItem(int idItem, string tipoItem, int cantidad = 1)
+        {
+            try
+            {
+                using (MySqlConnection conexion = new Conexion().EstablecerConexion())
+                {
+                    string query = "";
+                    switch (tipoItem.ToUpper())
+                    {
+                        case "PLATO":
+                            query = @"
+                    SELECT i.nombreProducto, i.cantidad AS stockActual, 
+                           r.cantidad_necesaria * @cantidad AS cantidadNecesaria
+                    FROM recetas r
+                    JOIN inventario i ON r.id_inventario = i.id_inventario
+                    WHERE r.id_plato = @idItem AND i.cantidad < (r.cantidad_necesaria * @cantidad)";
+                            break;
+                        case "BEBIDA":
+                            query = @"
+                    SELECT i.nombreProducto, i.cantidad AS stockActual, 
+                           @cantidad AS cantidadNecesaria
+                    FROM bebidas b
+                    JOIN inventario i ON b.id_inventario = i.id_inventario
+                    WHERE b.id_bebida = @idItem AND i.cantidad < @cantidad";
+                            break;
+                        case "EXTRA":
+                            query = @"
+                    SELECT i.nombreProducto, i.cantidad AS stockActual, 
+                           @cantidad AS cantidadNecesaria
+                    FROM extras e
+                    JOIN inventario i ON e.id_inventario = i.id_inventario
+                    WHERE e.id_extra = @idItem AND i.cantidad < @cantidad";
+                            break;
+                        default:
+                            return "";
+                    }
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@idItem", idItem);
+                        cmd.Parameters.AddWithValue("@cantidad", cantidad);
+
+                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            StringBuilder sb = new StringBuilder();
+                            while (reader.Read())
+                            {
+                                string nombreProducto = reader["nombreProducto"].ToString();
+                                decimal stockActual = Convert.ToDecimal(reader["stockActual"]);
+                                decimal cantidadNecesaria = Convert.ToDecimal(reader["cantidadNecesaria"]);
+
+                                sb.AppendLine($"- {nombreProducto} (Stock: {stockActual}, Necesario: {cantidadNecesaria})");
+                            }
+                            return sb.ToString();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return $"Error al verificar inventario: {ex.Message}";
+            }
+        }
+
+        // Método para verificar inventario de promoción
+        private string VerificarInventarioPromocion(int idPromocion, int cantidad = 1)
+        {
+            StringBuilder mensaje = new StringBuilder();
+            try
+            {
+                using (MySqlConnection conexion = new Conexion().EstablecerConexion())
+                {
+                    string query = @"
+            SELECT 
+                pi.tipo_item,
+                CASE
+                    WHEN pi.tipo_item = 'PLATO' THEN p.nombrePlato
+                    WHEN pi.tipo_item = 'BEBIDA' THEN (SELECT i.nombreProducto FROM bebidas b JOIN inventario i ON b.id_inventario = i.id_inventario WHERE b.id_bebida = pi.id_item)
+                    WHEN pi.tipo_item = 'EXTRA' THEN (SELECT i.nombreProducto FROM extras e JOIN inventario i ON e.id_inventario = i.id_inventario WHERE e.id_extra = pi.id_item)
+                END AS nombre,
+                CASE
+                    WHEN pi.tipo_item = 'PLATO' THEN 
+                        (SELECT SUM(r.cantidad_necesaria) FROM recetas r WHERE r.id_plato = pi.id_item) * pi.cantidad * @cantidad
+                    ELSE pi.cantidad * @cantidad
+                END AS cantidad_necesaria,
+                CASE
+                    WHEN pi.tipo_item = 'PLATO' THEN 
+                        (SELECT i.cantidad FROM recetas r JOIN inventario i ON r.id_inventario = i.id_inventario WHERE r.id_plato = pi.id_item LIMIT 1)
+                    WHEN pi.tipo_item = 'BEBIDA' THEN 
+                        (SELECT i.cantidad FROM bebidas b JOIN inventario i ON b.id_inventario = i.id_inventario WHERE b.id_bebida = pi.id_item)
+                    WHEN pi.tipo_item = 'EXTRA' THEN 
+                        (SELECT i.cantidad FROM extras e JOIN inventario i ON e.id_inventario = i.id_inventario WHERE e.id_extra = pi.id_item)
+                END AS stock_actual
+            FROM promocion_items pi
+            LEFT JOIN platos p ON pi.tipo_item = 'PLATO' AND pi.id_item = p.id_plato
+            WHERE pi.id_promocion = @idPromocion
+            HAVING stock_actual < cantidad_necesaria OR stock_actual < 5"; // Umbral bajo de stock
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@idPromocion", idPromocion);
+                        cmd.Parameters.AddWithValue("@cantidad", cantidad);
+
+                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                string tipo = reader["tipo_item"].ToString();
+                                string nombre = reader["nombre"].ToString();
+                                decimal stock = Convert.ToDecimal(reader["stock_actual"]);
+                                decimal necesaria = Convert.ToDecimal(reader["cantidad_necesaria"]);
+
+                                mensaje.AppendLine($"- {tipo}: {nombre} (Stock: {stock}, Necesario: {necesaria})");
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                mensaje.AppendLine($"Error al verificar inventario: {ex.Message}");
+            }
+            return mensaje.ToString();
         }
 
         // Método auxiliar para obtener el último ID insertado
@@ -1192,21 +1331,7 @@ WHERE p.id_orden = @idOrden";
                     return;
                 }
 
-                // Verificar inventario con manejo de errores
-                try
-                {
-                    if (!VerificarInventarioSuficiente())
-                    {
-                        return;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Error al verificar inventario: {ex.Message}", "Error",
-                                  MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-
+                
                 int idUsuarioCreador = ObtenerUsuarioCreadorOrden(Convert.ToInt32(lblIdOrden.Text));
 
                 // Crear formulario de pago con el usuario creador

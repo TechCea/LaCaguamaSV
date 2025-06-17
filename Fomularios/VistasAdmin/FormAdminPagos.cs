@@ -375,50 +375,88 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             try
             {
-                // 1. Restar inventario para platos individuales (ingredientes según recetas)
-                string queryPlatos = @"
+                // 1. Primero procesar todos los ítems individuales (no promociones)
+                ProcesarItemsIndividuales(conexion, transaction);
+
+                // 2. Luego procesar las promociones con sus componentes
+                ProcesarPromociones(conexion, transaction);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error al actualizar inventario: {ex.Message}");
+            }
+        }
+
+        private void ProcesarItemsIndividuales(MySqlConnection conexion, MySqlTransaction transaction)
+        {
+            // 1. Restar inventario para platos individuales
+            string queryPlatos = @"
         UPDATE inventario i
         JOIN recetas r ON i.id_inventario = r.id_inventario
         JOIN pedidos p ON r.id_plato = p.id_plato
-        SET i.cantidad = i.cantidad - (r.cantidad_necesaria * p.Cantidad)
-        WHERE p.id_orden = @idOrden AND p.id_plato IS NOT NULL";
+        SET i.cantidad = 
+            CASE 
+                WHEN i.cantidad > (r.cantidad_necesaria * p.Cantidad)
+                THEN i.cantidad - (r.cantidad_necesaria * p.Cantidad)
+                WHEN i.cantidad > 1 
+                THEN 1 -- Dejar al menos 1 unidad
+                ELSE i.cantidad -- No restar si ya está en 1 o menos
+            END
+        WHERE p.id_orden = @idOrden AND p.id_plato IS NOT NULL AND p.id_promocion IS NULL";
 
-                using (MySqlCommand cmd = new MySqlCommand(queryPlatos, conexion, transaction))
-                {
-                    cmd.Parameters.AddWithValue("@idOrden", idOrden);
-                    cmd.ExecuteNonQuery();
-                }
+            using (MySqlCommand cmd = new MySqlCommand(queryPlatos, conexion, transaction))
+            {
+                cmd.Parameters.AddWithValue("@idOrden", idOrden);
+                cmd.ExecuteNonQuery();
+            }
 
-                // 2. Restar inventario para bebidas individuales
-                string queryBebidas = @"
+            // 2. Restar inventario para bebidas individuales
+            string queryBebidas = @"
         UPDATE inventario i
         JOIN bebidas b ON i.id_inventario = b.id_inventario
         JOIN pedidos p ON b.id_bebida = p.id_bebida
-        SET i.cantidad = i.cantidad - p.Cantidad
-        WHERE p.id_orden = @idOrden AND p.id_bebida IS NOT NULL";
+        SET i.cantidad = 
+            CASE 
+                WHEN i.cantidad > p.Cantidad
+                THEN i.cantidad - p.Cantidad
+                WHEN i.cantidad > 1 
+                THEN 1 -- Dejar al menos 1 unidad
+                ELSE i.cantidad -- No restar si ya está en 1 o menos
+            END
+        WHERE p.id_orden = @idOrden AND p.id_bebida IS NOT NULL AND p.id_promocion IS NULL";
 
-                using (MySqlCommand cmd = new MySqlCommand(queryBebidas, conexion, transaction))
-                {
-                    cmd.Parameters.AddWithValue("@idOrden", idOrden);
-                    cmd.ExecuteNonQuery();
-                }
+            using (MySqlCommand cmd = new MySqlCommand(queryBebidas, conexion, transaction))
+            {
+                cmd.Parameters.AddWithValue("@idOrden", idOrden);
+                cmd.ExecuteNonQuery();
+            }
 
-                // 3. Restar inventario para extras individuales
-                string queryExtras = @"
+            // 3. Restar inventario para extras individuales
+            string queryExtras = @"
         UPDATE inventario i
         JOIN extras e ON i.id_inventario = e.id_inventario
         JOIN pedidos p ON e.id_extra = p.id_extra
-        SET i.cantidad = i.cantidad - p.Cantidad
-        WHERE p.id_orden = @idOrden AND p.id_extra IS NOT NULL";
+        SET i.cantidad = 
+            CASE 
+                WHEN i.cantidad > p.Cantidad
+                THEN i.cantidad - p.Cantidad
+                WHEN i.cantidad > 1 
+                THEN 1 -- Dejar al menos 1 unidad
+                ELSE i.cantidad -- No restar si ya está en 1 o menos
+            END
+        WHERE p.id_orden = @idOrden AND p.id_extra IS NOT NULL AND p.id_promocion IS NULL";
 
-                using (MySqlCommand cmd = new MySqlCommand(queryExtras, conexion, transaction))
-                {
-                    cmd.Parameters.AddWithValue("@idOrden", idOrden);
-                    cmd.ExecuteNonQuery();
-                }
+            using (MySqlCommand cmd = new MySqlCommand(queryExtras, conexion, transaction))
+            {
+                cmd.Parameters.AddWithValue("@idOrden", idOrden);
+                cmd.ExecuteNonQuery();
+            }
+        }
 
-                // 4. Restar inventario para promociones (todos sus componentes)
-                string queryPromociones = @"
+        private void ProcesarPromociones(MySqlConnection conexion, MySqlTransaction transaction)
+        {
+            // 1. Obtener todos los ítems de promoción en los pedidos de esta orden
+            string queryPromociones = @"
         SELECT 
             pi.id_promocion,
             pi.tipo_item,
@@ -429,77 +467,107 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         JOIN pedidos p ON pi.id_promocion = p.id_promocion
         WHERE p.id_orden = @idOrden AND p.id_promocion IS NOT NULL";
 
-                DataTable dtPromociones = new DataTable();
-                using (MySqlCommand cmd = new MySqlCommand(queryPromociones, conexion, transaction))
+            DataTable dtPromociones = new DataTable();
+            using (MySqlCommand cmd = new MySqlCommand(queryPromociones, conexion, transaction))
+            {
+                cmd.Parameters.AddWithValue("@idOrden", idOrden);
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                da.Fill(dtPromociones);
+            }
+
+            // 2. Procesar cada componente de cada promoción
+            foreach (DataRow row in dtPromociones.Rows)
+            {
+                string tipoItem = row["tipo_item"].ToString();
+                int idItem = Convert.ToInt32(row["id_item"]);
+                int cantidadEnPromo = Convert.ToInt32(row["cantidad_en_promo"]);
+                int cantidadPedida = Convert.ToInt32(row["cantidad_pedida"]);
+                int cantidadTotal = cantidadEnPromo * cantidadPedida;
+
+                // 3. Actualizar inventario según el tipo de ítem
+                switch (tipoItem)
                 {
-                    cmd.Parameters.AddWithValue("@idOrden", idOrden);
-                    MySqlDataAdapter da = new MySqlDataAdapter(cmd);
-                    da.Fill(dtPromociones);
-                }
+                    case "PLATO":
+                        ActualizarInventarioPlatoPromo(conexion, transaction, idItem, cantidadTotal);
+                        break;
 
-                foreach (DataRow row in dtPromociones.Rows)
-                {
-                    string tipoItem = row["tipo_item"].ToString();
-                    int idItem = Convert.ToInt32(row["id_item"]);
-                    int cantidadEnPromo = Convert.ToInt32(row["cantidad_en_promo"]);
-                    int cantidadPedida = Convert.ToInt32(row["cantidad_pedida"]);
-                    int cantidadTotal = cantidadEnPromo * cantidadPedida;
+                    case "BEBIDA":
+                        ActualizarInventarioBebidaPromo(conexion, transaction, idItem, cantidadTotal);
+                        break;
 
-                    switch (tipoItem)
-                    {
-                        case "PLATO":
-                            // Para platos en promoción, restar sus ingredientes
-                            string queryPlatoPromo = @"
-                    UPDATE inventario i
-                    JOIN recetas r ON i.id_inventario = r.id_inventario
-                    SET i.cantidad = i.cantidad - (r.cantidad_necesaria * @cantidadTotal)
-                    WHERE r.id_plato = @idItem";
-
-                            using (MySqlCommand cmd = new MySqlCommand(queryPlatoPromo, conexion, transaction))
-                            {
-                                cmd.Parameters.AddWithValue("@idItem", idItem);
-                                cmd.Parameters.AddWithValue("@cantidadTotal", cantidadTotal);
-                                cmd.ExecuteNonQuery();
-                            }
-                            break;
-
-                        case "BEBIDA":
-                            // Para bebidas en promoción, restar directamente del inventario
-                            string queryBebidaPromo = @"
-                    UPDATE inventario i
-                    JOIN bebidas b ON i.id_inventario = b.id_inventario
-                    SET i.cantidad = i.cantidad - @cantidadTotal
-                    WHERE b.id_bebida = @idItem";
-
-                            using (MySqlCommand cmd = new MySqlCommand(queryBebidaPromo, conexion, transaction))
-                            {
-                                cmd.Parameters.AddWithValue("@idItem", idItem);
-                                cmd.Parameters.AddWithValue("@cantidadTotal", cantidadTotal);
-                                cmd.ExecuteNonQuery();
-                            }
-                            break;
-
-                        case "EXTRA":
-                            // Para extras en promoción, restar directamente del inventario
-                            string queryExtraPromo = @"
-                    UPDATE inventario i
-                    JOIN extras e ON i.id_inventario = e.id_inventario
-                    SET i.cantidad = i.cantidad - @cantidadTotal
-                    WHERE e.id_extra = @idItem";
-
-                            using (MySqlCommand cmd = new MySqlCommand(queryExtraPromo, conexion, transaction))
-                            {
-                                cmd.Parameters.AddWithValue("@idItem", idItem);
-                                cmd.Parameters.AddWithValue("@cantidadTotal", cantidadTotal);
-                                cmd.ExecuteNonQuery();
-                            }
-                            break;
-                    }
+                    case "EXTRA":
+                        ActualizarInventarioExtraPromo(conexion, transaction, idItem, cantidadTotal);
+                        break;
                 }
             }
-            catch (Exception ex)
+        }
+
+        private void ActualizarInventarioPlatoPromo(MySqlConnection conexion, MySqlTransaction transaction, int idPlato, int cantidadTotal)
+        {
+            string query = @"
+        UPDATE inventario i
+        JOIN recetas r ON i.id_inventario = r.id_inventario
+        SET i.cantidad = 
+            CASE 
+                WHEN i.cantidad > (r.cantidad_necesaria * @cantidadTotal)
+                THEN i.cantidad - (r.cantidad_necesaria * @cantidadTotal)
+                WHEN i.cantidad > 1 
+                THEN 1 -- Dejar al menos 1 unidad
+                ELSE i.cantidad -- No restar si ya está en 1 o menos
+            END
+        WHERE r.id_plato = @idPlato";
+
+            using (MySqlCommand cmd = new MySqlCommand(query, conexion, transaction))
             {
-                throw new Exception($"Error al actualizar inventario: {ex.Message}");
+                cmd.Parameters.AddWithValue("@idPlato", idPlato);
+                cmd.Parameters.AddWithValue("@cantidadTotal", cantidadTotal);
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        private void ActualizarInventarioBebidaPromo(MySqlConnection conexion, MySqlTransaction transaction, int idBebida, int cantidadTotal)
+        {
+            string query = @"
+        UPDATE inventario i
+        JOIN bebidas b ON i.id_inventario = b.id_inventario
+        SET i.cantidad = 
+            CASE 
+                WHEN i.cantidad > @cantidadTotal
+                THEN i.cantidad - @cantidadTotal
+                WHEN i.cantidad > 1 
+                THEN 1 -- Dejar al menos 1 unidad
+                ELSE i.cantidad -- No restar si ya está en 1 o menos
+            END
+        WHERE b.id_bebida = @idBebida";
+
+            using (MySqlCommand cmd = new MySqlCommand(query, conexion, transaction))
+            {
+                cmd.Parameters.AddWithValue("@idBebida", idBebida);
+                cmd.Parameters.AddWithValue("@cantidadTotal", cantidadTotal);
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        private void ActualizarInventarioExtraPromo(MySqlConnection conexion, MySqlTransaction transaction, int idExtra, int cantidadTotal)
+        {
+            string query = @"
+        UPDATE inventario i
+        JOIN extras e ON i.id_inventario = e.id_inventario
+        SET i.cantidad = 
+            CASE 
+                WHEN i.cantidad > @cantidadTotal
+                THEN i.cantidad - @cantidadTotal
+                WHEN i.cantidad > 1 
+                THEN 1 -- Dejar al menos 1 unidad
+                ELSE i.cantidad -- No restar si ya está en 1 o menos
+            END
+        WHERE e.id_extra = @idExtra";
+
+            using (MySqlCommand cmd = new MySqlCommand(query, conexion, transaction))
+            {
+                cmd.Parameters.AddWithValue("@idExtra", idExtra);
+                cmd.Parameters.AddWithValue("@cantidadTotal", cantidadTotal);
+                cmd.ExecuteNonQuery();
             }
         }
 
@@ -507,59 +575,67 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
         {
             using (MySqlConnection conexion = new Conexion().EstablecerConexion())
             {
-                // Verificar stock para items individuales
+                // Consulta unificada que incluye productos individuales y de promociones
                 string queryVerificar = @"
-        SELECT i.nombreProducto, i.cantidad AS stock
+        SELECT 
+            i.nombreProducto, 
+            i.cantidad AS stock_actual,
+            CASE
+                WHEN p.id_plato IS NOT NULL THEN (r.cantidad_necesaria * p.Cantidad)
+                WHEN p.id_bebida IS NOT NULL THEN p.Cantidad
+                WHEN p.id_extra IS NOT NULL THEN p.Cantidad
+                WHEN p.id_promocion IS NOT NULL THEN (pi.cantidad * p.Cantidad)
+            END AS cantidad_necesaria,
+            CASE 
+                WHEN i.cantidad < CASE
+                    WHEN p.id_plato IS NOT NULL THEN (r.cantidad_necesaria * p.Cantidad)
+                    WHEN p.id_bebida IS NOT NULL THEN p.Cantidad
+                    WHEN p.id_extra IS NOT NULL THEN p.Cantidad
+                    WHEN p.id_promocion IS NOT NULL THEN (pi.cantidad * p.Cantidad)
+                END THEN 'CRÍTICO'
+                WHEN i.cantidad <= 3 THEN 'BAJO'
+                ELSE 'OK'
+            END AS estado_stock,
+            CASE
+                WHEN p.id_promocion IS NOT NULL THEN CONCAT('(Parte de promoción: ', pr.nombre, ')')
+                ELSE ''
+            END AS detalle_promocion
         FROM pedidos p
         LEFT JOIN platos pl ON p.id_plato = pl.id_plato
         LEFT JOIN recetas r ON pl.id_plato = r.id_plato
-        LEFT JOIN inventario i ON r.id_inventario = i.id_inventario
-        WHERE p.id_orden = @idOrden AND i.cantidad < (r.cantidad_necesaria * p.Cantidad)
-        
-        UNION
-        
-        SELECT i.nombreProducto, i.cantidad AS stock
-        FROM pedidos p
         LEFT JOIN bebidas b ON p.id_bebida = b.id_bebida
-        LEFT JOIN inventario i ON b.id_inventario = i.id_inventario
-        WHERE p.id_orden = @idOrden AND i.cantidad < p.Cantidad
-        
-        UNION
-        
-        SELECT i.nombreProducto, i.cantidad AS stock
-        FROM pedidos p
         LEFT JOIN extras e ON p.id_extra = e.id_extra
-        LEFT JOIN inventario i ON e.id_inventario = i.id_inventario
-        WHERE p.id_orden = @idOrden AND i.cantidad < p.Cantidad
-        
-        UNION
-        
-        -- Verificación para promociones
-        SELECT i.nombreProducto, i.cantidad AS stock
-        FROM pedidos p
-        JOIN promocion_items pi ON p.id_promocion = pi.id_promocion
-        LEFT JOIN platos pl ON pi.tipo_item = 'PLATO' AND pi.id_item = pl.id_plato
-        LEFT JOIN recetas r ON pl.id_plato = r.id_plato
-        LEFT JOIN inventario i ON r.id_inventario = i.id_inventario
-        WHERE p.id_orden = @idOrden AND i.cantidad < (r.cantidad_necesaria * pi.cantidad * p.Cantidad)
-        
-        UNION
-        
-        SELECT i.nombreProducto, i.cantidad AS stock
-        FROM pedidos p
-        JOIN promocion_items pi ON p.id_promocion = pi.id_promocion
-        LEFT JOIN bebidas b ON pi.tipo_item = 'BEBIDA' AND pi.id_item = b.id_bebida
-        LEFT JOIN inventario i ON b.id_inventario = i.id_inventario
-        WHERE p.id_orden = @idOrden AND i.cantidad < (pi.cantidad * p.Cantidad)
-        
-        UNION
-        
-        SELECT i.nombreProducto, i.cantidad AS stock
-        FROM pedidos p
-        JOIN promocion_items pi ON p.id_promocion = pi.id_promocion
-        LEFT JOIN extras e ON pi.tipo_item = 'EXTRA' AND pi.id_item = e.id_extra
-        LEFT JOIN inventario i ON e.id_inventario = i.id_inventario
-        WHERE p.id_orden = @idOrden AND i.cantidad < (pi.cantidad * p.Cantidad)";
+        LEFT JOIN promociones pr ON p.id_promocion = pr.id_promocion
+        LEFT JOIN promocion_items pi ON p.id_promocion = pi.id_promocion AND (
+            (pi.tipo_item = 'PLATO' AND pi.id_item = pl.id_plato) OR
+            (pi.tipo_item = 'BEBIDA' AND pi.id_item = b.id_bebida) OR
+            (pi.tipo_item = 'EXTRA' AND pi.id_item = e.id_extra)
+        )
+        LEFT JOIN inventario i ON 
+            (r.id_inventario = i.id_inventario OR 
+             b.id_inventario = i.id_inventario OR 
+             e.id_inventario = i.id_inventario OR
+             (pi.tipo_item = 'PLATO' AND EXISTS (
+                 SELECT 1 FROM recetas r2 
+                 WHERE r2.id_plato = pi.id_item AND r2.id_inventario = i.id_inventario
+             )) OR
+             (pi.tipo_item = 'BEBIDA' AND EXISTS (
+                 SELECT 1 FROM bebidas b2 
+                 WHERE b2.id_bebida = pi.id_item AND b2.id_inventario = i.id_inventario
+             )) OR
+             (pi.tipo_item = 'EXTRA' AND EXISTS (
+                 SELECT 1 FROM extras e2 
+                 WHERE e2.id_extra = pi.id_item AND e2.id_inventario = i.id_inventario
+             ))
+            )
+        WHERE p.id_orden = @idOrden AND 
+              (i.cantidad <= 3 OR 
+               i.cantidad < CASE
+                   WHEN p.id_plato IS NOT NULL THEN (r.cantidad_necesaria * p.Cantidad)
+                   WHEN p.id_bebida IS NOT NULL THEN p.Cantidad
+                   WHEN p.id_extra IS NOT NULL THEN p.Cantidad
+                   WHEN p.id_promocion IS NOT NULL THEN (pi.cantidad * p.Cantidad)
+               END)";
 
                 DataTable dt = new DataTable();
                 using (MySqlCommand cmd = new MySqlCommand(queryVerificar, conexion))
@@ -571,13 +647,47 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
                 if (dt.Rows.Count > 0)
                 {
-                    StringBuilder sb = new StringBuilder();
-                    sb.AppendLine("¡Stock insuficiente para los siguientes productos:");
+                    StringBuilder sbCritico = new StringBuilder();
+                    StringBuilder sbBajo = new StringBuilder();
+
+                    sbCritico.AppendLine("⚠️ ALERTA DE STOCK CRÍTICO ⚠️");
+                    sbCritico.AppendLine("Los siguientes productos no tienen suficiente inventario:");
+                    sbCritico.AppendLine("----------------------------------------");
+
+                    sbBajo.AppendLine("📢 AVISO DE STOCK BAJO");
+                    sbBajo.AppendLine("Los siguientes productos están por agotarse:");
+                    sbBajo.AppendLine("----------------------------------------");
+
                     foreach (DataRow row in dt.Rows)
                     {
-                        sb.AppendLine($"- {row["nombreProducto"]} (Stock: {row["stock"]})");
+                        string mensajeLinea = $"- {row["nombreProducto"]} (Stock: {row["stock_actual"]}, Necesario: {row["cantidad_necesaria"]}) {row["detalle_promocion"]}";
+
+                        if (row["estado_stock"].ToString() == "CRÍTICO")
+                        {
+                            sbCritico.AppendLine(mensajeLinea);
+                        }
+                        else
+                        {
+                            sbBajo.AppendLine(mensajeLinea);
+                        }
                     }
-                    MessageBox.Show(sb.ToString(), "Error de stock", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                    sbCritico.AppendLine("\n⚠️ POR FAVOR CONTACTE AL ADMINISTRADOR PARA RELLENAR INVENTARIO ⚠️");
+                    sbBajo.AppendLine("\nConsidere solicitar más inventario pronto");
+
+                    // Mostrar alertas separadas
+                    if (sbCritico.ToString().Contains("Stock:"))
+                    {
+                        MessageBox.Show(sbCritico.ToString(), "Alerta de Stock Crítico",
+                                      MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+
+                    if (sbBajo.ToString().Contains("Stock:"))
+                    {
+                        MessageBox.Show(sbBajo.ToString(), "Aviso de Stock Bajo",
+                                      MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+
                     return false;
                 }
                 return true;
@@ -595,10 +705,9 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             if (MessageBox.Show("¿Confirmar pago de la orden?", "Confirmar Pago",
        MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                if (!VerificarStockDisponible())
-                {
-                    return;
-                }
+                // Verificar stock (solo para mostrar advertencias)
+                VerificarStockDisponible();
+
                 try
                 {
                     string metodoPago = comboMetodoPago.SelectedValue.ToString();
@@ -606,7 +715,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                     decimal cambio = 0;
                     decimal totalAPagar = CalcularTotalConDescuento();
 
-                    if (metodoPago == "Efectivo") // Comparar con el string
+                    if (metodoPago == "Efectivo")
                     {
                         if (!decimal.TryParse(txtRecibido.Text, out recibido))
                         {
@@ -621,7 +730,7 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
                             return;
                         }
                     }
-                    else // Tarjeta u otro método
+                    else
                     {
                         recibido = totalAPagar;
                         cambio = 0;
@@ -638,14 +747,16 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
 
                     if (exito)
                     {
-                        MessageBox.Show("Pago procesado exitosamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("Pago procesado exitosamente", "Éxito",
+                                      MessageBoxButtons.OK, MessageBoxIcon.Information);
                         DialogResult = DialogResult.OK;
                         Close();
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Error al procesar pago: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"Error al procesar pago: {ex.Message}", "Error",
+                                  MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -800,6 +911,8 @@ namespace LaCaguamaSV.Fomularios.VistasAdmin
             }
             */
         }
+
+
 
 
         private string ObtenerNombreImpresoraTermica()
