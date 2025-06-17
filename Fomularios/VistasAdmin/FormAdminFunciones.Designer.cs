@@ -160,6 +160,7 @@
             this.btnCorte_tarjetas.Text = "Corte de Tarjetas";
             this.btnCorte_tarjetas.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnCorte_tarjetas.UseVisualStyleBackColor = false;
+            this.btnCorte_tarjetas.Visible = false;
             this.btnCorte_tarjetas.Click += new System.EventHandler(this.button3_Click);
             // 
             // btnCorte_general
@@ -959,7 +960,7 @@
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.BackgroundImage = global::LaCaguamaSV.Properties.Resources.fondo;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(1456, 662);
+            this.ClientSize = new System.Drawing.Size(1386, 662);
             this.Controls.Add(this.btnImportarBD);
             this.Controls.Add(this.Btn_Vendasday);
             this.Controls.Add(this.btnReimprimirCorte);
